@@ -1,0 +1,16 @@
+# ── まだ公開しないゲーム ───────────────────────────
+# 公開したくなったら、その行の先頭に # を付けるか、行ごと消すだけ。
+01_kingdom_of_six/
+03_okane_oukoku/
+05_kiri_no_sekiban/
+
+# ── 旧トップページ（中身は index.html に引きついである）──
+atayasaisai-gameland.html
+
+# ── 配布用の書き出し（サイトには要らない。重いだけ）──
+*.zip
+02_nandemo_learning_quest/dist/
+
+# ── macOS が勝手に作るファイル ─────────────────────
+.DS_Store
+._*

@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>せかいのレシピ — げんしのへや</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap">
+<style>
+:root{
+  --bg0:#05070F; --bg1:#0B1024; --bg2:#141C3A;
+  --ink:#EAF0FF; --sub:#9AA6C4; --faint:#5C6B8A;
+  --line:rgba(255,255,255,.12);
+  --panel:rgba(255,255,255,.055);
+  --acc:#7C8AA8;
+  --pro:#FF6B4A;
+  --ele:#6FE3FF;
+  color-scheme:dark;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  margin:0;font-family:"Zen Kaku Gothic New",-apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif;
+  color:var(--ink);background:var(--bg0);line-height:1.8;overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+#sky{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(1200px 800px at 50% -10%, #1E2A57 0%, transparent 60%),
+    radial-gradient(900px 700px at 85% 100%, #2A1840 0%, transparent 62%),
+    radial-gradient(800px 600px at 8% 80%, #0C2B41 0%, transparent 60%),
+    linear-gradient(180deg,#070B18 0%,#05070F 100%);
+}
+#stars{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.7}
+.wrap{position:relative;z-index:1;max-width:560px;margin:0 auto;padding:0 18px calc(24px + env(safe-area-inset-bottom))}
+svg{display:block}
+button{font-family:inherit;color:inherit;cursor:pointer}
+
+/* ---------- buttons ---------- */
+.btn{
+  border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.07);
+  color:var(--ink);font-weight:700;font-size:1rem;padding:13px 26px;border-radius:14px;
+  letter-spacing:.04em;white-space:nowrap;transition:transform .12s ease, background .2s, border-color .2s, box-shadow .2s;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+}
+.btn:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.3)}
+.btn:active{transform:scale(.96)}
+.btn:disabled{opacity:.35;cursor:default;transform:none}
+.btn.pri{
+  background:linear-gradient(140deg,#4D7BFF,#8A5BFF 60%,#C24BFF);
+  border-color:rgba(255,255,255,.34);color:#fff;
+  box-shadow:0 8px 30px -8px rgba(110,90,255,.85), inset 0 1px 0 rgba(255,255,255,.4);
+}
+.btn.pri:hover{box-shadow:0 12px 38px -8px rgba(130,110,255,1), inset 0 1px 0 rgba(255,255,255,.5)}
+.btn.sm{font-size:.82rem;padding:8px 15px;border-radius:11px;font-weight:500}
+.btn.go{
+  font-size:1.06rem;font-weight:900;padding:15px 10px;width:100%;
+  background:linear-gradient(140deg,#00C2A8,#00A4E0 55%,#3D7BFF);
+  border-color:rgba(255,255,255,.34);
+  box-shadow:0 10px 32px -10px rgba(0,180,220,.95), inset 0 1px 0 rgba(255,255,255,.45);
+}
+.btn.go:disabled{background:rgba(255,255,255,.06);box-shadow:none;border-color:var(--line)}
+
+/* ---------- title ---------- */
+#title{position:relative;z-index:1;min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;padding:40px 18px}
+.kicker{font-size:.7rem;letter-spacing:.42em;color:var(--sub);text-transform:uppercase;margin-left:.42em}
+#title h1{
+  font-size:clamp(2.1rem,9vw,3.1rem);font-weight:900;letter-spacing:.02em;margin:.1em 0 0;
+  background:linear-gradient(100deg,#FFFFFF 10%,#9CD8FF 42%,#C3A6FF 72%,#FF9ED6 96%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+#title h2{font-size:1.02rem;font-weight:500;color:var(--sub);letter-spacing:.2em;margin:.2em 0 0}
+#title p{max-width:26em;color:var(--sub);font-size:.9rem;margin:16px 0 4px;text-wrap:balance}
+#title p b{color:var(--ink);font-weight:700}
+.titleAtom{width:min(62vw,230px);margin:6px auto 2px;filter:drop-shadow(0 0 40px rgba(90,150,255,.4))}
+.tbtns{display:flex;gap:11px;flex-wrap:wrap;justify-content:center;margin-top:20px}
+.ladder{margin-top:34px;display:flex;flex-direction:column;gap:5px;width:100%;max-width:330px}
+.rung{display:flex;align-items:center;gap:11px;font-size:.78rem;color:var(--sub);
+  border:1px solid var(--line);border-radius:11px;padding:8px 13px;background:rgba(255,255,255,.03);text-align:left}
+.rung b{color:var(--ink);font-weight:700;font-size:.84rem}
+.rung .n{font-size:.62rem;letter-spacing:.14em;color:#6D7A9B;min-width:2.2em}
+.rung.on{border-color:rgba(120,180,255,.5);background:rgba(80,140,255,.12);color:var(--ink);
+  box-shadow:0 0 24px -6px rgba(90,150,255,.5)}
+.rung.on .n{color:#8FC5FF}
+
+/* ---------- game ---------- */
+#game{display:none;padding-top:14px}
+.hud{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.hudL{display:flex;align-items:baseline;gap:9px}
+.score{font-size:1.5rem;font-weight:900;letter-spacing:.02em;font-variant-numeric:tabular-nums}
+.score small{font-size:.64rem;color:var(--sub);font-weight:500;letter-spacing:.2em;margin-left:3px}
+.prog{font-size:.72rem;color:var(--sub);letter-spacing:.1em;font-variant-numeric:tabular-nums}
+.bar{height:3px;background:rgba(255,255,255,.1);border-radius:99px;overflow:hidden;margin-bottom:12px}
+.bar i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#00C2A8,#4D7BFF,#C24BFF);transition:width .5s cubic-bezier(.2,.9,.3,1)}
+
+.qbox{position:relative;border:1px solid var(--line);border-radius:18px;padding:12px 16px;
+  background:linear-gradient(160deg,rgba(255,255,255,.075),rgba(255,255,255,.02));margin-bottom:11px}
+.qlab{font-size:.63rem;letter-spacing:.3em;color:var(--sub);margin-left:.3em}
+.qname{font-size:clamp(1.5rem,6.6vw,2.05rem);font-weight:900;letter-spacing:.03em;line-height:1.35;margin-top:1px}
+.qname em{font-style:normal;font-size:.5em;font-weight:500;color:var(--sub);letter-spacing:.12em;margin-left:.5em}
+.qsuf{font-size:.92rem;font-weight:500;color:var(--sub);margin-left:.3em}
+.hintbtn{position:absolute;top:13px;right:13px}
+.hint{margin-top:9px;font-size:.8rem;color:#9FD3FF;border-top:1px dashed rgba(255,255,255,.16);padding-top:8px;display:none}
+.hint.on{display:block;animation:fadeUp .35s ease both}
+.hint b{color:#fff;font-weight:900;font-size:1.06em}
+
+/* atom */
+#atomWrap{position:relative;width:min(84vw,336px);margin:0 auto;touch-action:none}
+#atomWrap.over #ghostRing{opacity:1;transform:scale(1)}
+#ghostRing{position:absolute;inset:4%;border-radius:50%;border:2px dashed rgba(140,220,255,.75);
+  opacity:0;transform:scale(.9);transition:.2s ease;pointer-events:none;
+  box-shadow:0 0 50px rgba(90,190,255,.35) inset}
+#atom{width:100%;height:auto;overflow:visible}
+.ring{fill:none;stroke:rgba(255,255,255,.14);stroke-width:1.2}
+.ring.outer{stroke:var(--acc);stroke-width:2;stroke-dasharray:3 6;opacity:1;transition:stroke .45s;filter:drop-shadow(0 0 6px var(--acc))}
+.slot{animation:breathe 3.2s ease-in-out infinite}
+@keyframes breathe{0%,100%{opacity:.7;transform:scale(.94)}50%{opacity:1;transform:scale(1.08)}}
+.slot circle{fill:rgba(120,205,255,.09);stroke:rgba(160,225,255,.8);stroke-width:1.6;stroke-dasharray:4 4}
+.slot .plus{stroke:rgba(190,238,255,.9);stroke-width:1.8;stroke-linecap:round;fill:none}
+.eg{cursor:pointer}
+.pop{animation:pop .42s cubic-bezier(.2,1.5,.4,1) both}
+@keyframes pop{0%{transform:scale(0) }60%{transform:scale(1.35)}100%{transform:scale(1)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.spin{transform-origin:200px 200px;animation:spin var(--d,26s) linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.shake{animation:shake .42s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-9px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(3px)}}
+#nucGlow{transition:opacity .4s}
+#nucSlot{transition:opacity .4s}
+#atomWrap.over #field{opacity:1}
+#field{opacity:.6;transition:opacity .25s}
+
+.readout{display:flex;justify-content:center;gap:9px;margin:2px 0 12px;flex-wrap:wrap}
+.chip{display:flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:99px;
+  padding:5px 14px 5px 9px;font-size:.78rem;color:var(--sub);background:rgba(255,255,255,.04);
+  font-variant-numeric:tabular-nums}
+.chip b{color:var(--ink);font-weight:900;font-size:1.16em;min-width:1.1em;text-align:right}
+.chip .dot{width:9px;height:9px;border-radius:50%}
+.chip.eq{border-color:rgba(255,255,255,.07);background:none;padding:5px 4px;color:#5E6B8A;letter-spacing:.08em}
+
+/* tray */
+.tray{display:flex;gap:13px;align-items:stretch;border:1px solid var(--line);border-radius:20px;
+  padding:13px;background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.02))}
+.srcBox{flex:none;width:104px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  border:1px solid rgba(120,220,255,.28);border-radius:15px;background:rgba(70,190,255,.08);
+  padding:9px 4px;transition:transform .12s, box-shadow .25s;touch-action:none;user-select:none;cursor:grab}
+.srcBox:active{cursor:grabbing;transform:scale(.95)}
+.srcBox .lab{font-size:.63rem;letter-spacing:.12em;color:#9FD3FF;text-align:center;line-height:1.5}
+.srcBox svg{width:46px;height:46px;pointer-events:none;animation:bob 2.6s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(-2px)}50%{transform:translateY(3px)}}
+.trayR{flex:1;display:flex;flex-direction:column;gap:8px;justify-content:center}
+.trayTop{display:flex;gap:8px;align-items:center}
+.cnt{flex:1;font-size:.78rem;color:var(--sub);letter-spacing:.06em}
+.cnt b{font-size:1.5rem;font-weight:900;color:var(--ink);font-variant-numeric:tabular-nums;margin:0 2px}
+#ghost{position:fixed;z-index:99;width:44px;height:44px;margin:-22px 0 0 -22px;pointer-events:none;display:none}
+
+/* overlays */
+.ov{position:fixed;inset:0;z-index:60;display:none;align-items:center;justify-content:center;padding:20px;
+  background:rgba(3,5,12,.76);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.ov.on{display:flex;animation:fadeUp .3s ease both}
+.card{position:relative;width:100%;max-width:400px;border:1px solid rgba(255,255,255,.2);border-radius:26px;
+  padding:26px 24px 22px;text-align:center;overflow:hidden;
+  background:linear-gradient(165deg,rgba(28,36,66,.96),rgba(12,16,34,.98));
+  box-shadow:0 30px 80px -20px rgba(0,0,0,.9);animation:cardIn .5s cubic-bezier(.2,1.3,.35,1) both}
+@keyframes cardIn{from{opacity:0;transform:translateY(24px) scale(.9)}to{opacity:1;transform:none}}
+.card.ng::before{opacity:.12!important}
+.card.ng .elBox{box-shadow:none;border-style:dashed;opacity:.9}
+.card::before{content:"";position:absolute;top:-60%;left:50%;width:150%;height:130%;transform:translateX(-50%);
+  background:radial-gradient(circle at 50% 50%, var(--ac,#6cf) 0%, transparent 62%);opacity:.3;pointer-events:none}
+.verdict{position:relative;font-size:1.06rem;letter-spacing:.22em;font-weight:900;margin-left:.22em}
+.verdict.ng{font-size:.9rem;letter-spacing:.16em}
+.target{position:relative;font-size:.8rem;color:var(--sub);margin:9px 0 0;letter-spacing:.04em}
+.target b{color:#fff;font-weight:900;font-size:1.12em}
+.nudge{position:relative;display:inline-block;margin-top:10px;padding:7px 18px;border-radius:99px;
+  border:1px solid rgba(255,216,77,.45);background:rgba(255,216,77,.12);color:#FFE08A;font-size:.82rem;font-weight:700}
+.nudge b{font-size:1.2em;font-weight:900;color:#fff}
+.elBox{position:relative;display:inline-flex;flex-direction:column;align-items:center;gap:0;
+  border:1.5px solid var(--ac,#6cf);border-radius:20px;padding:12px 26px 13px;margin:11px 0 4px;min-width:150px;
+  background:rgba(255,255,255,.055);box-shadow:0 0 44px -8px var(--ac,#6cf)}
+.elBox .z{position:absolute;top:7px;left:12px;font-size:.66rem;color:var(--sub);font-variant-numeric:tabular-nums}
+.elBox .sym{font-size:3.5rem;font-weight:900;line-height:1.08;letter-spacing:.01em;color:#fff;
+  text-shadow:0 0 26px var(--ac,#6cf)}
+.elBox .nm{font-size:1.06rem;font-weight:700;letter-spacing:.06em;margin-top:2px}
+.elBox .ym{font-size:.66rem;color:var(--sub);letter-spacing:.2em;margin-top:-2px}
+.useTxt{position:relative;font-size:.86rem;color:#C7D2EC;margin:11px auto 0;max-width:19em;line-height:1.75;text-wrap:pretty}
+.bond{position:relative;display:inline-flex;align-items:center;gap:8px;margin-top:13px;padding:7px 15px;
+  border-radius:99px;border:1px solid var(--line);background:rgba(255,255,255,.05);font-size:.76rem;color:var(--sub)}
+.bond b{color:var(--ink);font-weight:900}
+.bond .hands{display:flex;gap:3px}
+.bond .hands i{width:5px;height:14px;border-radius:99px;background:var(--ac,#6cf);box-shadow:0 0 8px var(--ac,#6cf)}
+.gain{position:relative;font-size:2rem;font-weight:900;margin-top:12px;letter-spacing:.02em;
+  background:linear-gradient(100deg,#FFE08A,#FFB44D);-webkit-background-clip:text;background-clip:text;color:transparent}
+.newz{position:relative;font-size:.74rem;color:#7FE5C0;letter-spacing:.14em;margin-top:6px}
+.cardBtns{position:relative;display:flex;gap:9px;justify-content:center;margin-top:17px;flex-wrap:wrap}
+
+/* zukan */
+#zukanOv{z-index:95}
+.zwrap{width:100%;max-width:470px;max-height:88dvh;overflow:auto;border:1px solid rgba(255,255,255,.18);
+  border-radius:24px;padding:20px;background:linear-gradient(165deg,rgba(24,31,58,.97),rgba(10,14,30,.99));
+  box-shadow:0 30px 80px -20px rgba(0,0,0,.9);animation:cardIn .45s cubic-bezier(.2,1.3,.35,1) both}
+.zhead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:3px}
+.zhead h3{margin:0;font-size:1.1rem;font-weight:900;letter-spacing:.06em}
+.zsub{font-size:.72rem;color:var(--sub);margin-bottom:14px;letter-spacing:.04em}
+.zgrid{display:grid;grid-template-columns:repeat(8,1fr);gap:4px}
+.zcol{font-size:.58rem;color:#8C9AC0;font-weight:700;text-align:center;letter-spacing:.06em;padding-bottom:2px}
+.zc{aspect-ratio:1;border:1px solid rgba(255,255,255,.1);border-radius:8px;background:rgba(255,255,255,.025);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;position:relative;
+  font-size:.5rem;color:#3E4763;transition:.25s}
+.zc.got{border-color:var(--ac);background:color-mix(in srgb,var(--ac) 17%,transparent);cursor:pointer;
+  box-shadow:0 0 16px -4px var(--ac)}
+.zc.got .s{font-size:1.02rem;font-weight:900;color:#fff;line-height:1}
+.zc.got .n{font-size:.46rem;color:#D3DCF4;letter-spacing:.02em;margin-top:1px;transform:scale(.92)}
+.zc .z{position:absolute;top:2px;left:3px;font-size:.44rem;color:#77839F}
+.zc .q{font-size:1.06rem;font-weight:700;color:#6A76A0}
+.zc.got:hover{transform:translateY(-2px) scale(1.06);z-index:2}
+.zc.blank{border:none;background:none;box-shadow:none}
+.zdet{margin-top:13px;border:1px solid var(--line);border-radius:14px;padding:12px 14px;min-height:62px;
+  font-size:.8rem;color:var(--sub);background:rgba(255,255,255,.035)}
+.zdet{text-wrap:pretty}
+.zdet b{color:var(--ink);font-weight:900;font-size:1.02rem;letter-spacing:.04em}
+.zdet .u{display:block;color:#C7D2EC;margin-top:3px;font-size:.82rem}
+.znote{font-size:.68rem;color:#5E6B8A;margin-top:11px;line-height:1.75;letter-spacing:.02em}
+
+/* clear */
+#clear .card{max-width:420px}
+.bigScore{font-size:3.4rem;font-weight:900;line-height:1.1;letter-spacing:.01em;
+  background:linear-gradient(100deg,#FFE08A,#FFB44D 50%,#FF7EC7);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* confetti */
+.cf{position:fixed;z-index:70;pointer-events:none;border-radius:2px}
+@media (prefers-reduced-motion:reduce){
+  .spin,.srcBox svg{animation:none!important}
+}
+@media (max-width:400px){
+  .srcBox{width:88px}.srcBox svg{width:40px;height:40px}
+  .btn{padding:12px 20px}
+}
+</style>
+</head>
+<body>
+<div id="sky"></div>
+<canvas id="stars"></canvas>
+
+<!-- ================= TITLE ================= -->
+<section id="title">
+  <p class="kicker">Recipe of the World</p>
+  <h1>せかいのレシピ</h1>
+  <h2>げんしのへや</h2>
+
+  <svg class="titleAtom" viewBox="0 0 400 400" aria-hidden="true">
+    <defs>
+      <radialGradient id="tg1"><stop offset="0" stop-color="#8FF0FF" stop-opacity=".95"/><stop offset="1" stop-color="#3AA0FF" stop-opacity="0"/></radialGradient>
+      <radialGradient id="tg2"><stop offset="0" stop-color="#FFD9A0"/><stop offset="1" stop-color="#FF5B3A"/></radialGradient>
+    </defs>
+    <circle cx="200" cy="200" r="70" fill="none" stroke="rgba(255,255,255,.16)" stroke-width="1.4"/>
+    <circle cx="200" cy="200" r="122" fill="none" stroke="rgba(255,255,255,.14)" stroke-width="1.4"/>
+    <circle cx="200" cy="200" r="172" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="1.4" stroke-dasharray="3 6"/>
+    <g class="spin" style="--d:16s">
+      <circle cx="200" cy="130" r="18" fill="url(#tg1)"/><circle cx="200" cy="130" r="7" fill="#BDF3FF"/>
+      <circle cx="200" cy="270" r="18" fill="url(#tg1)"/><circle cx="200" cy="270" r="7" fill="#BDF3FF"/>
+    </g>
+    <g class="spin" style="--d:24s;animation-direction:reverse">
+      <circle cx="322" cy="200" r="18" fill="url(#tg1)"/><circle cx="322" cy="200" r="7" fill="#BDF3FF"/>
+      <circle cx="78" cy="200" r="18" fill="url(#tg1)"/><circle cx="78" cy="200" r="7" fill="#BDF3FF"/>
+      <circle cx="200" cy="78" r="18" fill="url(#tg1)"/><circle cx="200" cy="78" r="7" fill="#BDF3FF"/>
+      <circle cx="200" cy="322" r="18" fill="url(#tg1)"/><circle cx="200" cy="322" r="7" fill="#BDF3FF"/>
+    </g>
+    <circle cx="200" cy="200" r="52" fill="url(#tg1)" opacity=".18"/>
+    <g>
+      <circle cx="192" cy="196" r="13" fill="url(#tg2)"/><circle cx="210" cy="205" r="13" fill="url(#tg2)"/>
+      <circle cx="197" cy="213" r="13" fill="url(#tg2)"/><circle cx="208" cy="188" r="13" fill="url(#tg2)"/>
+    </g>
+  </svg>
+
+  <p>まんなかの<b>陽子</b>の数で、原子の名前は決まる。<br>
+     内側の電子はもう入っている。<b>いちばん外側だけ</b>、きみが置く。</p>
+
+  <div class="tbtns">
+    <button class="btn pri" id="startBtn">はじめる</button>
+    <button class="btn" id="zukanBtn2">図鑑を見る</button>
+  </div>
+
+  <div class="ladder" aria-hidden="true">
+    <div class="rung on"><span class="n">02</span><div><b>げんしのへや</b> ／ 原子をつくる</div></div>
+    <div class="rung"><span class="n">03</span><div>ぶんしのへや ／ 水・二酸化炭素</div></div>
+    <div class="rung"><span class="n">04</span><div>いのちのへや ／ 光合成</div></div>
+    <div class="rung"><span class="n">05</span><div>ほしのへや ／ 太陽をつくる</div></div>
+  </div>
+</section>
+
+<!-- ================= GAME ================= -->
+<section id="game"><div class="wrap">
+  <div class="hud">
+    <div class="hudL"><div class="score" id="scoreN">0</div><small style="color:var(--sub);font-size:.62rem;letter-spacing:.2em">POINTS</small></div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <span class="prog" id="prog">1 / 18</span>
+      <button class="btn sm" id="zukanBtn">図鑑</button>
+    </div>
+  </div>
+  <div class="bar"><i id="barI"></i></div>
+
+  <div class="qbox">
+    <p class="qlab">MAKE</p>
+    <button class="btn sm hintbtn" id="hintBtn">ヒント</button>
+    <div class="qname"><span id="qName">—</span><em id="qYomi"></em><span class="qsuf">を つくろう</span></div>
+    <div class="hint" id="hintTxt"></div>
+  </div>
+
+  <div id="atomWrap">
+    <div id="ghostRing"></div>
+    <svg id="atom" viewBox="0 0 400 400">
+      <defs>
+        <radialGradient id="eGlow"><stop offset="0" stop-color="#7FE8FF" stop-opacity=".8"/><stop offset=".55" stop-color="#3FA8FF" stop-opacity=".28"/><stop offset="1" stop-color="#3FA8FF" stop-opacity="0"/></radialGradient>
+        <radialGradient id="eBall" cx=".35" cy=".3"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".45" stop-color="#8CE9FF"/><stop offset="1" stop-color="#2F86E8"/></radialGradient>
+        <radialGradient id="pBall" cx=".35" cy=".3"><stop offset="0" stop-color="#FFE7C2"/><stop offset=".45" stop-color="#FF9A5C"/><stop offset="1" stop-color="#E0402A"/></radialGradient>
+        <radialGradient id="fieldG"><stop offset="0" stop-color="#5E8BFF" stop-opacity=".1"/><stop offset=".65" stop-color="#5E8BFF" stop-opacity=".04"/><stop offset="1" stop-color="#5E8BFF" stop-opacity="0"/></radialGradient>
+        <radialGradient id="nGlow"><stop offset="0" stop-color="#FF8A4A" stop-opacity=".55"/><stop offset="1" stop-color="#FF5B3A" stop-opacity="0"/></radialGradient>
+      </defs>
+      <circle id="field" cx="200" cy="200" r="158" fill="url(#fieldG)"/>
+      <g id="gRings"></g>
+      <circle id="nucSlot" cx="200" cy="200" r="27" fill="rgba(255,140,90,.05)" stroke="rgba(255,150,110,.3)" stroke-width="1.4" stroke-dasharray="3 5"/>
+      <circle id="nucGlow" cx="200" cy="200" r="62" fill="url(#nGlow)"/>
+      <g id="gNuc"></g>
+      <g id="gInner"></g>
+      <g id="gOuter"></g>
+    </svg>
+  </div>
+
+  <div class="readout">
+    <span class="chip"><span class="dot" style="background:#FF6B4A;box-shadow:0 0 9px #FF6B4A"></span>陽子 <b id="roP">0</b></span>
+    <span class="chip eq">=</span>
+    <span class="chip"><span class="dot" style="background:#6FE3FF;box-shadow:0 0 9px #6FE3FF"></span>電子 <b id="roE">0</b></span>
+  </div>
+
+  <div class="tray">
+    <div class="srcBox" id="eSrc">
+      <svg viewBox="0 0 60 60" aria-hidden="true">
+        <circle cx="30" cy="30" r="26" fill="url(#eGlow)"/>
+        <circle cx="30" cy="30" r="13" fill="url(#eBall)"/>
+        <circle cx="25" cy="25" r="4" fill="#fff" opacity=".85"/>
+      </svg>
+      <span class="lab">でんし<br>ドラッグ</span>
+    </div>
+    <div class="trayR">
+      <div class="trayTop">
+        <div class="cnt">いちばん外側に<b id="cntN">0</b>こ</div>
+        <button class="btn sm" id="undoBtn">もどす</button>
+      </div>
+      <button class="btn go" id="goBtn" disabled>これで つくる！</button>
+    </div>
+  </div>
+</div></section>
+
+<div id="ghost"><svg viewBox="0 0 60 60"><circle cx="30" cy="30" r="28" fill="url(#eGlow)"/><circle cx="30" cy="30" r="14" fill="url(#eBall)"/><circle cx="25" cy="25" r="4.5" fill="#fff" opacity=".85"/></svg></div>
+
+<!-- ================= OVERLAYS ================= -->
+<div class="ov" id="resultOv"><div class="card" id="resultCard"></div></div>
+<div class="ov" id="zukanOv"><div class="zwrap">
+  <div class="zhead"><h3>げんし図鑑</h3><button class="btn sm" id="zClose">とじる</button></div>
+  <p class="zsub"><span id="zCount">0</span> / 18 ・ たてに並ぶと、性格が似ている</p>
+  <div class="zgrid" id="zCols"></div>
+  <div class="zgrid" id="zGrid" style="margin-top:2px"></div>
+  <div class="zdet" id="zDet">マスをえらぶと、くわしく出ます。</div>
+  <p class="znote">※ 列の番号は「いちばん外側の電子の数」。ヘリウムだけは2こで満席になるので、いちばん右にいます。</p>
+</div></div>
+<div class="ov" id="clearOv"><div class="card" id="clearCard"></div></div>
+
+<script>
+(function(){
+"use strict";
+var RM = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ---------- 星空 ---------- */
+(function(){
+  var c=document.getElementById("stars"),x=c.getContext("2d"),S=[];
+  function fit(){c.width=innerWidth*devicePixelRatio;c.height=innerHeight*devicePixelRatio;
+    x.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);S=[];
+    var n=Math.round(innerWidth*innerHeight/7000);
+    for(var i=0;i<n;i++)S.push({x:Math.random()*innerWidth,y:Math.random()*innerHeight,
+      r:Math.random()*1.25+.25,a:Math.random(),s:Math.random()*.012+.003});}
+  function draw(){x.clearRect(0,0,innerWidth,innerHeight);
+    for(var i=0;i<S.length;i++){var p=S[i];p.a+=p.s;var o=.25+Math.abs(Math.sin(p.a))*.6;
+      x.beginPath();x.arc(p.x,p.y,p.r,0,6.284);x.fillStyle="rgba(200,225,255,"+o+")";x.fill();}
+    requestAnimationFrame(draw);}
+  fit();addEventListener("resize",fit);if(!RM)draw();else{x.globalAlpha=.6;
+    for(var i=0;i<S.length;i++){var p=S[i];x.beginPath();x.arc(p.x,p.y,p.r,0,6.284);x.fillStyle="#C8E1FF";x.fill();}}
+})();
+
+/* ---------- データ ---------- */
+/* grp = 図鑑の列（= いちばん外側の電子の数。Heだけ満席なので8列目）
+   outer = 外側に置く電子の数 / inner = すでに埋まっている内側の殻 */
+var GC=["#7C8AA8","#FF5C6C","#FF9B4A","#FFD84D","#4FE0A8","#38CFE0","#4B93FF","#9A7BFF","#FF71C8"];
+var EL=[
+ {z:1, sym:"H", nm:"水素",     ym:"すいそ",       grp:1, use:"宇宙にいちばん多い原子。ロケットの燃料にもなる。"},
+ {z:2, sym:"He",nm:"ヘリウム", ym:"ヘリウム",     grp:8, use:"風船を浮かせるガス。2こで満席なので、何とも結びつかない。"},
+ {z:3, sym:"Li",nm:"リチウム", ym:"リチウム",     grp:1, use:"スマホや電気自動車の電池の主役。"},
+ {z:4, sym:"Be",nm:"ベリリウム",ym:"ベリリウム",  grp:2, use:"軽くて硬い。宇宙望遠鏡の鏡に使われている。"},
+ {z:5, sym:"B", nm:"ホウ素",   ym:"ほうそ",       grp:3, use:"熱に強いガラス（耐熱ガラス）をつくる。"},
+ {z:6, sym:"C", nm:"炭素",     ym:"たんそ",       grp:4, use:"鉛筆の芯もダイヤモンドも、生き物の体も、これ。"},
+ {z:7, sym:"N", nm:"窒素",     ym:"ちっそ",       grp:5, use:"空気の約78%。冷やすと液体窒素になる。"},
+ {z:8, sym:"O", nm:"酸素",     ym:"さんそ",       grp:6, use:"呼吸に使う。地面の中にもいちばん多い。"},
+ {z:9, sym:"F", nm:"フッ素",   ym:"ふっそ",       grp:7, use:"歯みがき粉や、こげつかないフライパンに。"},
+ {z:10,sym:"Ne",nm:"ネオン",   ym:"ネオン",       grp:8, use:"ネオンサインの赤い光。満席なので何とも結びつかない。"},
+ {z:11,sym:"Na",nm:"ナトリウム",ym:"ナトリウム",  grp:1, use:"食塩の半分。燃やすと炎が黄色くなる。"},
+ {z:12,sym:"Mg",nm:"マグネシウム",ym:"マグネシウム",grp:2,use:"花火の白い閃光。葉っぱの緑（葉緑素）のまんなかにもいる。"},
+ {z:13,sym:"Al",nm:"アルミニウム",ym:"アルミニウム",grp:3,use:"1円玉、アルミホイル、飛行機の体。"},
+ {z:14,sym:"Si",nm:"ケイ素",   ym:"けいそ",       grp:4, use:"半導体チップの材料。砂の主成分でもある。"},
+ {z:15,sym:"P", nm:"リン",     ym:"リン",         grp:5, use:"マッチの発火剤。骨やDNAにも入っている。"},
+ {z:16,sym:"S", nm:"硫黄",     ym:"いおう",       grp:6, use:"温泉のにおい。ゴムを硬くするのに使う。"},
+ {z:17,sym:"Cl",nm:"塩素",     ym:"えんそ",       grp:7, use:"水道やプールの消毒。食塩のもう半分。"},
+ {z:18,sym:"Ar",nm:"アルゴン", ym:"アルゴン",     grp:8, use:"何とも結びつかない。だから電球の中に詰める。"}
+];
+EL.forEach(function(e){
+  if(e.z<=2){e.inner=[];e.outer=e.z;e.cap=2;}
+  else if(e.z<=10){e.inner=[2];e.outer=e.z-2;e.cap=8;}
+  else {e.inner=[2,8];e.outer=e.z-10;e.cap=8;}
+  e.innerSum=e.inner.reduce(function(a,b){return a+b;},0);
+  e.hands = (e.z===2||e.grp===8) ? 0 : (e.outer<=4 ? e.outer : 8-e.outer);
+  e.col=GC[e.grp];
+});
+function byZ(z){for(var i=0;i<EL.length;i++)if(EL[i].z===z)return EL[i];return null;}
+
+/* ---------- 保存 ---------- */
+var ZKEY="sekai_recipe_atom_zukan", BKEY="sekai_recipe_atom_best";
+function load(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+var zukan=load(ZKEY,[]);
+function collect(z){if(zukan.indexOf(z)<0){zukan.push(z);save(ZKEY,zukan);return true;}return false;}
+
+/* ---------- 状態 ---------- */
+var R=[62,110,158], RMAX=158, order=[], qi=0, cur=null, placed=0, tries=0, hinted=false, score=0, busy=false;
+var $=function(s){return document.querySelector(s);};
+var gRings=$("#gRings"), gInner=$("#gInner"), gOuter=$("#gOuter"), gNuc=$("#gNuc");
+
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function buildOrder(){
+  var p1=EL.filter(function(e){return e.z<=2;});
+  var p2=shuffle(EL.filter(function(e){return e.z>2&&e.z<=10;}));
+  var p3=shuffle(EL.filter(function(e){return e.z>10;}));
+  order=p1.concat(p2,p3);
+}
+function shellR(i,n){return Math.round(RMAX*(i+1)/(n+1));}
+function slot(r,k,cap){var a=(-90+k*360/cap)*Math.PI/180;return {x:200+r*Math.cos(a),y:200+r*Math.sin(a)};}
+function eSVG(x,y,rr,cls,extra){
+  return '<g class="'+(cls||"")+'" '+(extra||"")+'><circle cx="'+x+'" cy="'+y+'" r="'+(rr*2.1)+'" fill="url(#eGlow)"/>'+
+    '<circle cx="'+x+'" cy="'+y+'" r="'+rr+'" fill="url(#eBall)"/>'+
+    '<circle cx="'+(x-rr*.36)+'" cy="'+(y-rr*.36)+'" r="'+(rr*.3)+'" fill="#fff" opacity=".85"/></g>';
+}
+
+/* ---------- 画面を作る ---------- */
+function newQuestion(){
+  cur=order[qi];placed=0;tries=0;hinted=false;busy=false;
+  $("#qName").textContent=cur.nm;
+  $("#qYomi").textContent=(cur.nm!==cur.ym)?cur.ym:"";
+  $("#hintTxt").className="hint";$("#hintTxt").innerHTML="";
+  $("#hintBtn").disabled=false;
+  $("#prog").textContent=(qi+1)+" / "+order.length;
+  $("#barI").style.width=(qi/order.length*100)+"%";
+
+  var n=cur.inner.length,s="",i,k,p;
+  for(i=0;i<n;i++)s+='<circle cx="200" cy="200" r="'+shellR(i,n)+'" class="ring"/>';
+  s+='<circle cx="200" cy="200" r="'+RMAX+'" class="ring outer" id="outerRing"/>';
+  gRings.innerHTML=s;
+
+  s="";
+  for(i=0;i<n;i++){
+    var cap=(i===0)?2:8, g='<g class="spin" style="--d:'+(20+i*9)+'s'+(i%2?';animation-direction:reverse':'')+'">';
+    for(k=0;k<cur.inner[i];k++){p=slot(shellR(i,n),k,cap);g+=eSVG(p.x,p.y,9,"",'opacity=".5"');}
+    s+=g+'</g>';
+  }
+  gInner.innerHTML=s;
+  renderOuter(-1);renderNuc();
+  $("#goBtn").disabled=true;
+}
+function renderOuter(popIdx){
+  var r=RMAX,s="",k,p;
+  for(k=0;k<cur.cap;k++){
+    p=slot(r,k,cur.cap);
+    if(k<placed) s+=eSVG(p.x,p.y,12,"eg"+(k===popIdx?" pop":""),'data-i="'+k+'" style="transform-origin:'+p.x+'px '+p.y+'px"');
+    else s+='<g class="slot" style="transform-origin:'+p.x+'px '+p.y+'px;animation-delay:'+(k*.1).toFixed(2)+'s">'+'<circle cx="'+p.x+'" cy="'+p.y+'" r="13"/>'+'<path d="M'+(p.x-5.5)+' '+p.y+'h11M'+p.x+' '+(p.y-5.5)+'v11" class="plus"/></g>';
+  }
+  gOuter.innerHTML=s;
+  var col=GC[Math.min(placed,8)];
+  document.documentElement.style.setProperty("--acc",col);
+  $("#cntN").textContent=placed;
+  $("#goBtn").disabled=(placed===0);
+  $("#undoBtn").disabled=(placed===0);
+}
+function renderNuc(){
+  var np=cur.innerSum+placed,s="",i;
+  for(i=0;i<np;i++){
+    var a=i*2.39996, rr=25*Math.sqrt((i+.55)/Math.max(np,6));
+    s+='<circle cx="'+(200+rr*Math.cos(a)).toFixed(1)+'" cy="'+(200+rr*Math.sin(a)).toFixed(1)+'" r="7.6" fill="url(#pBall)"/>';
+  }
+  gNuc.innerHTML=s;
+  $("#nucGlow").setAttribute("r",String(38+np*1.6));
+  $("#nucGlow").style.opacity=np?"1":"0";
+  $("#nucSlot").style.opacity=np?"0":"1";
+  $("#roP").textContent=np;$("#roE").textContent=np;
+}
+
+/* ---------- 電子を置く / もどす ---------- */
+function addE(){
+  if(busy)return;
+  if(placed>=cur.cap){bump();return;}
+  placed++;renderOuter(placed-1);renderNuc();
+}
+function bump(){var w=$("#atomWrap");w.classList.remove("shake");void w.offsetWidth;w.classList.add("shake");}
+$("#undoBtn").addEventListener("click",function(){if(busy||!placed)return;placed--;renderOuter(-1);renderNuc();});
+gOuter.addEventListener("click",function(e){
+  if(busy)return;var g=e.target.closest(".eg");if(!g)return;
+  placed--;renderOuter(-1);renderNuc();
+});
+
+/* ドラッグ（ポインタ）— captureに頼らず window で受ける */
+(function(){
+  var src=$("#eSrc"),gh=$("#ghost"),wrap=$("#atomWrap"),dragging=false,moved=false,sx=0,sy=0;
+  function inAtom(x,y){
+    var r=wrap.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
+    return Math.hypot(x-cx,y-cy) < r.width*0.58;
+  }
+  function down(e){
+    if(busy)return;
+    e.preventDefault();
+    dragging=true;moved=false;sx=e.clientX;sy=e.clientY;
+    gh.style.display="block";gh.style.left=sx+"px";gh.style.top=sy+"px";
+    window.addEventListener("pointermove",move);
+    window.addEventListener("pointerup",up);
+    window.addEventListener("pointercancel",cancel);
+  }
+  function move(e){
+    if(!dragging)return;
+    if(Math.abs(e.clientX-sx)>7||Math.abs(e.clientY-sy)>7)moved=true;
+    gh.style.left=e.clientX+"px";gh.style.top=e.clientY+"px";
+    wrap.classList.toggle("over",inAtom(e.clientX,e.clientY));
+  }
+  function cleanup(){
+    dragging=false;gh.style.display="none";wrap.classList.remove("over");
+    window.removeEventListener("pointermove",move);
+    window.removeEventListener("pointerup",up);
+    window.removeEventListener("pointercancel",cancel);
+  }
+  var handled=false;
+  function up(e){
+    if(!dragging)return;
+    var hit = (!moved) || inAtom(e.clientX,e.clientY);
+    cleanup();
+    handled=true;                     /* 直後の click を食わせない */
+    setTimeout(function(){handled=false;},400);
+    if(hit) addE();
+  }
+  function cancel(){cleanup();}
+  src.addEventListener("pointerdown",down);
+  /* pointerdown が来ない環境のための保険（click だけは必ず来る） */
+  src.addEventListener("click",function(){if(!handled)addE();});
+})();
+
+/* ---------- ヒント ---------- */
+$("#hintBtn").addEventListener("click",function(){
+  if(busy||hinted)return;hinted=true;this.disabled=true;
+  var h=$("#hintTxt");
+  h.innerHTML= cur.nm+"は <b>"+cur.z+"</b> ばんめの原子。いま内側に <b>"+cur.innerSum+"</b> こ入っている。";
+  h.className="hint on";
+});
+
+/* ---------- 判定 ---------- */
+$("#goBtn").addEventListener("click",function(){
+  if(busy||!placed)return;busy=true;
+  var z=cur.innerSum+placed, made=byZ(z), ok=(z===cur.z);
+  var isNew=collect(z);
+  if(ok){
+    var pts=[100,60,30][Math.min(tries,2)];
+    if(hinted)pts=Math.min(pts,60);
+    score+=pts;$("#scoreN").textContent=score;
+    $("#outerRing").style.strokeDasharray="none";
+    gOuter.classList.add("spin");gOuter.style.setProperty("--d","14s");
+    if(!RM)confetti(made.col);
+    setTimeout(function(){showCard(made,true,pts,isNew);},RM?0:520);
+  }else{
+    bump();tries++;
+    setTimeout(function(){showCard(made,false,0,isNew);},RM?0:300);
+  }
+});
+
+function handsHTML(e){var s="";for(var i=0;i<e.hands;i++)s+="<i></i>";return s||'<span style="opacity:.5">なし</span>';}
+function showCard(e,ok,pts,isNew){
+  var c=$("#resultCard");c.style.setProperty("--ac",e.col);c.classList.toggle("ng",!ok);
+  var head = ok
+    ? '<p class="verdict" style="color:'+e.col+'">✧ できた！ ✧</p>'
+    : '<p class="verdict ng" style="color:#FF9B4A">ちがった。できたのは…</p>';
+  var body =
+    '<div class="elBox"><span class="z">'+e.z+'</span><span class="sym">'+e.sym+'</span>'+
+    '<span class="nm">'+e.nm+'</span>'+(e.nm!==e.ym?'<span class="ym">'+e.ym+'</span>':'')+'</div>'+
+    '<p class="useTxt">'+e.use+'</p>'+
+    '<div class="bond">いちばん外側 <b>'+e.outer+'</b> こ　→　くっつく手 <b>'+e.hands+'</b> 本 <span class="hands">'+handsHTML(e)+'</span></div>';
+  var nudge="";
+  if(!ok && tries>=2){
+    nudge='<p class="nudge">電子は もっと <b>'+(cur.outer>e.outer?"多い":"少ない")+'</b></p>';
+  }
+  var tail = ok
+    ? '<div class="gain">+'+pts+'</div>'+(isNew?'<p class="newz">図鑑に くわわった</p>':'')+
+      '<div class="cardBtns"><button class="btn pri" id="nextBtn">つぎへ</button></div>'
+    : '<p class="target">めざすのは <b>'+cur.nm+'</b></p>'+nudge+
+      (isNew?'<p class="newz">まちがいも 図鑑に くわわった</p>':'')+
+      '<div class="cardBtns"><button class="btn pri" id="retryBtn">もういちど</button>'+
+      '<button class="btn" id="zukanBtn3">図鑑</button></div>';
+  c.innerHTML=head+body+tail;
+  $("#resultOv").classList.add("on");
+  updateZukan();
+  var nb=$("#nextBtn");if(nb)nb.addEventListener("click",next);
+  var rb=$("#retryBtn");if(rb)rb.addEventListener("click",function(){
+    $("#resultOv").classList.remove("on");busy=false;
+  });
+  var zb=$("#zukanBtn3");if(zb)zb.addEventListener("click",openZukan);
+}
+function next(){
+  $("#resultOv").classList.remove("on");
+  gOuter.classList.remove("spin");
+  qi++;
+  if(qi>=order.length){finish();return;}
+  newQuestion();
+}
+function finish(){
+  $("#barI").style.width="100%";
+  var best=load(BKEY,0),rec=score>best;if(rec)save(BKEY,score);
+  var c=$("#clearCard");c.style.setProperty("--ac","#FFB44D");
+  c.innerHTML='<p class="verdict" style="color:#FFD84D">げんしのへや クリア</p>'+
+    '<div class="bigScore">'+score+'</div>'+
+    '<p class="useTxt">18この原子を すべて つくった。<br>いちばん外側の電子の数が、<br>そのまま<b style="color:#fff">くっつく手の数</b>になる。</p>'+'<p class="target" style="margin-top:12px">つぎは <b>ぶんしのへや</b> ／ その手をつかう</p>'+
+    (rec?'<p class="newz">さいこう記録こうしん！</p>':'<p class="newz" style="color:#9AA6C4">さいこう記録 '+Math.max(best,score)+'</p>')+
+    '<div class="cardBtns"><button class="btn pri" id="againBtn">もういちど</button><button class="btn" id="zukanBtn4">図鑑</button></div>';
+  $("#clearOv").classList.add("on");
+  $("#againBtn").addEventListener("click",function(){$("#clearOv").classList.remove("on");start();});
+  $("#zukanBtn4").addEventListener("click",openZukan);
+}
+
+/* ---------- 紙吹雪 ---------- */
+function confetti(col){
+  var cols=[col,"#FFD84D","#FFFFFF","#7FE8FF","#FF71C8"],w=$("#atomWrap").getBoundingClientRect();
+  var cx=w.left+w.width/2, cy=w.top+w.height/2;
+  for(var i=0;i<52;i++){
+    var d=document.createElement("i");d.className="cf";
+    var sz=4+Math.random()*7;
+    d.style.cssText="left:"+cx+"px;top:"+cy+"px;width:"+sz+"px;height:"+(sz*(Math.random()>.5?1:2.2))+"px;background:"+cols[i%cols.length];
+    document.body.appendChild(d);
+    var ang=Math.random()*6.284, dist=90+Math.random()*250;
+    d.animate([
+      {transform:"translate(0,0) rotate(0deg)",opacity:1},
+      {transform:"translate("+Math.cos(ang)*dist+"px,"+(Math.sin(ang)*dist+180+Math.random()*160)+"px) rotate("+(Math.random()*900-450)+"deg)",opacity:0}
+    ],{duration:1200+Math.random()*900,easing:"cubic-bezier(.15,.7,.3,1)"}).onfinish=function(){this.effect.target.remove();};
+  }
+}
+
+/* ---------- 図鑑 ---------- */
+function updateZukan(){
+  var cols=$("#zCols"),grid=$("#zGrid"),i,s="";
+  for(i=1;i<=8;i++)s+='<div class="zcol">'+i+'</div>';
+  cols.innerHTML=s;
+  s="";
+  for(var row=0;row<3;row++){
+    for(var g=1;g<=8;g++){
+      var e=EL.filter(function(x){
+        var p = x.z<=2?0 : (x.z<=10?1:2);
+        return p===row && x.grp===g;
+      })[0];
+      if(!e){s+='<div class="zc blank"></div>';continue;}
+      var got=zukan.indexOf(e.z)>=0;
+      s+='<div class="zc'+(got?' got':'')+'" style="--ac:'+e.col+'" data-z="'+e.z+'">'+
+         '<span class="z">'+e.z+'</span>'+
+         (got?'<span class="s">'+e.sym+'</span><span class="n">'+e.nm+'</span>':'<span class="q">?</span>')+
+         '</div>';
+    }
+  }
+  grid.innerHTML=s;
+  $("#zCount").textContent=zukan.length;
+}
+$("#zGrid").addEventListener("click",function(ev){
+  var c=ev.target.closest(".zc.got");if(!c)return;
+  var e=byZ(+c.dataset.z);
+  $("#zDet").innerHTML='<b style="color:'+e.col+'">'+e.sym+'</b> <b>'+e.nm+'</b>'+
+    (e.nm!==e.ym?' <span style="font-size:.72rem">（'+e.ym+'）</span>':'')+
+    '　<span style="font-size:.72rem">外側 '+e.outer+'こ ／ 手 '+e.hands+'本</span>'+
+    '<span class="u">'+e.use+'</span>';
+});
+function openZukan(){updateZukan();$("#zukanOv").classList.add("on");}
+$("#zClose").addEventListener("click",function(){$("#zukanOv").classList.remove("on");});
+$("#zukanBtn").addEventListener("click",openZukan);
+$("#zukanBtn2").addEventListener("click",openZukan);
+$("#zukanOv").addEventListener("click",function(e){if(e.target===this)this.classList.remove("on");});
+
+/* ---------- 開始 ---------- */
+function start(){
+  score=0;qi=0;$("#scoreN").textContent="0";
+  buildOrder();
+  $("#title").style.display="none";
+  $("#game").style.display="block";
+  newQuestion();
+  window.scrollTo(0,0);
+}
+$("#startBtn").addEventListener("click",start);
+updateZukan();
+})();
+</script>
+</body>
+</html>

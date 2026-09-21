@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>あたやさいさいゲームランド</title>
+<meta name="description" content="あそんでたら、くらしがととのってた。借金の返済も、まなびも、ねむりも。ついあとまわしにしちゃうことを、思わず続けたくなるゲームにしました。ぜんぶ無料、ブラウザですぐ遊べます。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="あたやさいさいゲームランド">
+<meta property="og:description" content="あそんでたら、くらしがととのってた。ぜんぶ無料、ブラウザですぐ遊べるゲームランドです。">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#FFFCF2">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Noto+Sans+JP:wght@400;500;700&display=swap">
+<style>
+:root{
+  --ki:#F5B70A; --do:#F0603F; --ai:#4A6BC0; --raku:#4CB86B; --pink:#F58FB0; --sky:#7EC8E3;
+  --ink:#33312A; --paper:#FFFCF2; --paper2:#FFF4D6; --white:#FFFFFF; --sub:#5C574A; --faint:#A39E8B;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:"Noto Sans JP",sans-serif;color:var(--ink);background:var(--paper);line-height:1.9;overflow-x:hidden}
+h1,h2,h3,.maru{font-family:"Zen Maru Gothic","Hiragino Maru Gothic ProN",sans-serif;margin:0;text-wrap:balance}
+svg{display:block}
+a{color:inherit}
+.wrap{max-width:1000px;margin:0 auto;padding-inline:20px;position:relative;z-index:2}
+
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+@keyframes wob{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(5deg)}}
+@keyframes bounce{0%,100%{transform:translateY(0)}40%{transform:translateY(-10px)}}
+@keyframes marquee{to{transform:translateX(-50%)}}
+@keyframes pop{0%{transform:scale(0) rotate(-20deg)}70%{transform:scale(1.15) rotate(4deg)}100%{transform:scale(1)}}
+@keyframes shake{0%,100%{transform:rotate(0)}20%{transform:rotate(-6deg)}40%{transform:rotate(6deg)}60%{transform:rotate(-4deg)}80%{transform:rotate(3deg)}}
+@keyframes blink{50%{opacity:.35}}
+.floaty{animation:floaty 4s ease-in-out infinite}
+.wob{animation:wob 3.2s ease-in-out infinite;transform-origin:center bottom}
+
+/* header */
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(255,252,242,.94);backdrop-filter:blur(8px);border-bottom:3px solid var(--ink)}
+.hd{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:10px}
+.logo{display:flex;align-items:center;gap:8px;font-family:"Zen Maru Gothic",sans-serif;font-weight:900;font-size:1.05rem;text-decoration:none}
+.logo svg{width:34px;height:34px}
+.logo b{background:var(--ki);border:2.5px solid var(--ink);border-radius:999px;padding:0 10px;font-size:.78rem;transform:rotate(-4deg);display:inline-block}
+nav{display:flex;gap:18px;font-size:.84rem;font-weight:700}
+nav a{text-decoration:none} nav a:hover{color:var(--do)}
+@media(max-width:760px){.hd{flex-wrap:wrap;justify-content:center;gap:6px;padding-block:8px}.logo{font-size:.95rem;white-space:nowrap}nav{width:100%;gap:14px;font-size:.74rem;flex-wrap:wrap;justify-content:center;border-top:2px dashed #E4DCC4;padding-top:7px}}
+
+.chantbar{background:var(--ink);color:#fff;overflow:hidden;white-space:nowrap;font-family:"Zen Maru Gothic",sans-serif;font-weight:900;font-size:.95rem;padding-block:7px}
+.chantbar .track{display:inline-block;animation:marquee 24s linear infinite}
+.chantbar span{margin:0 20px;letter-spacing:.12em}
+.y{color:var(--ki)}.r{color:var(--do)}.b{color:var(--sky)}.g{color:var(--raku)}.p{color:var(--pink)}
+
+/* hero */
+.hero{position:relative;overflow:hidden;padding-block:48px 20px;
+  background:radial-gradient(circle at 8% 18%,rgba(245,183,10,.24),transparent 30%),radial-gradient(circle at 92% 12%,rgba(240,96,63,.16),transparent 28%),radial-gradient(circle at 12% 90%,rgba(74,107,192,.14),transparent 28%),radial-gradient(circle at 90% 88%,rgba(76,184,107,.2),transparent 30%)}
+.doodle{position:absolute;pointer-events:none;z-index:1}
+.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:36px;align-items:center}
+@media(max-width:820px){.hero-grid{grid-template-columns:1fr;text-align:center}}
+.eyebrow{display:inline-block;font-size:.76rem;font-weight:700;letter-spacing:.2em;border:2.5px solid var(--ink);border-radius:999px;padding:4px 16px;background:var(--white);box-shadow:3px 3px 0 var(--ink);margin-bottom:18px}
+.hero h1{font-size:clamp(1.9rem,4.6vw,3.2rem);font-weight:900;line-height:1.35;letter-spacing:.02em}
+.hero h1 .big{display:block;font-size:1.18em}
+.hero h1 .big span{display:inline-block;animation:bounce 2.4s ease-in-out infinite}
+.hero h1 .big span:nth-child(2){animation-delay:.1s}.hero h1 .big span:nth-child(3){animation-delay:.2s}.hero h1 .big span:nth-child(4){animation-delay:.3s}.hero h1 .big span:nth-child(5){animation-delay:.4s}.hero h1 .big span:nth-child(6){animation-delay:.5s}.hero h1 .big span:nth-child(7){animation-delay:.6s}
+.lead{margin:18px 0 0;font-weight:500;max-width:30em}
+@media(max-width:820px){.lead{margin-inline:auto}}
+.lead mark{background:linear-gradient(transparent 58%,rgba(245,183,10,.6) 58%);color:inherit}
+
+/* gacha */
+.gacha{background:var(--white);border:3px solid var(--ink);border-radius:32px;box-shadow:0 7px 0 var(--ink);padding:22px 20px 20px;text-align:center;position:relative}
+.gacha h2{font-size:1.2rem;font-weight:900}
+.gacha .sub{font-size:.78rem;color:var(--sub);margin:0 0 10px}
+.machine{width:190px;max-width:100%;margin:0 auto}
+.machine.go{animation:shake .6s ease}
+.gbtn{font-family:"Zen Maru Gothic",sans-serif;font-weight:900;font-size:1.05rem;background:var(--do);color:#fff;border:3px solid var(--ink);border-radius:999px;padding:9px 26px;box-shadow:0 5px 0 var(--ink);cursor:pointer;margin-top:8px;transition:transform .1s}
+.gbtn:hover{transform:translateY(-2px)} .gbtn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--ink)}
+.gbtn:focus-visible,.chip:focus-visible,.play:focus-visible{outline:3px solid var(--ai);outline-offset:3px}
+.result{margin-top:14px;border:3px dashed var(--ink);border-radius:20px;padding:12px 14px;background:var(--paper2);display:flex;align-items:center;gap:12px;text-align:left;min-height:88px}
+.result .ic{width:58px;height:58px;flex:none;animation:pop .45s ease both}
+.result b{font-family:"Zen Maru Gothic",sans-serif;font-size:1.05rem;display:block;line-height:1.4}
+.result small{font-size:.76rem;color:var(--sub);display:block;line-height:1.6}
+
+.parade{display:flex;justify-content:center;align-items:flex-end;gap:clamp(8px,3vw,28px);margin-top:36px;flex-wrap:wrap}
+.parade svg{width:clamp(56px,9vw,90px);height:auto;animation:bounce 2.6s ease-in-out infinite}
+.parade svg:nth-child(2){animation-delay:.2s}.parade svg:nth-child(3){animation-delay:.4s}.parade svg:nth-child(4){animation-delay:.6s}.parade svg:nth-child(5){animation-delay:.8s}
+.hills{width:100%;height:64px;margin-top:-4px}
+
+/* sections */
+section{padding-block:72px;position:relative}
+.label{font-size:.76rem;font-weight:700;letter-spacing:.3em;color:var(--faint);text-align:center;margin:0 0 6px}
+.title{font-size:clamp(1.55rem,4vw,2.3rem);font-weight:900;text-align:center;margin-bottom:12px}
+.hl{background:linear-gradient(transparent 60%,rgba(245,183,10,.6) 60%)}
+.intro{max-width:34em;margin:0 auto 36px;text-align:center}
+.band{background:var(--paper2);border-block:3px solid var(--ink)}
+
+/* promises */
+.promises{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media(max-width:760px){.promises{grid-template-columns:1fr}}
+.prom{background:var(--white);border:3px solid var(--ink);border-radius:26px;padding:22px 20px;text-align:center;box-shadow:4px 4px 0 rgba(51,49,42,.14)}
+.prom svg{width:64px;height:64px;margin:0 auto 8px}
+.prom h3{font-size:1.1rem;font-weight:900;margin-bottom:4px}
+.prom p{margin:0;font-size:.84rem;color:var(--sub);text-align:left}
+
+/* spotlight */
+.spot{display:grid;grid-template-columns:1.1fr 1fr;background:var(--white);border:3px solid var(--ink);border-radius:32px;box-shadow:0 8px 0 var(--do);overflow:hidden}
+@media(max-width:820px){.spot{grid-template-columns:1fr}}
+.stage{background:#7EC8E3;border-right:3px solid var(--ink);position:relative;min-height:280px;overflow:hidden}
+@media(max-width:820px){.stage{border-right:0;border-bottom:3px solid var(--ink)}}
+.stage svg{width:100%;height:100%;position:absolute;inset:0}
+.walker{animation:walk 8s linear infinite}
+.walker.w2{animation-delay:-2.7s}.walker.w3{animation-delay:-5.4s}
+@keyframes walk{from{transform:translateX(0)}to{transform:translateX(-220px)}}
+.pow{animation:blink 1s steps(1) infinite}
+.stage .newtag{position:absolute;top:14px;left:14px;background:var(--ki);border:3px solid var(--ink);border-radius:999px;padding:2px 14px;font-family:"Zen Maru Gothic",sans-serif;font-weight:900;transform:rotate(-6deg);box-shadow:3px 3px 0 var(--ink);z-index:2}
+.spot-tx{padding:28px 26px;display:flex;flex-direction:column;gap:12px}
+.spot-tx h3{font-size:1.75rem;font-weight:900}
+.spot-tx p{margin:0;font-size:.92rem}
+.swap{display:grid;grid-template-columns:1fr auto 1fr;gap:6px 8px;align-items:center;font-size:.84rem;margin:0;padding:0;list-style:none}
+.swap .gm{background:var(--paper2);border:2px solid var(--ink);border-radius:999px;padding:1px 12px;font-weight:700;text-align:center}
+.swap .ar{color:var(--do);font-weight:900}
+.swap .rl{font-weight:700}
+.play{align-self:flex-start;display:inline-flex;gap:8px;align-items:center;font-family:"Zen Maru Gothic",sans-serif;font-weight:900;font-size:1.05rem;text-decoration:none;background:var(--raku);color:#fff;border:3px solid var(--ink);border-radius:999px;padding:9px 24px;box-shadow:0 5px 0 var(--ink);transition:transform .1s}
+.play:hover{transform:translateY(-2px)} .play:active{transform:translateY(4px);box-shadow:0 1px 0 var(--ink)}
+
+/* shelf */
+.filters{display:flex;flex-direction:column;gap:10px;align-items:center;margin-bottom:30px}
+.frow{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.chip{font-family:"Zen Maru Gothic",sans-serif;font-weight:700;font-size:.88rem;background:var(--white);color:var(--ink);border:2.5px solid var(--ink);border-radius:999px;padding:4px 14px;cursor:pointer;box-shadow:0 3px 0 var(--ink);display:inline-flex;align-items:center;gap:6px;transition:transform .1s}
+.chip:hover{transform:translateY(-2px)}
+.chip[aria-pressed="true"]{background:var(--ink);color:#fff;transform:translateY(2px);box-shadow:0 1px 0 var(--ink)}
+.chip svg{width:20px;height:20px}
+.shelf{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:22px}
+.card{background:var(--white);border:3px solid var(--ink);border-radius:26px;padding:20px 20px 18px;position:relative;box-shadow:4px 4px 0 rgba(51,49,42,.14);transition:transform .15s;display:flex;flex-direction:column;gap:6px;animation:pop .35s ease both}
+.card:hover{transform:translateY(-5px) rotate(-1deg)}
+.card .tag{position:absolute;top:-14px;right:14px;font-size:.7rem;font-weight:700;padding:2px 12px;border-radius:999px;border:2.5px solid var(--ink);color:#fff;transform:rotate(3deg)}
+.tag.live{background:var(--raku)}.tag.prep{background:var(--do)}.tag.idea{background:var(--ai)}
+.card .top{display:flex;gap:14px;align-items:center}
+.card .ic{width:66px;height:66px;flex:none;border-radius:20px;border:2.5px solid var(--ink);display:flex;align-items:center;justify-content:center}
+.card .ic svg{width:50px;height:50px}
+.card h3{font-size:1.14rem;font-weight:900;line-height:1.4}
+.card .biz{font-size:.72rem;color:var(--sub);font-weight:700}
+.card p{margin:4px 0 0;font-size:.84rem;color:var(--sub);line-height:1.8}
+.meter{display:grid;grid-template-columns:7em 1fr;gap:2px 8px;font-size:.76rem;font-weight:700;margin-top:6px;align-items:center}
+.stars{display:flex;gap:2px}
+.stars svg{width:16px;height:16px}
+.feel{display:flex;align-items:center;gap:6px;font-size:.74rem;font-weight:700;margin-top:6px;flex-wrap:wrap}
+.feel span{border:2px solid var(--ink);border-radius:999px;padding:0 10px;background:var(--paper2)}
+.card .play{margin-top:8px;font-size:.92rem;padding:5px 18px}
+.none{text-align:center;font-weight:700;color:var(--sub)}
+
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+@media(max-width:760px){.steps{grid-template-columns:1fr 1fr}}
+@media(max-width:420px){.steps{grid-template-columns:1fr}}
+.step{background:var(--white);border:3px solid var(--ink);border-radius:24px;padding:18px 16px;text-align:center;position:relative}
+.step .no{width:40px;height:40px;border-radius:50%;border:3px solid var(--ink);display:flex;align-items:center;justify-content:center;margin:-38px auto 8px;font-family:"Zen Maru Gothic",sans-serif;font-weight:900;font-size:1.15rem;color:#fff}
+.step h3{font-size:1.02rem;font-weight:900}
+.step p{margin:4px 0 0;font-size:.8rem;color:var(--sub)}
+
+/* soon */
+#soon{background:var(--ink);color:#fff;overflow:hidden}
+#soon .label{color:#8D8A7C}
+#soon blockquote{margin:0 auto;max-width:28em;text-align:center;font-family:"Zen Maru Gothic",sans-serif;font-weight:900;font-size:clamp(1.15rem,3.4vw,1.6rem);line-height:2.1}
+#soon em{font-style:normal}
+
+.brsp{display:none}@media(max-width:560px){.brsp{display:inline}}
+.sup{display:grid;grid-template-columns:1.15fr .85fr;gap:26px;align-items:center;background:var(--white);border:3px solid var(--ink);border-radius:32px;box-shadow:0 8px 0 var(--pink);padding:32px 30px;margin-top:36px}
+@media(max-width:820px){.sup{grid-template-columns:1fr;padding:26px 22px}}
+.sup-tx p{margin:0 0 14px;font-size:.95rem;line-height:2}
+.sup-tx .note{font-size:.78rem;color:var(--sub);margin:16px 0 0;line-height:1.9}
+.play.line{background:#06C755}
+.sup-ic{display:flex;justify-content:center}
+.sup-ic svg{width:min(230px,62vw);height:auto}
+footer{border-top:3px solid var(--ink);padding-block:40px 28px;text-align:center;background:var(--white)}
+footer .chant{font-family:"Zen Maru Gothic",sans-serif;font-weight:900;font-size:1.2rem;letter-spacing:.14em;margin:0 0 8px}
+footer .fine{font-size:.72rem;color:var(--faint);margin:0}
+
+.confetti{position:fixed;width:10px;height:14px;top:-20px;z-index:99;pointer-events:none;border:1.5px solid var(--ink)}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<header><div class="wrap hd">
+  <a class="logo" href="#top">
+    <svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="10" fill="#F5B70A" stroke="#33312A" stroke-width="2.5"/><g stroke="#33312A" stroke-width="2.5" stroke-linecap="round"><line x1="20" y1="2" x2="20" y2="7"/><line x1="20" y1="33" x2="20" y2="38"/><line x1="2" y1="20" x2="7" y2="20"/><line x1="33" y1="20" x2="38" y2="20"/><line x1="7" y1="7" x2="10.5" y2="10.5"/><line x1="29.5" y1="29.5" x2="33" y2="33"/><line x1="33" y1="7" x2="29.5" y2="10.5"/><line x1="10.5" y1="29.5" x2="7" y2="33"/></g><circle cx="16.5" cy="18.5" r="1.4" fill="#33312A"/><circle cx="23.5" cy="18.5" r="1.4" fill="#33312A"/><path d="M16 22.5 q4 3.5 8 0" stroke="#33312A" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+    あたやさいさい。<b>ゲームランド</b>
+  </a>
+  <nav><a href="#gacha">ガチャ</a><a href="#pick">いま遊べる</a><a href="#shelf">ゲームいちらん</a><a href="#how">あそびかた</a><a href="#support">おうえん</a></nav>
+</div></header>
+
+<div class="chantbar" aria-hidden="true"><div class="track">
+  <span class="y">やっさい、あそびさい。</span><span class="r">たたかって</span><span class="b">ねむって</span><span class="g">そだてて</span><span class="p">わらって</span><span class="y">やっさい、あそびさい。</span><span class="r">うたって</span><span class="b">ためて</span><span class="g">しぼって</span><span class="p">いわって</span>
+  <span class="y">やっさい、あそびさい。</span><span class="r">たたかって</span><span class="b">ねむって</span><span class="g">そだてて</span><span class="p">わらって</span><span class="y">やっさい、あそびさい。</span><span class="r">うたって</span><span class="b">ためて</span><span class="g">しぼって</span><span class="p">いわって</span>
+</div></div>
+
+<main id="top">
+<section class="hero" id="gacha">
+  <svg class="doodle floaty" style="top:40px;left:3%;width:50px" viewBox="0 0 50 50" aria-hidden="true"><rect x="6" y="6" width="38" height="38" rx="9" fill="#fff" stroke="#33312A" stroke-width="3"/><circle cx="16" cy="16" r="3.4" fill="#33312A"/><circle cx="34" cy="34" r="3.4" fill="#33312A"/><circle cx="25" cy="25" r="3.4" fill="#F0603F"/></svg>
+  <svg class="doodle floaty" style="bottom:130px;left:46%;width:44px;animation-delay:1.2s" viewBox="0 0 50 50" aria-hidden="true"><path d="M25 4 l5.5 13 14 1.2 -10.6 9.3 3.2 13.8 L25 34 12.9 41.3 16.1 27.5 5.5 18.2 19.5 17z" fill="#F5B70A" stroke="#33312A" stroke-width="3" stroke-linejoin="round"/></svg>
+  <svg class="doodle floaty" style="top:30px;right:4%;width:48px;animation-delay:.6s" viewBox="0 0 50 50" aria-hidden="true"><circle cx="25" cy="25" r="18" fill="#F5B70A" stroke="#33312A" stroke-width="3"/><text x="25" y="33" text-anchor="middle" font-family="Zen Maru Gothic,sans-serif" font-weight="900" font-size="22" fill="#33312A">¥</text></svg>
+
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <span class="eyebrow">ATAYASAISAI GAME LAND</span>
+        <h1>あそんでたら、<br>くらしが<br><span style="color:var(--raku)">ととのってた</span>。
+          <span class="big"><span class="y" style="color:var(--ki)">げ</span><span style="color:var(--do)">ー</span><span style="color:var(--ai)">む</span><span style="color:var(--raku)">ら</span><span style="color:var(--pink)">ん</span><span style="color:var(--ki)">ど</span><span style="color:var(--do)">！</span></span>
+        </h1>
+        <p class="lead">借金の返済も、家計も、ねむりも、声の練習も。<mark>ついあとまわしにしちゃうことを、思わず続けたくなるゲーム</mark>にしました。遊んだぶんだけ、ほんとうの毎日がちょっと楽しくなります。</p>
+      </div>
+
+      <div class="gacha">
+        <h2>やさいさいガチャ</h2>
+        <p class="sub">なにで遊ぶか迷ったら、ハンドルをまわしてね</p>
+        <svg class="machine" id="machine" viewBox="0 0 200 230" aria-hidden="true">
+          <rect x="44" y="186" width="112" height="30" rx="8" fill="#F0603F" stroke="#33312A" stroke-width="3.5"/>
+          <path d="M40 120 h120 v70 h-120z" fill="#F0603F" stroke="#33312A" stroke-width="3.5" stroke-linejoin="round"/>
+          <circle cx="100" cy="72" r="62" fill="#DFF3FA" stroke="#33312A" stroke-width="3.5"/>
+          <g stroke="#33312A" stroke-width="2.6">
+            <circle cx="70" cy="92" r="15" fill="#F5B70A"/><circle cx="102" cy="100" r="15" fill="#4CB86B"/><circle cx="132" cy="90" r="15" fill="#F58FB0"/>
+            <circle cx="84" cy="64" r="15" fill="#4A6BC0"/><circle cx="116" cy="62" r="15" fill="#F0603F"/><circle cx="100" cy="36" r="14" fill="#7EC8E3"/>
+          </g>
+          <path d="M60 40 q10 -18 30 -22" stroke="#fff" stroke-width="6" fill="none" stroke-linecap="round"/>
+          <circle cx="100" cy="150" r="17" fill="#fff" stroke="#33312A" stroke-width="3.5"/>
+          <rect id="lever" x="96" y="136" width="8" height="28" rx="4" fill="#33312A" style="transform-origin:100px 150px;transition:transform .5s"/>
+          <rect x="120" y="164" width="28" height="20" rx="4" fill="#33312A"/>
+          <circle cx="64" cy="146" r="5" fill="#fff" stroke="#33312A" stroke-width="2.4"/><circle cx="64" cy="170" r="5" fill="#F5B70A" stroke="#33312A" stroke-width="2.4"/>
+        </svg>
+        <button class="gbtn" id="spin" type="button">ガチャをまわす！</button>
+        <div class="result" id="result" aria-live="polite">
+          <div class="ic" id="rIc"></div>
+          <div><b id="rName">借金退治クエスト</b><small id="rDesc">返済日にせまるモンスターを、返済でやっつけよう。</small></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="parade" aria-hidden="true" id="parade"></div>
+  </div>
+</section>
+<svg class="hills" viewBox="0 0 1200 90" preserveAspectRatio="none" aria-hidden="true"><path d="M0 90 L0 55 Q150 10 340 48 Q520 82 700 40 Q880 4 1060 44 Q1140 60 1200 50 L1200 90z" fill="#4CB86B" stroke="#33312A" stroke-width="3"/></svg>
+
+<section class="band" id="promise"><div class="wrap">
+  <p class="label">PROMISE</p>
+  <h2 class="title">ゲームランドの<span class="hl">3つのおやくそく</span></h2>
+  <div class="promises">
+    <div class="prom">
+      <svg class="wob" viewBox="0 0 60 60" aria-hidden="true"><rect x="10" y="12" width="40" height="38" rx="6" fill="#fff" stroke="#33312A" stroke-width="3"/><path d="M10 20 h40" stroke="#33312A" stroke-width="3"/><rect x="10" y="12" width="40" height="8" fill="#F0603F" stroke="#33312A" stroke-width="3"/><circle cx="22" cy="32" r="3" fill="#F5B70A"/><circle cx="38" cy="32" r="3" fill="#4CB86B"/><path d="M20 42 q10 6 20 0" stroke="#33312A" stroke-width="3" fill="none" stroke-linecap="round"/></svg>
+      <h3>ほんものの数字であそぶ</h3><p>返済日も、残高も、ねむった時間も、ぜんぶあなたのもの。クリアしたら、現実もちゃんと一歩すすんでいます。</p></div>
+    <div class="prom">
+      <svg class="wob" style="animation-delay:.3s" viewBox="0 0 60 60" aria-hidden="true"><path d="M30 8 l18 7 v12 c0 12 -8 20 -18 25 c-10 -5 -18 -13 -18 -25 v-12z" fill="#4CB86B" stroke="#33312A" stroke-width="3" stroke-linejoin="round"/><path d="M22 30 l6 6 12 -12" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <h3>きろくは、あなたの端末だけ</h3><p>入れた数字は、つかっている端末のブラウザの中だけにしまいます。会員登録もログインもいりません。</p></div>
+    <div class="prom">
+      <svg class="wob" style="animation-delay:.6s" viewBox="0 0 60 60" aria-hidden="true"><path d="M30 50 c-14 -9 -22 -17 -22 -27 a11 11 0 0 1 22 -3 a11 11 0 0 1 22 3 c0 10 -8 18 -22 27z" fill="#F58FB0" stroke="#33312A" stroke-width="3" stroke-linejoin="round"/><circle cx="23" cy="27" r="2.4" fill="#33312A"/><circle cx="37" cy="27" r="2.4" fill="#33312A"/><path d="M24 34 q6 5 12 0" stroke="#33312A" stroke-width="2.6" fill="none" stroke-linecap="round"/></svg>
+      <h3>金融商品はすすめません</h3><p>ゲームの中で保険や投資の勧誘はしません。むかつくも、かなしいも、「やってみよう」に変えるための遊び場です。</p></div>
+  </div>
+</div></section>
+
+<section id="pick"><div class="wrap">
+  <p class="label">NOW PLAYING</p>
+  <h2 class="title">いま遊べる！<span class="hl">なんでもラーニングクエスト</span></h2>
+  <p class="intro">いますぐブラウザで遊べます。インストールも、会員とうろくもいりません。</p>
+  <article class="spot">
+    <div class="stage" aria-hidden="true">
+      <span class="newtag">公開中！</span>
+      <svg viewBox="0 0 420 300" preserveAspectRatio="xMidYMid slice">
+        <rect width="420" height="190" fill="#7EC8E3"/>
+        <path d="M250 60 q8 -18 28 -13 q7 -11 21 -6 q15 -5 18 10 q13 3 6 14 q-38 7 -73 -5z" fill="#fff" stroke="#33312A" stroke-width="3" stroke-linejoin="round"/>
+        <path d="M0 190 Q100 160 210 185 T420 180 V300 H0z" fill="#4CB86B" stroke="#33312A" stroke-width="3"/>
+        <path d="M0 238 Q210 218 420 236 V262 Q210 244 0 264z" fill="#E9C58E" stroke="#33312A" stroke-width="3"/>
+        <!-- castle -->
+        <g stroke="#33312A" stroke-width="3" stroke-linejoin="round">
+          <rect x="18" y="140" width="80" height="110" fill="#fff"/>
+          <rect x="8" y="118" width="26" height="132" fill="#fff"/><rect x="82" y="118" width="26" height="132" fill="#fff"/>
+          <path d="M4 120 l17 -30 17 30z M78 120 l17 -30 17 30z" fill="#4A6BC0"/>
+          <path d="M44 250 v-34 q14 -16 28 0 v34z" fill="#C98A4B"/>
+          <path d="M21 90 v-22 l16 6 -16 6" fill="#F0603F"/>
+        </g>
+        <!-- hero -->
+        <g class="floaty" stroke="#33312A" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+          <circle cx="146" cy="196" r="14" fill="#FFD9A0"/>
+          <path d="M132 192 q14 -14 28 0 v-5 q-14 -12 -28 0z" fill="#33312A"/>
+          <circle cx="141" cy="196" r="1.8" fill="#33312A"/><circle cx="151" cy="196" r="1.8" fill="#33312A"/>
+          <path d="M141 203 q5 4 10 0" fill="none"/>
+          <path d="M135 212 q11 6 22 0 l3 28 h-28z" fill="#F0603F"/>
+          <path d="M157 216 l20 -22" /><path d="M172 188 l14 -16 4 4 -16 14z" fill="#DFE6EC"/>
+        </g>
+        <text class="pow" x="192" y="170" font-family="Zen Maru Gothic,sans-serif" font-weight="900" font-size="22" fill="#F5B70A" stroke="#33312A" stroke-width="1.5">えいっ！</text>
+        <!-- monsters -->
+        <g class="walker">
+          <g transform="translate(330 214)" stroke="#33312A" stroke-width="3" stroke-linejoin="round">
+            <path d="M-22 22 q-2 -34 22 -34 q24 0 22 34z" fill="#9B7BE0"/>
+            <circle cx="-7" cy="0" r="3" fill="#33312A"/><circle cx="7" cy="0" r="3" fill="#33312A"/>
+            <path d="M-8 10 q8 -5 16 0" fill="none"/>
+            <rect x="-18" y="-34" width="36" height="16" rx="4" fill="#fff"/><text x="0" y="-22" text-anchor="middle" font-size="10" font-weight="900" fill="#4CB86B" stroke="none" font-family="Zen Maru Gothic,sans-serif">90てん</text>
+          </g>
+        </g>
+        <g class="walker w2">
+          <g transform="translate(330 214)" stroke="#33312A" stroke-width="3" stroke-linejoin="round">
+            <path d="M-20 22 q0 -30 20 -30 q20 0 20 30z" fill="#4CB86B"/>
+            <circle cx="-7" cy="2" r="3" fill="#33312A"/><circle cx="7" cy="2" r="3" fill="#33312A"/>
+            <path d="M-8 -8 l-6 -10 M8 -8 l6 -10" fill="none"/>
+            <rect x="-18" y="-36" width="36" height="16" rx="4" fill="#fff"/><text x="0" y="-24" text-anchor="middle" font-size="10" font-weight="900" fill="#4CB86B" stroke="none" font-family="Zen Maru Gothic,sans-serif">120てん</text>
+          </g>
+        </g>
+        <g class="walker w3">
+          <g transform="translate(340 206)" stroke="#33312A" stroke-width="3" stroke-linejoin="round">
+            <path d="M-28 30 q-6 -46 28 -46 q34 0 28 46z" fill="#F0603F"/>
+            <path d="M-18 -12 l-8 -14 12 6 M18 -12 l8 -14 -12 6" fill="#F5B70A"/>
+            <circle cx="-9" cy="2" r="3.4" fill="#33312A"/><circle cx="9" cy="2" r="3.4" fill="#33312A"/>
+            <path d="M-10 14 l4 -4 4 4 4 -4 4 4 4 -4" fill="none"/>
+            <rect x="-20" y="-46" width="40" height="16" rx="4" fill="#fff"/><text x="0" y="-34" text-anchor="middle" font-size="10" font-weight="900" fill="#F0603F" stroke="none" font-family="Zen Maru Gothic,sans-serif">20てん</text>
+          </g>
+        </g>
+      </svg>
+    </div>
+    <div class="spot-tx">
+      <h3>なんでもラーニングクエスト</h3>
+      <p>問題をかかげたモンスターが、1びょうに1ぽずつお城にせまってきます。こたえを選んでやっつけよう。遠くで倒すほど高得点。まちがえた問題は、おぼえておいて もういちど出てきます。いまは「せかいの国旗」36か国ぶん。</p>
+      <ul class="swap">
+        <li class="gm">モンスター</li><li class="ar">＝</li><li class="rl">まだ覚えていない問題</li>
+        <li class="gm">かかげている旗</li><li class="ar">＝</li><li class="rl">問いそのもの</li>
+        <li class="gm">こうげき</li><li class="ar">＝</li><li class="rl">こたえる</li>
+        <li class="gm">お城まで行かれる</li><li class="ar">＝</li><li class="rl">覚えないまま流れた</li>
+      </ul>
+      <a class="play" href="02_nandemo_learning_quest/">クエストにでかける ▶</a>
+    </div>
+  </article>
+</div></section>
+
+<section class="band" id="shelf"><div class="wrap">
+  <p class="label">GAME LIST</p>
+  <h2 class="title">ゲーム<span class="hl">いちらん</span></h2>
+  <p class="intro">ジャンルや、いまの気分でさがしてね。★は「おもしろさ」と「くらしに効く度」です。</p>
+  <div class="filters">
+    <div class="frow" id="fCat" role="group" aria-label="ジャンルでさがす"></div>
+    <div class="frow" id="fFeel" role="group" aria-label="気分でさがす"></div>
+  </div>
+  <div class="shelf" id="list"></div>
+</div></section>
+
+<section id="how"><div class="wrap">
+  <p class="label">HOW TO PLAY</p>
+  <h2 class="title">あそびかたは<span class="hl">かんたん4ステップ</span></h2>
+  <div class="steps" style="margin-top:44px">
+    <div class="step"><div class="no" style="background:var(--ki)">1</div><h3>えらぶ</h3><p>気になるゲームを選ぶか、ガチャにおまかせ。</p></div>
+    <div class="step"><div class="no" style="background:var(--do)">2</div><h3>いれる</h3><p>返済日や残高など、自分の数字を入れる。</p></div>
+    <div class="step"><div class="no" style="background:var(--ai)">3</div><h3>あそぶ</h3><p>1回数分。こうげき、きろく、れんしゅう。</p></div>
+    <div class="step"><div class="no" style="background:var(--raku)">4</div><h3>すすむ</h3><p>クリアのお祝いと一緒に、くらしも前へ。</p></div>
+  </div>
+</div></section>
+
+<section id="soon"><div class="wrap">
+  <p class="label">COMING SOON</p>
+  <blockquote>
+    <em class="r">むかつく</em>も、<em class="b">かなしい</em>も、<br>ゲームにしたら、<em class="y">ちょっとたのしい</em>。<br>
+    やさいさいファミリーから、<em class="g">新しいゲームが続々登場予定</em>です。
+  </blockquote>
+</div></section>
+
+<section class="band" id="support"><div class="wrap">
+  <p class="label">SUPPORT</p>
+  <h2 class="title">このゲームランドは<span class="hl">寄付</span>で<br class="brsp">成り立っています</h2>
+  <div class="sup">
+    <div class="sup-tx">
+      <p>ここにあるゲームは、ぜんぶ無料です。広告も出しません。会員とうろくもいりません。つくるのにかかるお金は、あそんでくれた人の寄付でまかなっています。</p>
+      <p><b>よかったら、LINEスタンプを買ってください。</b>スタンプ1こぶんの気もちが、つぎのゲーム1本になります。</p>
+      <a class="play line" href="https://store.line.me/stickershop" target="_blank" rel="noopener">LINEスタンプを見にいく ▶</a>
+      <p class="note">買わなくても、ぜんぶ遊べます。あそんでくれるだけで、じゅうぶんうれしいです。</p>
+    </div>
+    <div class="sup-ic" aria-hidden="true">
+      <svg viewBox="0 0 200 170"><g stroke="#33312A" stroke-width="3.4" stroke-linejoin="round" stroke-linecap="round">
+        <rect x="26" y="34" width="112" height="92" rx="20" fill="#06C755" transform="rotate(-5 82 80)"/>
+        <g transform="rotate(-5 82 80)">
+          <circle cx="66" cy="72" r="5" fill="#fff" stroke="none"/><circle cx="98" cy="72" r="5" fill="#fff" stroke="none"/>
+          <path d="M62 94 q20 16 40 0" fill="none" stroke="#fff"/>
+          <circle cx="52" cy="92" r="7" fill="#F58FB0" stroke="none" opacity=".85"/><circle cx="112" cy="92" r="7" fill="#F58FB0" stroke="none" opacity=".85"/>
+        </g>
+        <path d="M150 52 q10 -16 22 -6 q12 10 -2 24 q-8 8 -20 18 q-12 -10 -20 -18 q-14 -14 -2 -24 q12 -10 22 6z" fill="#F0603F"/>
+        <path d="M36 140 q8 -10 16 0 M58 146 q8 -10 16 0" fill="none"/>
+        <path d="M168 110 l4 10 11 1 -8 7 2 11 -9 -6 -9 6 2 -11 -8 -7 11 -1z" fill="#F5B70A"/>
+      </g></svg>
+    </div>
+  </div>
+</div></section>
+</main>
+
+<footer>
+  <p class="chant">やっさい、あそびさい。</p>
+  <p class="fine">© あたやさいさい株式会社（構想中）— 「公開中！」のゲームは、いますぐ無料で遊べます。じゅんび中・かんがえ中のゲームは、内容が変わることがあります。<br>あそんだ記録は、それぞれの端末のブラウザの中にだけ残ります。こちらから見ることはできません。</p>
+</footer>
+
+<script>
+(function(){
+var S='stroke="#33312A" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"';
+var ICON={
+ monster:'<g '+S+'><path d="M10 50 q-4 -38 20 -38 q24 0 20 38z" fill="#F0603F"/><path d="M18 18 l-6 -10 10 5 M42 18 l6 -10 -10 5" fill="#F5B70A"/><circle cx="23" cy="30" r="3" fill="#33312A"/><circle cx="37" cy="30" r="3" fill="#33312A"/><path d="M22 40 l3 -3 3 3 3 -3 3 3 3 -3" fill="none"/></g>',
+ shop:'<g '+S+'><rect x="12" y="26" width="36" height="26" fill="#fff"/><path d="M8 26 l6 -14 h32 l6 14z" fill="#F58FB0"/><path d="M18 12 v14 M30 12 v14 M42 12 v14" /><circle cx="30" cy="40" r="7" fill="#F5B70A"/><path d="M27 40 h6" /></g>',
+ chest:'<g '+S+'><path d="M10 28 q0 -16 20 -16 q20 0 20 16z" fill="#C98A4B"/><rect x="10" y="28" width="40" height="22" fill="#C98A4B"/><rect x="8" y="26" width="44" height="6" fill="#F5B70A"/><rect x="26" y="30" width="8" height="10" rx="2" fill="#F5B70A"/><path d="M16 12 l-4 -6 M44 12 l4 -6 M30 8 v-5" stroke="#F5B70A"/></g>',
+ cow:'<g '+S+'><circle cx="30" cy="30" r="17" fill="#fff"/><ellipse cx="30" cy="38" rx="10" ry="7" fill="#F58FB0"/><circle cx="27" cy="38" r="1.5" fill="#33312A"/><circle cx="33" cy="38" r="1.5" fill="#33312A"/><circle cx="24" cy="26" r="2.2" fill="#33312A"/><circle cx="36" cy="26" r="2.2" fill="#33312A"/><path d="M15 24 q-8 -3 -7 -10 q8 0 10 6 M45 24 q8 -3 7 -10 q-8 0 -10 6" fill="#fff"/><path d="M30 14 q4 -6 10 -4 q-2 6 -10 6" fill="#33312A"/></g>',
+ dice:'<g '+S+'><rect x="10" y="12" width="36" height="36" rx="8" fill="#fff" transform="rotate(-10 28 30)"/><circle cx="20" cy="24" r="3" fill="#33312A"/><circle cx="36" cy="36" r="3" fill="#33312A"/><circle cx="28" cy="30" r="3" fill="#F0603F"/><path d="M48 14 l4 -4 M50 22 l6 -1" /></g>',
+ mic:'<g '+S+'><circle cx="30" cy="30" r="22" fill="#fff"/><circle cx="30" cy="30" r="14" fill="#F0603F"/><circle cx="30" cy="30" r="6" fill="#fff"/><path d="M50 10 l-18 18" /><path d="M46 8 l6 0 0 6" fill="none"/></g>',
+ flag:'<g '+S+'><path d="M16 54 v-46"/><path d="M16 10 q13 -7 23 0 q10 6 7 -2 v20 q3 8 -7 2 q-10 -7 -23 0z" fill="#F0603F"/><circle cx="16" cy="6" r="3.2" fill="#F5B70A"/></g>',
+ atom:'<g '+S+'><ellipse cx="30" cy="30" rx="25" ry="10" fill="none"/><ellipse cx="30" cy="30" rx="25" ry="10" fill="none" transform="rotate(60 30 30)"/><ellipse cx="30" cy="30" rx="25" ry="10" fill="none" transform="rotate(-60 30 30)"/><circle cx="30" cy="30" r="7" fill="#F0603F"/><circle cx="52" cy="22" r="4" fill="#F5B70A"/></g>',
+ moon:'<g '+S+'><path d="M38 10 a20 20 0 1 0 12 30 a16 16 0 1 1 -12 -30z" fill="#F5B70A"/><circle cx="32" cy="30" r="1.8" fill="#33312A"/><path d="M26 32 q-3 -3 -6 0" fill="none"/><path d="M48 12 h6 l-6 6 h6" fill="none" stroke-width="2.4"/></g>',
+ volcano:'<g '+S+'><path d="M6 52 l16 -28 h16 l16 28z" fill="#C98A4B"/><path d="M22 24 q8 6 16 0" fill="#F0603F"/><path d="M26 18 q-4 -8 2 -14 M34 18 q4 -8 -2 -12" stroke="#F0603F" stroke-width="3.4" fill="none"/><circle cx="25" cy="38" r="2" fill="#33312A"/><circle cx="35" cy="38" r="2" fill="#33312A"/><path d="M24 45 q6 -4 12 0" fill="none"/></g>',
+ book:'<g '+S+'><path d="M8 16 q11 -4 22 2 q11 -6 22 -2 v32 q-11 -4 -22 2 q-11 -6 -22 -2z" fill="#fff"/><path d="M30 18 v32" /><path d="M16 26 h8 M16 32 h8 M36 26 h8" stroke-width="2.4"/><path d="M40 34 c-3 4 -3 7 0 8 c3 -1 3 -4 0 -8z" fill="#7EC8E3" stroke-width="2.2"/></g>',
+ cake:'<g '+S+'><rect x="12" y="30" width="36" height="20" rx="4" fill="#fff"/><path d="M12 36 q6 5 12 0 q6 5 12 0 q6 5 12 0" fill="none" stroke="#F58FB0"/><rect x="12" y="22" width="36" height="10" rx="3" fill="#F58FB0"/><path d="M22 22 v-8 M30 22 v-10 M38 22 v-8" /><path d="M22 10 q-2 -3 0 -5 q2 2 0 5z M30 8 q-2 -3 0 -5 q2 2 0 5z M38 10 q-2 -3 0 -5 q2 2 0 5z" fill="#F5B70A" stroke-width="2"/></g>',
+ sofa:'<g '+S+'><rect x="12" y="18" width="36" height="18" rx="6" fill="#4A6BC0"/><rect x="6" y="28" width="48" height="16" rx="6" fill="#7EC8E3"/><path d="M12 44 v6 M48 44 v6" /><path d="M20 8 l4 4 M40 8 l-4 4" stroke-width="2.4"/></g>',
+ milk:'<g '+S+'><path d="M22 8 h16 v8 l6 8 v26 h-28 v-26 l6 -8z" fill="#fff"/><rect x="22" y="4" width="16" height="6" rx="2" fill="#4A6BC0"/><rect x="16" y="30" width="28" height="12" fill="#7EC8E3"/><path d="M50 16 l4 -2 M52 24 l5 1 M8 16 l-4 -2" stroke-width="2.4"/><path d="M26 36 h8" stroke-width="2.4"/></g>'
+};
+function svg(k){return '<svg viewBox="0 0 60 60" aria-hidden="true">'+ICON[k]+'</svg>';}
+var FEEL={ki:{t:"うれしい",c:"#F5B70A"},do:{t:"むかつく",c:"#F0603F"},ai:{t:"かなしい",c:"#4A6BC0"},raku:{t:"たのしい",c:"#4CB86B"}};
+var CAT=["まなび","おかね","からだ","こえ・おと","くらし","みんなで"];
+var G=[
+ {i:"flag",bg:"#E6F5EA",n:"なんでもラーニングクエスト",s:"live",c:["まなび"],f:"do",fun:5,use:4,b:"あたやさいさい",d:"問題をかかげたモンスターが、1びょうに1ぽずつお城にせまってくる。こたえを選んでやっつける学習ゲーム。いまは「せかいの国旗」36か国ぶん。",url:"02_nandemo_learning_quest/"},
+ {i:"atom",bg:"#E4EBFA",n:"せかいのレシピ ／ げんしのへや",s:"live",c:["まなび"],f:"ki",fun:4,use:3,b:"あたやさいさい",d:"まんなかの陽子の数で、原子の名前は決まる。いちばん外がわの電子だけを自分で置いて、18この原子をつくります。",url:"04_sekai_no_recipe/"},
+ {i:"monster",bg:"#FFE3DC",n:"借金退治クエスト",s:"prep",c:["おかね"],f:"do",fun:5,use:5,b:"おかねやさいさい",d:"返済日にせまるモンスターを、返済と繰り上げ返済でやっつけるRPG。完済までの見通しつき。"},
+ {i:"shop",bg:"#FFE6EF",n:"リガットやさん",s:"prep",c:["おかね","みんなで"],f:"raku",fun:5,use:3,b:"おかねやさいさい（こども）",d:"おかね「リガット」で、おさかなとお米をこうかん！ お金は「ありがとう」を運ぶものだと、あそびながらわかるお店やさんごっこ。"},
+ {i:"chest",bg:"#FFF1CC",n:"かけいぼダンジョン",s:"prep",c:["おかね","くらし"],f:"ai",fun:4,use:5,b:"おかねやさいさい",d:"毎月の固定費はワナ、ごほうびは宝箱。1か月の家計を、ダンジョン探検としてつけていきます。"},
+ {i:"cow",bg:"#E6F5EA",n:"もう1頭ふやす？牧場",s:"idea",c:["おかね"],f:"raku",fun:4,use:4,b:"らくやさいさい",d:"お金を借りて牛を1頭ふやしたら、何年でもとがとれる？ ほんものの牧場の数字であそぶ経営ゲーム。"},
+ {i:"dice",bg:"#E4EBFA",n:"おきゅうりょうすごろく",s:"idea",c:["おかね"],f:"ki",fun:3,use:5,b:"おかねやさいさい",d:"お給料が、税金や保険のマスを通って手取りになるまでの旅。給与明細が読めるようになります。"},
+ {i:"mic",bg:"#FFE3DC",n:"音程ハンター",s:"prep",c:["こえ・おと"],f:"do",fun:5,use:4,b:"うたやさいさい",d:"声で的をねらう音程あてゲーム。音がずれたぶんだけ矢がそれるから、ズレが目で見えます。"},
+ {i:"milk",bg:"#DFF3FA",n:"しぼりたてリズム",s:"idea",c:["こえ・おと","みんなで"],f:"raku",fun:5,use:2,b:"らくやさいさい × おとやさいさい",d:"音楽にあわせて、モ〜リモリ牛乳をしぼるリズムゲーム。家族で点数をきそおう。"},
+ {i:"moon",bg:"#FFF1CC",n:"ねむりの森",s:"idea",c:["からだ"],f:"ai",fun:3,use:5,b:"ねむりやさいさい",d:"ねむった時間のぶんだけ、森に木がそだつ。夜ふかしが続くと、森にきりがかかります。"},
+ {i:"volcano",bg:"#FFE3DC",n:"ぷんぷん火山",s:"idea",c:["からだ","くらし"],f:"do",fun:4,use:4,b:"うたやさいさい",d:"むかついたことを書いて、火山をドッカーン！ 冷えた岩の中から「つぎにやること」をひとつだけ掘り出します。"},
+ {i:"book",bg:"#E4EBFA",n:"なみだのほんだな",s:"idea",c:["くらし"],f:"ai",fun:2,use:4,b:"なきやさいさい",d:"かなしかったことを、みじかいお話にして本だなにしまう。時間がたってから、そっと読み返せます。"},
+ {i:"cake",bg:"#FFE6EF",n:"おいわいカレンダー",s:"idea",c:["くらし","みんなで"],f:"ki",fun:3,use:4,b:"いわいやさいさい",d:"家族や友だちの記念日を入れると、当日に向けて「おいわい準備クエスト」が届きます。"},
+ {i:"sofa",bg:"#DFF3FA",n:"もようがえパズル",s:"idea",c:["くらし"],f:"raku",fun:4,use:3,b:"すまいやさいさい",d:"お部屋のサイズを入れて、家具をならべかえるパズル。動きやすい道ができたらクリア！"}
+];
+var ST={live:"公開中！",prep:"じゅんび中",idea:"かんがえ中"};
+
+/* parade */
+document.getElementById("parade").innerHTML=["monster","cow","mic","milk","cake"].map(svg).join("");
+
+/* filters */
+var fc="ぜんぶ",ff="ぜんぶ";
+function face(k){var c=FEEL[k].c;var m={ki:'<path d="M9 12 q3 5 6 0" fill="none"/>',do:'<path d="M9 14 q3 -3 6 0" fill="none"/><path d="M7 7 l3 1.5 M17 7 l-3 1.5"/>',ai:'<path d="M9 15 q3 -2.5 6 0" fill="none"/>',raku:'<path d="M8 12 q4 6 8 0z" fill="#33312A"/>'}[k];
+  return '<svg viewBox="0 0 24 24"><g stroke="#33312A" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10" fill="'+c+'"/><circle cx="9" cy="10" r="1" fill="#33312A"/><circle cx="15" cy="10" r="1" fill="#33312A"/>'+m+'</g></svg>';}
+function mk(el,items,set){
+  el.innerHTML=items.map(function(x,i){return '<button type="button" class="chip" data-v="'+x.v+'" aria-pressed="'+(i===0)+'">'+(x.h||"")+x.t+'</button>';}).join("");
+  el.addEventListener("click",function(e){var b=e.target.closest(".chip");if(!b)return;set(b.dataset.v);
+    el.querySelectorAll(".chip").forEach(function(c){c.setAttribute("aria-pressed",String(c===b));});render();});
+}
+mk(document.getElementById("fCat"),[{v:"ぜんぶ",t:"ぜんぶ"}].concat(CAT.map(function(c){return {v:c,t:c};})),function(v){fc=v;});
+mk(document.getElementById("fFeel"),[{v:"ぜんぶ",t:"どんな気分でも"}].concat(Object.keys(FEEL).map(function(k){return {v:k,t:FEEL[k].t,h:face(k)};})),function(v){ff=v;});
+function stars(n,col){var s="";for(var i=0;i<5;i++)s+='<svg viewBox="0 0 20 20"><path d="M10 1.5 l2.5 5.6 6 .6 -4.5 4 1.3 6 -5.3 -3.1 -5.3 3.1 1.3 -6 -4.5 -4 6 -.6z" fill="'+(i<n?col:"#EDE7D6")+'" stroke="#33312A" stroke-width="1.4" stroke-linejoin="round"/></svg>';return '<span class="stars">'+s+'</span>';}
+function render(){
+  var ord={live:0,prep:1,idea:2};
+  var L=G.filter(function(g){return (fc==="ぜんぶ"||g.c.indexOf(fc)>=0)&&(ff==="ぜんぶ"||g.f===ff);}).sort(function(a,b){return ord[a.s]-ord[b.s];});
+  document.getElementById("list").innerHTML=L.length?L.map(function(g,i){
+    return '<article class="card" style="animation-delay:'+(i*0.04)+'s"><span class="tag '+g.s+'">'+ST[g.s]+'</span>'
+     +'<div class="top"><div class="ic" style="background:'+g.bg+'">'+svg(g.i)+'</div><div><h3>'+g.n+'</h3><div class="biz">'+g.b+'</div></div></div>'
+     +'<p>'+g.d+'</p>'
+     +'<div class="meter"><span>おもしろさ</span>'+stars(g.fun,"#F5B70A")+'<span>くらしに効く</span>'+stars(g.use,"#4CB86B")+'</div>'
+     +'<div class="feel">'+face(g.f).replace('<svg','<svg width="20" height="20"')+'<span>'+FEEL[g.f].t+' → たのしい</span></div>'
+     +(g.url?'<a class="play" href="'+g.url+'"'+(/^https?:/.test(g.url)?' target="_blank" rel="noopener"':'')+'>あそぶ ▶</a>':'')
+     +'</article>';}).join(""):'<p class="none">この組み合わせのゲームは、いま考え中です。ほかの気分もえらんでみてね。</p>';
+}
+render();
+
+/* gacha */
+var reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+var pal=["#F5B70A","#F0603F","#4A6BC0","#4CB86B","#F58FB0","#7EC8E3"];
+function confetti(){
+  if(reduce)return;
+  for(var i=0;i<28;i++){var c=document.createElement("div");c.className="confetti";
+    c.style.left=(Math.random()*100)+"vw";c.style.background=pal[i%pal.length];c.style.borderRadius=Math.random()>.5?"50%":"3px";
+    var t=1400+Math.random()*1200;
+    c.animate([{transform:"translateY(0) rotate(0)"},{transform:"translateY(105vh) rotate("+(360+Math.random()*540)+"deg)"}],{duration:t,easing:"ease-in"});
+    document.body.appendChild(c);setTimeout(function(el){el.remove();}.bind(null,c),t);}
+}
+function show(g){
+  var ic=document.getElementById("rIc");ic.innerHTML=svg(g.i);ic.style.animation="none";void ic.offsetWidth;ic.style.animation="";
+  document.getElementById("rName").textContent=g.n+"（"+ST[g.s]+"）";
+  document.getElementById("rDesc").textContent=g.d;
+}
+show(G[0]);
+var last=0,rot=0;
+document.getElementById("spin").addEventListener("click",function(){
+  var m=document.getElementById("machine");m.classList.remove("go");void m.getBoundingClientRect();m.classList.add("go");
+  rot+=360;document.getElementById("lever").style.transform="rotate("+rot+"deg)";
+  var n;do{n=Math.floor(Math.random()*G.length);}while(n===last);last=n;
+  setTimeout(function(){show(G[n]);confetti();},reduce?0:550);
+});
+})();
+</script>
+</body>
+</html>
