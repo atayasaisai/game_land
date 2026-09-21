@@ -111,10 +111,14 @@ section{padding-block:72px;position:relative}
 .walker{animation:walk 8s linear infinite}
 .walker.w2{animation-delay:-2.7s}.walker.w3{animation-delay:-5.4s}
 @keyframes walk{from{transform:translateX(0)}to{transform:translateX(-220px)}}
+.orb{animation:orb 18s linear infinite;transform-origin:200px 150px;transform-box:view-box}
+.orb.o2{animation-duration:30s;animation-direction:reverse}
+@keyframes orb{from{transform:rotate(0)}to{transform:rotate(360deg)}}
 .pow{animation:blink 1s steps(1) infinite}
 .stage .newtag{position:absolute;top:14px;left:14px;background:var(--ki);border:3px solid var(--ink);border-radius:999px;padding:2px 14px;font-family:"Zen Maru Gothic",sans-serif;font-weight:900;transform:rotate(-6deg);box-shadow:3px 3px 0 var(--ink);z-index:2}
 .spot-tx{padding:28px 26px;display:flex;flex-direction:column;gap:12px}
 .spot-tx h3{font-size:1.75rem;font-weight:900}
+.spot-tx h3 small{font-size:.6em;font-weight:700;color:var(--sub);margin-left:.5em;white-space:nowrap}
 .spot-tx p{margin:0;font-size:.92rem}
 .swap{display:grid;grid-template-columns:1fr auto 1fr;gap:6px 8px;align-items:center;font-size:.84rem;margin:0;padding:0;list-style:none}
 .swap .gm{background:var(--paper2);border:2px solid var(--ink);border-radius:999px;padding:1px 12px;font-weight:700;text-align:center}
@@ -259,72 +263,67 @@ footer .fine{font-size:.72rem;color:var(--faint);margin:0}
 
 <section id="pick"><div class="wrap">
   <p class="label">NOW PLAYING</p>
-  <h2 class="title">いま遊べる！<span class="hl">なんでもラーニングクエスト</span></h2>
+  <h2 class="title">いま遊べる！<span class="hl">せかいのレシピ</span></h2>
   <p class="intro">いますぐブラウザで遊べます。インストールも、会員とうろくもいりません。</p>
   <article class="spot">
     <div class="stage" aria-hidden="true">
       <span class="newtag">公開中！</span>
       <svg viewBox="0 0 420 300" preserveAspectRatio="xMidYMid slice">
-        <rect width="420" height="190" fill="#7EC8E3"/>
-        <path d="M250 60 q8 -18 28 -13 q7 -11 21 -6 q15 -5 18 10 q13 3 6 14 q-38 7 -73 -5z" fill="#fff" stroke="#33312A" stroke-width="3" stroke-linejoin="round"/>
-        <path d="M0 190 Q100 160 210 185 T420 180 V300 H0z" fill="#4CB86B" stroke="#33312A" stroke-width="3"/>
-        <path d="M0 238 Q210 218 420 236 V262 Q210 244 0 264z" fill="#E9C58E" stroke="#33312A" stroke-width="3"/>
-        <!-- castle -->
-        <g stroke="#33312A" stroke-width="3" stroke-linejoin="round">
-          <rect x="18" y="140" width="80" height="110" fill="#fff"/>
-          <rect x="8" y="118" width="26" height="132" fill="#fff"/><rect x="82" y="118" width="26" height="132" fill="#fff"/>
-          <path d="M4 120 l17 -30 17 30z M78 120 l17 -30 17 30z" fill="#4A6BC0"/>
-          <path d="M44 250 v-34 q14 -16 28 0 v34z" fill="#C98A4B"/>
-          <path d="M21 90 v-22 l16 6 -16 6" fill="#F0603F"/>
+        <rect width="420" height="300" fill="#15163A"/>
+        <g class="pow" fill="#FFF6D8">
+          <circle cx="38" cy="42" r="2"/><circle cx="96" cy="24" r="1.4"/><circle cx="352" cy="58" r="2.2"/>
+          <circle cx="396" cy="128" r="1.6"/><circle cx="26" cy="196" r="1.8"/><circle cx="66" cy="262" r="2"/>
+          <circle cx="330" cy="248" r="1.6"/><circle cx="388" cy="222" r="2.2"/><circle cx="150" cy="276" r="1.5"/>
+          <circle cx="268" cy="28" r="1.7"/>
         </g>
-        <!-- hero -->
-        <g class="floaty" stroke="#33312A" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
-          <circle cx="146" cy="196" r="14" fill="#FFD9A0"/>
-          <path d="M132 192 q14 -14 28 0 v-5 q-14 -12 -28 0z" fill="#33312A"/>
-          <circle cx="141" cy="196" r="1.8" fill="#33312A"/><circle cx="151" cy="196" r="1.8" fill="#33312A"/>
-          <path d="M141 203 q5 4 10 0" fill="none"/>
-          <path d="M135 212 q11 6 22 0 l3 28 h-28z" fill="#F0603F"/>
-          <path d="M157 216 l20 -22" /><path d="M172 188 l14 -16 4 4 -16 14z" fill="#DFE6EC"/>
+        <!-- でんしのわ -->
+        <circle cx="200" cy="150" r="58" fill="none" stroke="#6E7BD6" stroke-width="2.4" stroke-dasharray="3 9" stroke-linecap="round"/>
+        <circle cx="200" cy="150" r="98" fill="none" stroke="#8E7BD6" stroke-width="2.4" stroke-dasharray="3 9" stroke-linecap="round"/>
+        <!-- まんなか（陽子と中性子） -->
+        <circle cx="200" cy="150" r="34" fill="#F0603F" opacity=".22"/>
+        <g stroke="#33312A" stroke-width="2.6">
+          <circle cx="191" cy="143" r="9" fill="#F0603F"/><circle cx="209" cy="145" r="9" fill="#F0603F"/>
+          <circle cx="197" cy="158" r="9" fill="#DFE6EC"/><circle cx="212" cy="159" r="9" fill="#DFE6EC"/>
         </g>
-        <text class="pow" x="192" y="170" font-family="Zen Maru Gothic,sans-serif" font-weight="900" font-size="22" fill="#F5B70A" stroke="#33312A" stroke-width="1.5">えいっ！</text>
-        <!-- monsters -->
-        <g class="walker">
-          <g transform="translate(330 214)" stroke="#33312A" stroke-width="3" stroke-linejoin="round">
-            <path d="M-22 22 q-2 -34 22 -34 q24 0 22 34z" fill="#9B7BE0"/>
-            <circle cx="-7" cy="0" r="3" fill="#33312A"/><circle cx="7" cy="0" r="3" fill="#33312A"/>
-            <path d="M-8 10 q8 -5 16 0" fill="none"/>
-            <rect x="-18" y="-34" width="36" height="16" rx="4" fill="#fff"/><text x="0" y="-22" text-anchor="middle" font-size="10" font-weight="900" fill="#4CB86B" stroke="none" font-family="Zen Maru Gothic,sans-serif">90てん</text>
+        <!-- 内がわの電子（もう入っている） -->
+        <g class="orb">
+          <g stroke="#33312A" stroke-width="2.6">
+            <circle cx="200" cy="92" r="7.5" fill="#7EC8E3"/>
+            <circle cx="250" cy="179" r="7.5" fill="#7EC8E3"/>
+            <circle cx="150" cy="179" r="7.5" fill="#7EC8E3"/>
           </g>
         </g>
-        <g class="walker w2">
-          <g transform="translate(330 214)" stroke="#33312A" stroke-width="3" stroke-linejoin="round">
-            <path d="M-20 22 q0 -30 20 -30 q20 0 20 30z" fill="#4CB86B"/>
-            <circle cx="-7" cy="2" r="3" fill="#33312A"/><circle cx="7" cy="2" r="3" fill="#33312A"/>
-            <path d="M-8 -8 l-6 -10 M8 -8 l6 -10" fill="none"/>
-            <rect x="-18" y="-36" width="36" height="16" rx="4" fill="#fff"/><text x="0" y="-24" text-anchor="middle" font-size="10" font-weight="900" fill="#4CB86B" stroke="none" font-family="Zen Maru Gothic,sans-serif">120てん</text>
+        <!-- 外がわの電子（きみが置いたぶん） -->
+        <g class="orb o2">
+          <g stroke="#33312A" stroke-width="2.6">
+            <circle cx="298" cy="150" r="8.5" fill="#F5B70A"/>
+            <circle cx="151" cy="235" r="8.5" fill="#F5B70A"/>
+            <circle cx="151" cy="65" r="8.5" fill="#F5B70A"/>
           </g>
         </g>
-        <g class="walker w3">
-          <g transform="translate(340 206)" stroke="#33312A" stroke-width="3" stroke-linejoin="round">
-            <path d="M-28 30 q-6 -46 28 -46 q34 0 28 46z" fill="#F0603F"/>
-            <path d="M-18 -12 l-8 -14 12 6 M18 -12 l8 -14 -12 6" fill="#F5B70A"/>
-            <circle cx="-9" cy="2" r="3.4" fill="#33312A"/><circle cx="9" cy="2" r="3.4" fill="#33312A"/>
-            <path d="M-10 14 l4 -4 4 4 4 -4 4 4 4 -4" fill="none"/>
-            <rect x="-20" y="-46" width="40" height="16" rx="4" fill="#fff"/><text x="0" y="-34" text-anchor="middle" font-size="10" font-weight="900" fill="#F0603F" stroke="none" font-family="Zen Maru Gothic,sans-serif">20てん</text>
+        <!-- あいている席 -->
+        <circle cx="200" cy="52" r="9.5" fill="none" stroke="#FFF6D8" stroke-width="2.4" stroke-dasharray="3 5"/>
+        <!-- いま置くところ -->
+        <g class="floaty">
+          <path d="M262 36 q-26 -2 -52 6" fill="none" stroke="#FFF6D8" stroke-width="2.2" stroke-dasharray="5 6" stroke-linecap="round"/>
+          <path d="M216 38 l-14 5 12 6z" fill="#FFF6D8"/>
+          <circle cx="278" cy="34" r="11" fill="#F5B70A" stroke="#33312A" stroke-width="3"/>
+          <g stroke="#FFF6D8" stroke-width="2.6" stroke-linecap="round">
+            <path d="M278 14 v-8 M278 54 v8 M258 34 h-8 M298 34 h8"/>
           </g>
         </g>
       </svg>
     </div>
     <div class="spot-tx">
-      <h3>なんでもラーニングクエスト</h3>
-      <p>問題をかかげたモンスターが、1びょうに1ぽずつお城にせまってきます。こたえを選んでやっつけよう。遠くで倒すほど高得点。まちがえた問題は、おぼえておいて もういちど出てきます。いまは「せかいの国旗」36か国ぶん。</p>
+      <h3>せかいのレシピ<small>／ げんしのへや</small></h3>
+      <p>まんなかの陽子の数で、原子の名前は決まる。内がわの電子は、もう入っている。<b>いちばん外がわだけ、きみが置く。</b>18この原子をぜんぶつくると、外がわの電子の数が、そのまま「くっつく手の数」になっていると分かります。</p>
       <ul class="swap">
-        <li class="gm">モンスター</li><li class="ar">＝</li><li class="rl">まだ覚えていない問題</li>
-        <li class="gm">かかげている旗</li><li class="ar">＝</li><li class="rl">問いそのもの</li>
-        <li class="gm">こうげき</li><li class="ar">＝</li><li class="rl">こたえる</li>
-        <li class="gm">お城まで行かれる</li><li class="ar">＝</li><li class="rl">覚えないまま流れた</li>
+        <li class="gm">まんなかの玉</li><li class="ar">＝</li><li class="rl">陽子。この数で名前が決まる</li>
+        <li class="gm">いちばん外のわ</li><li class="ar">＝</li><li class="rl">きみが電子を置くところ</li>
+        <li class="gm">外がわの電子の数</li><li class="ar">＝</li><li class="rl">ほかの原子とくっつく手の数</li>
+        <li class="gm">18こ ぜんぶ</li><li class="ar">＝</li><li class="rl">水も、空気も、いのちも つくれる</li>
       </ul>
-      <a class="play" href="02_nandemo_learning_quest/">クエストにでかける ▶</a>
+      <a class="play" href="04_sekai_no_recipe/">へやに はいる ▶</a>
     </div>
   </article>
 </div></section>
@@ -414,7 +413,7 @@ function svg(k){return '<svg viewBox="0 0 60 60" aria-hidden="true">'+ICON[k]+'<
 var FEEL={ki:{t:"うれしい",c:"#F5B70A"},do:{t:"むかつく",c:"#F0603F"},ai:{t:"かなしい",c:"#4A6BC0"},raku:{t:"たのしい",c:"#4CB86B"}};
 var CAT=["まなび","おかね","からだ","こえ・おと","くらし","みんなで"];
 var G=[
- {i:"flag",bg:"#E6F5EA",n:"なんでもラーニングクエスト",s:"live",c:["まなび"],f:"do",fun:5,use:4,b:"あたやさいさい",d:"問題をかかげたモンスターが、1びょうに1ぽずつお城にせまってくる。こたえを選んでやっつける学習ゲーム。いまは「せかいの国旗」36か国ぶん。",url:"02_nandemo_learning_quest/"},
+ {i:"flag",bg:"#E6F5EA",n:"なんでもラーニングクエスト",s:"prep",c:["まなび"],f:"do",fun:5,use:4,b:"あたやさいさい",d:"問題をかかげたモンスターが、1びょうに1ぽずつお城にせまってくる。こたえを選んでやっつける学習ゲーム。いまイラストを描きなおしています。",url:""},
  {i:"atom",bg:"#E4EBFA",n:"せかいのレシピ ／ げんしのへや",s:"live",c:["まなび"],f:"ki",fun:4,use:3,b:"あたやさいさい",d:"まんなかの陽子の数で、原子の名前は決まる。いちばん外がわの電子だけを自分で置いて、18この原子をつくります。",url:"04_sekai_no_recipe/"},
  {i:"monster",bg:"#FFE3DC",n:"借金退治クエスト",s:"prep",c:["おかね"],f:"do",fun:5,use:5,b:"おかねやさいさい",d:"返済日にせまるモンスターを、返済と繰り上げ返済でやっつけるRPG。完済までの見通しつき。"},
  {i:"shop",bg:"#FFE6EF",n:"リガットやさん",s:"prep",c:["おかね","みんなで"],f:"raku",fun:5,use:3,b:"おかねやさいさい（こども）",d:"おかね「リガット」で、おさかなとお米をこうかん！ お金は「ありがとう」を運ぶものだと、あそびながらわかるお店やさんごっこ。"},
