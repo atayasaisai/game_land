@@ -8,7 +8,7 @@
 | フォルダ | ゲーム | 状態 |
 |---|---|---|
 | `index.html` | ゲームランドのトップページ | 公開中 |
-| `02_nandemo_learning_quest/` | なんでもラーニングクエスト | 非公開（イラスト描きなおし中） |
+| `02_nandemo_learning_quest/` | なんでもラーニングクエスト | 公開中 |
 | `04_sekai_no_recipe/` | せかいのレシピ ／ げんしのへや | 公開中 |
 | `01_kingdom_of_six/` | 王国発展記 〜六つの選択〜 | 非公開（`.gitignore`） |
 | `03_okane_oukoku/` | おかね王国のつくりかた | 非公開（`.gitignore`） |
