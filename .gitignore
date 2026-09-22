@@ -15,6 +15,9 @@ atayasaisai-gameland.html
 *.zip
 02_nandemo_learning_quest/dist/
 
+# ── 素材の元ファイル（切り出し前の一覧画像など。サイトには要らない）──
+Monster.jpeg
+
 # ── macOS が勝手に作るファイル ─────────────────────
 .DS_Store
 ._*
