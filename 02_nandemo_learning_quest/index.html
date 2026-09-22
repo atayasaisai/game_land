@@ -3,7 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>なんでもラーニングクエスト</title>
+<title>なんでもラーニングクエスト｜せかいの国旗をおぼえる無料の学習ゲーム｜あたやさいさいゲームランド</title>
+<meta name="description" content="問題をかかげたモンスターが、1びょうに1ぽずつお城にせまってくる。こたえを選んでやっつける、子供用の無料学習ゲームです。いまは せかいの国旗 36か国ぶん。まちがえた問題はおぼえておいて、もういちど出てきます。広告なし・会員とうろくなし。">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://atayasaisai.github.io/game_land/02_nandemo_learning_quest/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="あたやさいさいゲームランド">
+<meta property="og:title" content="なんでもラーニングクエスト｜せかいの国旗をおぼえる無料の学習ゲーム">
+<meta property="og:url" content="https://atayasaisai.github.io/game_land/02_nandemo_learning_quest/">
+<meta property="og:image" content="https://atayasaisai.github.io/game_land/ogp.png">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Zen+Maru+Gothic:wght@500;700;900&display=swap">
 <style>
@@ -48,7 +58,10 @@ svg{display:block}
   radial-gradient(circle at 88% 88%,rgba(76,184,107,.22),transparent 32%);}
 .brand{text-align:center;margin-bottom:6px}
 .brand .lead{display:inline-block;font-size:.72rem;letter-spacing:.24em;border:2.5px solid var(--ink);
-  border-radius:999px;padding:3px 15px;background:#fff;box-shadow:3px 3px 0 var(--ink);margin-bottom:14px}
+  border-radius:999px;padding:3px 15px;background:#fff;box-shadow:3px 3px 0 var(--ink);margin-bottom:14px;
+  color:inherit;text-decoration:none;transition:transform .1s}
+.brand a.lead:hover{transform:translateY(-2px)}
+.brand a.lead:active{transform:translateY(2px);box-shadow:1px 1px 0 var(--ink)}
 .brand h1{font-size:clamp(1.6rem,6.4vw,2.5rem);line-height:1.35;letter-spacing:.02em}
 .brand h1 .c1{color:var(--do)}.brand h1 .c2{color:var(--ai)}.brand h1 .c3{color:var(--raku)}
 .brand p{margin:12px 0 0;font-size:.9rem;color:var(--sub)}
@@ -191,7 +204,7 @@ svg{display:block}
 <!-- ═══════════ タイトル ═══════════ -->
 <section class="screen on" id="title"><div class="pad">
   <div class="brand">
-    <span class="lead">あたやさいさいゲームランド</span>
+    <a class="lead" href="../">◀ あたやさいさいゲームランド</a>
     <h1>なんでも<span class="c1">ラ</span><span class="c2">ー</span><span class="c3">ニ</span>ング<br>クエスト</h1>
     <p>問題をかかげたモンスターが、1びょうに1ぽずつ お城にせまってきます。<br>こたえを えらんで、やっつけよう。</p>
   </div>
@@ -243,6 +256,7 @@ svg{display:block}
     <button class="btn" id="again">もういっかい ▶</button>
     <button class="btn warn" id="weakonly">にがてだけ ▶</button>
     <button class="btn sub" id="home">タイトルへ</button>
+    <a class="btn sub" href="../">ゲームランドへ</a>
   </div>
 </div></section>
 
@@ -268,7 +282,10 @@ var reduce  = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 /* 画像の場所。1ファイル版ではビルド時に window.__IMG へ data URI が入る。
    ふつうのフォルダ版では、そのまま相対パスを返す。 */
 var IMGMAP = window.__IMG || {};
-function IMG(p){ return IMGMAP[p] || p; }
+// 絵を差し替えたとき、ブラウザが古い絵を覚えたままにならないよう版をつける。
+// 絵を入れ替えたら ASSETV の日付を新しくすること（1ファイル版では IMGMAP 側が使われるので影響なし）
+var ASSETV = "20260922";
+function IMG(p){ return IMGMAP[p] || (p + "?v=" + ASSETV); }
 
 var PACKLIST = [
   {k:"flagName",    pack:window.PACKS.flagName},
