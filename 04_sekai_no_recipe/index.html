@@ -54,6 +54,8 @@ button{font-family:inherit;color:inherit;cursor:pointer}
   backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
 }
 .btn:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.3)}
+a.btn{text-decoration:none;display:inline-flex;align-items:center}
+#quitBtn{align-self:center;padding:5px 12px;font-size:.78rem}
 .btn:active{transform:scale(.96)}
 .btn:disabled{opacity:.35;cursor:default;transform:none}
 .btn.pri{
@@ -351,7 +353,7 @@ button{font-family:inherit;color:inherit;cursor:pointer}
 <!-- ================= GAME ================= -->
 <section id="game"><div class="wrap">
   <div class="hud">
-    <div class="hudL"><div class="score" id="scoreN">0</div><small style="color:var(--sub);font-size:.62rem;letter-spacing:.2em">POINTS</small></div>
+    <div class="hudL"><button class="btn sm" id="quitBtn">◀ もどる</button><div class="score" id="scoreN">0</div><small style="color:var(--sub);font-size:.62rem;letter-spacing:.2em">POINTS</small></div>
     <div style="display:flex;align-items:center;gap:10px">
       <span class="prog" id="prog">1 / 18</span>
       <button class="btn sm" id="zukanBtn">図鑑</button>
@@ -688,10 +690,12 @@ function finish(){
     '<div class="bigScore">'+score+'</div>'+
     '<p class="useTxt">18この原子を すべて つくった。<br>いちばん外側の電子の数が、<br>そのまま<b style="color:#fff">くっつく手の数</b>になる。</p>'+'<p class="target" style="margin-top:12px">つぎは <b>ぶんしのへや</b> ／ その手をつかう</p>'+
     (rec?'<p class="newz">さいこう記録こうしん！</p>':'<p class="newz" style="color:#9AA6C4">さいこう記録 '+Math.max(best,score)+'</p>')+
-    '<div class="cardBtns"><button class="btn pri" id="againBtn">もういちど</button><button class="btn" id="zukanBtn4">図鑑</button></div>';
+    '<div class="cardBtns"><button class="btn pri" id="againBtn">もういちど</button><button class="btn" id="zukanBtn4">図鑑</button></div>'+
+    '<div class="cardBtns"><button class="btn" id="titleBtn">タイトルへ</button><a class="btn" href="../">ゲームランドへ</a></div>';
   $("#clearOv").classList.add("on");
   $("#againBtn").addEventListener("click",function(){$("#clearOv").classList.remove("on");start();});
   $("#zukanBtn4").addEventListener("click",openZukan);
+  $("#titleBtn").addEventListener("click",toTitle);
 }
 
 /* ---------- 紙吹雪 ---------- */
@@ -758,6 +762,17 @@ function start(){
   window.scrollTo(0,0);
 }
 $("#startBtn").addEventListener("click",start);
+// タイトルへもどる（あそんでいる とちゅうなら、いちど たしかめる）
+function toTitle(){
+  ["#resultOv","#clearOv","#zukanOv"].forEach(function(s){$(s).classList.remove("on");});
+  $("#game").style.display="none";
+  $("#title").style.display="";
+  window.scrollTo(0,0);
+}
+$("#quitBtn").addEventListener("click",function(){
+  if(qi>0 && qi<order.length && !confirm("とちゅうで やめて、タイトルに もどる？")) return;
+  toTitle();
+});
 updateZukan();
 })();
 </script>
