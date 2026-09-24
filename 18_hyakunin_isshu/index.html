@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>百人一首かるた｜モンスターと札とり勝負｜あたやさいさいゲームランド</title>
+<meta name="description" content="小倉百人一首 全100首のかるた。上の句が読まれたら、たたみの上の取り札を モンスターより先にタッチ！ 取った歌は ふりがな・作者・やさしい意味つきで出てきます。子供用の無料学習ゲーム。広告なし・会員とうろくなし。">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://atayasaisai.github.io/game_land/18_hyakunin_isshu/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="あたやさいさいゲームランド">
+<meta property="og:title" content="百人一首かるた｜モンスターと札とり勝負">
+<meta property="og:url" content="https://atayasaisai.github.io/game_land/18_hyakunin_isshu/">
+<meta property="og:image" content="https://atayasaisai.github.io/game_land/ogp.png">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Zen+Maru+Gothic:wght@500;700;900&family=Zen+Old+Mincho:wght@600;700&display=swap">
+<style>
+:root{
+  --ki:#F5B70A; --do:#F0603F; --ai:#4A6BC0; --raku:#4CB86B; --pink:#F58FB0; --sky:#7EC8E3;
+  --ink:#33312A; --paper:#FFFCF2; --paper2:#FFF4D6; --sub:#5C574A;
+  --tatami:#c9c27a; --tatami2:#b7ae62; --heri:#2f5a3a;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:"Zen Maru Gothic","Hiragino Maru Gothic ProN",sans-serif;font-weight:700;color:var(--ink);
+  background:#bfe3f5;overflow:hidden;-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
+h1,h2,h3,.pop{font-family:"Mochiy Pop One","Zen Maru Gothic",sans-serif;font-weight:400;margin:0}
+button{font-family:inherit;font-weight:700;cursor:pointer;color:inherit}
+.mincho{font-family:"Zen Old Mincho","Hiragino Mincho ProN",serif}
+rt{font-size:.5em;font-family:"Zen Maru Gothic",sans-serif;font-weight:700;color:var(--sub)}
+
+#app{height:100%;display:flex;flex-direction:column;overflow:hidden}
+.screen{display:none;height:100%;overflow-y:auto;overscroll-behavior:contain}
+.screen.on{display:block}
+.pad{max-width:760px;margin:0 auto;padding:16px 16px 40px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--raku);color:#fff;
+  border:3px solid var(--ink);border-radius:999px;padding:10px 26px;font-size:1.05rem;box-shadow:0 5px 0 var(--ink);
+  transition:transform .08s;text-decoration:none}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--ink)}
+.btn.sub{background:#fff;color:var(--ink)}
+.btn:focus-visible,.pick:focus-visible,.card:focus-visible{outline:3px solid var(--ai);outline-offset:3px}
+
+/* ───────── タイトル ───────── */
+#title,#result{background:#bfe3f5 url(bg.jpg) center 30%/cover no-repeat fixed}
+.top{text-align:center}
+.lead{display:inline-block;font-size:.72rem;letter-spacing:.24em;border:2.5px solid var(--ink);border-radius:999px;
+  padding:3px 15px;background:#fff;box-shadow:3px 3px 0 var(--ink);color:inherit;text-decoration:none;margin-bottom:30px}
+.logo{display:flex;align-items:center;justify-content:center;gap:4px;max-width:640px;margin:0 auto}
+.logo .side{width:clamp(60px,17vw,120px);flex:none;filter:drop-shadow(0 4px 4px rgba(0,0,0,.25));animation:hop 1.6s ease-in-out infinite}
+.logo .side.r{animation-delay:-.8s}
+.logo .boy{aspect-ratio:340/280;background:url(runner.webp) 100% 0/800% 100% no-repeat}
+@keyframes hop{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-10px) rotate(3deg)}}
+.sign{position:relative;padding:20px clamp(12px,4vw,30px) 18px;border-radius:26px;line-height:1.1;
+  background:linear-gradient(#c98a4b,#a86a33 55%,#8d5528);border:4px solid #5b3417;
+  box-shadow:inset 0 3px 0 rgba(255,255,255,.35),inset 0 -5px 0 rgba(0,0,0,.18),0 8px 0 #5b3417,0 14px 22px rgba(40,30,10,.35);
+  animation:swing 3.2s ease-in-out infinite;transform-origin:50% 0}
+@keyframes swing{0%,100%{transform:rotate(-1.2deg)}50%{transform:rotate(1.2deg)}}
+.sign .crown{position:absolute;left:50%;top:-32px;width:58px;transform:translateX(-50%) rotate(-4deg);filter:drop-shadow(0 3px 0 #5b3417)}
+.sign .star{position:absolute;font-size:1.3rem;color:#ffd43b;text-shadow:0 2px 0 #7a4a12;animation:twk 1.4s ease-in-out infinite}
+.sign .star.a{left:8px;top:6px}.sign .star.b{right:10px;bottom:4px;animation-delay:-.7s}
+@keyframes twk{0%,100%{transform:scale(1)}50%{transform:scale(1.35) rotate(15deg)}}
+.logo h1{font-family:"Mochiy Pop One",sans-serif;font-weight:400;line-height:1.1;margin:0}
+.logo h1 .sm{display:block;font-size:clamp(.9rem,3.6vw,1.3rem);color:#fff;letter-spacing:.3em;
+  text-shadow:0 2px 0 #5b3417,2px 0 0 #5b3417,-2px 0 0 #5b3417,0 -2px 0 #5b3417;margin-bottom:4px}
+.logo h1 .bg,.logo h1 .q{display:block;white-space:nowrap}
+.logo h1 .lt{display:inline-block;font-size:min(4.2rem,10.5vw);color:var(--k);
+  text-shadow:3px 0 0 #fff,-3px 0 0 #fff,0 3px 0 #fff,0 -3px 0 #fff,2px 2px 0 #fff,-2px -2px 0 #fff,2px -2px 0 #fff,-2px 2px 0 #fff,
+    0 7px 0 #5b3417,4px 5px 0 #5b3417,-4px 5px 0 #5b3417;
+  transform:rotate(var(--r,0deg));animation:jump 2.4s ease-in-out infinite;animation-delay:calc(var(--i) * .12s)}
+.logo h1 .q{margin-top:4px}
+.logo h1 .q .lt{font-size:clamp(1.7rem,7.6vw,3rem);color:#ffd84d;
+  text-shadow:3px 0 0 #7a3f12,-3px 0 0 #7a3f12,0 3px 0 #7a3f12,0 -3px 0 #7a3f12,2px 2px 0 #7a3f12,-2px -2px 0 #7a3f12,2px -2px 0 #7a3f12,-2px 2px 0 #7a3f12,0 6px 0 #3e1f08}
+@keyframes jump{0%,78%,100%{transform:translateY(0) rotate(var(--r,0deg))}86%{transform:translateY(-9px) rotate(var(--r,0deg))}}
+.catch{margin:22px auto 0;display:table;padding:6px 16px;border-radius:16px;background:rgba(255,252,240,.9);
+  font-size:.9rem;line-height:1.7;text-align:center}
+
+.panel{margin:18px auto 0;max-width:640px;background:rgba(255,252,240,.94);border:3px solid var(--ink);
+  border-radius:26px;padding:8px 14px 22px;box-shadow:0 8px 0 rgba(51,49,42,.85)}
+.opt{margin-top:14px;text-align:center}
+.opt h3{font-size:.82rem;letter-spacing:.14em;color:var(--sub);margin-bottom:8px}
+.row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.pick{background:#fff;border:2.5px solid var(--ink);border-radius:999px;padding:7px 15px;font-size:.9rem;box-shadow:0 3px 0 var(--ink)}
+.pick[aria-pressed="true"]{background:var(--ink);color:#fff;transform:translateY(2px);box-shadow:0 1px 0 var(--ink)}
+.pick small{font-size:.7rem;opacity:.8;margin-left:3px}
+.pick.foe{display:inline-flex;align-items:center;gap:6px;padding:4px 14px 4px 6px}
+.pick.foe img{width:34px;height:34px;object-fit:contain}
+.start{display:block;margin:24px auto 0;font-size:1.3rem;padding:13px 46px}
+.note{margin:18px auto 0;max-width:640px;font-size:.76rem;color:var(--sub);line-height:1.9;
+  background:rgba(255,255,255,.94);border:2.5px dashed var(--ink);border-radius:18px;padding:12px 16px}
+.note b{color:var(--ink)}
+
+/* ───────── ゲーム ───────── */
+#game{display:none;height:100%;flex-direction:column;overflow:hidden;
+  background:#8c8448 url(bg.jpg) center 30%/cover no-repeat}
+#game.on{display:flex}
+.hud{flex:none;display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--ink);color:#fff;font-size:.84rem}
+.hud .quit{background:transparent;border:2px solid rgba(255,255,255,.6);color:#fff;border-radius:999px;padding:2px 10px;font-size:.74rem}
+.hud .nm{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hud b{color:var(--ki)}
+
+/* 対戦のようす */
+.vs{flex:none;display:flex;align-items:center;gap:8px;padding:6px 10px;background:rgba(255,252,240,.9);border-bottom:3px solid var(--ink)}
+.vs .me,.vs .foe{display:flex;align-items:center;gap:6px;font-size:.78rem}
+.vs .me .boy{width:62px;aspect-ratio:340/280;background:url(runner.webp) calc(1*100%/7) 0/800% 100% no-repeat}
+.vs .foe img{width:46px;height:46px;object-fit:contain}
+.vs .n{font-family:"Mochiy Pop One",sans-serif;font-size:1.5rem;line-height:1}
+.vs .me .n{color:var(--raku)}.vs .foe .n{color:var(--do)}
+.vs .mid{flex:1;min-width:0;text-align:center}
+.vs .bar{height:12px;border:2.5px solid var(--ink);border-radius:999px;background:#fff;overflow:hidden}
+.vs .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#ffb36b,var(--do))}
+.vs .mid small{display:block;font-size:.66rem;color:var(--sub);margin-top:2px}
+.vs .foe.grab img{animation:grab .4s ease-in-out 2}
+@keyframes grab{50%{transform:translateY(12px) scale(1.15)}}
+
+/* 読み札 */
+.yomi{flex:none;margin:8px 10px 0;background:#fffdf5;border:3px solid var(--ink);border-radius:16px;
+  padding:8px 12px;min-height:3.4em;box-shadow:0 4px 0 rgba(51,49,42,.6)}
+.yomi small{display:block;font-size:.62rem;color:var(--sub);letter-spacing:.14em}
+.yomi .tx{font-size:clamp(1.05rem,4.6vw,1.45rem);letter-spacing:.06em;line-height:1.5;min-height:1.5em}
+.yomi .tx .k{color:var(--do)}
+
+/* たたみと取り札 */
+.field{flex:1;min-height:0;margin:10px;padding:10px;border-radius:14px;
+  background:repeating-linear-gradient(90deg,var(--tatami) 0 3px,var(--tatami2) 3px 5px),var(--tatami);
+  border:6px solid var(--heri);box-shadow:inset 0 0 0 2px #1d3a25,0 6px 0 rgba(0,0,0,.25);
+  display:grid;grid-template-columns:repeat(var(--cols,4),var(--cw,70px));grid-template-rows:repeat(var(--rows,2),calc(var(--cw,70px) * 73 / 53));
+  gap:var(--gap,10px);place-content:center;position:relative}
+.card{position:relative;width:100%;height:100%;padding:0;
+  background:#fffaf0;border:3px solid #2f6b3c;border-radius:8px;box-shadow:0 4px 0 rgba(0,0,0,.28);
+  container-type:inline-size;transition:transform .12s}
+.card:hover{transform:translateY(-3px)}
+.card:active{transform:translateY(2px)}
+.card .cv{position:absolute;inset:7% 8%;writing-mode:vertical-rl;display:flex;justify-content:space-between;
+  font-family:"Zen Old Mincho","Hiragino Mincho ProN",serif;font-weight:700;font-size:21cqw;line-height:1.05;color:#222}
+.card .cv span{display:block;text-align:justify;text-align-last:justify}
+.card.empty{visibility:hidden}
+.card.ok{animation:okc .55s ease forwards;pointer-events:none}
+@keyframes okc{30%{transform:scale(1.15);box-shadow:0 0 0 6px #fff,0 0 22px 8px #ffe58a}100%{transform:translateY(120%) scale(.4);opacity:0}}
+.card.lost{animation:lostc .55s ease forwards;pointer-events:none}
+@keyframes lostc{30%{transform:scale(1.1);box-shadow:0 0 0 6px var(--do)}100%{transform:translateY(-140%) scale(.4);opacity:0}}
+.card.bad{animation:shake .4s}
+@keyframes shake{20%,60%{transform:translateX(-6px) rotate(-3deg)}40%,80%{transform:translateX(6px) rotate(3deg)}}
+.field.freeze::after{content:"おてつき！ ちょっと まってね";position:absolute;inset:0;display:grid;place-items:center;
+  background:rgba(240,96,63,.35);color:#fff;font-size:1.2rem;border-radius:8px;text-shadow:0 2px 0 rgba(0,0,0,.4)}
+.flash{position:absolute;left:50%;top:40%;transform:translate(-50%,-50%);z-index:9;border:3px solid var(--ink);border-radius:999px;
+  padding:6px 22px;font-family:"Mochiy Pop One",sans-serif;font-size:clamp(1.2rem,5.4vw,1.7rem);color:#fff;white-space:nowrap;
+  animation:pop .45s cubic-bezier(.2,1.7,.5,1) both;pointer-events:none}
+.flash.me{background:var(--raku)}.flash.foe{background:var(--do)}
+@keyframes pop{from{transform:translate(-50%,-50%) scale(.3);opacity:0}to{transform:translate(-50%,-50%) scale(1);opacity:1}}
+
+/* 歌のカード（取ったあとに出る） */
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:20;display:none;justify-content:center;padding:0 10px calc(12px + env(safe-area-inset-bottom,0px))}
+.sheet.on{display:flex;animation:up .3s ease both}
+@keyframes up{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
+.uta{width:100%;max-width:620px;background:#fffdf5;border:3px solid var(--ink);border-radius:22px;padding:14px 16px 16px;
+  box-shadow:0 -4px 30px rgba(0,0,0,.25),0 6px 0 var(--ink);max-height:70vh;overflow:auto}
+.uta .who{display:flex;align-items:center;gap:8px;font-size:.78rem;color:var(--sub)}
+.uta .who .no{background:var(--ink);color:#fff;border-radius:999px;padding:0 9px;font-size:.72rem}
+.uta .who .res{margin-left:auto;border-radius:999px;padding:0 10px;color:#fff;font-size:.74rem}
+.uta .who .res.me{background:var(--raku)}.uta .who .res.foe{background:var(--do)}
+.uta .poem{margin:8px 0 2px;font-size:clamp(1.1rem,4.8vw,1.4rem);line-height:2.1}
+.uta .poem .l2{display:block;padding-left:1.2em}
+.uta .au{text-align:right;font-size:.9rem}
+.uta .kim{font-size:.76rem;color:var(--sub);margin-top:6px}
+.uta .kim b{color:var(--do);font-size:1rem}
+.uta .imi{margin-top:8px;background:var(--paper2);border-radius:12px;padding:8px 12px;font-size:.84rem;line-height:1.7}
+.uta .imi small{display:block;font-size:.66rem;color:var(--sub)}
+.uta .go{display:flex;justify-content:center;margin-top:12px}
+
+/* ───────── けっか ───────── */
+.rbox{margin:10px auto 0;max-width:640px;background:rgba(255,252,240,.95);border:3px solid var(--ink);border-radius:26px;
+  padding:20px 16px;text-align:center;box-shadow:0 8px 0 rgba(51,49,42,.85)}
+.rbox h2{font-size:clamp(1.4rem,6vw,2rem)}
+.rvs{display:flex;align-items:center;justify-content:center;gap:14px;margin:12px 0 4px}
+.rvs .boy{width:clamp(76px,24vw,110px);aspect-ratio:340/280;background:url(runner.webp) 100% 0/800% 100% no-repeat}
+.rvs img{width:clamp(56px,17vw,80px);height:auto;object-fit:contain}
+.rvs .sc{font-family:"Mochiy Pop One",sans-serif;font-size:clamp(1.6rem,8vw,2.4rem);white-space:nowrap}
+.rvs .sc .a{color:var(--raku)}.rvs .sc .b{color:var(--do)}
+.rnew{display:inline-block;margin-top:6px;background:var(--ki);border:2.5px solid var(--ink);border-radius:999px;padding:1px 14px;font-size:.8rem;transform:rotate(-3deg)}
+.rlist{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:8px;text-align:left}
+.rlist li{background:#fff;border:2px solid var(--do);border-radius:14px;padding:8px 12px;font-size:.8rem;color:var(--sub)}
+.rlist li .p{display:block;color:var(--ink);font-size:.98rem;line-height:1.9}
+.rlist h3,.rbox h3{font-size:.86rem;margin:14px 0 0;text-align:left}
+.rbtns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:18px}
+.conf{position:fixed;width:10px;height:14px;top:-20px;z-index:30;pointer-events:none;border:1.5px solid var(--ink)}
+
+@media (min-width:760px){
+  .field{max-width:900px;align-self:center;width:calc(100% - 20px)}
+  .yomi{max-width:900px;align-self:center;width:calc(100% - 20px)}
+}
+@media (prefers-reduced-motion: reduce){ *{animation:none!important;transition:none!important} }
+</style>
+<!-- ▼ 訪問者カウント（GoatCounter）。Cookieも個人情報も使わない集計。
+     goatcounter.com で決めたコードを MYCODE に入れて、この行のコメントを外すと動きます -->
+<!-- <script data-goatcounter="https://MYCODE.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script> -->
+</head>
+<body>
+<div id="app">
+
+<!-- ═══════════ タイトル ═══════════ -->
+<section class="screen on" id="title"><div class="pad">
+  <div class="top">
+    <a class="lead" href="../">◀ あたやさいさいゲームランド</a>
+    <div class="logo">
+      <div class="side l boy" role="img" aria-label=""></div>
+      <div class="sign"><svg class="crown" viewBox="0 0 60 40" aria-hidden="true"><path d="M4 34 L8 10 L20 22 L30 4 L40 22 L52 10 L56 34 Z" fill="#ffd43b" stroke="#5b3417" stroke-width="3" stroke-linejoin="round"/><circle cx="30" cy="25" r="4" fill="#F0603F" stroke="#5b3417" stroke-width="2"/></svg><span class="star a">★</span><span class="star b">★</span>
+        <h1 aria-label="百人一首かるた"><span class="sm">おぐら</span><span class="bg"><span class="lt" style="--k:var(--do);--i:0;--r:-6deg">百</span><span class="lt" style="--k:var(--ai);--i:1;--r:4deg">人</span><span class="lt" style="--k:var(--raku);--i:2;--r:-3deg">一</span><span class="lt" style="--k:var(--ki);--i:3;--r:5deg">首</span></span><span class="q"><span class="lt" style="--i:4">か</span><span class="lt" style="--i:5">る</span><span class="lt" style="--i:6">た</span></span></h1>
+      </div>
+      <img class="side r" src="mon/wizard.png" alt="" width="120" height="120">
+    </div>
+    <p class="catch">上の句が 読まれたら、下の句の 札を<br>モンスターより 先に タッチ！</p>
+  </div>
+
+  <div class="panel">
+    <div class="opt"><h3>どの歌で あそぶ？</h3><div class="row" id="rgRow"></div></div>
+    <div class="opt"><h3>あいて</h3><div class="row" id="lvRow"></div></div>
+    <button class="btn start pop" id="go">はじめる ▶</button>
+  </div>
+
+  <p class="note">
+    <b>小倉百人一首の 100首ぜんぶ</b>が入っています。1回の勝負は 20首。たたみの上には 8まいずつ ならびます。<br>
+    読み札は、昔のかなづかいで 1文字ずつ 出てきます。<b>赤い字は「決まり字」</b>。そこまで 読まれたら、どの札か わかる字です。<br>
+    まちがえて ちがう札に さわると「おてつき」で、すこしの間 さわれません。
+    モンスターに とられた歌は「にがて」として のこります。きろくは この端末の中だけです。
+  </p>
+</div></section>
+
+<!-- ═══════════ ゲーム ═══════════ -->
+<section id="game">
+  <div class="hud">
+    <button class="quit" id="quit" type="button">◀ やめる</button>
+    <div class="nm" id="rgName"></div>
+    <div>のこり <b id="left">20</b></div>
+  </div>
+  <div class="vs">
+    <div class="me"><div class="boy" aria-hidden="true"></div><span class="n" id="meN">0</span></div>
+    <div class="mid"><div class="bar"><i id="bar"></i></div><small id="foeSay">モンスターが ねらっている…</small></div>
+    <div class="foe" id="foeBox"><span class="n" id="foeN">0</span><img id="foeImg" src="mon/slime.png" alt=""></div>
+  </div>
+  <div class="yomi"><small>よみふだ（上の句）</small><div class="tx mincho" id="yomi"></div></div>
+  <div class="field" id="field"></div>
+</section>
+
+<!-- ═══════════ けっか ═══════════ -->
+<section class="screen" id="result"><div class="pad"><div class="rbox" id="rbox"></div></div></section>
+
+</div>
+
+<div class="sheet" id="sheet"><div class="uta" id="uta"></div></div>
+
+<script src="poems.js"></script>
+<script>
+(function(){
+"use strict";
+
+var P = window.POEMS;
+var RANGES = [
+  {k:"1",  nm:"1〜20",  from:1,  to:20},
+  {k:"21", nm:"21〜40", from:21, to:40},
+  {k:"41", nm:"41〜60", from:41, to:60},
+  {k:"61", nm:"61〜80", from:61, to:80},
+  {k:"81", nm:"81〜100",from:81, to:100},
+  {k:"all",nm:"100首から",all:true}
+];
+// あいて：base＝読みはじめてから 札をとるまでの時間（ミリ秒）。決まり字が長いほど すこし おそくなる
+var FOES = [
+  {k:"1", nm:"スライム",   img:"mon/slime.png",  base:7500, per:350},
+  {k:"2", nm:"まほうつかい", img:"mon/wizard.png", base:4800, per:300},
+  {k:"3", nm:"ドラゴン",   img:"mon/dragon.png", base:2900, per:260}
+];
+var PER_GAME = 20, ON_FIELD = 8, READ_MS = 190, FREEZE_MS = 1300;
+
+function $(id){ return document.getElementById(id); }
+function shuffle(a){ var i,j,t; for(i=a.length-1;i>0;i--){ j=Math.floor(Math.random()*(i+1)); t=a[i];a[i]=a[j];a[j]=t; } return a; }
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function load(k,d){ try{ var v=localStorage.getItem(k); return v?JSON.parse(v):d; }catch(e){ return d; } }
+function save(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
+var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+// 「秋(あき)の田(た)の」→ ふりがなつき
+function ruby(s){
+  return esc(s).replace(/([一-龯々〆ヶ]+)\(([^)]+)\)/g, "<ruby>$1<rt>$2</rt></ruby>");
+}
+// 取り札：下の句のかなを 5・5・のこり の3列に（ほんもののかるたと同じ）
+function cardHTML(p){
+  var c = p.c;
+  return '<span>'+c.slice(0,5)+'</span><span>'+c.slice(5,10)+'</span><span>'+c.slice(10)+'</span>';
+}
+
+var pref = load("hk_pref", {rg:"1", foe:"1"});
+var best = load("hk_best", {});      // 範囲+あいて → いちばん多く とった数
+var weak = load("hk_weak", {});      // 歌の番号 → 1
+
+/* ═══════════ おと ═══════════ */
+var AC = null;
+function beep(f,d,type,vol,when){
+  try{ AC = AC || new (window.AudioContext||window.webkitAudioContext)();
+    var t=AC.currentTime+(when||0), o=AC.createOscillator(), g=AC.createGain();
+    o.type=type||"sine"; o.frequency.setValueAtTime(f,t); g.gain.setValueAtTime(vol||.12,t);
+    g.gain.exponentialRampToValueAtTime(.001,t+d); o.connect(g); g.connect(AC.destination); o.start(t); o.stop(t+d);
+  }catch(e){}
+}
+function sTake(){ [660,880,1175].forEach(function(f,i){ beep(f,.14,"triangle",.13,i*.07); }); }
+function sLost(){ beep(220,.25,"sawtooth",.06); beep(165,.3,"sawtooth",.06,.12); }
+function sBad(){ beep(140,.25,"square",.06); }
+
+/* ═══════════ タイトル ═══════════ */
+function weakList(){ return P.filter(function(p){ return weak[p.n]; }); }
+function paintTitle(){
+  var wl = weakList().length;
+  var rg = RANGES.map(function(r){
+    return '<button class="pick" type="button" data-rg="'+r.k+'" aria-pressed="'+(pref.rg===r.k)+'">'+r.nm+'</button>';
+  }).join("");
+  if(wl >= 1) rg += '<button class="pick" type="button" data-rg="weak" aria-pressed="'+(pref.rg==="weak")+'">にがて<small>（'+wl+'）</small></button>';
+  else if(pref.rg==="weak") pref.rg = "1";
+  $("rgRow").innerHTML = rg;
+  $("lvRow").innerHTML = FOES.map(function(f){
+    return '<button class="pick foe" type="button" data-foe="'+f.k+'" aria-pressed="'+(pref.foe===f.k)+'"><img src="'+f.img+'" alt="">'+f.nm+'</button>';
+  }).join("");
+}
+$("rgRow").addEventListener("click", function(e){ var b=e.target.closest("[data-rg]"); if(!b) return; pref.rg=b.dataset.rg; save("hk_pref",pref); paintTitle(); });
+$("lvRow").addEventListener("click", function(e){ var b=e.target.closest("[data-foe]"); if(!b) return; pref.foe=b.dataset.foe; save("hk_pref",pref); paintTitle(); });
+$("go").addEventListener("click", start);
+
+/* ═══════════ ゲーム ═══════════ */
+var G = null, T = {read:null, foe:null, next:null, freeze:null};
+function clearT(){ clearInterval(T.read); clearTimeout(T.foe); clearTimeout(T.next); clearTimeout(T.freeze); }
+
+function show(id){
+  ["title","result"].forEach(function(s){ $(s).classList.toggle("on", s===id); });
+  $("game").classList.toggle("on", id==="game");
+  if(id!=="game") $("sheet").classList.remove("on");
+}
+
+function rangeName(){
+  if(pref.rg==="weak") return "にがての歌";
+  var r = RANGES.filter(function(x){ return x.k===pref.rg; })[0];
+  return r.all ? "100首から 20首" : r.nm+" ばん";
+}
+function start(){
+  var pool;
+  if(pref.rg==="weak") pool = weakList();
+  else {
+    var r = RANGES.filter(function(x){ return x.k===pref.rg; })[0];
+    pool = r.all ? P.slice() : P.filter(function(p){ return p.n>=r.from && p.n<=r.to; });
+  }
+  var deck = shuffle(pool.slice()).slice(0, PER_GAME);
+  var foe = FOES.filter(function(f){ return f.k===pref.foe; })[0];
+  G = {deck:deck, pending:deck.slice(ON_FIELD), field:deck.slice(0, ON_FIELD), foe:foe,
+       me:0, them:0, otetsuki:0, lost:[], taken:[], cur:null, busy:false, frozen:false};
+  while(G.field.length < ON_FIELD) G.field.push(null);
+  $("rgName").textContent = rangeName();
+  $("foeImg").src = foe.img;
+  $("meN").textContent = "0"; $("foeN").textContent = "0";
+  show("game");
+  paintField();
+  T.next = setTimeout(nextRound, 700);
+}
+
+// 札の大きさ：たたみの形に合わせて 4×2・3×3・2×4 のうち 札がいちばん大きくなる ならべ方をえらぶ
+function fitField(){
+  var f = $("field"), cs = getComputedStyle(f);
+  var w = f.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+  var hh = f.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+  var gap = Math.max(6, Math.min(14, w*.025)), bestW = 0, bc = 4;
+  [4,3,2].forEach(function(c){
+    var r = Math.ceil(ON_FIELD/c);
+    var cw = Math.min((w - gap*(c-1))/c, ((hh - gap*(r-1))/r) * 53/73, 150);
+    if(cw > bestW + 1){ bestW = cw; bc = c; }
+  });
+  f.style.setProperty("--cols", bc); f.style.setProperty("--rows", Math.ceil(ON_FIELD/bc));
+  f.style.setProperty("--cw", Math.floor(bestW)+"px"); f.style.setProperty("--gap", gap+"px");
+}
+window.addEventListener("resize", function(){ if(G) fitField(); });
+function paintField(){
+  fitField();
+  $("field").innerHTML = G.field.map(function(p, i){
+    if(!p) return '<button class="card empty" type="button" tabindex="-1" aria-hidden="true"></button>';
+    return '<button class="card" type="button" data-i="'+i+'" aria-label="'+esc(p.c)+'"><span class="cv">'+cardHTML(p)+'</span></button>';
+  }).join("");
+}
+
+function nextRound(){
+  var live = G.field.filter(Boolean);
+  $("left").textContent = live.length + G.pending.length;
+  if(!live.length){ finish(); return; }
+  G.cur = live[Math.floor(Math.random()*live.length)];
+  G.busy = false; G.shown = 0;
+  $("yomi").innerHTML = "";
+  $("foeSay").textContent = G.foe.nm + "が ねらっている…";
+  // 読み札：昔のかなづかいで 1文字ずつ
+  var chars = G.cur.kk.split(""), kim = G.cur.m.length, cnt = 0;
+  T.read = setInterval(function(){
+    if(G.shown >= chars.length){ clearInterval(T.read); return; }
+    G.shown++;
+    paintYomi(chars, kim);
+  }, READ_MS);
+  // モンスターの手
+  var ms = G.foe.base + kim*G.foe.per;
+  var bar = $("bar"); bar.style.transition = "none"; bar.style.width = "0";
+  void bar.offsetWidth;
+  bar.style.transition = "width "+ms+"ms linear"; bar.style.width = "100%";
+  T.foe = setTimeout(function(){ resolve("foe"); }, ms);
+}
+function paintYomi(chars, kim){
+  var h = "", n = 0;
+  for(var i=0;i<G.shown;i++){
+    var c = chars[i];
+    if(c===" "){ h += "　"; continue; }
+    h += n < kim ? '<span class="k">'+c+'</span>' : c;
+    n++;
+  }
+  $("yomi").innerHTML = h;
+}
+
+$("field").addEventListener("click", function(e){
+  var b = e.target.closest(".card[data-i]"); if(!b || !G || G.busy || G.frozen || !G.cur) return;
+  var p = G.field[+b.dataset.i];
+  if(p === G.cur){ resolve("me", b); }
+  else {
+    // おてつき
+    G.otetsuki++; sBad();
+    b.classList.remove("bad"); void b.offsetWidth; b.classList.add("bad");
+    G.frozen = true; $("field").classList.add("freeze");
+    T.freeze = setTimeout(function(){ G.frozen = false; $("field").classList.remove("freeze"); }, FREEZE_MS);
+  }
+});
+
+function resolve(who, el){
+  if(!G || G.busy) return;
+  G.busy = true;
+  clearInterval(T.read); clearTimeout(T.foe); clearTimeout(T.freeze);
+  G.frozen = false; $("field").classList.remove("freeze");
+  var p = G.cur, i = G.field.indexOf(p);
+  el = el || document.querySelector('.card[data-i="'+i+'"]');
+  var bar = $("bar"), w = getComputedStyle(bar).width; bar.style.transition = "none"; bar.style.width = w;
+  G.shown = p.kk.length; paintYomi(p.kk.split(""), p.m.length);
+  var f = document.createElement("div");
+  if(who==="me"){
+    G.me++; G.taken.push(p); delete weak[p.n]; sTake();
+    el.classList.add("ok"); f.className = "flash me"; f.textContent = "とった！";
+    $("meN").textContent = G.me;
+  } else {
+    G.them++; G.lost.push(p); weak[p.n] = 1; sLost();
+    el.classList.add("lost"); f.className = "flash foe"; f.textContent = G.foe.nm+"が とった！";
+    $("foeN").textContent = G.them;
+    var fb = $("foeBox"); fb.classList.remove("grab"); void fb.offsetWidth; fb.classList.add("grab");
+  }
+  save("hk_weak", weak);
+  $("field").appendChild(f);
+  setTimeout(function(){
+    f.remove();
+    G.field[i] = G.pending.length ? G.pending.shift() : null;
+    paintField();
+    $("left").textContent = G.field.filter(Boolean).length + G.pending.length;
+    showUta(p, who);
+  }, 700);
+}
+
+// 取ったあと：歌ぜんぶ・作者・決まり字・やさしい意味
+function showUta(p, who){
+  $("uta").innerHTML =
+      '<div class="who"><span class="no">'+p.n+'ばん</span>'
+    + '<span class="res '+who+'">'+(who==="me" ? "あなたが とった" : G.foe.nm+"が とった")+'</span></div>'
+    + '<p class="poem mincho">'+ruby(p.k)+'<span class="l2">'+ruby(p.s)+'</span></p>'
+    + '<p class="au">'+esc(p.a)+'<small>（'+esc(p.ay)+'）</small></p>'
+    + '<p class="kim">決まり字 <b>'+esc(p.m)+'</b>　ここまで 読まれたら この札！</p>'
+    + '<div class="imi"><small>どんな歌？</small>'+esc(p.i)+'</div>'
+    + '<div class="go"><button class="btn" id="nextBtn" type="button">つぎの歌 ▶</button></div>';
+  $("sheet").classList.add("on");
+  var nb = $("nextBtn"); nb.focus({preventScroll:true});
+  nb.onclick = function(){ $("sheet").classList.remove("on"); T.next = setTimeout(nextRound, 350); };
+}
+
+function finish(){
+  clearT();
+  var key = pref.rg+"_"+pref.foe, prev = best[key]||0, isNew = pref.rg!=="weak" && G.me > prev;
+  if(isNew){ best[key] = G.me; save("hk_best", best); }
+  var win = G.me > G.them, draw = G.me === G.them;
+  var head = win ? "かち！ おみごと！" : draw ? "ひきわけ！" : "まけちゃった…";
+  var list = G.lost.length
+    ? '<h3>'+esc(G.foe.nm)+'に とられた歌（にがてに 入れたよ）</h3><ul class="rlist">' + G.lost.map(function(p){
+        return '<li><span class="p mincho">'+ruby(p.k)+'　'+ruby(p.s)+'</span>'+p.n+'ばん・'+esc(p.a)+'</li>'; }).join("") + '</ul>'
+    : '<p style="margin:14px 0 0;color:var(--raku)">ぜんぶ とったよ！ すごい！</p>';
+  $("rbox").innerHTML = '<h2>'+head+'</h2>'
+    + '<div class="rvs"><div class="boy" aria-hidden="true"></div><div class="sc"><span class="a">'+G.me+'</span> − <span class="b">'+G.them+'</span></div><img src="'+G.foe.img+'" alt="'+esc(G.foe.nm)+'"></div>'
+    + '<div style="font-size:.8rem;color:var(--sub)">'+esc(rangeName())+' ／ おてつき '+G.otetsuki+'かい</div>'
+    + (isNew ? '<span class="rnew">きろく こうしん！</span>' : '')
+    + list
+    + '<div class="rbtns"><button class="btn" id="rAgain">もういちど</button><button class="btn sub" id="rHome">タイトルへ</button><a class="btn sub" href="../">ゲームランドへ</a></div>';
+  show("result"); $("result").scrollTop = 0;
+  if(win) confetti();
+  $("rAgain").onclick = start;
+  $("rHome").onclick = function(){ paintTitle(); show("title"); };
+}
+
+function confetti(){
+  if(reduce) return;
+  var cols=["#F5B70A","#F0603F","#4A6BC0","#4CB86B","#F58FB0","#7EC8E3"];
+  for(var i=0;i<40;i++){
+    var c=document.createElement("div"); c.className="conf"; c.style.left=Math.random()*100+"vw"; c.style.background=cols[i%cols.length];
+    document.body.appendChild(c);
+    c.animate([{transform:"translateY(0) rotate(0)"},{transform:"translateY("+(innerHeight+60)+"px) rotate("+(360+Math.random()*540)+"deg)"}],
+      {duration:1600+Math.random()*1400,delay:Math.random()*500,easing:"ease-in",fill:"forwards"});
+    (function(el){ setTimeout(function(){ el.remove(); },3600); })(c);
+  }
+}
+
+$("quit").addEventListener("click", function(){
+  if(G && G.me+G.them>0 && G.field.some(Boolean) && !confirm("とちゅうで やめて、タイトルに もどる？")) return;
+  clearT(); G = null; paintTitle(); show("title");
+});
+
+paintTitle();
+})();
+</script>
+</body>
+</html>
