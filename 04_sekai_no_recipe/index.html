@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>せかいのレシピ げんしのへや｜原子をつくる無料の理科教材ゲーム｜あたやさいさいゲームランド</title>
-<meta name="description" content="まんなかの陽子の数で、原子の名前は決まる。内がわの電子はもう入っている。いちばん外がわだけ、きみが置く。18この原子をつくる、子ども向けの無料の理科・教育ゲームです。広告なし・会員とうろくなし。">
+<meta name="description" content="まんなかの陽子の数で、原子の名前は決まる。内がわの電子はもう入っている。いちばん外がわだけ、きみが置く。118この原子をぜんぶつくれる、子ども向けの無料の理科・教育ゲームです。広告なし・会員とうろくなし。">
 <meta name="robots" content="index,follow">
 <link rel="canonical" href="https://atayasaisai.github.io/game_land/04_sekai_no_recipe/">
 <meta property="og:type" content="article">
@@ -152,6 +152,29 @@ a.btn{text-decoration:none;display:inline-flex;align-items:center}
 .hint.on{display:block;animation:fadeUp .35s ease both}
 .hint b{color:#fff;font-weight:900;font-size:1.06em}
 
+/* 何をするかの式：内側（入っている）＋ 外側（きみが置く）＝ 原子番号 */
+.need{margin-top:8px;font-size:.8rem;color:var(--sub);line-height:1.6}
+.need .zline b{color:#fff;font-size:1.15em}
+.need .eqn{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:6px}
+.need .box{border:1px solid var(--line);border-radius:12px;padding:3px 10px;background:rgba(255,255,255,.04);text-align:center;line-height:1.35}
+.need .box b{display:block;font-size:1.25rem;color:#fff;font-variant-numeric:tabular-nums}
+.need .box small{font-size:.62rem;letter-spacing:.04em}
+.need .box.in{opacity:.75}
+.need .box.out{border-color:rgba(140,220,255,.7);background:rgba(70,190,255,.12);box-shadow:0 0 14px -4px rgba(90,190,255,.8)}
+.need .box.out b{color:#9FE8FF}
+.need .box.sum.ok{border-color:#4FE0A8;box-shadow:0 0 14px -4px #4FE0A8}
+.need .box.sum.ok b{color:#7FF0C4}
+.need .op{font-size:1.1rem;color:#8C9AC0}
+.rgsel{margin-top:16px;width:100%}
+.rglab{font-size:.74rem;color:var(--sub);margin:10px 0 6px!important;letter-spacing:.08em}
+.rgrow{display:flex;flex-wrap:wrap;gap:7px;justify-content:center}
+.rgrow button{border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.06);color:var(--ink);border-radius:99px;
+  padding:7px 14px;font-size:.84rem;font-weight:700}
+.rgrow button[aria-pressed="true"]{background:linear-gradient(140deg,#4D7BFF,#8A5BFF);border-color:#9FB8FF}
+.rgrow button small{font-size:.66rem;opacity:.75;margin-left:3px;font-weight:500}
+.atomLab{fill:#9FE8FF;font-size:15px;font-weight:700;letter-spacing:.06em}
+.atomLab.in{fill:#8C9AC0;font-size:13px}
+
 /* atom */
 #atomWrap{position:relative;width:min(84vw,336px);margin:0 auto;touch-action:none}
 #atomWrap.over #ghostRing{opacity:1;transform:scale(1)}
@@ -243,23 +266,25 @@ a.btn{text-decoration:none;display:inline-flex;align-items:center}
 
 /* zukan */
 #zukanOv{z-index:95}
-.zwrap{width:100%;max-width:470px;max-height:88dvh;overflow:auto;border:1px solid rgba(255,255,255,.18);
+.zwrap{width:100%;max-width:820px;max-height:88dvh;overflow:auto;border:1px solid rgba(255,255,255,.18);
   border-radius:24px;padding:20px;background:linear-gradient(165deg,rgba(24,31,58,.97),rgba(10,14,30,.99));
   box-shadow:0 30px 80px -20px rgba(0,0,0,.9);animation:cardIn .45s cubic-bezier(.2,1.3,.35,1) both}
 .zhead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:3px}
 .zhead h3{margin:0;font-size:1.1rem;font-weight:900;letter-spacing:.06em}
 .zsub{font-size:.72rem;color:var(--sub);margin-bottom:14px;letter-spacing:.04em}
-.zgrid{display:grid;grid-template-columns:repeat(8,1fr);gap:4px}
+.zscroll{overflow-x:auto;padding-bottom:4px}
+.zgrid{display:grid;grid-template-columns:repeat(18,minmax(28px,1fr));gap:3px;min-width:540px}
+.zgrid .gap{grid-column:1/-1;height:8px}
 .zcol{font-size:.58rem;color:#8C9AC0;font-weight:700;text-align:center;letter-spacing:.06em;padding-bottom:2px}
 .zc{aspect-ratio:1;border:1px solid rgba(255,255,255,.1);border-radius:8px;background:rgba(255,255,255,.025);
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;position:relative;
   font-size:.5rem;color:#3E4763;transition:.25s}
 .zc.got{border-color:var(--ac);background:color-mix(in srgb,var(--ac) 17%,transparent);cursor:pointer;
   box-shadow:0 0 16px -4px var(--ac)}
-.zc.got .s{font-size:1.02rem;font-weight:900;color:#fff;line-height:1}
-.zc.got .n{font-size:.46rem;color:#D3DCF4;letter-spacing:.02em;margin-top:1px;transform:scale(.92)}
+.zc.got .s{font-size:clamp(.72rem,1.9vw,1rem);font-weight:900;color:#fff;line-height:1}
+.zc.got .n{display:none;font-size:.46rem;color:#D3DCF4;letter-spacing:.02em;margin-top:1px;transform:scale(.92)}
 .zc .z{position:absolute;top:2px;left:3px;font-size:.44rem;color:#77839F}
-.zc .q{font-size:1.06rem;font-weight:700;color:#6A76A0}
+.zc .q{font-size:.8rem;font-weight:700;color:#6A76A0}
 .zc.got:hover{transform:translateY(-2px) scale(1.06);z-index:2}
 .zc.blank{border:none;background:none;box-shadow:none}
 .zdet{margin-top:13px;border:1px solid var(--line);border-radius:14px;padding:12px 14px;min-height:62px;
@@ -267,6 +292,8 @@ a.btn{text-decoration:none;display:inline-flex;align-items:center}
 .zdet{text-wrap:pretty}
 .zdet b{color:var(--ink);font-weight:900;font-size:1.02rem;letter-spacing:.04em}
 .zdet .u{display:block;color:#C7D2EC;margin-top:3px;font-size:.82rem}
+.zleg{display:flex;flex-wrap:wrap;gap:5px 10px;margin-top:10px;font-size:.66rem;color:var(--sub)}
+.zleg i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:4px;vertical-align:-1px}
 .znote{font-size:.68rem;color:#5E6B8A;margin-top:11px;line-height:1.75;letter-spacing:.02em}
 
 /* clear */
@@ -331,8 +358,14 @@ a.btn{text-decoration:none;display:inline-flex;align-items:center}
     </g>
   </svg>
 
-  <p>まんなかの<b>陽子</b>の数で、原子の名前は決まる。<br>
-     内側の電子はもう入っている。<b>いちばん外側だけ</b>、きみが置く。</p>
+  <p>まんなかの<b>陽子</b>の数（原子番号）で、原子の名前は決まる。<br>
+     電子も 陽子と おなじ数だけ いる。<br>
+     <b>内側の電子は もう入っている</b>ので、<b>いちばん外側の電子だけ</b> きみが置く。</p>
+
+  <div class="rgsel">
+    <p class="rglab">どの原子を つくる？</p><div class="rgrow" id="rgRow"></div>
+    <p class="rglab">いくつ つくる？</p><div class="rgrow" id="qnRow"></div>
+  </div>
 
   <div class="tbtns">
     <button class="btn pri" id="startBtn">はじめる</button>
@@ -365,6 +398,7 @@ a.btn{text-decoration:none;display:inline-flex;align-items:center}
     <p class="qlab">MAKE</p>
     <button class="btn sm hintbtn" id="hintBtn">ヒント</button>
     <div class="qname"><span id="qName">—</span><em id="qYomi"></em><span class="qsuf">を つくろう</span></div>
+    <div class="need" id="need"></div>
     <div class="hint" id="hintTxt"></div>
   </div>
 
@@ -419,14 +453,15 @@ a.btn{text-decoration:none;display:inline-flex;align-items:center}
 <div class="ov" id="resultOv"><div class="card" id="resultCard"></div></div>
 <div class="ov" id="zukanOv"><div class="zwrap">
   <div class="zhead"><h3>げんし図鑑</h3><button class="btn sm" id="zClose">とじる</button></div>
-  <p class="zsub"><span id="zCount">0</span> / 18 ・ たてに並ぶと、性格が似ている</p>
-  <div class="zgrid" id="zCols"></div>
-  <div class="zgrid" id="zGrid" style="margin-top:2px"></div>
+  <p class="zsub"><span id="zCount">0</span> / 118 ・ 周期表のかたち。たてに並ぶと、性格が似ている</p>
+  <div class="zscroll"><div class="zgrid" id="zGrid"></div></div>
+  <div class="zleg" id="zLeg"></div>
   <div class="zdet" id="zDet">マスをえらぶと、くわしく出ます。</div>
-  <p class="znote">※ 列の番号は「いちばん外側の電子の数」。ヘリウムだけは2こで満席になるので、いちばん右にいます。</p>
+  <p class="znote">※ 下の2だんは ランタノイド（57〜71）と アクチノイド（89〜103）。表の中に入りきらないので、べつの だんに ならべています。</p>
 </div></div>
 <div class="ov" id="clearOv"><div class="card" id="clearCard"></div></div>
 
+<script src="elements.js?v=20260925"></script>
 <script>
 (function(){
 "use strict";
@@ -449,36 +484,19 @@ var RM = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").mat
 })();
 
 /* ---------- データ ---------- */
-/* grp = 図鑑の列（= いちばん外側の電子の数。Heだけ満席なので8列目）
-   outer = 外側に置く電子の数 / inner = すでに埋まっている内側の殻 */
+/* elements.js の 118こ。inner＝もう入っている内側の殻、outer＝いちばん外側（きみが置く）の電子の数 */
 var GC=["#7C8AA8","#FF5C6C","#FF9B4A","#FFD84D","#4FE0A8","#38CFE0","#4B93FF","#9A7BFF","#FF71C8"];
-var EL=[
- {z:1, sym:"H", nm:"水素",     ym:"すいそ",       grp:1, use:"宇宙にいちばん多い原子。ロケットの燃料にもなる。"},
- {z:2, sym:"He",nm:"ヘリウム", ym:"ヘリウム",     grp:8, use:"風船を浮かせるガス。2こで満席なので、何とも結びつかない。"},
- {z:3, sym:"Li",nm:"リチウム", ym:"リチウム",     grp:1, use:"スマホや電気自動車の電池の主役。"},
- {z:4, sym:"Be",nm:"ベリリウム",ym:"ベリリウム",  grp:2, use:"軽くて硬い。宇宙望遠鏡の鏡に使われている。"},
- {z:5, sym:"B", nm:"ホウ素",   ym:"ほうそ",       grp:3, use:"熱に強いガラス（耐熱ガラス）をつくる。"},
- {z:6, sym:"C", nm:"炭素",     ym:"たんそ",       grp:4, use:"鉛筆の芯もダイヤモンドも、生き物の体も、これ。"},
- {z:7, sym:"N", nm:"窒素",     ym:"ちっそ",       grp:5, use:"空気の約78%。冷やすと液体窒素になる。"},
- {z:8, sym:"O", nm:"酸素",     ym:"さんそ",       grp:6, use:"呼吸に使う。地面の中にもいちばん多い。"},
- {z:9, sym:"F", nm:"フッ素",   ym:"ふっそ",       grp:7, use:"歯みがき粉や、こげつかないフライパンに。"},
- {z:10,sym:"Ne",nm:"ネオン",   ym:"ネオン",       grp:8, use:"ネオンサインの赤い光。満席なので何とも結びつかない。"},
- {z:11,sym:"Na",nm:"ナトリウム",ym:"ナトリウム",  grp:1, use:"食塩の半分。燃やすと炎が黄色くなる。"},
- {z:12,sym:"Mg",nm:"マグネシウム",ym:"マグネシウム",grp:2,use:"花火の白い閃光。葉っぱの緑（葉緑素）のまんなかにもいる。"},
- {z:13,sym:"Al",nm:"アルミニウム",ym:"アルミニウム",grp:3,use:"1円玉、アルミホイル、飛行機の体。"},
- {z:14,sym:"Si",nm:"ケイ素",   ym:"けいそ",       grp:4, use:"半導体チップの材料。砂の主成分でもある。"},
- {z:15,sym:"P", nm:"リン",     ym:"リン",         grp:5, use:"マッチの発火剤。骨やDNAにも入っている。"},
- {z:16,sym:"S", nm:"硫黄",     ym:"いおう",       grp:6, use:"温泉のにおい。ゴムを硬くするのに使う。"},
- {z:17,sym:"Cl",nm:"塩素",     ym:"えんそ",       grp:7, use:"水道やプールの消毒。食塩のもう半分。"},
- {z:18,sym:"Ar",nm:"アルゴン", ym:"アルゴン",     grp:8, use:"何とも結びつかない。だから電球の中に詰める。"}
-];
+var CAT={alk:["#FF5C6C","アルカリ金属"],ae:["#FF9B4A","アルカリ土類金属"],tm:["#FFD84D","遷移金属"],pm:["#8FE07A","そのほかの金属"],
+  md:["#4FE0A8","半金属"],nm:["#38CFE0","非金属"],hal:["#4B93FF","ハロゲン"],ng:["#FF71C8","貴ガス"],ln:["#B89BFF","ランタノイド"],an:["#E09BFF","アクチノイド"]};
+var EL=window.ELEMENTS;
 EL.forEach(function(e){
-  if(e.z<=2){e.inner=[];e.outer=e.z;e.cap=2;}
-  else if(e.z<=10){e.inner=[2];e.outer=e.z-2;e.cap=8;}
-  else {e.inner=[2,8];e.outer=e.z-10;e.cap=8;}
+  e.inner=e.sh.slice(0,-1);e.outer=e.sh[e.sh.length-1];
+  e.cap=(e.z<=2)?2:Math.max(8,e.outer);
   e.innerSum=e.inner.reduce(function(a,b){return a+b;},0);
-  e.hands = (e.z===2||e.grp===8) ? 0 : (e.outer<=4 ? e.outer : 8-e.outer);
-  e.col=GC[e.grp];
+  // くっつく手：典型元素だけ。遷移金属などは 内側の電子も使うので きまった数にならない
+  var typical=(e.cat!=="tm"&&e.cat!=="ln"&&e.cat!=="an");
+  e.hands = !typical ? null : (e.cat==="ng" ? 0 : (e.outer<=4 ? e.outer : 8-e.outer));
+  e.col=CAT[e.cat][0];
 });
 function byZ(z){for(var i=0;i<EL.length;i++)if(EL[i].z===z)return EL[i];return null;}
 
@@ -495,13 +513,21 @@ var $=function(s){return document.querySelector(s);};
 var gRings=$("#gRings"), gInner=$("#gInner"), gOuter=$("#gOuter"), gNuc=$("#gNuc");
 
 function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
-function buildOrder(){
-  var p1=EL.filter(function(e){return e.z<=2;});
-  var p2=shuffle(EL.filter(function(e){return e.z>2&&e.z<=10;}));
-  var p3=shuffle(EL.filter(function(e){return e.z>10;}));
-  order=p1.concat(p2,p3);
+var RANGES=[{k:"a",nm:"1〜20",lo:1,hi:20,sub:"はじめて"},{k:"b",nm:"21〜54",lo:21,hi:54},{k:"c",nm:"55〜118",lo:55,hi:118},{k:"all",nm:"ぜんぶ",lo:1,hi:118,sub:"118こ"}];
+var QNS=[10,20,"all"], pref=load("sekai_recipe_atom_pref",{rg:"a",qn:"all"});
+function paintSel(){
+  $("#rgRow").innerHTML=RANGES.map(function(r){return '<button type="button" data-rg="'+r.k+'" aria-pressed="'+(pref.rg===r.k)+'">'+r.nm+(r.sub?'<small>'+r.sub+'</small>':'')+'</button>';}).join("");
+  $("#qnRow").innerHTML=QNS.map(function(q){return '<button type="button" data-qn="'+q+'" aria-pressed="'+(pref.qn===q)+'">'+(q==="all"?"ぜんぶ（"+pool().length+"こ）":q+"こ")+'</button>';}).join("");
 }
-function shellR(i,n){return Math.round(RMAX*(i+1)/(n+1));}
+function pool(){var r=RANGES.filter(function(x){return x.k===pref.rg;})[0]||RANGES[0];return EL.filter(function(e){return e.z>=r.lo&&e.z<=r.hi;});}
+$("#rgRow").addEventListener("click",function(e){var b=e.target.closest("[data-rg]");if(!b)return;pref.rg=b.dataset.rg;save("sekai_recipe_atom_pref",pref);paintSel();});
+$("#qnRow").addEventListener("click",function(e){var b=e.target.closest("[data-qn]");if(!b)return;pref.qn=b.dataset.qn==="all"?"all":+b.dataset.qn;save("sekai_recipe_atom_pref",pref);paintSel();});
+// 出題の順番：えらんだ範囲を まるごと シャッフル（原子番号の順には しない）
+function buildOrder(){
+  var p=shuffle(pool().slice());
+  order=(pref.qn==="all")?p:p.slice(0,pref.qn);
+}
+function shellR(i,n){return Math.round(40+(RMAX-40)*(i+1)/(n+1));}
 function slot(r,k,cap){var a=(-90+k*360/cap)*Math.PI/180;return {x:200+r*Math.cos(a),y:200+r*Math.sin(a)};}
 function eSVG(x,y,rr,cls,extra){
   return '<g class="'+(cls||"")+'" '+(extra||"")+'><circle cx="'+x+'" cy="'+y+'" r="'+(rr*2.1)+'" fill="url(#eGlow)"/>'+
@@ -522,17 +548,28 @@ function newQuestion(){
   var n=cur.inner.length,s="",i,k,p;
   for(i=0;i<n;i++)s+='<circle cx="200" cy="200" r="'+shellR(i,n)+'" class="ring"/>';
   s+='<circle cx="200" cy="200" r="'+RMAX+'" class="ring outer" id="outerRing"/>';
+  s+='<text class="atomLab" x="200" y="394" text-anchor="middle">▲ いちばん外側：ここに 電子を おく</text>';
+  if(n) s+='<text class="atomLab in" x="200" y="16" text-anchor="middle">うすい電子（内側）は もう入っている</text>';
   gRings.innerHTML=s;
 
   s="";
   for(i=0;i<n;i++){
-    var cap=(i===0)?2:8, g='<g class="spin" style="--d:'+(20+i*9)+'s'+(i%2?';animation-direction:reverse':'')+'">';
-    for(k=0;k<cur.inner[i];k++){p=slot(shellR(i,n),k,cap);g+=eSVG(p.x,p.y,9,"",'opacity=".5"');}
+    var cnt=cur.inner[i], rr=shellR(i,n), er=Math.max(2.6,Math.min(9,2*Math.PI*rr/(cnt*2.6))),
+        g='<g class="spin" style="--d:'+(20+i*9)+'s'+(i%2?';animation-direction:reverse':'')+'">';
+    for(k=0;k<cnt;k++){p=slot(rr,k,cnt);g+=eSVG(p.x,p.y,er,"",'opacity=".5"');}
     s+=g+'</g>';
   }
   gInner.innerHTML=s;
   renderOuter(-1);renderNuc();
   $("#goBtn").disabled=true;
+}
+// 原子番号 → 電子のぜんぶの数、内側（入っている）＋外側（きみが置く）＝ぜんぶ
+function paintNeed(){
+  var sum=cur.innerSum+placed, ok=(sum===cur.z);
+  $("#need").innerHTML='<div class="zline">原子番号 <b>'+cur.z+'</b> → 電子は ぜんぶで <b>'+cur.z+'</b> こ</div>'+
+    '<div class="eqn"><span class="box in"><b>'+cur.innerSum+'</b><small>内側（もう入っている）</small></span><span class="op">＋</span>'+
+    '<span class="box out"><b>'+placed+'</b><small>外側（きみが おく）</small></span><span class="op">＝</span>'+
+    '<span class="box sum'+(ok?' ok':'')+'"><b>'+sum+'</b><small>'+(ok?'ぴったり！':'めざすのは '+cur.z)+'</small></span></div>';
 }
 function renderOuter(popIdx){
   var r=RMAX,s="",k,p;
@@ -545,17 +582,18 @@ function renderOuter(popIdx){
   var col=GC[Math.min(placed,8)];
   document.documentElement.style.setProperty("--acc",col);
   $("#cntN").textContent=placed;
+  paintNeed();
   $("#goBtn").disabled=(placed===0);
   $("#undoBtn").disabled=(placed===0);
 }
 function renderNuc(){
   var np=cur.innerSum+placed,s="",i;
   for(i=0;i<np;i++){
-    var a=i*2.39996, rr=25*Math.sqrt((i+.55)/Math.max(np,6));
-    s+='<circle cx="'+(200+rr*Math.cos(a)).toFixed(1)+'" cy="'+(200+rr*Math.sin(a)).toFixed(1)+'" r="7.6" fill="url(#pBall)"/>';
+    var a=i*2.39996, rr=25*Math.sqrt((i+.55)/Math.max(np,6)), pr=np<=18?7.6:Math.max(2.4,7.6*Math.sqrt(18/np));
+    s+='<circle cx="'+(200+rr*Math.cos(a)).toFixed(1)+'" cy="'+(200+rr*Math.sin(a)).toFixed(1)+'" r="'+pr.toFixed(1)+'" fill="url(#pBall)"/>';
   }
   gNuc.innerHTML=s;
-  $("#nucGlow").setAttribute("r",String(38+np*1.6));
+  $("#nucGlow").setAttribute("r",String(Math.min(70,38+np*1.6)));
   $("#nucGlow").style.opacity=np?"1":"0";
   $("#nucSlot").style.opacity=np?"0":"1";
   $("#roP").textContent=np;$("#roE").textContent=np;
@@ -621,7 +659,7 @@ gOuter.addEventListener("click",function(e){
 $("#hintBtn").addEventListener("click",function(){
   if(busy||hinted)return;hinted=true;this.disabled=true;
   var h=$("#hintTxt");
-  h.innerHTML= cur.nm+"は <b>"+cur.z+"</b> ばんめの原子。いま内側に <b>"+cur.innerSum+"</b> こ入っている。";
+  h.innerHTML= "外側に おく数 ＝ 原子番号 <b>"+cur.z+"</b> − 内側 <b>"+cur.innerSum+"</b> ＝ <b>"+(cur.z-cur.innerSum)+"</b> こ";
   h.className="hint on";
 });
 
@@ -654,7 +692,9 @@ function showCard(e,ok,pts,isNew){
     '<div class="elBox"><span class="z">'+e.z+'</span><span class="sym">'+e.sym+'</span>'+
     '<span class="nm">'+e.nm+'</span>'+(e.nm!==e.ym?'<span class="ym">'+e.ym+'</span>':'')+'</div>'+
     '<p class="useTxt">'+e.use+'</p>'+
-    '<div class="bond">いちばん外側 <b>'+e.outer+'</b> こ　→　くっつく手 <b>'+e.hands+'</b> 本 <span class="hands">'+handsHTML(e)+'</span></div>';
+    (e.hands===null
+      ? '<div class="bond">いちばん外側 <b>'+e.outer+'</b> こ　→　くっつく手は <b>いろいろ</b>（内側の電子も つかう）</div>'
+      : '<div class="bond">いちばん外側 <b>'+e.outer+'</b> こ　→　くっつく手 <b>'+e.hands+'</b> 本 <span class="hands">'+handsHTML(e)+'</span></div>');
   var nudge="";
   if(!ok && tries>=2){
     nudge='<p class="nudge">電子は もっと <b>'+(cur.outer>e.outer?"多い":"少ない")+'</b></p>';
@@ -688,7 +728,7 @@ function finish(){
   var c=$("#clearCard");c.style.setProperty("--ac","#FFB44D");
   c.innerHTML='<p class="verdict" style="color:#FFD84D">げんしのへや クリア</p>'+
     '<div class="bigScore">'+score+'</div>'+
-    '<p class="useTxt">18この原子を すべて つくった。<br>いちばん外側の電子の数が、<br>そのまま<b style="color:#fff">くっつく手の数</b>になる。</p>'+'<p class="target" style="margin-top:12px">つぎは <b>ぶんしのへや</b> ／ その手をつかう</p>'+
+    '<p class="useTxt">'+order.length+'この原子を つくった。<br>多くの原子は、いちばん外側の電子の数で<br><b style="color:#fff">くっつく手の数</b>が きまる。</p>'+'<p class="target" style="margin-top:12px">つぎは <b>ぶんしのへや</b> ／ その手をつかう</p>'+
     (rec?'<p class="newz">さいこう記録こうしん！</p>':'<p class="newz" style="color:#9AA6C4">さいこう記録 '+Math.max(best,score)+'</p>')+
     '<div class="cardBtns"><button class="btn pri" id="againBtn">もういちど</button><button class="btn" id="zukanBtn4">図鑑</button></div>'+
     '<div class="cardBtns"><button class="btn" id="titleBtn">タイトルへ</button><a class="btn" href="../">ゲームランドへ</a></div>';
@@ -717,33 +757,23 @@ function confetti(col){
 
 /* ---------- 図鑑 ---------- */
 function updateZukan(){
-  var cols=$("#zCols"),grid=$("#zGrid"),i,s="";
-  for(i=1;i<=8;i++)s+='<div class="zcol">'+i+'</div>';
-  cols.innerHTML=s;
-  s="";
-  for(var row=0;row<3;row++){
-    for(var g=1;g<=8;g++){
-      var e=EL.filter(function(x){
-        var p = x.z<=2?0 : (x.z<=10?1:2);
-        return p===row && x.grp===g;
-      })[0];
-      if(!e){s+='<div class="zc blank"></div>';continue;}
-      var got=zukan.indexOf(e.z)>=0;
-      s+='<div class="zc'+(got?' got':'')+'" style="--ac:'+e.col+'" data-z="'+e.z+'">'+
-         '<span class="z">'+e.z+'</span>'+
-         (got?'<span class="s">'+e.sym+'</span><span class="n">'+e.nm+'</span>':'<span class="q">?</span>')+
-         '</div>';
-    }
-  }
-  grid.innerHTML=s;
+  var s="";
+  EL.forEach(function(e){
+    var got=zukan.indexOf(e.z)>=0, row=e.y>=9?e.y:e.y;   // 9,10だん＝ランタノイド・アクチノイド
+    s+='<div class="zc'+(got?' got':'')+'" style="--ac:'+e.col+';grid-column:'+e.x+';grid-row:'+(e.y>=9?e.y:e.y)+'" data-z="'+e.z+'" title="'+e.z+'">'+
+       '<span class="z">'+e.z+'</span>'+(got?'<span class="s">'+e.sym+'</span><span class="n">'+e.nm+'</span>':'<span class="q">?</span>')+'</div>';
+  });
+  s+='<div class="gap" style="grid-row:8"></div>';
+  $("#zGrid").innerHTML=s;
   $("#zCount").textContent=zukan.length;
+  $("#zLeg").innerHTML=Object.keys(CAT).map(function(k){return '<span><i style="background:'+CAT[k][0]+'"></i>'+CAT[k][1]+'</span>';}).join("");
 }
 $("#zGrid").addEventListener("click",function(ev){
   var c=ev.target.closest(".zc.got");if(!c)return;
   var e=byZ(+c.dataset.z);
   $("#zDet").innerHTML='<b style="color:'+e.col+'">'+e.sym+'</b> <b>'+e.nm+'</b>'+
     (e.nm!==e.ym?' <span style="font-size:.72rem">（'+e.ym+'）</span>':'')+
-    '　<span style="font-size:.72rem">外側 '+e.outer+'こ ／ 手 '+e.hands+'本</span>'+
+    '　<span style="font-size:.72rem">原子番号 '+e.z+' ／ 外側 '+e.outer+'こ ／ 手 '+(e.hands===null?'いろいろ':e.hands+'本')+'</span>'+
     '<span class="u">'+e.use+'</span>';
 });
 function openZukan(){updateZukan();$("#zukanOv").classList.add("on");}
@@ -762,6 +792,7 @@ function start(){
   window.scrollTo(0,0);
 }
 $("#startBtn").addEventListener("click",start);
+paintSel();
 // タイトルへもどる（あそんでいる とちゅうなら、いちど たしかめる）
 function toTitle(){
   ["#resultOv","#clearOv","#zukanOv"].forEach(function(s){$(s).classList.remove("on");});
