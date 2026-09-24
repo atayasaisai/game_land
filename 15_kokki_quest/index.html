@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>国旗クエスト｜せかいの国旗をおぼえる無料の学習ゲーム｜あたやさいさいゲームランド</title>
+<meta name="description" content="国旗をかかげたモンスターが、1びょうに1ぽずつお城にせまってくる。国の名前を選んでやっつける、子供用の無料学習ゲームです。せかいの国旗 36か国ぶん。まちがえた国旗はおぼえておいて、もういちど出てきます。広告なし・会員とうろくなし。">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://atayasaisai.github.io/game_land/15_kokki_quest/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="あたやさいさいゲームランド">
+<meta property="og:title" content="国旗クエスト｜せかいの国旗をおぼえる無料の学習ゲーム">
+<meta property="og:url" content="https://atayasaisai.github.io/game_land/15_kokki_quest/">
+<meta property="og:image" content="https://atayasaisai.github.io/game_land/ogp.png">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Zen+Maru+Gothic:wght@500;700;900&display=swap">
+<style>
+:root{
+  --ki:#F5B70A; --do:#F0603F; --ai:#4A6BC0; --raku:#4CB86B; --pink:#F58FB0; --sky:#7EC8E3;
+  --ink:#33312A; --paper:#FFFCF2; --paper2:#FFF4D6; --sub:#5C574A;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{
+  font-family:"Zen Maru Gothic","Hiragino Maru Gothic ProN",sans-serif;font-weight:700;
+  color:var(--ink);background:var(--paper);overflow:hidden;
+  -webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent;
+}
+h1,h2,h3,.pop{font-family:"Mochiy Pop One","Zen Maru Gothic",sans-serif;font-weight:400;margin:0}
+button{font-family:inherit;font-weight:700;cursor:pointer}
+svg{display:block}
+
+/* ───────── 画面の骨組み ───────── */
+#app{height:100%;display:flex;flex-direction:column;overflow:hidden}
+.screen{display:none;height:100%;overflow-y:auto;overscroll-behavior:contain}
+.screen.on{display:block}
+.pad{max-width:760px;margin:0 auto;padding:22px 18px 40px}
+
+/* ───────── ボタン共通 ───────── */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  background:var(--raku);color:#fff;border:3px solid var(--ink);border-radius:999px;
+  padding:10px 26px;font-size:1.05rem;box-shadow:0 5px 0 var(--ink);transition:transform .08s;
+}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--ink)}
+.btn.sub{background:#fff;color:var(--ink)}
+.btn.warn{background:var(--do)}
+.btn:focus-visible{outline:3px solid var(--ai);outline-offset:3px}
+
+/* ───────── タイトル ───────── */
+/* ───────── タイトル（ゲームランドのトップと同じ空の絵を背景に） ───────── */
+#title{position:relative;background:#bfe3f5 url(bg.jpg?v=20260924) center 30%/cover no-repeat}
+#title::before{content:"";position:fixed;inset:0;pointer-events:none;
+  background:linear-gradient(rgba(255,252,240,.10),rgba(255,252,240,.55))}
+#title .pad{position:relative}
+.brand{text-align:center;margin-bottom:6px}
+.brand .lead{display:inline-block;font-size:.72rem;letter-spacing:.24em;border:2.5px solid var(--ink);
+  border-radius:999px;padding:3px 15px;background:#fff;box-shadow:3px 3px 0 var(--ink);margin-bottom:30px;
+  color:inherit;text-decoration:none;transition:transform .1s}
+.brand a.lead:hover{transform:translateY(-2px)}
+.brand a.lead:active{transform:translateY(2px);box-shadow:1px 1px 0 var(--ink)}
+
+/* ロゴ：木の看板に、ふちどりした色とりどりの文字（トップの題字に合わせた） */
+.logo{position:relative;display:flex;align-items:center;justify-content:center;gap:4px;margin:0 auto;max-width:640px}
+.logo .side{width:clamp(56px,16vw,120px);height:auto;flex:none;filter:drop-shadow(0 4px 4px rgba(0,0,0,.25));
+  animation:hop 1.6s ease-in-out infinite}
+.logo .side.r{animation-delay:-.8s}
+@keyframes hop{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-10px) rotate(3deg)}}
+.sign{position:relative;padding:20px clamp(12px,4vw,30px) 18px;border-radius:26px;
+  background:linear-gradient(#c98a4b,#a86a33 55%,#8d5528);border:4px solid #5b3417;
+  box-shadow:inset 0 3px 0 rgba(255,255,255,.35),inset 0 -5px 0 rgba(0,0,0,.18),0 8px 0 #5b3417,0 14px 22px rgba(40,30,10,.35);
+  animation:swing 3.2s ease-in-out infinite;transform-origin:50% 0}
+@keyframes swing{0%,100%{transform:rotate(-1.2deg)}50%{transform:rotate(1.2deg)}}
+.sign::before,.sign::after{content:"";position:absolute;left:10px;right:10px;height:2px;background:rgba(80,40,10,.28);border-radius:2px}
+.sign::before{top:38%}.sign::after{top:70%}
+.sign .crown{position:absolute;left:50%;top:-32px;width:58px;transform:translateX(-50%) rotate(-4deg);
+  filter:drop-shadow(0 3px 0 #5b3417)}
+.sign .star{position:absolute;font-size:1.3rem;color:#ffd43b;text-shadow:0 2px 0 #7a4a12;animation:twk 1.4s ease-in-out infinite}
+.sign .star.a{left:8px;top:6px}.sign .star.b{right:10px;bottom:4px;animation-delay:-.7s}
+@keyframes twk{0%,100%{transform:scale(1)}50%{transform:scale(1.35) rotate(15deg)}}
+.logo h1{position:relative;font-family:"Mochiy Pop One",sans-serif;font-weight:400;line-height:1.1;letter-spacing:0;margin:0}
+.logo h1 .sm{display:block;font-size:clamp(.9rem,3.6vw,1.3rem);color:#fff;letter-spacing:.3em;
+  text-shadow:0 2px 0 #5b3417,2px 0 0 #5b3417,-2px 0 0 #5b3417,0 -2px 0 #5b3417;margin-bottom:4px}
+.logo h1 .bg,.logo h1 .q{display:block;white-space:nowrap}
+.logo h1 .lt{display:inline-block;font-size:clamp(2.4rem,11vw,4.4rem);color:var(--k);
+  text-shadow:
+    3px 0 0 #fff,-3px 0 0 #fff,0 3px 0 #fff,0 -3px 0 #fff,2px 2px 0 #fff,-2px -2px 0 #fff,2px -2px 0 #fff,-2px 2px 0 #fff,
+    0 7px 0 #5b3417,4px 5px 0 #5b3417,-4px 5px 0 #5b3417;
+  transform:rotate(var(--r,0deg));
+  animation:jump 2.4s ease-in-out infinite;animation-delay:calc(var(--i) * .12s)}
+.logo h1 .lt.s{font-size:clamp(1.9rem,8.5vw,3.3rem)}
+.logo h1 .q{margin-top:4px}
+.logo h1 .q .lt{font-size:clamp(1.7rem,7.6vw,3rem);color:#ffd84d;
+  text-shadow:
+    3px 0 0 #7a3f12,-3px 0 0 #7a3f12,0 3px 0 #7a3f12,0 -3px 0 #7a3f12,2px 2px 0 #7a3f12,-2px -2px 0 #7a3f12,2px -2px 0 #7a3f12,-2px 2px 0 #7a3f12,
+    0 6px 0 #3e1f08}
+@keyframes jump{0%,78%,100%{transform:translateY(0) rotate(var(--r,0deg))}86%{transform:translateY(-9px) rotate(var(--r,0deg))}}
+.brand p{margin:22px auto 0;font-size:.9rem;color:var(--ink);display:table;background:rgba(255,252,240,.88);
+  border-radius:16px;padding:6px 16px}
+
+/* えらぶところは、紙のいたに のせて読みやすく */
+.panel{margin:18px auto 0;max-width:640px;background:rgba(255,252,240,.93);border:3px solid var(--ink);
+  border-radius:26px;padding:6px 14px 24px;box-shadow:0 8px 0 rgba(51,49,42,.85)}
+.packname{margin:14px 0 4px;text-align:center;font-size:1.15rem}
+.packname small{display:block;font-size:.76rem;color:var(--sub);font-family:"Zen Maru Gothic",sans-serif}
+
+.opt{margin-top:22px}
+.opt > h3{font-size:.82rem;letter-spacing:.16em;color:var(--sub);margin-bottom:9px;text-align:center}
+.row{display:flex;flex-wrap:wrap;gap:9px;justify-content:center}
+.pick{background:#fff;border:2.5px solid var(--ink);border-radius:999px;padding:7px 18px;
+  font-size:.94rem;box-shadow:0 3px 0 var(--ink);transition:transform .08s}
+.pick:hover{transform:translateY(-2px)}
+.pick[aria-pressed="true"]{background:var(--ink);color:#fff;transform:translateY(2px);box-shadow:0 1px 0 var(--ink)}
+.pick[disabled]{opacity:.38;cursor:default;transform:none}
+.start{display:block;margin:30px auto 0;font-size:1.3rem;padding:13px 46px}
+.note{margin:26px auto 0;max-width:30em;font-size:.76rem;color:var(--sub);line-height:1.9;
+  background:#fff;border:2.5px dashed var(--ink);border-radius:18px;padding:13px 17px}
+.note b{color:var(--ink)}
+
+/* ───────── ゲーム画面 ───────── */
+#game{display:none;height:100%;flex-direction:column;overflow:hidden}
+#game.on{display:flex}
+
+.hud{display:flex;align-items:center;gap:10px;padding:7px 12px;background:var(--ink);color:#fff;flex:none}
+/* 画面左上のとくてん */
+.hud .score{display:flex;align-items:baseline;gap:6px;flex:none;background:var(--ki);color:var(--ink);
+  border:2.5px solid #fff;border-radius:999px;padding:1px 14px 2px}
+.hud .score small{font-size:.58rem;letter-spacing:.12em}
+.hud .score b{font-family:"Mochiy Pop One",sans-serif;font-weight:400;font-size:1.12rem;
+  min-width:2.4em;text-align:right;line-height:1.25}
+.hud .score.pop{animation:scorepop .42s cubic-bezier(.2,1.8,.4,1)}
+@keyframes scorepop{0%,100%{transform:scale(1)}40%{transform:scale(1.24)}}
+/* 国旗の上の点数が、とくてんに吸い込まれる玉 */
+.fly{position:fixed;z-index:60;pointer-events:none;white-space:nowrap;
+  font-family:"Mochiy Pop One","Zen Maru Gothic",sans-serif;font-size:1.45rem;color:var(--ink);
+  background:var(--ki);border:3px solid var(--ink);border-radius:999px;padding:1px 17px 3px;
+  box-shadow:0 4px 0 rgba(51,49,42,.35);
+  transform:translate(-50%,-50%) scale(.7);opacity:0}
+.hud .hearts{display:flex;gap:3px;font-size:1.15rem;line-height:1}
+.hud .hearts i{font-style:normal;filter:grayscale(1) brightness(2.2);opacity:.35}
+.hud .hearts i.on{filter:none;opacity:1}
+.hud .mid{flex:1;text-align:center;font-size:.84rem;letter-spacing:.04em}
+.hud .mid b{color:var(--ki);font-size:1.05rem}
+.hud .combo{color:var(--ki);font-size:.8rem;min-width:5.4em;text-align:right}
+.hud .combo.hot{animation:pulse .5s ease infinite alternate}
+@keyframes pulse{to{transform:scale(1.14)}}
+.hud .quit{background:none;border:2px solid rgba(255,255,255,.5);color:#fff;border-radius:999px;
+  padding:1px 11px;font-size:.74rem}
+
+.field{flex:1;min-height:0;position:relative;background:#BFE6F4;overflow:hidden}
+.field svg{width:100%;height:100%}
+.field.shake{animation:shk .4s}
+@keyframes shk{0%,100%{transform:translateX(0)}25%{transform:translateX(-9px)}75%{transform:translateX(9px)}}
+
+.mob{transition:transform .28s cubic-bezier(.3,1.5,.6,1)}
+.mob .bob{animation:bob 1.1s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.mob.tgt .ring{opacity:1}
+.ring{opacity:0;transition:opacity .2s}
+
+.ans{flex:none;background:var(--paper2);border-top:3px solid var(--ink);padding:9px 10px calc(10px + env(safe-area-inset-bottom,0px))}
+.ask{text-align:center;font-size:.86rem;color:var(--sub);margin:0 0 7px}
+.ask b{color:var(--ink)}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:680px;margin:0 auto}
+.ch{background:#fff;border:3px solid var(--ink);border-radius:16px;box-shadow:0 4px 0 var(--ink);
+  padding:12px 8px;font-size:clamp(.95rem,3.6vw,1.2rem);line-height:1.3;transition:transform .08s;min-height:52px}
+.ch:hover{transform:translateY(-2px)}
+.ch:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.ch.bad{background:#D8D2C4;color:#8A8474;box-shadow:0 1px 0 var(--ink);transform:translateY(3px);
+  text-decoration:line-through;cursor:default}
+.ch.good{background:var(--raku);color:#fff}
+.ch:focus-visible{outline:3px solid var(--ai);outline-offset:3px}
+
+/* 画面に出る合図 */
+.toast{position:absolute;left:50%;top:12%;transform:translateX(-50%);z-index:9;
+  background:rgba(51,49,42,.93);color:#fff;border-radius:999px;padding:8px 22px;
+  font-size:clamp(.95rem,3.6vw,1.2rem);white-space:nowrap;animation:up .35s ease both;pointer-events:none}
+.toast.ok{background:var(--raku)}.toast.ng{background:var(--do)}
+@keyframes up{from{opacity:0;transform:translate(-50%,14px)}to{opacity:1;transform:translate(-50%,0)}}
+
+.winb{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:14px;z-index:12;pointer-events:none}
+.winb .bar{background:rgba(0,0,0,.55);color:#fff;width:100%;text-align:center;padding:20px 12px;
+  font-family:"Mochiy Pop One",sans-serif;font-size:clamp(1.3rem,5.4vw,2.2rem)}
+.winb img{width:min(60%,340px);animation:zoomin .6s cubic-bezier(.2,1.7,.5,1) both}
+@keyframes zoomin{from{transform:scale(.03)}to{transform:scale(1)}}
+.conf{position:fixed;width:10px;height:14px;top:-20px;z-index:30;pointer-events:none;border:1.5px solid var(--ink)}
+
+/* ───────── けっか ───────── */
+#result .pad{max-width:680px}
+.rhead{text-align:center;margin-bottom:22px}
+.rhead h2{font-size:clamp(1.5rem,6vw,2.1rem)}
+.rhead .big{font-family:"Mochiy Pop One",sans-serif;font-size:3.1rem;color:var(--do);display:block;
+  margin-top:6px;line-height:1.15}
+.rhead .big em{font-style:normal;font-size:.4em;margin-left:.2em;color:var(--sub)}
+.rhead .rec{display:inline-block;margin-top:8px;background:var(--ki);border:2.5px solid var(--ink);
+  border-radius:999px;padding:2px 18px;font-size:.88rem;box-shadow:3px 3px 0 var(--ink);
+  transform:rotate(-3deg);animation:scorepop .5s cubic-bezier(.2,1.8,.4,1)}
+.rhead .prev{margin:8px 0 0;font-size:.78rem;color:var(--sub)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:26px}
+.stat{background:#fff;border:3px solid var(--ink);border-radius:18px;padding:11px 6px;text-align:center}
+.stat small{display:block;font-size:.68rem;color:var(--sub);letter-spacing:.08em}
+.stat b{font-size:1.4rem;font-family:"Mochiy Pop One",sans-serif;font-weight:400}
+.weakbox{background:#fff;border:3px solid var(--ink);border-radius:22px;padding:17px 16px;margin-bottom:22px}
+.weakbox h3{font-size:1.02rem;margin-bottom:3px}
+.weakbox p{margin:0 0 13px;font-size:.78rem;color:var(--sub)}
+.wlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:12px}
+.w{text-align:center;font-size:.8rem;line-height:1.5}
+.w .fw{border:2px solid var(--ink);border-radius:4px;overflow:hidden;background:#fff}
+.w small{display:block;color:var(--sub);font-size:.7rem}
+.flagsvg{width:100%;height:auto;display:block}
+.allok{text-align:center;font-size:1rem;color:var(--raku)}
+.rbtns{display:flex;flex-wrap:wrap;gap:11px;justify-content:center}
+
+@media (max-width:620px){
+  .pad{padding:16px 14px 34px}
+  /* せまい画面では こたえるボタンを大きく。あまった高さは戦場が引き取る */
+  .ans{padding:11px 10px calc(13px + env(safe-area-inset-bottom,0px))}
+  .ch{min-height:78px;border-radius:18px;font-size:1.08rem}
+  .hud{padding:6px 9px;gap:7px}
+  .hud .mid{font-size:.72rem;white-space:nowrap}
+  .hud .mid b{font-size:.95rem}
+  .hud .hearts{font-size:.95rem}
+  .hud .combo{font-size:.7rem;min-width:0}
+  .hud .quit{font-size:.68rem;padding:1px 8px}
+  .hud .score{padding:1px 10px 2px}
+  .hud .score small{display:none}
+  .hud .score b{font-size:1rem;min-width:2.1em}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .fly{font-size:1.25rem;padding:1px 14px 3px}
+}
+@media (prefers-reduced-motion: reduce){
+  *{animation:none!important;transition:none!important}
+}
+</style>
+<!-- ▼ 訪問者カウント（GoatCounter）。Cookieも個人情報も使わない集計。
+     goatcounter.com で決めたコードを MYCODE に入れて、この行のコメントを外すと動きます -->
+<!-- <script data-goatcounter="https://MYCODE.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script> -->
+</head>
+<body>
+<div id="app">
+
+<!-- ═══════════ タイトル ═══════════ -->
+<section class="screen on" id="title"><div class="pad">
+  <div class="brand">
+    <a class="lead" href="../">◀ あたやさいさいゲームランド</a>
+    <div class="logo">
+      <img class="side l" src="hero/cheer.png" alt="" width="120" height="120">
+      <div class="sign"><svg class="crown" viewBox="0 0 60 40" aria-hidden="true"><path d="M4 34 L8 10 L20 22 L30 4 L40 22 L52 10 L56 34 Z" fill="#ffd43b" stroke="#5b3417" stroke-width="3" stroke-linejoin="round"/><circle cx="30" cy="25" r="4" fill="#F0603F" stroke="#5b3417" stroke-width="2"/></svg><span class="star a">★</span><span class="star b">★</span>
+        <h1 aria-label="国旗クエスト"><span class="sm">せかいの</span><span class="bg"><span class="lt" style="--k:var(--do);--i:0;--r:-6deg">国</span><span class="lt" style="--k:var(--ai);--i:1;--r:4deg">旗</span></span><span class="q"><span class="lt" style="--i:2">ク</span><span class="lt" style="--i:3">エ</span><span class="lt" style="--i:4">ス</span><span class="lt" style="--i:5">ト</span></span></h1>
+      </div>
+      <img class="side r" src="mon/chimera.png" alt="" width="120" height="120">
+    </div>
+    <p>国旗をかかげたモンスターが、1びょうに1ぽずつ お城にせまってきます。<br>国の名前を えらんで、やっつけよう。</p>
+  </div>
+
+  <div class="panel">
+  <div class="packname" id="pkName"></div>
+  <div class="row" id="pkRow" hidden style="display:none"></div>
+
+  <div class="opt">
+    <h3>むずかしさ</h3>
+    <div class="row" id="lvRow"></div>
+  </div>
+
+  <div class="opt">
+    <h3>もんだいの数</h3>
+    <div class="row" id="qnRow"></div>
+  </div>
+
+  <button class="btn start pop" id="go">はじめる ▶</button>
+  </div>
+
+  <p class="note">
+    <b>まちがえた国旗は、おぼえておきます。</b>もういちど出てきますし、おわったあとに「にがてな国旗」として
+    ならびます。きろくは この端末のブラウザの中だけに のこります。<br>
+    ※ 国旗はすべて手描きです。ブラジル・スペイン・ポルトガル・メキシコ・みなみアフリカの中央のもようは
+    かんたんにして描いています。
+  </p>
+</div></section>
+
+<!-- ═══════════ ゲーム ═══════════ -->
+<section id="game">
+  <div class="hud">
+    <div class="score" id="scoreBox"><small>とくてん</small><b id="scoreVal">0</b></div>
+    <div class="hearts" id="hearts"></div>
+    <div class="mid">のこり <b id="left">0</b>／せいかい <b id="hit">0</b></div>
+    <div class="combo" id="combo"></div>
+    <button class="quit" id="quit" type="button">やめる</button>
+  </div>
+  <div class="field" id="field"></div>
+  <div class="ans">
+    <p class="ask" id="ask"></p>
+    <div class="choices" id="choices"></div>
+  </div>
+</section>
+
+<!-- ═══════════ けっか ═══════════ -->
+<section class="screen" id="result"><div class="pad">
+  <div class="rhead" id="rhead"></div>
+  <div class="stats" id="stats"></div>
+  <div class="weakbox" id="weakbox"></div>
+  <div class="rbtns">
+    <button class="btn" id="again">もういっかい ▶</button>
+    <button class="btn warn" id="weakonly">にがてだけ ▶</button>
+    <button class="btn sub" id="home">タイトルへ</button>
+    <a class="btn sub" href="../">ゲームランドへ</a>
+  </div>
+</div></section>
+
+</div>
+
+<script src="packs/flags.js"></script>
+<script>
+(function(){
+"use strict";
+
+/* ═══════════ 設定 ═══════════ */
+
+var STEPS   = 12;                                   // お城までの歩数
+var MAXFLD  = 3;                                    // 同時に出てくる数(せまい画面では2)
+var SPAWN   = 4;                                    // 何歩ごとに次が出てくるか
+var LIVES   = 3;
+var MONS    = ["goblin","slime","bat","skeleton","zombie","wizard","golem","tree","chimera","dragon",
+               "goblin2","slime2","bat2","skeleton2","zombie2","wizard2","golem2","tree2","chimera2","dragon2"];
+var LVNAME  = {1:"やさしい",2:"ふつう",3:"むずかしい",0:"ぜんぶ"};
+var LVSPEED = {1:1250,2:1000,3:850,0:1000};
+var reduce  = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* 画像の場所。1ファイル版ではビルド時に window.__IMG へ data URI が入る。
+   ふつうのフォルダ版では、そのまま相対パスを返す。 */
+var IMGMAP = window.__IMG || {};
+// 絵を差し替えたとき、ブラウザが古い絵を覚えたままにならないよう版をつける。
+// 絵を入れ替えたら ASSETV の日付を新しくすること（1ファイル版では IMGMAP 側が使われるので影響なし）
+var ASSETV = "20260922";
+function IMG(p){ return IMGMAP[p] || (p + "?v=" + ASSETV); }
+
+var PACKLIST = [
+  {k:"flagName", pack:window.PACKS.flagName}
+];
+
+/* ═══════════ 状態 ═══════════ */
+
+var sel = {pk:"flagName", lv:1, weakOnly:false, qn:30};
+var QNLIST = [10, 30, 50, "endless"];
+var QNNAME = {10:"10問", 30:"30問", 50:"50問", endless:"エンドレス"};
+var S = null;
+var stepTimer = null, mid = 0;
+
+/* ═══════════ 小道具 ═══════════ */
+
+function $(id){ return document.getElementById(id); }
+function shuffle(a){ var i,j,t; for(i=a.length-1;i>0;i--){ j=Math.floor(Math.random()*(i+1)); t=a[i];a[i]=a[j];a[j]=t; } return a; }
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+function wkey(pid){ return "nlq_weak_"+pid; }
+function loadWeak(pid){ try{ return JSON.parse(localStorage.getItem(wkey(pid))||"{}"); }catch(e){ return {}; } }
+function saveWeak(pid,o){ try{ localStorage.setItem(wkey(pid),JSON.stringify(o)); }catch(e){} }
+
+/* ═══════════ タイトル ═══════════ */
+
+function paintTitle(){
+  $("pkRow").innerHTML = PACKLIST.map(function(p){
+    return '<button class="pick" type="button" data-pk="'+p.k+'" aria-pressed="'+(sel.pk===p.k)+'">'
+      + esc(p.pack.title.split("▸")[1].trim()) + '</button>';
+  }).join("");
+
+  var weakN = Object.keys(loadWeak(curPack().id)).length;
+  $("lvRow").innerHTML = [1,2,3,0].map(function(l){
+    return '<button class="pick" type="button" data-lv="'+l+'" aria-pressed="'+(!sel.weakOnly&&sel.lv===l)+'">'
+      + LVNAME[l] + '</button>';
+  }).join("")
+  + '<button class="pick" type="button" data-lv="w" aria-pressed="'+sel.weakOnly+'"'
+  + (weakN?"":" disabled") + '>にがてだけ'+(weakN?"（"+weakN+"）":"")+'</button>';
+
+  $("qnRow").innerHTML = QNLIST.map(function(q){
+    return '<button class="pick" type="button" data-qn="'+q+'" aria-pressed="'+(sel.qn===q)+'">'
+      + QNNAME[q] + '</button>';
+  }).join("");
+
+  $("pkName").innerHTML = '<span class="pop">'+esc(curPack().title.split("▸")[0].trim())+'</span>'
+    + '<small>'+esc(curPack().ask)+'</small>';
+}
+function curPack(){
+  var f = PACKLIST.filter(function(p){ return p.k===sel.pk; })[0];
+  return f.pack;
+}
+
+$("pkRow").addEventListener("click", function(e){
+  var b = e.target.closest("[data-pk]"); if(!b) return;
+  sel.pk = b.dataset.pk; paintTitle();
+});
+$("lvRow").addEventListener("click", function(e){
+  var b = e.target.closest("[data-lv]"); if(!b || b.disabled) return;
+  if(b.dataset.lv==="w"){ sel.weakOnly = true; }
+  else { sel.weakOnly = false; sel.lv = +b.dataset.lv; }
+  paintTitle();
+});
+$("qnRow").addEventListener("click", function(e){
+  var b = e.target.closest("[data-qn]"); if(!b) return;
+  sel.qn = b.dataset.qn === "endless" ? "endless" : +b.dataset.qn;
+  paintTitle();
+});
+
+/* ═══════════ 出題 ═══════════ */
+
+// いま選ばれている条件（教科パック・むずかしさ・にがてだけ）にあう問題のプール
+function currentPool(){
+  var pack = curPack(), all = pack.items, list;
+  if(sel.weakOnly){
+    var w = loadWeak(pack.id);
+    list = all.filter(function(x){ return w[x.key]; });
+  } else {
+    list = (sel.lv===0) ? all.slice() : all.filter(function(x){ return x.lv===sel.lv; });
+  }
+  if(!list.length) list = all.slice();
+  return list;
+}
+
+function pickItems(){
+  var list = currentPool();
+  if(sel.qn === "endless") return shuffle(list.slice());
+  // プールがすくなくても、出題数に足りるまで シャッフルした周回をつなげる
+  var need = sel.qn, out = [];
+  while(out.length < need) out = out.concat(shuffle(list.slice()));
+  return out.slice(0, need);
+}
+
+// まぎらわしい選択肢を、なるべく同じ地域からえらぶ
+function choicesFor(it){
+  var all = curPack().items,
+      same = all.filter(function(x){ return x.key!==it.key && x.reg===it.reg && x.a!==it.a; }),
+      rest = all.filter(function(x){ return x.key!==it.key && x.reg!==it.reg && x.a!==it.a; }),
+      out  = shuffle(same).slice(0,3);
+  if(out.length<3) out = out.concat(shuffle(rest).slice(0,3-out.length));
+  return shuffle(out.map(function(x){ return x.a; }).concat([it.a]));
+}
+
+/* ═══════════ 戦場を描く ═══════════ */
+
+var W = 1200, H = 520, LX0 = 380, LX1 = 1090, GY = 448,
+    NARROW = false, CS = 1, HEROW = 132, FW = 150, FH = 100, BOX = 110;
+
+function measure(){
+  var el = $("field"), w = el.clientWidth, h = el.clientHeight;
+  NARROW = w < 620;
+  W = NARROW ? 720 : 1200;
+  // 入れものと同じ縦横比にしておくと、切れも余白も出ない
+  H = Math.max(300, Math.round(W * (h / Math.max(w, 1))));
+  GY = H - Math.round(H * 0.11);
+
+  MAXFLD = NARROW ? 2 : 3;
+  SPAWN  = NARROW ? 5 : 4;
+
+  FW  = Math.round(W * (NARROW ? 0.26  : 0.125));   // 旗のはば
+  FH  = Math.round(FW / 1.5);
+  BOX = Math.round(W * (NARROW ? 0.17  : 0.092));   // モンスターの大きさ
+  CS  = NARROW ? 0.60 : 1;                          // お城の縮尺
+  HEROW = Math.round(W * (NARROW ? 0.135 : 0.11));
+
+  var castleRight = 14 + 222 * CS;
+  LX0 = Math.round(castleRight + HEROW + 26);       // 勇者より右から道がはじまる
+  LX1 = W - Math.round(FW / 2) - 8;
+  if(LX1 - LX0 < W * 0.22) LX0 = Math.round(LX1 - W * 0.22);
+}
+
+function castleSVG(){
+  // 童話風のお城。淡いグレーの石、紺の三角屋根、金のかざり、青い小旗、金アーチの木の門。
+  var g = GY + 24;
+  return '<g stroke="#33312A" stroke-width="3.4" stroke-linejoin="round">'
+   // 石段
+   +'<path d="M18,'+g+' H236 V'+(g-9)+' H30 V'+(g-18)+' H42" fill="#CFCABB"/>'
+   // 本体
+   +'<rect x="52" y="'+(g-132)+'" width="132" height="'+(132-18)+'" fill="#E2DED2"/>'
+   // 左右の塔
+   +'<rect x="22" y="'+(g-166)+'" width="42" height="'+(166-18)+'" fill="#EDEAE0"/>'
+   +'<rect x="172" y="'+(g-166)+'" width="42" height="'+(166-18)+'" fill="#EDEAE0"/>'
+   // 紺の三角屋根
+   +'<path d="M14,'+(g-166)+' L43,'+(g-214)+' L72,'+(g-166)+' Z" fill="#2E3D73"/>'
+   +'<path d="M164,'+(g-166)+' L193,'+(g-214)+' L222,'+(g-166)+' Z" fill="#2E3D73"/>'
+   +'<path d="M46,'+(g-132)+' L118,'+(g-186)+' L190,'+(g-132)+' Z" fill="#2E3D73"/>'
+   // 金のかざり
+   +'<circle cx="118" cy="'+(g-192)+'" r="6" fill="#F5B70A"/>'
+   +'<rect x="60" y="'+(g-138)+'" width="116" height="9" fill="#F5B70A"/>'
+   // 青い小旗
+   +'<path d="M43,'+(g-214)+' v-26" stroke-width="3"/>'
+   +'<path d="M43,'+(g-240)+' l24,7 -24,8 z" fill="#4A6BC0"/>'
+   +'<path d="M193,'+(g-214)+' v-26" stroke-width="3"/>'
+   +'<path d="M193,'+(g-240)+' l24,7 -24,8 z" fill="#4A6BC0"/>'
+   // 金アーチの木の門
+   +'<path d="M96,'+(g-18)+' v-40 q22,-26 44,0 v40 z" fill="#A8703C"/>'
+   +'<path d="M96,'+(g-58)+' q22,-26 44,0" fill="none" stroke="#F5B70A" stroke-width="6"/>'
+   +'<path d="M118,'+(g-18)+' v-62" stroke-width="2.6"/>'
+   // 窓
+   +'<path d="M34,'+(g-140)+' h18 v22 q-9,10 -18,0 z" fill="#4A6BC0"/>'
+   +'<path d="M184,'+(g-140)+' h18 v22 q-9,10 -18,0 z" fill="#4A6BC0"/>'
+   +'</g>';
+}
+// お城は地面の線を軸に縮める(足が浮かないように)
+function castleWrapped(){
+  if(CS === 1) return castleSVG();
+  return '<g transform="translate(0,'+GY+') scale('+CS+') translate(0,'+(-GY)+')">'+castleSVG()+'</g>';
+}
+
+function sceneSVG(){
+  var s = '<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="xMinYMax slice">';
+  s += '<defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">'
+     + '<stop offset="0" stop-color="#9FD9EF"/><stop offset="1" stop-color="#E4F4FB"/></linearGradient></defs>';
+  s += '<rect width="'+W+'" height="'+H+'" fill="url(#sky)"/>';
+  var u = H / 520, U = function(n){ return Math.round(n * u); };   // 高さに合わせて景色も伸ばす
+  // 雲
+  s += '<g fill="#fff" opacity=".9"><ellipse cx="'+(W*.62)+'" cy="'+U(58)+'" rx="'+U(62)+'" ry="'+U(24)+'"/>'
+     + '<ellipse cx="'+(W*.68)+'" cy="'+U(46)+'" rx="'+U(42)+'" ry="'+U(22)+'"/>'
+     + '<ellipse cx="'+(W*.22)+'" cy="'+U(86)+'" rx="'+U(48)+'" ry="'+U(19)+'"/></g>';
+  // 山と草原
+  s += '<path d="M0,'+(GY-U(96))+' Q'+(W*.18)+','+(GY-U(178))+' '+(W*.38)+','+(GY-U(104))
+     + ' Q'+(W*.6)+','+(GY-U(196))+' '+(W*.82)+','+(GY-U(100))
+     + ' Q'+(W*.93)+','+(GY-U(140))+' '+W+','+(GY-U(104))+' V'+H+' H0 Z" fill="#8FC98C" opacity=".75"/>';
+  s += '<path d="M0,'+(GY-U(54))+' Q'+(W*.3)+','+(GY-U(84))+' '+(W*.62)+','+(GY-U(58))
+     + ' Q'+(W*.85)+','+(GY-U(40))+' '+W+','+(GY-U(56))+' V'+H+' H0 Z" fill="#4CB86B" stroke="#33312A" stroke-width="3.4"/>';
+  // 道
+  s += '<path d="M0,'+(GY+U(6))+' Q'+(W*.5)+','+(GY-U(12))+' '+W+','+(GY+U(2))+' V'+(GY+U(46))
+     + ' Q'+(W*.5)+','+(GY+U(32))+' 0,'+(GY+U(50))+' Z" fill="#E4C795" stroke="#33312A" stroke-width="3.4"/>';
+  // 足あと(道しるべの代わり。ここは日づけではなく「お城までの のこり歩数」)
+  var i, fx;
+  for(i=0;i<=STEPS;i++){
+    fx = LX1 - (i/STEPS)*(LX1-LX0);
+    s += '<ellipse cx="'+fx.toFixed(1)+'" cy="'+(GY+U(26))+'" rx="6" ry="3.6" fill="#C9A874" opacity=".85"/>';
+  }
+  s += castleWrapped();
+  s += '<g id="mobs"></g>';
+  // 勇者の絵は 451x420 の共通キャンバスにそろえてある（体の位置と大きさが
+  // ポーズごとに動かないように）。枠もその比率にして、足もとを GY にぴったり置く
+  var hw = Math.round(HEROW * 1.33), hh = Math.round(hw * 420 / 451);
+  s += '<image id="heroImg" x="'+Math.round(LX0-HEROW-22-(hw-HEROW)/2)+'" y="'+(GY-hh)+'" width="'+hw+'" height="'+hh+'"'
+     + ' preserveAspectRatio="xMidYMax meet" href="'+IMG("hero/stance.png")+'"/>';
+  s += '<image id="boomImg" width="200" height="200" preserveAspectRatio="xMidYMid meet"'
+     + ' style="display:none" href="'+IMG("boom/1.png")+'"/>';
+  s += '</svg>';
+  return s;
+}
+
+// とくてんは「お城までの のこり歩数」で決まる。遠くで倒すほど高い。
+function points(m){ return Math.max(1, STEPS - m.step) * 10; }
+
+function mobSVG(m){
+  var fw  = FW, fh = FH, box = BOX,
+      top = GY - box,                                         // モンスターのあたま
+      // 旗は1つおきに高さをずらす(となり合っても どちらも読めるように)
+      fy  = top - 12 - fh - ((m.id % 2) ? Math.round(fh * 0.62) : 0),
+      pt  = fy - 9,                                           // 旗ざおのてっぺん
+      px  = -fw/2 - 4,
+      bw  = Math.round(fw * 0.46),                            // 点数ふだ
+      bh  = Math.round(fh * 0.34),
+      bs  = Math.round(fh * 0.27),
+      by  = fy - 4 - bh / 2 - 7;
+  return '<g class="mob" data-id="'+m.id+'" transform="translate('+mobX(m)+',0)">'
+   + '<ellipse class="ring" cx="0" cy="'+(GY+4)+'" rx="'+(box*0.54)+'" ry="12" fill="#F5B70A" opacity="0"/>'
+   + '<g class="bob">'
+   +   '<line x1="'+px+'" y1="'+GY+'" x2="'+px+'" y2="'+pt+'" stroke="#6B4A2A" stroke-width="5" stroke-linecap="round"/>'
+   +   '<circle cx="'+px+'" cy="'+(pt-4)+'" r="5.5" fill="#F5B70A" stroke="#33312A" stroke-width="2.4"/>'
+   +   '<rect x="'+(-fw/2-2)+'" y="'+(fy-2)+'" width="'+(fw+4)+'" height="'+(fh+4)+'" rx="2.5" fill="#33312A"/>'
+   +   '<svg x="'+(-fw/2)+'" y="'+fy+'" width="'+fw+'" height="'+fh+'" viewBox="0 0 90 60">'
+   +     '<rect width="90" height="60" fill="#fff"/>' + m.it.raw
+   +   '</svg>'
+   +   '<image x="'+(-box/2)+'" y="'+top+'" width="'+box+'" height="'+box+'"'
+   +     ' preserveAspectRatio="xMidYMax meet" href="'+IMG("mon/"+m.mon+".png")+'"/>'
+   +   '<g class="pts" transform="translate(0,'+by+')">'
+   +     '<rect x="'+(-bw/2)+'" y="'+(-bh/2)+'" width="'+bw+'" height="'+bh+'" rx="'+(bh/2)+'"'
+   +       ' fill="#F5B70A" stroke="#33312A" stroke-width="3"/>'
+   +     '<text class="ptsv" x="0" y="'+Math.round(bs*0.36)+'" text-anchor="middle" font-size="'+bs+'"'
+   +       ' font-family="Mochiy Pop One,Zen Maru Gothic,sans-serif" fill="#33312A">'+points(m)+'</text>'
+   +   '</g>'
+   + '</g></g>';
+}
+function mobX(m){ return (LX1 - (m.step/STEPS)*(LX1-LX0)).toFixed(1); }
+
+function layout(){
+  measure();
+  $("field").innerHTML = sceneSVG();
+  if(S){ S.field.forEach(function(m){ m.node = null; }); syncMobs(); }
+}
+
+function syncMobs(){
+  var box = document.getElementById("mobs");
+  if(!box) return;
+  S.field.forEach(function(m){
+    if(!m.node){
+      box.insertAdjacentHTML("beforeend", mobSVG(m));
+      m.node = box.lastElementChild;
+    }
+    m.node.setAttribute("transform","translate("+mobX(m)+",0)");
+    m.node.classList.toggle("tgt", m === S.field[0]);
+    var pv = m.node.querySelector(".ptsv");          // 近づくほど点数が下がっていく
+    if(pv) pv.textContent = points(m);
+  });
+}
+
+/* ═══════════ 勇者のポーズ ═══════════ */
+
+var HPAIR = {stance:"stance2", sword:"stance2", guts:"guts2", cheer:"cheer2",
+             cannon:"cannonfly", damage:"damage", lowhp:"lowhp"};
+var poseTimer = null, flipTimer = null, curPose = "stance", flip = false;
+
+function pose(p, ms){
+  curPose = p; flip = false; paintHero();
+  clearTimeout(poseTimer);
+  if(ms) poseTimer = setTimeout(function(){ pose("stance"); }, ms);
+}
+function paintHero(){
+  var img = document.getElementById("heroImg");
+  if(!img) return;
+  var b = (flip && HPAIR[curPose]) ? HPAIR[curPose] : curPose;
+  img.setAttribute("href", IMG("hero/"+b+".png"));
+}
+if(!reduce) flipTimer = setInterval(function(){ flip = !flip; paintHero(); }, 1100);
+
+/* ═══════════ 爆発 ═══════════ */
+
+function boom(x){
+  var img = document.getElementById("boomImg"), n = 1;
+  if(!img) return;
+  img.setAttribute("x", x - 100);
+  img.setAttribute("y", GY - 170);
+  img.style.display = "";
+  var t = setInterval(function(){
+    n++;
+    if(n > 9){ clearInterval(t); img.style.display = "none"; return; }
+    img.setAttribute("href", IMG("boom/"+n+".png"));
+  }, reduce ? 20 : 55);
+}
+
+/* ═══════════ とくてん ═══════════ */
+
+var shownScore = 0;
+
+function tweenScore(){
+  var el = $("scoreVal"), box = $("scoreBox"),
+      from = shownScore, to = S.score, t0 = 0, dur = reduce ? 0 : 430;
+  box.classList.remove("pop"); void box.offsetWidth; box.classList.add("pop");
+  if(!dur){ shownScore = to; el.textContent = to.toLocaleString("ja-JP"); return; }
+  requestAnimationFrame(function step(now){
+    if(!t0) t0 = now;
+    var k = Math.min(1, (now - t0) / dur);
+    shownScore = Math.round(from + (to - from) * k);
+    el.textContent = shownScore.toLocaleString("ja-JP");
+    if(k < 1) requestAnimationFrame(step);
+  });
+}
+
+// 国旗の上の点数ふだが、ふくらんでから 左上のとくてんへ吸い込まれる
+function flyScore(rect, gain){
+  if(reduce || !rect){ tweenScore(); return; }
+  var goal = $("scoreBox").getBoundingClientRect(),
+      x0 = rect.left + rect.width / 2, y0 = rect.top + rect.height / 2,
+      dx = (goal.left + goal.width / 2) - x0,
+      dy = (goal.top + goal.height / 2) - y0,
+      el = document.createElement("div");
+  el.className = "fly";
+  el.textContent = "+" + gain;
+  el.style.left = x0 + "px";
+  el.style.top  = y0 + "px";
+  document.body.appendChild(el);
+  var a = el.animate([
+    { transform:"translate(-50%,-50%) scale(.7)",  opacity:0,  offset:0    },
+    { transform:"translate(-50%,-50%) scale(2.4)", opacity:1,  offset:.20  },
+    { transform:"translate(-50%,-50%) scale(2.4)", opacity:1,  offset:.46  },
+    { transform:"translate(calc(-50% + "+dx+"px),calc(-50% + "+dy+"px)) scale(.5)",
+      opacity:.85, offset:1 }
+  ], { duration:1000, easing:"cubic-bezier(.45,.02,.2,1)" });
+  a.onfinish = function(){ el.remove(); tweenScore(); };
+}
+
+function toast(txt, kind){
+  var d = document.createElement("div");
+  d.className = "toast " + (kind||"");
+  d.textContent = txt;
+  $("field").appendChild(d);
+  setTimeout(function(){ d.remove(); }, 1500);
+}
+
+/* ═══════════ ゲーム進行 ═══════════ */
+
+function start(weakOnly){
+  sel.weakOnly = !!weakOnly;
+  var items = pickItems();
+  S = {
+    pid: curPack().id, ask: curPack().ask,
+    queue: items.map(function(it){ return {it:it, tries:0}; }),
+    field: [], life: LIVES, hit: 0, total: items.length, attempted: 0,
+    combo: 0, best: 0, score: 0, weak: {}, t0: Date.now(), over: false, sinceSpawn: SPAWN,
+    endless: sel.qn === "endless"
+  };
+  shownScore = 0;
+  $("scoreVal").textContent = "0";
+  $("title").classList.remove("on");
+  $("result").classList.remove("on");
+  $("game").classList.add("on");
+  layout();
+  pose("stance");
+  paintHUD();
+  tick(true);
+  clearInterval(stepTimer);
+  stepTimer = setInterval(tick, LVSPEED[sel.weakOnly ? 2 : sel.lv]);
+}
+
+function tick(first){
+  if(!S || S.over) return;
+
+  if(!first){
+    S.field.forEach(function(m){ m.step++; });
+    var reached = S.field.filter(function(m){ return m.step >= STEPS; });
+    reached.forEach(breach);
+    if(S.over) return;
+  }
+
+  S.sinceSpawn++;
+  maybeSpawn();
+
+  if(!S.queue.length && !S.field.length){ finish(true); return; }
+
+  syncMobs();
+  paintChoices();
+  paintHUD();
+}
+
+// 次の敵を出す。画面が空になったら間をあけずに出す(こたえるものが無い時間を作らない)
+function maybeSpawn(){
+  // エンドレスは 問題ぎれになるたび、おなじ条件のプールから もう一周ぶん補充する
+  if(S.endless && !S.queue.length){
+    S.queue = shuffle(currentPool().slice()).map(function(it){ return {it:it, tries:0}; });
+  }
+  if(!S.queue.length || S.field.length >= MAXFLD) return;
+  if(S.sinceSpawn < SPAWN && S.field.length > 0) return;
+  var q = S.queue.shift();
+  if(q.tries === 0) S.attempted++;
+  S.field.push({id: ++mid, it: q.it, tries: q.tries, step: 0, mon: MONS[mid % MONS.length], node: null});
+  S.sinceSpawn = 0;
+}
+
+function breach(m){
+  S.field = S.field.filter(function(x){ return x !== m; });
+  if(m.node) m.node.remove();
+  S.life--;
+  S.combo = 0;
+  markWeak(m.it);
+  requeue(m);
+  pose("damage", 1200);
+  $("field").classList.remove("shake"); void $("field").offsetWidth; $("field").classList.add("shake");
+  toast("お城がやられた！ こたえは「" + m.it.a + "」", "ng");
+  paintHUD();
+  if(S.life <= 0){ finish(false); }
+}
+
+function requeue(m){
+  if(m.tries < 2) S.queue.push({it: m.it, tries: m.tries + 1});
+}
+
+function markWeak(it){
+  S.weak[it.key] = (S.weak[it.key] || 0) + 1;
+  var w = loadWeak(S.pid);
+  w[it.key] = (w[it.key] || 0) + 1;
+  saveWeak(S.pid, w);
+}
+function clearWeak(it){
+  var w = loadWeak(S.pid);
+  if(w[it.key]){ delete w[it.key]; saveWeak(S.pid, w); }
+}
+
+/* ── こたえる ── */
+
+var lastKey = null;
+
+function paintChoices(){
+  var m = S.field[0];
+  if(!m){ $("choices").innerHTML = ""; $("ask").textContent = ""; return; }
+  if(lastKey === m.id) return;                       // 同じ相手なら作り直さない
+  lastKey = m.id;
+  $("ask").innerHTML = "<b>" + esc(S.ask) + "</b>";
+  $("choices").innerHTML = choicesFor(m.it).map(function(c){
+    return '<button class="ch" type="button" data-a="' + esc(c) + '">' + esc(c) + '</button>';
+  }).join("");
+}
+
+$("choices").addEventListener("click", function(e){
+  var b = e.target.closest(".ch");
+  if(!b || b.classList.contains("bad") || !S || S.over) return;
+  var m = S.field[0];
+  if(!m) return;
+
+  if(b.dataset.a === m.it.a){
+    var x = +mobX(m),
+        gain = points(m),
+        pv = m.node && m.node.querySelector(".pts"),
+        rect = pv ? pv.getBoundingClientRect() : null;   // 消す前に ふだの位置をひかえる
+    S.field = S.field.filter(function(y){ return y !== m; });
+    if(m.node) m.node.remove();
+    lastKey = null;
+    S.hit++; S.combo++; S.best = Math.max(S.best, S.combo);
+    S.score += gain;
+    flyScore(rect, gain);
+    if(m.tries === 0) clearWeak(m.it);               // 一発で当てたら にがてから外す
+    boom(x);
+    pose(S.combo >= 5 ? "cannon" : "guts", 1100);
+    b.classList.add("good");
+    if(S.combo >= 5) toast("コンボ " + S.combo + "！ 大砲だ！", "ok");
+    maybeSpawn();
+    if(!S.queue.length && !S.field.length){ finish(true); return; }
+    syncMobs(); paintChoices(); paintHUD();
+  } else {
+    b.classList.add("bad");
+    S.combo = 0;
+    markWeak(m.it);
+    m.tries = Math.max(m.tries, 1);
+    m.step = Math.min(STEPS - 1, m.step + 2);        // ばつとして2歩すすむ
+    pose("damage", 900);
+    toast("ちがう！ " + (m.it.sub ? m.it.sub + " ではない" : "もういちど"), "ng");
+    syncMobs(); paintHUD();
+  }
+});
+
+function paintHUD(){
+  var h = "", i;
+  for(i = 0; i < LIVES; i++) h += '<i class="' + (i < S.life ? "on" : "") + '">❤️</i>';
+  $("hearts").innerHTML = h;
+  $("left").textContent = S.endless ? "∞" : (S.queue.length + S.field.length);
+  $("hit").textContent = S.hit;
+  var c = $("combo");
+  c.textContent = S.combo >= 2 ? (S.combo + " コンボ") : "";
+  c.classList.toggle("hot", S.combo >= 5);
+}
+
+/* ═══════════ おわり ═══════════ */
+
+function finish(cleared){
+  if(S.over) return;
+  S.over = true;
+  clearInterval(stepTimer);
+  S.sec = Math.round((Date.now() - S.t0) / 1000);
+
+  if(cleared){
+    pose("cheer", 4000);
+    var b = document.createElement("div");
+    b.className = "winb";
+    b.innerHTML = '<img src="'+IMG("congrats.jpg")+'" alt="">'
+      + '<div class="bar">ぜんぶ たおした！</div>';
+    $("field").appendChild(b);
+    confetti();
+    setTimeout(function(){ b.remove(); showResult(cleared); }, 2600);
+  } else {
+    pose("lowhp", 3000);
+    setTimeout(function(){ showResult(cleared); }, 900);
+  }
+}
+
+function confetti(){
+  if(reduce) return;
+  var pal = ["#F5B70A","#F0603F","#4A6BC0","#4CB86B","#F58FB0","#7EC8E3"], i;
+  for(i = 0; i < 90; i++){
+    (function(i){
+      var c = document.createElement("div");
+      c.className = "conf";
+      c.style.left = (Math.random() * 100) + "vw";
+      c.style.background = pal[i % pal.length];
+      c.style.borderRadius = Math.random() > .5 ? "50%" : "3px";
+      var t = 1600 + Math.random() * 1400;
+      c.animate([{transform:"translateY(0) rotate(0)"},
+                 {transform:"translateY(108vh) rotate(" + (360 + Math.random() * 540) + "deg)"}],
+                {duration:t, easing:"ease-in"});
+      document.body.appendChild(c);
+      setTimeout(function(){ c.remove(); }, t);
+    })(i);
+  }
+}
+
+function showResult(cleared){
+  $("game").classList.remove("on");
+  $("result").classList.add("on");
+
+  var bkey = "nlq_best_" + S.pid, prev = 0, isNew = false;
+  try { prev = parseInt(localStorage.getItem(bkey) || "0", 10) || 0; } catch(e){}
+  if(S.score > prev){ isNew = true; try { localStorage.setItem(bkey, String(S.score)); } catch(e){} }
+
+  $("rhead").innerHTML =
+      '<h2 class="pop">' + (cleared ? "クリア！" : "お城が おちた…") + '</h2>'
+    + '<span class="big">' + S.score.toLocaleString("ja-JP") + '<em>てん</em></span>'
+    + (isNew ? '<span class="rec">しんきろく！</span>'
+             : '<p class="prev">さいこう記録 ' + prev.toLocaleString("ja-JP") + ' てん</p>');
+
+  // 「せいかい」は一発で当てた割合。倒した数だと、クリア時は必ず100%になってしまう。
+  // エンドレスは「予定の問題数」がないので、実際に出あった数(attempted)を分母にする。
+  var missed = Object.keys(S.weak).length,
+      total = S.endless ? S.attempted : S.total,
+      pct = total ? Math.round(Math.max(0, total - missed) / total * 100) : 0;
+  $("stats").innerHTML =
+      '<div class="stat"><small>たおした数</small><b>' + S.hit + '<span style="font-size:.6em">' + (S.endless ? "" : "/" + S.total) + '</span></b></div>'
+    + '<div class="stat"><small>いっぱつ正解</small><b>' + pct + '%</b></div>'
+    + '<div class="stat"><small>さいだいコンボ</small><b>' + S.best + '</b></div>'
+    + '<div class="stat"><small>かかった時間</small><b>' + S.sec + '<span style="font-size:.6em">びょう</span></b></div>';
+
+  var w = loadWeak(S.pid),
+      keys = Object.keys(w),
+      all = curPack().items,
+      map = {};
+  all.forEach(function(x){ map[x.key] = x; });
+  var list = keys.map(function(k){ return map[k]; }).filter(Boolean)
+                 .sort(function(a,b){ return w[b.key] - w[a.key]; });
+
+  if(list.length){
+    $("weakbox").innerHTML =
+        '<h3>にがてな国旗（' + list.length + '）</h3>'
+      + '<p>まちがえた国旗です。この端末にだけ のこしています。つぎに「にがてだけ」であそぶと、これが出ます。</p>'
+      + '<div class="wlist">' + list.map(function(x){
+          return '<div class="w"><div class="fw">'
+            + '<svg class="flagsvg" viewBox="0 0 90 60"><rect width="90" height="60" fill="#fff"/>' + x.raw + '</svg>'
+            + '</div>' + esc(x.a) + (x.sub ? '<small>' + esc(x.sub) + '</small>' : '')
+            + (x.note ? '<small>' + esc(x.note) + '</small>' : '')
+            + '</div>';
+        }).join("") + '</div>';
+  } else {
+    $("weakbox").innerHTML = '<p class="allok">にがてな国旗は ありません。おみごと！</p>';
+  }
+  $("weakonly").style.display = list.length ? "" : "none";
+}
+
+/* ═══════════ ボタン ═══════════ */
+
+$("go").addEventListener("click", function(){ start(sel.weakOnly); });
+$("again").addEventListener("click", function(){ start(false); });
+$("weakonly").addEventListener("click", function(){ start(true); });
+$("home").addEventListener("click", function(){
+  $("result").classList.remove("on");
+  $("title").classList.add("on");
+  paintTitle();
+});
+$("quit").addEventListener("click", function(){
+  clearInterval(stepTimer);
+  if(S) S.over = true;
+  $("game").classList.remove("on");
+  $("title").classList.add("on");
+  paintTitle();
+});
+
+var rt = null;
+window.addEventListener("resize", function(){
+  if(!$("game").classList.contains("on")) return;
+  clearTimeout(rt);
+  rt = setTimeout(layout, 180);
+});
+
+/* ═══════════ 起動 ═══════════ */
+
+// 旗のSVGの中身だけ raw として持っておく(けっか画面でも使うため)
+PACKLIST.forEach(function(p){
+  p.pack.items.forEach(function(it){
+    it.raw = it.q.replace(/^<svg[^>]*>/, "").replace(/<\/svg>$/, "");
+  });
+});
+
+paintTitle();
+window.__start=start;
+
+})();
+</script>
+</body>
+</html>
