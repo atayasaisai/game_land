@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>ことばの橋 English Typing Game｜英文の穴うめタイピング｜あたやさいさいゲームランド</title>
+<meta name="description" content="英文の橋に あいた穴に、ことばの板を1文字ずつ はめて わたっていく、子供用の無料 英語タイピングゲーム。小学英語から中学1年まで、9つの島。スマホでは文字のふだを押して答えられます。広告なし・会員とうろくなし。">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://atayasaisai.github.io/game_land/17_kotoba_no_hashi/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="あたやさいさいゲームランド">
+<meta property="og:title" content="ことばの橋 English Typing Game｜英文の穴うめタイピング">
+<meta property="og:url" content="https://atayasaisai.github.io/game_land/17_kotoba_no_hashi/">
+<meta property="og:image" content="https://atayasaisai.github.io/game_land/17_kotoba_no_hashi/title.jpg">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Mochiy+Pop+One&family=Zen+Maru+Gothic:wght@500;700;900&display=swap">
+<style>
+:root{
+  --ki:#F5B70A; --do:#F0603F; --ai:#4A6BC0; --raku:#4CB86B; --pink:#F58FB0; --sky:#7EC8E3;
+  --ink:#33312A; --paper:#FFFCF2; --paper2:#FFF4D6; --sub:#5C574A;
+  --wood:#C98A4B; --wood2:#A86A33; --woodd:#5B3417;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{
+  font-family:"Zen Maru Gothic","Hiragino Maru Gothic ProN",sans-serif;font-weight:700;
+  color:var(--ink);background:#bfe3f5;overflow:hidden;
+  -webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent;
+}
+h1,h2,h3,.pop{font-family:"Mochiy Pop One","Zen Maru Gothic",sans-serif;font-weight:400;margin:0}
+button{font-family:inherit;font-weight:700;cursor:pointer;color:inherit}
+.en{font-family:"Fredoka","Zen Maru Gothic",sans-serif}
+
+#app{height:100%;display:flex;flex-direction:column;overflow:hidden}
+.screen{display:none;height:100%;overflow-y:auto;overscroll-behavior:contain}
+.screen.on{display:block}
+.pad{max-width:760px;margin:0 auto;padding:16px 16px 40px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  background:var(--raku);color:#fff;border:3px solid var(--ink);border-radius:999px;
+  padding:10px 26px;font-size:1.05rem;box-shadow:0 5px 0 var(--ink);transition:transform .08s;text-decoration:none}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--ink)}
+.btn.sub{background:#fff;color:var(--ink)}
+.btn.warn{background:var(--do)}
+.btn:focus-visible,.isl:focus-visible,.pick:focus-visible{outline:3px solid var(--ai);outline-offset:3px}
+
+/* ───────── タイトル ───────── */
+#title{background:#bfe3f5 url(bg.jpg) center 30%/cover no-repeat fixed}
+.lead{display:inline-block;font-size:.72rem;letter-spacing:.24em;border:2.5px solid var(--ink);
+  border-radius:999px;padding:3px 15px;background:#fff;box-shadow:3px 3px 0 var(--ink);
+  color:inherit;text-decoration:none}
+.top{text-align:center}
+.frame{margin:12px auto 0;border-radius:22px;overflow:hidden;border:4px solid #fff;
+  box-shadow:0 10px 30px rgba(40,60,90,.3);aspect-ratio:764/508;max-width:640px;background:#bfe3f5}
+.frame img{display:block;width:100%;height:100%;object-fit:cover}
+.catch{margin:14px auto 0;display:table;padding:6px 16px;border-radius:16px;background:rgba(255,252,240,.9);
+  font-size:clamp(.9rem,3.8vw,1.1rem);line-height:1.6;text-align:center}
+.catch em{font-style:normal;background:linear-gradient(transparent 55%,#ffe58a 55%);padding:0 3px}
+
+.panel{margin:18px auto 0;max-width:640px;background:rgba(255,252,240,.94);border:3px solid var(--ink);
+  border-radius:26px;padding:14px 14px 20px;box-shadow:0 8px 0 rgba(51,49,42,.85)}
+.panel h3{text-align:center;font-size:1.05rem;margin:2px 0 12px}
+.panel h3 small{display:block;font-family:"Zen Maru Gothic",sans-serif;font-size:.74rem;color:var(--sub);margin-top:2px}
+.islands{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+.isl{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 6px 9px;
+  background:#fff;border:3px solid var(--c,var(--raku));border-radius:20px;box-shadow:0 5px 0 var(--c,var(--raku));
+  transition:transform .1s}
+.isl:hover{transform:translateY(-2px)}
+.isl:active{transform:translateY(4px);box-shadow:0 1px 0 var(--c,var(--raku))}
+.isl .no{font-family:"Mochiy Pop One",sans-serif;font-size:.7rem;color:#fff;background:var(--c,var(--raku));
+  border-radius:999px;padding:0 9px}
+.isl .nm{font-size:1rem;line-height:1.3}
+.isl .lv{font-size:.68rem;color:var(--sub)}
+.isl .best{font-size:.95rem;letter-spacing:.05em;color:#d9d2c0;min-height:1.2em}
+.isl .best b{color:var(--ki);font-weight:400}
+.isl.weak{--c:var(--do)}
+.opt{margin-top:18px;text-align:center}
+.opt h4{margin:0 0 8px;font-size:.8rem;letter-spacing:.14em;color:var(--sub)}
+.row{display:flex;flex-wrap:wrap;gap:9px;justify-content:center}
+.pick{background:#fff;border:2.5px solid var(--ink);border-radius:999px;padding:7px 16px;
+  font-size:.9rem;box-shadow:0 3px 0 var(--ink)}
+.pick[aria-pressed="true"]{background:var(--ink);color:#fff;transform:translateY(2px);box-shadow:0 1px 0 var(--ink)}
+.note{margin:18px auto 0;max-width:640px;font-size:.76rem;color:var(--sub);line-height:1.9;
+  background:rgba(255,255,255,.94);border:2.5px dashed var(--ink);border-radius:18px;padding:12px 16px}
+.note b{color:var(--ink)}
+
+/* ───────── ゲーム ───────── */
+#game{display:none;height:100%;flex-direction:column;overflow:hidden;background:#bfe3f5}
+#game.on{display:flex}
+.hud{flex:none;display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--ink);color:#fff}
+.hud .quit,.hud .snd{background:transparent;border:2px solid rgba(255,255,255,.6);color:#fff;border-radius:999px;
+  padding:2px 10px;font-size:.74rem}
+.hud .snd{padding:2px 8px}
+.hud .sname{flex:1;min-width:0;font-size:.86rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hud .dots{display:flex;gap:5px}
+.hud .dots i{width:13px;height:13px;border-radius:50%;border:2px solid #fff;display:block}
+.hud .dots i.done{background:var(--raku)}
+.hud .dots i.now{background:var(--ki);animation:pulse 1s ease-in-out infinite}
+@keyframes pulse{50%{transform:scale(1.25)}}
+
+.scene{position:relative;flex:1;min-height:210px;overflow:hidden;
+  background:#bfe3f5 url(bg.jpg) center 35%/cover no-repeat}
+.scene::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(rgba(255,255,255,0) 40%,rgba(160,210,240,.35))}
+.jp{position:absolute;left:50%;top:auto;bottom:60%;transform:translateX(-50%);z-index:5;max-width:calc(100% - 20px);
+  background:rgba(255,252,240,.95);border:3px solid var(--ink);border-radius:16px;padding:6px 16px;
+  font-size:clamp(.92rem,3.8vw,1.15rem);text-align:center;box-shadow:0 4px 0 rgba(51,49,42,.7);white-space:nowrap}
+.jp small{display:block;font-size:.64rem;color:var(--sub);letter-spacing:.12em}
+
+.stage{position:absolute;left:0;right:0;bottom:0;height:66%;transition:opacity .35s,transform .45s}
+.stage.out{opacity:0;transform:translateX(-30px)}
+.stage.in{opacity:0;transform:translateX(30px)}
+.island{position:absolute;bottom:4%;width:25%;max-width:210px;z-index:1}
+.island.l{left:-3%}.island.r{right:-3%}
+.island svg{width:100%;height:auto;overflow:visible}
+.castle{position:absolute;right:2%;bottom:30%;width:17%;max-width:140px;z-index:1;display:none}
+.castle.on{display:block;animation:pop .6s cubic-bezier(.2,1.7,.5,1) both}
+@keyframes pop{from{transform:scale(.2);opacity:0}to{transform:scale(1);opacity:1}}
+
+/* 橋：英文そのものが橋。穴のところは板がぬけている */
+.bridge{position:absolute;left:15%;right:15%;z-index:2}
+.deck{position:relative;display:flex;align-items:flex-end;gap:.12em;white-space:nowrap;width:100%}
+.deck::before,.deck::after{content:"";position:absolute;left:0;right:0;height:3px;background:#7a4a1f;border-radius:2px}
+.deck::before{top:-.5em}
+.deck::after{bottom:-.2em;height:5px;background:#6b3f18}
+/* ことばの外がわの、ふつうの板 */
+.fill-l,.fill-r{flex:1 1 0;min-width:.3em;height:1.9em;border:2.5px solid var(--woodd);border-radius:.25em;
+  background:repeating-linear-gradient(90deg,#c48a50 0 .9em,#5b3417 .9em calc(.9em + 2px)),#c48a50;
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.3);opacity:.95}
+.plank{display:inline-flex;align-items:center;justify-content:center;height:1.9em;padding:0 .24em;
+  background:linear-gradient(#d9a066,#b77a3f);border:2.5px solid var(--woodd);border-radius:.3em;
+  color:#fff;font-weight:600;text-shadow:0 2px 0 rgba(70,35,10,.6);box-shadow:inset 0 2px 0 rgba(255,255,255,.35)}
+.plank.p{padding:0 .15em;min-width:.8em}
+.gap{display:inline-flex;gap:.08em;padding:0 .08em}
+.slot{position:relative;width:.9em;height:1.9em;border:2.5px dashed #fff;border-radius:.25em;
+  background:rgba(25,45,80,.62);box-shadow:inset 0 3px 6px rgba(0,0,0,.35);display:inline-flex;align-items:center;justify-content:center}
+.slot.cur{border-color:var(--ki);border-width:3px;animation:blink 1s ease-in-out infinite}
+@keyframes blink{50%{background:rgba(245,183,10,.55)}}
+.slot.fill{border:2.5px solid var(--woodd);border-style:solid;background:linear-gradient(#ffe08a,#f5b70a);
+  color:var(--ink);text-shadow:none;animation:drop .28s cubic-bezier(.3,1.6,.5,1) both}
+.slot.fill.help{background:linear-gradient(#fff,#e8e2d2)}
+@keyframes drop{from{transform:translateY(-90%) rotate(-8deg);opacity:0}to{transform:none;opacity:1}}
+.slot.shake{animation:shake .35s}
+@keyframes shake{20%,60%{transform:translateX(-4px)}40%,80%{transform:translateX(4px)}}
+.fall{position:absolute;left:0;top:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(#e7b27a,#b77a3f);border:2.5px solid var(--woodd);border-radius:.25em;color:#fff;
+  animation:fall .75s ease-in forwards;pointer-events:none}
+@keyframes fall{to{transform:translateY(260%) rotate(80deg);opacity:0}}
+.deck.done .slot.fill{animation:glow .8s ease-out}
+@keyframes glow{40%{box-shadow:0 0 0 5px rgba(255,255,255,.9),0 0 18px 6px #ffe58a}}
+
+/* たびびと（勇者と犬） */
+.walker{position:absolute;z-index:4;width:clamp(70px,15vw,110px);transition:left 1.5s linear,bottom 1.5s linear}
+.walker svg{width:100%;height:auto;overflow:visible}
+.walker.go svg{animation:walk .3s ease-in-out infinite}
+@keyframes walk{50%{transform:translateY(-6%)}}
+.walker.cheer svg{animation:hop2 .5s ease-in-out 3}
+@keyframes hop2{50%{transform:translateY(-22%)}}
+.say{position:absolute;left:50%;bottom:104%;transform:translateX(-50%);white-space:nowrap;background:#fff;
+  border:2.5px solid var(--ink);border-radius:999px;padding:1px 12px;font-size:.8rem;opacity:0;transition:opacity .2s}
+.say.on{opacity:1}
+
+.toast{position:absolute;left:50%;top:40%;transform:translate(-50%,0);z-index:9;background:var(--raku);color:#fff;
+  border:3px solid var(--ink);border-radius:999px;padding:6px 22px;font-family:"Mochiy Pop One",sans-serif;
+  font-size:clamp(1.1rem,5vw,1.6rem);white-space:nowrap;animation:tup .4s cubic-bezier(.2,1.7,.5,1) both;pointer-events:none}
+@keyframes tup{from{opacity:0;transform:translate(-50%,20px) scale(.6)}to{opacity:1;transform:translate(-50%,0)}}
+
+/* こたえる所 */
+.pad2{flex:none;background:var(--paper2);border-top:3px solid var(--ink);
+  padding:8px 8px calc(10px + env(safe-area-inset-bottom,0px))}
+.tools{display:flex;justify-content:center;align-items:center;gap:10px;margin-bottom:8px;font-size:.8rem;color:var(--sub)}
+.hintb{background:#fff;border:2.5px solid var(--ink);border-radius:999px;padding:3px 14px;font-size:.82rem;
+  box-shadow:0 3px 0 var(--ink)}
+.hintb:active{transform:translateY(2px);box-shadow:0 1px 0 var(--ink)}
+.tiles{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;max-width:560px;margin:0 auto}
+.tile{width:clamp(46px,13vw,58px);height:clamp(50px,14vw,60px);border:3px solid var(--woodd);border-radius:12px;
+  background:linear-gradient(#e2aa6f,#b97c41);color:#fff;font-family:"Fredoka",sans-serif;font-weight:600;
+  font-size:clamp(1.5rem,6.5vw,1.9rem);text-shadow:0 2px 0 rgba(70,35,10,.6);box-shadow:0 4px 0 var(--woodd);
+  transition:transform .08s,opacity .2s}
+.tile:active{transform:translateY(3px);box-shadow:0 1px 0 var(--woodd)}
+.tile.used{opacity:0;pointer-events:none;transform:translateY(-30px) scale(.6)}
+.tile.bad{animation:shake .35s}
+.tile.hint,.key.hint{outline:4px solid var(--ki);outline-offset:2px;animation:pulse 1s ease-in-out infinite}
+.kb{max-width:600px;margin:0 auto;display:flex;flex-direction:column;gap:6px}
+.kb .r{display:flex;justify-content:center;gap:5px}
+.key{flex:1 1 0;max-width:52px;height:clamp(40px,11.5vw,50px);padding:0;background:#fff;border:2.5px solid var(--ink);
+  border-radius:9px;box-shadow:0 3px 0 var(--ink);font-family:"Fredoka",sans-serif;font-weight:600;
+  font-size:clamp(1.05rem,4.6vw,1.35rem);transition:transform .06s,background .1s}
+.key:active,.key.dn{transform:translateY(2px);box-shadow:0 1px 0 var(--ink);background:#ffe58a}
+.key.bad{background:#f7c1b3}
+
+/* ───────── けっか ───────── */
+#result{background:#bfe3f5 url(bg.jpg) center 30%/cover no-repeat fixed}
+.rbox{margin:10px auto 0;max-width:640px;background:rgba(255,252,240,.95);border:3px solid var(--ink);
+  border-radius:26px;padding:20px 16px;text-align:center;box-shadow:0 8px 0 rgba(51,49,42,.85)}
+.rbox h2{font-size:clamp(1.3rem,5.6vw,1.9rem)}
+.stars{font-size:clamp(2.4rem,11vw,3.4rem);letter-spacing:.1em;margin:6px 0 2px;color:#e3dccb}
+.stars b{color:var(--ki);font-weight:400;display:inline-block;animation:pop .5s cubic-bezier(.2,1.7,.5,1) both}
+.stars b:nth-child(2){animation-delay:.15s}.stars b:nth-child(3){animation-delay:.3s}
+.rmeta{font-size:.84rem;color:var(--sub)}
+.rnew{display:inline-block;margin-top:6px;background:var(--ki);border:2.5px solid var(--ink);border-radius:999px;
+  padding:1px 14px;font-size:.8rem;transform:rotate(-3deg)}
+.wl{list-style:none;margin:16px 0 0;padding:0;text-align:left;display:grid;gap:8px}
+.wl li{background:#fff;border:2px solid #e3dccb;border-radius:14px;padding:8px 12px;font-size:.78rem;color:var(--sub)}
+.wl li .en{display:block;font-size:1.08rem;color:var(--ink);font-weight:600}
+.wl li .en b{color:var(--ai);background:linear-gradient(transparent 60%,#ffe58a 60%);padding:0 2px}
+.wl li.miss{border-color:var(--do)}
+.wl li.miss::after{content:"もういちど れんしゅう";display:inline-block;margin-left:6px;color:var(--do);font-size:.68rem}
+.rbtns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:18px}
+.conf{position:fixed;width:10px;height:14px;top:-20px;z-index:30;pointer-events:none;border:1.5px solid var(--ink)}
+
+@media (max-width:620px){
+  .pad{padding:12px 12px 34px}
+  .scene{min-height:190px}
+  .island{width:34%}
+  .island.l{left:-15%}.island.r{right:-15%}
+  .bridge{left:15%;right:4%}
+  .walker{width:62px}
+}
+@media (prefers-reduced-motion: reduce){
+  *{animation:none!important;transition:none!important}
+}
+</style>
+<!-- ▼ 訪問者カウント（GoatCounter）。Cookieも個人情報も使わない集計。
+     goatcounter.com で決めたコードを MYCODE に入れて、この行のコメントを外すと動きます -->
+<!-- <script data-goatcounter="https://MYCODE.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script> -->
+</head>
+<body>
+<div id="app">
+
+<!-- ═══════════ タイトル ═══════════ -->
+<section class="screen on" id="title"><div class="pad">
+  <div class="top">
+    <a class="lead" href="../">◀ あたやさいさいゲームランド</a>
+    <h1 class="frame"><img src="title.jpg" alt="ことばの橋 English Typing Game 英語でひろがる、キミの冒険！" width="764" height="508"></h1>
+    <p class="catch">英文の橋に、<em>あながあいている</em>よ。<br>ことばを タイプして 板をはめて、わたろう！</p>
+  </div>
+
+  <div class="panel">
+    <h3>どの島へ いく？<small>島を えらぶと はじまります（1つの島で 橋が5本）</small></h3>
+    <div class="islands" id="isles"></div>
+
+    <div class="opt">
+      <h4>こたえかた</h4>
+      <div class="row" id="modeRow">
+        <button class="pick" type="button" data-mode="tile">もじふだ（やさしい）</button>
+        <button class="pick" type="button" data-mode="kb">キーボード</button>
+      </div>
+    </div>
+  </div>
+
+  <p class="note">
+    <b>小学校の英語から、中学1年くらいまで。</b>英文の下にある日本語をヒントに、あなの ことばを 考えます。
+    まちがえても 板が おちるだけ。何回でも やりなおせます。<br>
+    パソコンでは ほんもののキーボードで打てます。スマホでは画面の「もじふだ」か「キーボード」を おしてください。
+    きろくは この端末のブラウザの中だけに のこります。英文の よみあげは、端末に入っている声だけを つかいます。
+  </p>
+</div></section>
+
+<!-- ═══════════ ゲーム ═══════════ -->
+<section id="game">
+  <div class="hud">
+    <button class="quit" id="quit" type="button">◀ やめる</button>
+    <div class="sname" id="sname"></div>
+    <div class="dots" id="dots"></div>
+    <button class="snd" id="snd" type="button" aria-label="おと">🔊</button>
+  </div>
+  <div class="scene" id="scene">
+    <div class="jp" id="jp"></div>
+    <div class="stage" id="stage">
+      <div class="island l"><svg viewBox="0 0 200 130" aria-hidden="true"><use href="#isle"/></svg></div>
+      <div class="island r"><svg viewBox="0 0 200 130" aria-hidden="true"><use href="#isle"/></svg></div>
+      <svg class="castle" id="castle" viewBox="0 0 120 120" aria-hidden="true"><use href="#castleG"/></svg>
+      <div class="bridge" id="bridge"></div>
+    </div>
+    <div class="walker" id="walker"><span class="say" id="say">Yes!</span>
+      <svg viewBox="0 0 120 100" aria-hidden="true"><use href="#heroG"/></svg></div>
+  </div>
+  <div class="pad2">
+    <div class="tools"><span id="tip">あなに入る ことばは？</span><button class="hintb" id="hintb" type="button">💡 1文字おしえて</button></div>
+    <div id="inputArea"></div>
+  </div>
+</section>
+
+<!-- ═══════════ けっか ═══════════ -->
+<section class="screen" id="result"><div class="pad">
+  <div class="rbox" id="rbox"></div>
+</div></section>
+
+</div>
+
+<!-- 絵の部品（島・お城・たびびと）。<use> で使いまわす -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <g id="isle">
+      <path d="M8 34 Q100 18 192 34 L176 58 Q150 92 118 104 Q100 128 84 104 Q48 92 26 60 Z" fill="#8a6a4a" stroke="#4a3320" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M40 62 Q60 70 76 64 M110 76 Q128 80 150 66 M84 92 Q96 98 108 90" fill="none" stroke="#6b4f35" stroke-width="3" stroke-linecap="round"/>
+      <path d="M4 34 Q100 12 196 34 Q198 46 184 46 Q150 52 100 50 Q50 52 16 46 Q2 46 4 34 Z" fill="#6cc35a" stroke="#2f6b2a" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M22 36 Q30 26 36 36 M150 32 Q158 22 164 32 M92 30 Q98 22 104 30" fill="none" stroke="#2f6b2a" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="60" cy="32" r="4" fill="#fff59a" stroke="#b98a18" stroke-width="1.5"/>
+      <circle cx="132" cy="30" r="4" fill="#ffb6c9" stroke="#c0567a" stroke-width="1.5"/>
+    </g>
+    <g id="castleG" stroke="#4a4a5a" stroke-width="3" stroke-linejoin="round">
+      <rect x="22" y="50" width="76" height="62" fill="#f1eee6"/>
+      <rect x="10" y="36" width="22" height="76" fill="#e6e2d8"/>
+      <rect x="88" y="36" width="22" height="76" fill="#e6e2d8"/>
+      <rect x="46" y="26" width="28" height="40" fill="#f1eee6"/>
+      <path d="M6 38 L21 8 L36 38 Z M84 38 L99 8 L114 38 Z M42 28 L60 -4 L78 28 Z" fill="#e05a4a"/>
+      <path d="M50 112 V88 Q60 76 70 88 V112 Z" fill="#b8793e"/>
+      <path d="M60 -4 V-18 L74 -13 L60 -8" fill="#ffd43b"/>
+      <circle cx="21" cy="56" r="4" fill="#7ec8e3"/><circle cx="99" cy="56" r="4" fill="#7ec8e3"/><circle cx="60" cy="44" r="5" fill="#7ec8e3"/>
+    </g>
+    <g id="heroG" stroke="#33312a" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round">
+      <!-- 犬 -->
+      <g transform="translate(66 52)">
+        <ellipse cx="22" cy="30" rx="18" ry="12" fill="#fff"/>
+        <path d="M10 38 v8 M20 40 v7 M30 40 v7 M38 36 v8" fill="none"/>
+        <path d="M39 24 q10 -6 8 -14" fill="none"/>
+        <circle cx="10" cy="16" r="13" fill="#fff"/>
+        <path d="M0 8 L2 -6 L10 4 Z M14 4 L22 -6 L22 9 Z" fill="#fff"/>
+        <circle cx="6" cy="16" r="1.8" fill="#33312a" stroke="none"/><circle cx="14" cy="16" r="1.8" fill="#33312a" stroke="none"/>
+        <path d="M8 21 q2 2 4 0" fill="none" stroke-width="2"/>
+        <path d="M1 26 q10 6 20 0 l-2 5 q-8 3 -16 0 Z" fill="#e0483a"/>
+      </g>
+      <!-- たびびと -->
+      <g>
+        <path d="M34 50 q-24 8 -28 40 q14 -8 26 -10 Z" fill="#d8453a"/>
+        <rect x="26" y="52" width="16" height="22" rx="5" fill="#9a6a3a"/>
+        <path d="M30 60 h10" fill="none" stroke-width="2"/>
+        <rect x="34" y="50" width="26" height="30" rx="9" fill="#3f5f9a"/>
+        <path d="M40 80 v14 M54 80 v14" fill="none" stroke-width="5"/>
+        <path d="M36 95 h8 M50 95 h9" fill="none" stroke-width="5" stroke="#6b4a2a"/>
+        <path d="M58 58 q10 2 12 -8" fill="none" stroke-width="5" stroke="#3f5f9a"/>
+        <circle cx="70" cy="49" r="3.5" fill="#f6d2b0"/>
+        <circle cx="48" cy="36" r="16" fill="#f6d2b0"/>
+        <path d="M34 34 q2 -12 14 -12 q12 0 16 10 q-6 -2 -10 4 q-4 -6 -10 -2 q-4 -4 -10 0 Z" fill="#8a4f24"/>
+        <circle cx="53" cy="38" r="2.2" fill="#33312a" stroke="none"/>
+        <path d="M52 45 q3 2 6 -1" fill="none" stroke-width="2"/>
+        <circle cx="59" cy="42" r="2.6" fill="#f5a0a0" stroke="none"/>
+        <path d="M20 24 Q48 14 78 22 Q74 28 48 27 Q28 28 20 24 Z" fill="#8a5a2c"/>
+        <path d="M32 24 Q34 4 50 4 Q64 4 66 22 Z" fill="#9e6a35"/>
+        <path d="M33 20 Q50 16 65 19 L66 23 Q50 20 32 24 Z" fill="#3e8a4a"/>
+      </g>
+    </g>
+  </defs>
+</svg>
+
+<script>
+(function(){
+"use strict";
+
+/* ═══════════ 英文の島 ═══════════
+   1行 = 1問。[ ] の中が あなになる ことば（英字だけ）。｜のあとが 日本語。
+   島をふやすときは、この配列に1つ足すだけ。 */
+var STAGES = [
+ {id:"hello", name:"はじめまして", lv:1, c:"var(--raku)", q:[
+  "[Hello], I am Ken.|こんにちは、ぼくは ケンです。",
+  "Good [morning].|おはよう。",
+  "Thank [you].|ありがとう。",
+  "I am [happy].|わたしは うれしい。",
+  "My [name] is Yumi.|わたしの 名前は ユミです。",
+  "Nice to [meet] you.|はじめまして。",
+  "See you [again].|またね。",
+  "How [are] you?|げんきですか？",
+  "I am [fine].|げんきです。",
+  "I am ten years [old].|わたしは 10さいです。",
+  "Good [night].|おやすみなさい。"]},
+ {id:"animal", name:"どうぶつ", lv:1, c:"var(--raku)", q:[
+  "I like [cats].|わたしは ねこが すきです。",
+  "The [dog] is big.|その 犬は 大きい。",
+  "I see a [bird].|鳥が 見えます。",
+  "A [fish] can swim.|魚は およげます。",
+  "The [rabbit] is white.|その うさぎは 白い。",
+  "A [lion] is strong.|ライオンは つよい。",
+  "Look at the [monkey].|サルを 見て。",
+  "The [elephant] has a long nose.|ゾウは はなが 長い。",
+  "A [horse] can run fast.|馬は はやく 走れます。",
+  "The [frog] is green.|その カエルは みどり色です。",
+  "I have a [dog].|わたしは 犬を かっています。"]},
+ {id:"food", name:"たべもの", lv:1, c:"var(--raku)", q:[
+  "I like [apples].|わたしは りんごが すきです。",
+  "I eat [bread] every morning.|わたしは まいあさ パンを 食べます。",
+  "I drink [milk].|わたしは 牛乳を のみます。",
+  "The [cake] is sweet.|その ケーキは あまい。",
+  "I want some [water].|水が ほしいです。",
+  "I like [bananas].|わたしは バナナが すきです。",
+  "This [pizza] is hot.|この ピザは あつい。",
+  "Let's eat [lunch].|おひるごはんを 食べよう。",
+  "I eat an [egg].|わたしは たまごを 1こ 食べます。",
+  "The [soup] is good.|その スープは おいしい。",
+  "I like [rice].|わたしは ごはんが すきです。"]},
+ {id:"color", name:"いろ と かず", lv:1, c:"var(--raku)", q:[
+  "The sky is [blue].|空は 青い。",
+  "I like [red].|わたしは 赤が すきです。",
+  "The banana is [yellow].|その バナナは 黄色です。",
+  "The grass is [green].|草は みどり色です。",
+  "The snow is [white].|雪は 白い。",
+  "The cat is [black].|その ねこは 黒い。",
+  "I have [two] dogs.|わたしは 犬を 2ひき かっています。",
+  "I see [three] birds.|鳥が 3わ 見えます。",
+  "I have [five] pencils.|わたしは えんぴつを 5本 もっています。",
+  "I am [seven] years old.|わたしは 7さいです。",
+  "I have [ten] fingers.|ゆびが 10本 あります。"]},
+ {id:"school", name:"がっこう", lv:2, c:"var(--ai)", q:[
+  "This is my [pen].|これは わたしの ペンです。",
+  "I have a [book].|わたしは 本を もっています。",
+  "Open the [door].|ドアを あけて。",
+  "I go to [school].|わたしは 学校へ 行きます。",
+  "My [teacher] is kind.|わたしの 先生は やさしい。",
+  "Please [sit] down.|すわってください。",
+  "[Stand] up, please.|立ってください。",
+  "I study [English].|わたしは 英語を 勉強します。",
+  "I like [music].|わたしは 音楽が すきです。",
+  "I like [math].|わたしは 算数が すきです。",
+  "This is my [friend].|この子は わたしの ともだちです。"]},
+ {id:"day", name:"まいにち", lv:2, c:"var(--ai)", q:[
+  "I [play] soccer.|わたしは サッカーを します。",
+  "I [get] up at six.|わたしは 6時に おきます。",
+  "I [go] to bed at nine.|わたしは 9時に ねます。",
+  "I [read] books.|わたしは 本を 読みます。",
+  "I can [swim].|わたしは およげます。",
+  "I [watch] TV.|わたしは テレビを 見ます。",
+  "I [walk] to school.|わたしは 歩いて 学校へ 行きます。",
+  "I [wash] my hands.|わたしは 手を あらいます。",
+  "I [brush] my teeth.|わたしは 歯を みがきます。",
+  "I can [run] fast.|わたしは はやく 走れます。",
+  "I [help] my mother.|わたしは 母を 手つだいます。"]},
+ {id:"weather", name:"てんき と きせつ", lv:2, c:"var(--ai)", q:[
+  "It is [sunny] today.|今日は 晴れです。",
+  "It is [rainy] today.|今日は 雨です。",
+  "It is [cloudy] today.|今日は くもりです。",
+  "It is [cold] today.|今日は さむい。",
+  "It is [hot] in summer.|夏は あつい。",
+  "It is [windy] today.|今日は 風が 強い。",
+  "Today is [Monday].|今日は 月曜日です。",
+  "See you on [Friday].|金曜日に 会おうね。",
+  "I like [spring].|わたしは 春が すきです。",
+  "I swim in [summer].|わたしは 夏に およぎます。",
+  "My birthday is in [May].|わたしの たんじょう日は 5月です。"]},
+ {id:"jh1a", name:"中1 ① しつもん", lv:3, c:"var(--do)", q:[
+  "[Are] you a student?|あなたは 生徒ですか？",
+  "Yes, I [am].|はい、そうです。",
+  "[Do] you like dogs?|あなたは 犬が すきですか？",
+  "I do [not] like snakes.|わたしは ヘビが すきではありません。",
+  "She [is] my sister.|かのじょは わたしの 姉です。",
+  "He [plays] tennis.|かれは テニスを します。",
+  "She [has] a cat.|かのじょは ねこを かっています。",
+  "He [likes] music.|かれは 音楽が すきです。",
+  "[What] is this?|これは 何ですか？",
+  "[Where] do you live?|あなたは どこに 住んでいますか？",
+  "[Who] is that boy?|あの 男の子は だれですか？",
+  "[How] many books do you have?|あなたは 本を 何さつ もっていますか？"]},
+ {id:"jh1b", name:"中1 ② できる・している", lv:3, c:"var(--do)", q:[
+  "I [can] play the piano.|わたしは ピアノが ひけます。",
+  "[Can] you swim?|あなたは およげますか？",
+  "I am [reading] a book.|わたしは 本を 読んでいます。",
+  "She is [running] in the park.|かのじょは 公園で 走っています。",
+  "They [are] my friends.|かれらは わたしの ともだちです。",
+  "That is [his] bike.|あれは かれの 自転車です。",
+  "[Please] help me.|手つだってください。",
+  "[When] is your birthday?|あなたの たんじょう日は いつですか？",
+  "[Whose] pen is this?|これは だれの ペンですか？",
+  "What [time] is it?|何時ですか？",
+  "[Which] do you like, cats or dogs?|ねこと 犬の どちらが すきですか？"]}
+];
+var LVNAME = {1:"★ 小学（はじめて）", 2:"★★ 小学（なれてきた）", 3:"★★★ 中学1年"};
+var PER = 5;   // 1つの島の 橋の数
+
+/* ═══════════ 小道具 ═══════════ */
+function $(id){ return document.getElementById(id); }
+function shuffle(a){ var i,j,t; for(i=a.length-1;i>0;i--){ j=Math.floor(Math.random()*(i+1)); t=a[i];a[i]=a[j];a[j]=t; } return a; }
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function load(k,d){ try{ var v=localStorage.getItem(k); return v?JSON.parse(v):d; }catch(e){ return d; } }
+function save(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
+var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+// "I like [cats].|わたしは…" → {key, pre, ans, post, jp}
+function parse(line, sid){
+  var p = line.split("|"), m = p[0].match(/^(.*)\[([A-Za-z]+)\](.*)$/);
+  return {key:sid+":"+p[0], pre:m[1], ans:m[2], post:m[3], jp:p[1], sid:sid};
+}
+STAGES.forEach(function(s){ s.items = s.q.map(function(l){ return parse(l, s.id); }); });
+
+var pref  = load("kh_pref", {mode: matchMedia("(pointer:coarse)").matches ? "tile" : "kb", sound:true});
+var best  = load("kh_best", {});    // 島ごとの いちばんよい ★
+var weak  = load("kh_weak", {});    // まちがえた問題の key → 1
+
+/* ═══════════ おと（端末の中で鳴らすだけ） ═══════════ */
+var AC = null;
+function beep(f, dur, type, vol, when){
+  if(!pref.sound) return;
+  try{
+    AC = AC || new (window.AudioContext||window.webkitAudioContext)();
+    var t = AC.currentTime + (when||0), o = AC.createOscillator(), g = AC.createGain();
+    o.type = type||"sine"; o.frequency.setValueAtTime(f, t);
+    g.gain.setValueAtTime(vol||.12, t); g.gain.exponentialRampToValueAtTime(.001, t+dur);
+    o.connect(g); g.connect(AC.destination); o.start(t); o.stop(t+dur);
+  }catch(e){}
+}
+function sGood(){ beep(880,.09,"triangle",.14); }
+function sBad(){ beep(160,.22,"square",.06); }
+function sDone(){ [523,659,784,1047].forEach(function(f,i){ beep(f,.18,"triangle",.12,i*.09); }); }
+// 英文の よみあげ。端末に入っている声（localService）だけを使う。なければ よまない
+function speak(text){
+  if(!pref.sound || !window.speechSynthesis) return;
+  var vs = speechSynthesis.getVoices().filter(function(v){ return /^en/i.test(v.lang) && v.localService; });
+  if(!vs.length) return;
+  var u = new SpeechSynthesisUtterance(text);
+  u.voice = vs.filter(function(v){ return /en-US/i.test(v.lang); })[0] || vs[0];
+  u.lang = u.voice.lang; u.rate = .85;
+  speechSynthesis.cancel(); speechSynthesis.speak(u);
+}
+if(window.speechSynthesis) speechSynthesis.getVoices();
+
+/* ═══════════ タイトル ═══════════ */
+function paintTitle(){
+  var weakItems = weakList();
+  var html = STAGES.map(function(s, i){
+    var b = best[s.id]||0, st = "";
+    for(var k=0;k<3;k++) st += k<b ? "<b>★</b>" : "☆";
+    return '<button class="isl" type="button" data-s="'+i+'" style="--c:'+s.c+'">'
+      + '<span class="no">しま '+(i+1)+'</span><span class="nm">'+esc(s.name)+'</span>'
+      + '<span class="lv">'+LVNAME[s.lv]+'</span><span class="best">'+st+'</span></button>';
+  }).join("");
+  if(weakItems.length){
+    html += '<button class="isl weak" type="button" data-s="weak"><span class="no">とくべつ</span>'
+      + '<span class="nm">にがての島</span><span class="lv">まちがえた文（'+weakItems.length+'）</span><span class="best"></span></button>';
+  }
+  $("isles").innerHTML = html;
+  [].forEach.call(document.querySelectorAll("#modeRow .pick"), function(b){
+    b.setAttribute("aria-pressed", b.dataset.mode===pref.mode);
+  });
+}
+function weakList(){
+  var all = []; STAGES.forEach(function(s){ all = all.concat(s.items); });
+  return all.filter(function(x){ return weak[x.key]; });
+}
+$("modeRow").addEventListener("click", function(e){
+  var b = e.target.closest("[data-mode]"); if(!b) return;
+  pref.mode = b.dataset.mode; save("kh_pref", pref); paintTitle();
+});
+$("isles").addEventListener("click", function(e){
+  var b = e.target.closest("[data-s]"); if(!b) return;
+  start(b.dataset.s);
+});
+
+/* ═══════════ ゲーム ═══════════ */
+var G = null;
+
+function show(id){
+  ["title","result"].forEach(function(s){ $(s).classList.toggle("on", s===id); });
+  $("game").classList.toggle("on", id==="game");
+}
+
+function start(sidx){
+  var st, items;
+  if(sidx==="weak"){
+    items = shuffle(weakList()).slice(0, PER);
+    st = {id:"weak", name:"にがての島", c:"var(--do)"};
+  } else {
+    st = STAGES[+sidx];
+    items = shuffle(st.items.slice()).slice(0, PER);
+  }
+  G = {st:st, sidx:sidx, items:items, n:0, pos:0, miss:0, help:0, slotMiss:0, busy:false,
+       log:[], t0:Date.now(), qMiss:0};
+  $("sname").textContent = (sidx==="weak" ? "" : "しま"+(+sidx+1)+"　") + st.name;
+  show("game");
+  $("snd").textContent = pref.sound ? "🔊" : "🔈";
+  setQ(true);
+}
+
+function paintDots(){
+  var h = "";
+  for(var i=0;i<G.items.length;i++) h += '<i class="'+(i<G.n?"done":i===G.n?"now":"")+'"></i>';
+  $("dots").innerHTML = h;
+}
+
+// ことばを 板に。句読点だけの かたまりは 小さい板にする
+function planks(txt){
+  return txt.trim().split(/\s+/).filter(Boolean).map(function(w){
+    return '<span class="plank en'+(/^[.,?!]+$/.test(w)?" p":"")+'">'+esc(w)+'</span>';
+  }).join("");
+}
+
+function setQ(first){
+  var q = G.items[G.n];
+  G.pos = 0; G.slotMiss = 0; G.qMiss = 0; G.qHelp = 0; G.busy = false;
+  paintDots();
+  $("jp").innerHTML = '<small>いみ</small>' + esc(q.jp);
+  var slots = "";
+  for(var i=0;i<q.ans.length;i++) slots += '<span class="slot en" data-i="'+i+'"></span>';
+  // 文のおわりの記号（. ? ,）は、あなの すぐあとに くっつける
+  var post = q.post, glue = "", m = post.match(/^([.,?!]+)(.*)$/);
+  if(m){ glue = m[1]; post = m[2]; }
+  var pre = q.pre.replace(/\s+$/,"");
+  $("bridge").innerHTML = '<div class="deck en" id="deck"><span class="fill-l"></span>'
+    + planks(pre)
+    + '<span class="gap">'+slots+(glue?'<span class="plank p en">'+esc(glue)+'</span>':'')+'</span>'
+    + planks(post) + '<span class="fill-r"></span></div>';
+  $("castle").classList.toggle("on", G.n===G.items.length-1);
+  fitBridge();
+  placeWalker(false);
+  paintInput();
+  markCur();
+  if(!first){
+    var stg = $("stage"); stg.classList.add("in");
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){ stg.classList.remove("in"); }); });
+  }
+}
+
+// 橋の文字の大きさを、画面のはばに合わせる
+function fitBridge(){
+  var br = $("bridge"), deck = $("deck"), sc = $("scene");
+  var fs = Math.min(32, Math.max(19, sc.clientWidth/20));
+  deck.style.fontSize = fs+"px";
+  while(deck.scrollWidth > br.clientWidth + 1 && fs > 11){ fs -= 1; deck.style.fontSize = fs+"px"; }
+  // 橋の高さ＝島の草の高さ
+  var isl = document.querySelector(".island.l");
+  var bb = $("stage").offsetHeight*0.04 + isl.offsetHeight*0.62;
+  br.style.bottom = bb + "px";
+  // 日本語の札は、橋と たびびとの すこし上に
+  var jb = bb + Math.max(deck.offsetHeight, 10) + ($("walker").offsetHeight||80) + 16;
+  $("jp").style.bottom = Math.min(jb, sc.clientHeight - $("jp").offsetHeight - 10) + "px";
+}
+function placeWalker(across){
+  var w = $("walker"), sc = $("scene"), isl = document.querySelector(".island.l");
+  var ww = w.offsetWidth || 90, stageH = $("stage").offsetHeight;
+  var ground = stageH*0.04 + isl.offsetHeight*0.66;   // 草の上
+  w.style.bottom = ground + "px";
+  if(across){
+    w.style.left = (sc.clientWidth - ww - sc.clientWidth*0.02) + "px";
+  } else {
+    w.style.transition = "none";
+    w.style.left = Math.max(2, sc.clientWidth*0.01) + "px";
+    void w.offsetWidth; w.style.transition = "";
+  }
+}
+window.addEventListener("resize", function(){ if(G && $("game").classList.contains("on") && !G.busy){ fitBridge(); placeWalker(false); } });
+
+/* こたえる所：もじふだ か キーボード */
+var ROWS = ["qwertyuiop","asdfghjkl","zxcvbnm"];
+function paintInput(){
+  var q = G.items[G.n], a = $("inputArea");
+  if(pref.mode==="tile"){
+    var letters = q.ans.toLowerCase().split(""), pool = "abcdefghijklmnopqrstuvwxyz".split("").filter(function(c){ return letters.indexOf(c)<0; });
+    var extra = shuffle(pool).slice(0, q.ans.length<=3 ? 3 : q.ans.length<=6 ? 4 : 3);
+    G.tiles = shuffle(letters.concat(extra));
+    a.innerHTML = '<div class="tiles">' + G.tiles.map(function(c,i){
+      return '<button class="tile" type="button" data-t="'+i+'">'+c+'</button>'; }).join("") + '</div>';
+  } else {
+    a.innerHTML = '<div class="kb">' + ROWS.map(function(r){
+      return '<div class="r">' + r.split("").map(function(c){
+        return '<button class="key" type="button" data-k="'+c+'">'+c+'</button>'; }).join("") + '</div>';
+    }).join("") + '</div>';
+  }
+}
+$("inputArea").addEventListener("click", function(e){
+  var t = e.target.closest("[data-t]"), k = e.target.closest("[data-k]");
+  if(t) press(t.textContent, t);
+  else if(k) press(k.dataset.k, k);
+});
+document.addEventListener("keydown", function(e){
+  if(!G || !$("game").classList.contains("on")) return;
+  if(e.metaKey || e.ctrlKey || e.altKey) return;
+  if(/^[a-zA-Z]$/.test(e.key)){
+    e.preventDefault();
+    var el = null;
+    if(pref.mode==="tile"){
+      el = [].filter.call(document.querySelectorAll(".tile:not(.used)"), function(b){ return b.textContent===e.key.toLowerCase(); })[0];
+    } else {
+      el = document.querySelector('.key[data-k="'+e.key.toLowerCase()+'"]');
+      if(el){ el.classList.add("dn"); setTimeout(function(){ el.classList.remove("dn"); }, 120); }
+    }
+    press(e.key, el);
+  } else if(e.key==="Escape"){ quit(); }
+});
+
+function markCur(){
+  [].forEach.call(document.querySelectorAll(".slot"), function(s){ s.classList.toggle("cur", +s.dataset.i===G.pos); });
+  [].forEach.call(document.querySelectorAll(".hint"), function(x){ x.classList.remove("hint"); });
+  $("tip").textContent = G.slotMiss>=2 ? "ひかっている 文字を おしてみよう" : "あなに入る ことばは？";
+  if(G.slotMiss>=2) glowNext();
+}
+function glowNext(){
+  var c = G.items[G.n].ans[G.pos].toLowerCase(), el;
+  if(pref.mode==="tile") el = [].filter.call(document.querySelectorAll(".tile:not(.used)"), function(b){ return b.textContent===c; })[0];
+  else el = document.querySelector('.key[data-k="'+c+'"]');
+  if(el) el.classList.add("hint");
+}
+
+function press(ch, el){
+  if(!G || G.busy) return;
+  var q = G.items[G.n], want = q.ans[G.pos];
+  var slot = document.querySelector('.slot[data-i="'+G.pos+'"]');
+  if(ch.toLowerCase() === want.toLowerCase()){
+    fill(slot, want, false);
+    if(el && el.classList.contains("tile")) el.classList.add("used");
+    sGood(); next();
+  } else {
+    G.miss++; G.qMiss++; G.slotMiss++;
+    sBad();
+    // まちがえた板が ガタッとゆれて おちる
+    var f = document.createElement("span"); f.className = "fall"; f.textContent = ch.toLowerCase();
+    slot.appendChild(f); setTimeout(function(){ f.remove(); }, 800);
+    slot.classList.remove("shake"); void slot.offsetWidth; slot.classList.add("shake");
+    if(el){ el.classList.remove("bad"); void el.offsetWidth; el.classList.add("bad");
+      setTimeout(function(){ el.classList.remove("bad"); }, 400); }
+    markCur();
+  }
+}
+function fill(slot, c, help){
+  slot.textContent = c; slot.classList.add("fill"); if(help) slot.classList.add("help");
+  slot.classList.remove("cur");
+}
+function next(){
+  G.pos++; G.slotMiss = 0;
+  if(G.pos < G.items[G.n].ans.length){ markCur(); return; }
+  cross();
+}
+$("hintb").addEventListener("click", function(){
+  if(!G || G.busy) return;
+  var q = G.items[G.n], c = q.ans[G.pos];
+  G.help++; G.qHelp++;
+  var t = pref.mode==="tile" ? [].filter.call(document.querySelectorAll(".tile:not(.used)"), function(b){ return b.textContent===c.toLowerCase(); })[0] : null;
+  if(t) t.classList.add("used");
+  fill(document.querySelector('.slot[data-i="'+G.pos+'"]'), c, true);
+  beep(600,.08,"sine",.1); next();
+});
+
+// 橋ができた → わたる
+function cross(){
+  var q = G.items[G.n];
+  G.busy = true;
+  G.log.push({q:q, ok:!G.qMiss && !G.qHelp});
+  if(G.qMiss || G.qHelp) weak[q.key] = 1; else delete weak[q.key];
+  save("kh_weak", weak);
+  $("deck").classList.add("done");
+  [].forEach.call(document.querySelectorAll(".hint"), function(x){ x.classList.remove("hint"); });
+  sDone();
+  speak(q.pre + q.ans + q.post);
+  var words = ["Yes!","Great!","Nice!","Good job!","Perfect!"];
+  var say = $("say"); say.textContent = G.qMiss||G.qHelp ? words[Math.floor(Math.random()*3)] : "Perfect!";
+  say.classList.add("on");
+  var w = $("walker");
+  setTimeout(function(){
+    say.classList.remove("on");
+    w.classList.add("go"); placeWalker(true);
+  }, 700);
+  setTimeout(function(){
+    w.classList.remove("go");
+    G.n++;
+    if(G.n >= G.items.length){ finish(); return; }
+    var stg = $("stage"); stg.classList.add("out");
+    setTimeout(function(){ stg.classList.remove("out"); setQ(false); }, reduce ? 0 : 380);
+  }, reduce ? 900 : 2300);
+}
+
+function finish(){
+  var w = $("walker"); w.classList.add("cheer");
+  var tt = document.createElement("div"); tt.className = "toast"; tt.textContent = "お城に ついた！";
+  $("scene").appendChild(tt);
+  paintDots();
+  setTimeout(function(){ w.classList.remove("cheer"); tt.remove(); result(); }, 1700);
+}
+
+function result(){
+  var pen = G.miss + G.help;
+  var stars = pen<=1 ? 3 : pen<=4 ? 2 : 1;
+  var sid = G.st.id, isNew = false;
+  if(sid!=="weak" && stars > (best[sid]||0)){ isNew = true; best[sid] = stars; save("kh_best", best); }
+  var secs = Math.round((Date.now()-G.t0)/1000);
+  var st = ""; for(var i=0;i<3;i++) st += i<stars ? "<b>★</b>" : "★";
+  var list = G.log.map(function(x){
+    return '<li class="'+(x.ok?"":"miss")+'"><span class="en">'+esc(x.q.pre)+'<b>'+esc(x.q.ans)+'</b>'+esc(x.q.post)+'</span>'+esc(x.q.jp)+'</li>';
+  }).join("");
+  var nextBtn = (sid!=="weak" && +G.sidx < STAGES.length-1) ? '<button class="btn" id="rNext">つぎの島へ ▶</button>' : '';
+  $("rbox").innerHTML = '<h2>'+esc(G.st.name)+' クリア！</h2>'
+    + '<div class="stars">'+st+'</div>'
+    + '<div class="rmeta">まちがい '+G.miss+'かい ／ ヒント '+G.help+'かい ／ '+secs+'びょう</div>'
+    + (isNew ? '<span class="rnew">きろく こうしん！</span>' : '')
+    + '<ul class="wl">'+list+'</ul>'
+    + '<div class="rbtns">'+nextBtn
+    + '<button class="btn '+(nextBtn?"sub":"")+'" id="rAgain">もういちど</button>'
+    + '<button class="btn sub" id="rHome">島をえらぶ</button>'
+    + '<a class="btn sub" href="../">ゲームランドへ</a></div>';
+  show("result"); $("result").scrollTop = 0;
+  if(stars===3) confetti();
+  var n = $("rNext"); if(n) n.onclick = function(){ start(String(+G.sidx+1)); };
+  $("rAgain").onclick = function(){ start(G.sidx); };
+  $("rHome").onclick = function(){ paintTitle(); show("title"); };
+}
+
+function confetti(){
+  if(reduce) return;
+  var cols = ["#F5B70A","#F0603F","#4A6BC0","#4CB86B","#F58FB0","#7EC8E3"];
+  for(var i=0;i<40;i++){
+    var c = document.createElement("div"); c.className = "conf";
+    c.style.left = Math.random()*100+"vw"; c.style.background = cols[i%cols.length];
+    document.body.appendChild(c);
+    c.animate([{transform:"translateY(0) rotate(0)"},{transform:"translateY("+(innerHeight+60)+"px) rotate("+(360+Math.random()*540)+"deg)"}],
+      {duration:1600+Math.random()*1400, delay:Math.random()*500, easing:"ease-in", fill:"forwards"});
+    (function(el){ setTimeout(function(){ el.remove(); }, 3600); })(c);
+  }
+}
+
+function quit(){ G = null; if(window.speechSynthesis) speechSynthesis.cancel(); paintTitle(); show("title"); }
+$("quit").addEventListener("click", quit);
+$("snd").addEventListener("click", function(){
+  pref.sound = !pref.sound; save("kh_pref", pref);
+  this.textContent = pref.sound ? "🔊" : "🔈";
+});
+
+paintTitle();
+})();
+</script>
+</body>
+</html>

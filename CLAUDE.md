@@ -59,6 +59,7 @@
 | `02_nandemo_learning_quest/` | なんでもラーニングクエスト | 公開中 |
 | `04_sekai_no_recipe/` | せかいのレシピ ／ げんしのへや | 公開中 |
 | `15_kokki_quest/` `16_shuto_quest/` | 国旗クエスト・首都あてクエスト（02と同じエンジン） | 公開中 |
+| `17_kotoba_no_hashi/` | ことばの橋 English Typing Game（英文の穴うめタイピング。クエストとは別の仕組み。英文は index.html の `STAGES`） | 公開中 |
 | `06`〜`14` の `*_quest/` | くく・たしざん・ひきざん・かけざん・わりざん・かんじ・えいたんご・げんそきごう・ねんごう（02と同じエンジン） | 公開中 |
 | `01_kingdom_of_six/` | 王国発展記 〜六つの選択〜 | 非公開（`.gitignore`） |
 | `03_okane_oukoku/` | おかね王国のつくりかた | 非公開（`.gitignore`） |

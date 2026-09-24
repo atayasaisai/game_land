@@ -11,6 +11,7 @@
 | `02_nandemo_learning_quest/` | なんでもラーニングクエスト（国旗・首都の2つ入り。旧URL用） | 公開中 |
 | `15_kokki_quest/` | 国旗クエスト | 公開中 |
 | `16_shuto_quest/` | 首都あてクエスト | 公開中 |
+| `17_kotoba_no_hashi/` | ことばの橋 English Typing Game | 公開中 |
 | `04_sekai_no_recipe/` | せかいのレシピ ／ げんしのへや | 公開中 |
 | `01_kingdom_of_six/` | 王国発展記 〜六つの選択〜 | 非公開（`.gitignore`） |
 | `03_okane_oukoku/` | おかね王国のつくりかた | 非公開（`.gitignore`） |
