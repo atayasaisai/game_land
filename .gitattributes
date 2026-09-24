@@ -1,0 +1,10 @@
+# 改行コードは LF に固定する。
+# Windows の Git は既定で CRLF に変換するため、これが無いと
+# 次のコミットで全HTMLが「全行変更された」ことになってしまう。
+* text=auto eol=lf
+
+# 画像と書き出しは触らない
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.zip binary
