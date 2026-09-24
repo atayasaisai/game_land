@@ -224,6 +224,11 @@ svg{display:block}
     <div class="row" id="lvRow"></div>
   </div>
 
+  <div class="opt">
+    <h3>もんだいの数</h3>
+    <div class="row" id="qnRow"></div>
+  </div>
+
   <button class="btn start pop" id="go">はじめる ▶</button>
 
   <p class="note">
@@ -297,7 +302,9 @@ var PACKLIST = [
 
 /* ═══════════ 状態 ═══════════ */
 
-var sel = {pk:"flagName", lv:1, weakOnly:false};
+var sel = {pk:"flagName", lv:1, weakOnly:false, qn:30};
+var QNLIST = [10, 30, 50, "endless"];
+var QNNAME = {10:"10問", 30:"30問", 50:"50問", endless:"エンドレス"};
 var S = null;
 var stepTimer = null, mid = 0;
 
@@ -327,6 +334,11 @@ function paintTitle(){
   + '<button class="pick" type="button" data-lv="w" aria-pressed="'+sel.weakOnly+'"'
   + (weakN?"":" disabled") + '>にがてだけ'+(weakN?"（"+weakN+"）":"")+'</button>';
 
+  $("qnRow").innerHTML = QNLIST.map(function(q){
+    return '<button class="pick" type="button" data-qn="'+q+'" aria-pressed="'+(sel.qn===q)+'">'
+      + QNNAME[q] + '</button>';
+  }).join("");
+
   $("pkName").innerHTML = '<span class="pop">'+esc(curPack().title.split("▸")[0].trim())+'</span>'
     + '<small>'+esc(curPack().ask)+'</small>';
 }
@@ -345,10 +357,16 @@ $("lvRow").addEventListener("click", function(e){
   else { sel.weakOnly = false; sel.lv = +b.dataset.lv; }
   paintTitle();
 });
+$("qnRow").addEventListener("click", function(e){
+  var b = e.target.closest("[data-qn]"); if(!b) return;
+  sel.qn = b.dataset.qn === "endless" ? "endless" : +b.dataset.qn;
+  paintTitle();
+});
 
 /* ═══════════ 出題 ═══════════ */
 
-function pickItems(){
+// いま選ばれている条件（教科パック・むずかしさ・にがてだけ）にあう問題のプール
+function currentPool(){
   var pack = curPack(), all = pack.items, list;
   if(sel.weakOnly){
     var w = loadWeak(pack.id);
@@ -357,7 +375,16 @@ function pickItems(){
     list = (sel.lv===0) ? all.slice() : all.filter(function(x){ return x.lv===sel.lv; });
   }
   if(!list.length) list = all.slice();
-  return shuffle(list.slice()).slice(0, 12);
+  return list;
+}
+
+function pickItems(){
+  var list = currentPool();
+  if(sel.qn === "endless") return shuffle(list.slice());
+  // プールがすくなくても、出題数に足りるまで シャッフルした周回をつなげる
+  var need = sel.qn, out = [];
+  while(out.length < need) out = out.concat(shuffle(list.slice()));
+  return out.slice(0, need);
 }
 
 // まぎらわしい選択肢を、なるべく同じ地域からえらぶ
@@ -621,8 +648,9 @@ function start(weakOnly){
   S = {
     pid: curPack().id, ask: curPack().ask,
     queue: items.map(function(it){ return {it:it, tries:0}; }),
-    field: [], life: LIVES, hit: 0, total: items.length,
-    combo: 0, best: 0, score: 0, weak: {}, t0: Date.now(), over: false, sinceSpawn: SPAWN
+    field: [], life: LIVES, hit: 0, total: items.length, attempted: 0,
+    combo: 0, best: 0, score: 0, weak: {}, t0: Date.now(), over: false, sinceSpawn: SPAWN,
+    endless: sel.qn === "endless"
   };
   shownScore = 0;
   $("scoreVal").textContent = "0";
@@ -659,9 +687,14 @@ function tick(first){
 
 // 次の敵を出す。画面が空になったら間をあけずに出す(こたえるものが無い時間を作らない)
 function maybeSpawn(){
+  // エンドレスは 問題ぎれになるたび、おなじ条件のプールから もう一周ぶん補充する
+  if(S.endless && !S.queue.length){
+    S.queue = shuffle(currentPool().slice()).map(function(it){ return {it:it, tries:0}; });
+  }
   if(!S.queue.length || S.field.length >= MAXFLD) return;
   if(S.sinceSpawn < SPAWN && S.field.length > 0) return;
   var q = S.queue.shift();
+  if(q.tries === 0) S.attempted++;
   S.field.push({id: ++mid, it: q.it, tries: q.tries, step: 0, mon: MONS[mid % MONS.length], node: null});
   S.sinceSpawn = 0;
 }
@@ -751,7 +784,7 @@ function paintHUD(){
   var h = "", i;
   for(i = 0; i < LIVES; i++) h += '<i class="' + (i < S.life ? "on" : "") + '">❤️</i>';
   $("hearts").innerHTML = h;
-  $("left").textContent = S.queue.length + S.field.length;
+  $("left").textContent = S.endless ? "∞" : (S.queue.length + S.field.length);
   $("hit").textContent = S.hit;
   var c = $("combo");
   c.textContent = S.combo >= 2 ? (S.combo + " コンボ") : "";
@@ -816,10 +849,12 @@ function showResult(cleared){
              : '<p class="prev">さいこう記録 ' + prev.toLocaleString("ja-JP") + ' てん</p>');
 
   // 「せいかい」は一発で当てた割合。倒した数だと、クリア時は必ず100%になってしまう。
+  // エンドレスは「予定の問題数」がないので、実際に出あった数(attempted)を分母にする。
   var missed = Object.keys(S.weak).length,
-      pct = S.total ? Math.round(Math.max(0, S.total - missed) / S.total * 100) : 0;
+      total = S.endless ? S.attempted : S.total,
+      pct = total ? Math.round(Math.max(0, total - missed) / total * 100) : 0;
   $("stats").innerHTML =
-      '<div class="stat"><small>たおした数</small><b>' + S.hit + '<span style="font-size:.6em">/' + S.total + '</span></b></div>'
+      '<div class="stat"><small>たおした数</small><b>' + S.hit + '<span style="font-size:.6em">' + (S.endless ? "" : "/" + S.total) + '</span></b></div>'
     + '<div class="stat"><small>いっぱつ正解</small><b>' + pct + '%</b></div>'
     + '<div class="stat"><small>さいだいコンボ</small><b>' + S.best + '</b></div>'
     + '<div class="stat"><small>かかった時間</small><b>' + S.sec + '<span style="font-size:.6em">びょう</span></b></div>';
