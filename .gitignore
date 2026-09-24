@@ -7,6 +7,8 @@
 
 # ── 旧トップページ（中身は index.html に引きついである）──
 atayasaisai-gameland.html
+# ── 2代目トップページ（2026-09-24 まで。git のタグ top-v2 でも戻せる）──
+atayasaisai-gameland_v2_2026-09-24.html
 
 # ── 配布用の書き出し（サイトには要らない。重いだけ）──
 *.zip

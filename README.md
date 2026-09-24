@@ -20,9 +20,11 @@
 ## 手もとで確かめる
 
 ```bash
-python3 -m http.server 8399
+py -m http.server 8399
 ```
-→ http://127.0.0.1:8399/
+（macOS なら `python3 -m http.server 8399`）
+
+→ http://127.0.0.1:8399/ 　止めるのは Ctrl+C
 
 （`file://` で直接開くと、相対パスの読み込みが止まるブラウザがあります）
 
