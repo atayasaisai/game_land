@@ -16,7 +16,7 @@ var items = [], a, b, t, u;
 // やさしい：1けたどうし、くり下がりなし（a>=b、どちらも1けた）
 for(a = 1; a <= 9; a++){
   for(b = 1; b <= a; b++){
-    items.push({ key:"y"+a+"_"+b, q:card(a+"－"+b), a:String(a-b), lv:1, reg:"lv1" });
+    items.push({ key:"y"+a+"_"+b, q:card(a+"−"+b), a:String(a-b), lv:1, reg:"lv1" });
   }
 }
 
@@ -24,7 +24,7 @@ for(a = 1; a <= 9; a++){
 for(a = 11; a <= 18; a++){
   for(b = 2; b <= 9; b++){
     if(b < a - 9){
-      items.push({ key:"f"+a+"_"+b, q:card(a+"－"+b), a:String(a-b), lv:2, reg:"lv2" });
+      items.push({ key:"f"+a+"_"+b, q:card(a+"−"+b), a:String(a-b), lv:2, reg:"lv2" });
     }
   }
 }
@@ -34,7 +34,7 @@ for(a = 11; a <= 18; a++){
   [3,6,9].forEach(function(uu){
     a = tt * 10 + uu;
     [1,4,7].forEach(function(bb){
-      items.push({ key:"m"+a+"_"+bb, q:card(a+"－"+bb), a:String(a-bb), lv:3, reg:"lv3" });
+      items.push({ key:"m"+a+"_"+bb, q:card(a+"−"+bb), a:String(a-bb), lv:3, reg:"lv3" });
     });
   });
 });
