@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- 分子のイラスト（ぶんしのへや用）。水の分子 H2O：酸素（赤）に 水素（白）が 2つ -->
+  <defs>
+    <radialGradient id="space" cx="50%" cy="45%" r="60%">
+      <stop offset="0" stop-color="#23346e"/><stop offset=".55" stop-color="#101838"/><stop offset="1" stop-color="#05070f"/>
+    </radialGradient>
+    <radialGradient id="o" cx="35%" cy="30%" r="75%">
+      <stop offset="0" stop-color="#ffe0d8"/><stop offset=".3" stop-color="#ff6b6b"/><stop offset=".8" stop-color="#c8283a"/><stop offset="1" stop-color="#6e0d18"/>
+    </radialGradient>
+    <radialGradient id="h" cx="35%" cy="30%" r="75%">
+      <stop offset="0" stop-color="#ffffff"/><stop offset=".45" stop-color="#e6eeff"/><stop offset="1" stop-color="#8e9cc0"/>
+    </radialGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#7fe3ff" stop-opacity=".35"/><stop offset="1" stop-color="#7fe3ff" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="round"><circle cx="100" cy="100" r="96"/></clipPath>
+  </defs>
+  <g clip-path="url(#round)">
+    <rect width="200" height="200" fill="url(#space)"/>
+    <g fill="#fff">
+      <circle cx="28" cy="36" r=".9" opacity=".8"/><circle cx="162" cy="28" r="1.2" opacity=".9"/><circle cx="178" cy="150" r=".8" opacity=".6"/>
+      <circle cx="40" cy="160" r="1" opacity=".7"/><circle cx="120" cy="182" r=".7" opacity=".6"/><circle cx="70" cy="18" r=".7" opacity=".5"/>
+    </g>
+    <circle cx="100" cy="100" r="80" fill="url(#glow)"/>
+    <g>
+      <animateTransform attributeName="transform" type="rotate" values="-6 100 100;6 100 100;-6 100 100" dur="6s" repeatCount="indefinite"/>
+      <!-- 手（結合） -->
+      <line x1="100" y1="92" x2="56" y2="128" stroke="#dde6ff" stroke-width="8" stroke-linecap="round"/>
+      <line x1="100" y1="92" x2="144" y2="128" stroke="#dde6ff" stroke-width="8" stroke-linecap="round"/>
+      <circle cx="56" cy="130" r="22" fill="url(#h)"/>
+      <circle cx="144" cy="130" r="22" fill="url(#h)"/>
+      <circle cx="100" cy="88" r="36" fill="url(#o)"/>
+      <text x="100" y="99" text-anchor="middle" font-family="sans-serif" font-weight="900" font-size="30" fill="#fff" opacity=".92">O</text>
+      <text x="56" y="138" text-anchor="middle" font-family="sans-serif" font-weight="900" font-size="20" fill="#34405e">H</text>
+      <text x="144" y="138" text-anchor="middle" font-family="sans-serif" font-weight="900" font-size="20" fill="#34405e">H</text>
+    </g>
+  </g>
+  <circle cx="100" cy="100" r="96" fill="none" stroke="#7fe8c4" stroke-width="3" opacity=".7"/>
+</svg>
