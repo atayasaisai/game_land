@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- 原子のイラスト（げんしのへや用）。陽子＝赤、中性子＝青灰、電子＝水色。電子は軌道の上を回る -->
+  <defs>
+    <radialGradient id="space" cx="50%" cy="45%" r="60%">
+      <stop offset="0" stop-color="#23346e"/><stop offset=".55" stop-color="#101838"/><stop offset="1" stop-color="#05070f"/>
+    </radialGradient>
+    <radialGradient id="core" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#ffb070" stop-opacity=".75"/><stop offset=".45" stop-color="#ff6a3d" stop-opacity=".22"/><stop offset="1" stop-color="#ff6a3d" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="pro" cx="35%" cy="30%" r="75%">
+      <stop offset="0" stop-color="#ffe0c8"/><stop offset=".25" stop-color="#ff7a52"/><stop offset=".75" stop-color="#d23a22"/><stop offset="1" stop-color="#7a160c"/>
+    </radialGradient>
+    <radialGradient id="neu" cx="35%" cy="30%" r="75%">
+      <stop offset="0" stop-color="#f2f6ff"/><stop offset=".25" stop-color="#a9b8d8"/><stop offset=".75" stop-color="#5d6f96"/><stop offset="1" stop-color="#27324d"/>
+    </radialGradient>
+    <radialGradient id="ele" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#ffffff"/><stop offset=".25" stop-color="#bdf4ff"/><stop offset=".55" stop-color="#3fc8ff" stop-opacity=".55"/><stop offset="1" stop-color="#3fc8ff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="orb" x1="0" x2="1">
+      <stop offset="0" stop-color="#7fe3ff" stop-opacity=".15"/><stop offset=".5" stop-color="#bdf4ff" stop-opacity=".95"/><stop offset="1" stop-color="#7fe3ff" stop-opacity=".15"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <clipPath id="round"><circle cx="100" cy="100" r="96"/></clipPath>
+    <path id="o1" d="M20,100 a80,28 0 1,0 160,0 a80,28 0 1,0 -160,0"/>
+  </defs>
+
+  <g clip-path="url(#round)">
+    <rect width="200" height="200" fill="url(#space)"/>
+    <g fill="#fff">
+      <circle cx="28" cy="36" r=".9" opacity=".8"/><circle cx="162" cy="28" r="1.2" opacity=".9"/><circle cx="178" cy="120" r=".8" opacity=".6"/>
+      <circle cx="40" cy="160" r="1" opacity=".7"/><circle cx="120" cy="178" r=".7" opacity=".6"/><circle cx="70" cy="18" r=".7" opacity=".5"/>
+      <circle cx="16" cy="104" r=".8" opacity=".6"/><circle cx="150" cy="170" r="1.1" opacity=".8"/><circle cx="186" cy="70" r=".7" opacity=".5"/>
+    </g>
+    <circle cx="100" cy="100" r="46" fill="url(#core)"/>
+
+    <!-- 軌道（うしろ半分） -->
+    <g fill="none" stroke="url(#orb)" stroke-width="1.6" filter="url(#glow)">
+      <ellipse cx="100" cy="100" rx="80" ry="28"/>
+      <ellipse cx="100" cy="100" rx="80" ry="28" transform="rotate(60 100 100)"/>
+      <ellipse cx="100" cy="100" rx="80" ry="28" transform="rotate(-60 100 100)"/>
+    </g>
+
+    <!-- 原子核：陽子と中性子 -->
+    <g>
+      <circle cx="92"  cy="92"  r="10" fill="url(#neu)"/>
+      <circle cx="109" cy="90"  r="10" fill="url(#pro)"/>
+      <circle cx="85"  cy="106" r="10" fill="url(#pro)"/>
+      <circle cx="116" cy="105" r="10" fill="url(#neu)"/>
+      <circle cx="101" cy="115" r="10" fill="url(#pro)"/>
+      <circle cx="100" cy="100" r="10.5" fill="url(#neu)"/>
+      <circle cx="96"  cy="84"  r="9"  fill="url(#pro)"/>
+    </g>
+
+    <!-- 電子：それぞれの軌道を回る -->
+    <g filter="url(#glow)">
+      <g><circle r="9" fill="url(#ele)"><animateMotion dur="5s" repeatCount="indefinite"><mpath href="#o1"/></animateMotion></circle></g>
+      <g transform="rotate(60 100 100)"><circle r="9" fill="url(#ele)"><animateMotion dur="6.5s" begin="-2s" repeatCount="indefinite"><mpath href="#o1"/></animateMotion></circle></g>
+      <g transform="rotate(-60 100 100)"><circle r="9" fill="url(#ele)"><animateMotion dur="5.8s" begin="-4s" repeatCount="indefinite"><mpath href="#o1"/></animateMotion></circle></g>
+      <g transform="rotate(60 100 100)"><circle r="9" fill="url(#ele)"><animateMotion dur="6.5s" begin="-5.2s" repeatCount="indefinite"><mpath href="#o1"/></animateMotion></circle></g>
+    </g>
+  </g>
+  <circle cx="100" cy="100" r="96" fill="none" stroke="#7fb8ff" stroke-width="3" opacity=".7"/>
+</svg>
