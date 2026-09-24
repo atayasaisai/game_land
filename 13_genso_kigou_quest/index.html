@@ -52,20 +52,60 @@ svg{display:block}
 .btn:focus-visible{outline:3px solid var(--ai);outline-offset:3px}
 
 /* ───────── タイトル ───────── */
-#title{background:
-  radial-gradient(circle at 10% 15%,rgba(245,183,10,.28),transparent 32%),
-  radial-gradient(circle at 90% 12%,rgba(240,96,63,.18),transparent 30%),
-  radial-gradient(circle at 88% 88%,rgba(76,184,107,.22),transparent 32%);}
+/* ───────── タイトル（ゲームランドのトップと同じ空の絵を背景に） ───────── */
+#title{position:relative;background:#bfe3f5 url(bg.jpg?v=20260924) center 30%/cover no-repeat}
+#title::before{content:"";position:fixed;inset:0;pointer-events:none;
+  background:linear-gradient(rgba(255,252,240,.10),rgba(255,252,240,.55))}
+#title .pad{position:relative}
 .brand{text-align:center;margin-bottom:6px}
 .brand .lead{display:inline-block;font-size:.72rem;letter-spacing:.24em;border:2.5px solid var(--ink);
-  border-radius:999px;padding:3px 15px;background:#fff;box-shadow:3px 3px 0 var(--ink);margin-bottom:14px;
+  border-radius:999px;padding:3px 15px;background:#fff;box-shadow:3px 3px 0 var(--ink);margin-bottom:30px;
   color:inherit;text-decoration:none;transition:transform .1s}
 .brand a.lead:hover{transform:translateY(-2px)}
 .brand a.lead:active{transform:translateY(2px);box-shadow:1px 1px 0 var(--ink)}
-.brand h1{font-size:clamp(1.6rem,6.4vw,2.5rem);line-height:1.35;letter-spacing:.02em}
-.brand h1 .c1{color:var(--do)}.brand h1 .c2{color:var(--ai)}.brand h1 .c3{color:var(--raku)}
-.brand p{margin:12px 0 0;font-size:.9rem;color:var(--sub)}
-.packname{margin:26px 0 4px;text-align:center;font-size:1.15rem}
+
+/* ロゴ：木の看板に、ふちどりした色とりどりの文字（トップの題字に合わせた） */
+.logo{position:relative;display:flex;align-items:center;justify-content:center;gap:4px;margin:0 auto;max-width:640px}
+.logo .side{width:clamp(56px,16vw,120px);height:auto;flex:none;filter:drop-shadow(0 4px 4px rgba(0,0,0,.25));
+  animation:hop 1.6s ease-in-out infinite}
+.logo .side.r{animation-delay:-.8s}
+@keyframes hop{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-10px) rotate(3deg)}}
+.sign{position:relative;padding:20px clamp(12px,4vw,30px) 18px;border-radius:26px;
+  background:linear-gradient(#c98a4b,#a86a33 55%,#8d5528);border:4px solid #5b3417;
+  box-shadow:inset 0 3px 0 rgba(255,255,255,.35),inset 0 -5px 0 rgba(0,0,0,.18),0 8px 0 #5b3417,0 14px 22px rgba(40,30,10,.35);
+  animation:swing 3.2s ease-in-out infinite;transform-origin:50% 0}
+@keyframes swing{0%,100%{transform:rotate(-1.2deg)}50%{transform:rotate(1.2deg)}}
+.sign::before,.sign::after{content:"";position:absolute;left:10px;right:10px;height:2px;background:rgba(80,40,10,.28);border-radius:2px}
+.sign::before{top:38%}.sign::after{top:70%}
+.sign .crown{position:absolute;left:50%;top:-32px;width:58px;transform:translateX(-50%) rotate(-4deg);
+  filter:drop-shadow(0 3px 0 #5b3417)}
+.sign .star{position:absolute;font-size:1.3rem;color:#ffd43b;text-shadow:0 2px 0 #7a4a12;animation:twk 1.4s ease-in-out infinite}
+.sign .star.a{left:8px;top:6px}.sign .star.b{right:10px;bottom:4px;animation-delay:-.7s}
+@keyframes twk{0%,100%{transform:scale(1)}50%{transform:scale(1.35) rotate(15deg)}}
+.logo h1{position:relative;font-family:"Mochiy Pop One",sans-serif;font-weight:400;line-height:1.1;letter-spacing:0;margin:0}
+.logo h1 .sm{display:block;font-size:clamp(.9rem,3.6vw,1.3rem);color:#fff;letter-spacing:.3em;
+  text-shadow:0 2px 0 #5b3417,2px 0 0 #5b3417,-2px 0 0 #5b3417,0 -2px 0 #5b3417;margin-bottom:4px}
+.logo h1 .bg,.logo h1 .q{display:block;white-space:nowrap}
+.logo h1 .lt{display:inline-block;font-size:min(4.4rem,11vw,calc(46vw / var(--n,2)),calc(17rem / var(--n,2)));color:var(--k);
+  text-shadow:
+    3px 0 0 #fff,-3px 0 0 #fff,0 3px 0 #fff,0 -3px 0 #fff,2px 2px 0 #fff,-2px -2px 0 #fff,2px -2px 0 #fff,-2px 2px 0 #fff,
+    0 7px 0 #5b3417,4px 5px 0 #5b3417,-4px 5px 0 #5b3417;
+  transform:rotate(var(--r,0deg));
+  animation:jump 2.4s ease-in-out infinite;animation-delay:calc(var(--i) * .12s)}
+.logo h1 .lt.s{font-size:clamp(1.9rem,8.5vw,3.3rem)}
+.logo h1 .q{margin-top:4px}
+.logo h1 .q .lt{font-size:clamp(1.7rem,7.6vw,3rem);color:#ffd84d;
+  text-shadow:
+    3px 0 0 #7a3f12,-3px 0 0 #7a3f12,0 3px 0 #7a3f12,0 -3px 0 #7a3f12,2px 2px 0 #7a3f12,-2px -2px 0 #7a3f12,2px -2px 0 #7a3f12,-2px 2px 0 #7a3f12,
+    0 6px 0 #3e1f08}
+@keyframes jump{0%,78%,100%{transform:translateY(0) rotate(var(--r,0deg))}86%{transform:translateY(-9px) rotate(var(--r,0deg))}}
+.brand p{margin:22px auto 0;font-size:.9rem;color:var(--ink);display:table;background:rgba(255,252,240,.88);
+  border-radius:16px;padding:6px 16px}
+
+/* えらぶところは、紙のいたに のせて読みやすく */
+.panel{margin:18px auto 0;max-width:640px;background:rgba(255,252,240,.93);border:3px solid var(--ink);
+  border-radius:26px;padding:6px 14px 24px;box-shadow:0 8px 0 rgba(51,49,42,.85)}
+.packname{margin:14px 0 4px;text-align:center;font-size:1.15rem}
 .packname small{display:block;font-size:.76rem;color:var(--sub);font-family:"Zen Maru Gothic",sans-serif}
 
 .opt{margin-top:22px}
@@ -208,10 +248,17 @@ svg{display:block}
 <section class="screen on" id="title"><div class="pad">
   <div class="brand">
     <a class="lead" href="../">◀ あたやさいさいゲームランド</a>
-    <h1><span class="c1">げ</span><span class="c2">ん</span>そきごうクエスト</h1>
+    <div class="logo">
+      <img class="side l" src="hero/cheer.png" alt="" width="120" height="120">
+      <div class="sign"><svg class="crown" viewBox="0 0 60 40" aria-hidden="true"><path d="M4 34 L8 10 L20 22 L30 4 L40 22 L52 10 L56 34 Z" fill="#ffd43b" stroke="#5b3417" stroke-width="3" stroke-linejoin="round"/><circle cx="30" cy="25" r="4" fill="#F0603F" stroke="#5b3417" stroke-width="2"/></svg><span class="star a">★</span><span class="star b">★</span>
+        <h1 aria-label="げんそきごうクエスト"><span class="sm">18この元素</span><span class="bg" style="--n:6"><span class="lt" style="--k:var(--do);--i:0;--r:-6deg">げ</span><span class="lt" style="--k:var(--ai);--i:1;--r:4deg">ん</span><span class="lt" style="--k:var(--raku);--i:2;--r:-3deg">そ</span><span class="lt" style="--k:var(--ki);--i:3;--r:5deg">き</span><span class="lt" style="--k:var(--pink);--i:4;--r:-6deg">ご</span><span class="lt" style="--k:var(--sky);--i:5;--r:4deg">う</span></span><span class="q"><span class="lt" style="--i:6">ク</span><span class="lt" style="--i:7">エ</span><span class="lt" style="--i:8">ス</span><span class="lt" style="--i:9">ト</span></span></h1>
+      </div>
+      <img class="side r" src="mon/skeleton.png" alt="" width="120" height="120">
+    </div>
     <p>元素記号をかかげたモンスターが、1びょうに1ぽずつ お城にせまってきます。<br>名前を えらんで、やっつけよう。</p>
   </div>
 
+  <div class="panel">
   <div class="packname" id="pkName"></div>
   <div class="row" id="pkRow" hidden style="display:none"></div>
 
@@ -226,6 +273,7 @@ svg{display:block}
   </div>
 
   <button class="btn start pop" id="go">はじめる ▶</button>
+  </div>
 
   <p class="note">
     <b>まちがえた元素記号は、おぼえておきます。</b>もういちど出てきますし、おわったあとに「にがてな元素記号」として

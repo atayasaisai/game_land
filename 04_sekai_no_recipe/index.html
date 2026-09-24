@@ -15,7 +15,7 @@
 <meta property="og:locale" content="ja_JP">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap">
 <style>
 :root{
   --bg0:#05070F; --bg1:#0B1024; --bg2:#141C3A;
@@ -72,7 +72,40 @@ button{font-family:inherit;color:inherit;cursor:pointer}
 .btn.go:disabled{background:rgba(255,255,255,.06);box-shadow:none;border-color:var(--line)}
 
 /* ---------- title ---------- */
-#title{position:relative;z-index:1;min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;padding:40px 18px}
+#title{position:relative;z-index:1;min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;padding:24px 16px 40px;
+  background:#bfe3f5 url(img/bg.jpg) center 30%/cover no-repeat}
+/* 最初の画面：ゲームランドのトップと同じ空の絵＋木の看板のロゴ。中身は夜空の板にのせる */
+.logo{position:relative;display:flex;align-items:center;justify-content:center;gap:4px;margin:26px auto 0;max-width:640px}
+.logo .side{width:clamp(56px,16vw,110px);height:auto;flex:none;filter:drop-shadow(0 4px 4px rgba(0,0,0,.25));animation:hop 1.6s ease-in-out infinite}
+.logo .side.r{animation-delay:-.8s}
+@keyframes hop{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-10px) rotate(3deg)}}
+.sign{position:relative;padding:20px clamp(12px,4vw,30px) 18px;border-radius:26px;line-height:1.1;
+  background:linear-gradient(#c98a4b,#a86a33 55%,#8d5528);border:4px solid #5b3417;
+  box-shadow:inset 0 3px 0 rgba(255,255,255,.35),inset 0 -5px 0 rgba(0,0,0,.18),0 8px 0 #5b3417,0 14px 22px rgba(40,30,10,.35);
+  animation:swing 3.2s ease-in-out infinite;transform-origin:50% 0}
+@keyframes swing{0%,100%{transform:rotate(-1.2deg)}50%{transform:rotate(1.2deg)}}
+.sign .crown{position:absolute;left:50%;top:-32px;width:58px;transform:translateX(-50%) rotate(-4deg);filter:drop-shadow(0 3px 0 #5b3417)}
+.sign .star{position:absolute;font-size:1.3rem;color:#ffd43b;text-shadow:0 2px 0 #7a4a12;animation:twk 1.4s ease-in-out infinite}
+.sign .star.a{left:8px;top:6px}.sign .star.b{right:10px;bottom:4px;animation-delay:-.7s}
+@keyframes twk{0%,100%{transform:scale(1)}50%{transform:scale(1.35) rotate(15deg)}}
+#title .logo h1{font-family:"Mochiy Pop One",sans-serif;font-weight:400;line-height:1.1;letter-spacing:0;margin:0;background:none;color:inherit;font-size:1rem}
+.logo h1 .sm{display:block;font-size:clamp(.9rem,3.6vw,1.3rem);color:#fff;letter-spacing:.3em;
+  text-shadow:0 2px 0 #5b3417,2px 0 0 #5b3417,-2px 0 0 #5b3417,0 -2px 0 #5b3417;margin-bottom:4px}
+.logo h1 .bg,.logo h1 .q{display:block;white-space:nowrap}
+.logo h1 .lt{display:inline-block;font-size:min(4.4rem,11vw,calc(46vw / var(--n,2)),calc(17rem / var(--n,2)));color:var(--k);
+  text-shadow:3px 0 0 #fff,-3px 0 0 #fff,0 3px 0 #fff,0 -3px 0 #fff,2px 2px 0 #fff,-2px -2px 0 #fff,2px -2px 0 #fff,-2px 2px 0 #fff,
+    0 7px 0 #5b3417,4px 5px 0 #5b3417,-4px 5px 0 #5b3417;
+  transform:rotate(var(--r,0deg));animation:jump 2.4s ease-in-out infinite;animation-delay:calc(var(--i) * .12s)}
+.logo h1 .q{margin-top:4px}
+.logo h1 .q .lt{font-size:clamp(1.5rem,6.6vw,2.6rem);color:#ffd84d;
+  text-shadow:3px 0 0 #7a3f12,-3px 0 0 #7a3f12,0 3px 0 #7a3f12,0 -3px 0 #7a3f12,2px 2px 0 #7a3f12,-2px -2px 0 #7a3f12,2px -2px 0 #7a3f12,-2px 2px 0 #7a3f12,0 6px 0 #3e1f08}
+@keyframes jump{0%,78%,100%{transform:translateY(0) rotate(var(--r,0deg))}86%{transform:translateY(-9px) rotate(var(--r,0deg))}}
+.tpanel{margin-top:22px;width:100%;max-width:520px;display:flex;flex-direction:column;align-items:center;gap:6px;
+  background:linear-gradient(165deg,rgba(20,28,58,.93),rgba(8,11,26,.95));border:3px solid #2a3560;border-radius:28px;
+  padding:18px 16px 22px;box-shadow:0 10px 30px rgba(10,20,50,.45)}
+#title .tpanel .titleAtom{margin-top:0}
+.tlead{display:inline-block;font-size:.72rem;letter-spacing:.2em;border:2.5px solid #33312A;border-radius:999px;padding:3px 15px;
+  background:#fff;color:#33312A;box-shadow:3px 3px 0 #33312A;text-decoration:none;font-weight:700}
 .kicker{font-size:.7rem;letter-spacing:.42em;color:var(--sub);text-transform:uppercase;margin-left:.42em}
 #title h1{
   font-size:clamp(2.1rem,9vw,3.1rem);font-weight:900;letter-spacing:.02em;margin:.1em 0 0;
@@ -259,9 +292,17 @@ button{font-family:inherit;color:inherit;cursor:pointer}
 
 <!-- ================= TITLE ================= -->
 <section id="title">
+  <a class="tlead" href="../">◀ あたやさいさいゲームランド</a>
+  <div class="logo">
+    <img class="side l" src="img/cheer.png" alt="" width="110" height="102">
+    <div class="sign"><svg class="crown" viewBox="0 0 60 40" aria-hidden="true"><path d="M4 34 L8 10 L20 22 L30 4 L40 22 L52 10 L56 34 Z" fill="#ffd43b" stroke="#5b3417" stroke-width="3" stroke-linejoin="round"/><circle cx="30" cy="25" r="4" fill="#F0603F" stroke="#5b3417" stroke-width="2"/></svg><span class="star a">★</span><span class="star b">★</span>
+      <h1 aria-label="せかいのレシピ げんしのへや"><span class="sm">せかいの</span><span class="bg" style="--n:3"><span class="lt" style="--k:#F0603F;--i:0;--r:-6deg">レ</span><span class="lt" style="--k:#4A6BC0;--i:1;--r:4deg">シ</span><span class="lt" style="--k:#4CB86B;--i:2;--r:-3deg">ピ</span></span><span class="q"><span class="lt" style="--i:3">げ</span><span class="lt" style="--i:4">ん</span><span class="lt" style="--i:5">し</span><span class="lt" style="--i:6">の</span><span class="lt" style="--i:7">へ</span><span class="lt" style="--i:8">や</span></span></h1>
+    </div>
+    <img class="side r" src="img/cheer2.png" alt="" width="110" height="102">
+  </div>
+
+  <div class="tpanel">
   <p class="kicker">Recipe of the World</p>
-  <h1>せかいのレシピ</h1>
-  <h2>げんしのへや</h2>
 
   <svg class="titleAtom" viewBox="0 0 400 400" aria-hidden="true">
     <defs>
@@ -303,6 +344,7 @@ button{font-family:inherit;color:inherit;cursor:pointer}
     <div class="rung"><span class="n">03</span><div>ぶんしのへや ／ 水・二酸化炭素</div></div>
     <div class="rung"><span class="n">04</span><div>いのちのへや ／ 光合成</div></div>
     <div class="rung"><span class="n">05</span><div>ほしのへや ／ 太陽をつくる</div></div>
+  </div>
   </div>
 </section>
 
