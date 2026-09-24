@@ -114,15 +114,12 @@ button{font-family:inherit;font-weight:700;cursor:pointer;color:inherit}
 .stage{position:absolute;left:0;right:0;bottom:0;height:66%;transition:opacity .35s,transform .45s}
 .stage.out{opacity:0;transform:translateX(-30px)}
 .stage.in{opacity:0;transform:translateX(30px)}
-.island{position:absolute;bottom:4%;width:25%;max-width:210px;z-index:1}
-.island.l{left:-3%}.island.r{right:-3%}
-.island svg{width:100%;height:auto;overflow:visible}
-.castle{position:absolute;right:2%;bottom:30%;width:17%;max-width:140px;z-index:1;display:none}
+.castle{position:absolute;right:1%;bottom:30%;width:15%;max-width:120px;z-index:1;display:none}
 .castle.on{display:block;animation:pop .6s cubic-bezier(.2,1.7,.5,1) both}
 @keyframes pop{from{transform:scale(.2);opacity:0}to{transform:scale(1);opacity:1}}
 
 /* 橋：英文そのものが橋。穴のところは板がぬけている */
-.bridge{position:absolute;left:15%;right:15%;z-index:2}
+.bridge{position:absolute;left:0;right:0;bottom:18%;z-index:2}
 .deck{position:relative;display:flex;align-items:flex-end;gap:.12em;white-space:nowrap;width:100%}
 .deck::before,.deck::after{content:"";position:absolute;left:0;right:0;height:3px;background:#7a4a1f;border-radius:2px}
 .deck::before{top:-.5em}
@@ -154,13 +151,15 @@ button{font-family:inherit;font-weight:700;cursor:pointer;color:inherit}
 @keyframes glow{40%{box-shadow:0 0 0 5px rgba(255,255,255,.9),0 0 18px 6px #ffe58a}}
 
 /* たびびと（勇者と犬） */
-.walker{position:absolute;z-index:4;width:clamp(70px,15vw,110px);transition:left 1.5s linear,bottom 1.5s linear}
-.walker svg{width:100%;height:auto;overflow:visible}
-.walker.go svg{animation:walk .3s ease-in-out infinite}
-@keyframes walk{50%{transform:translateY(-6%)}}
-.walker.cheer svg{animation:hop2 .5s ease-in-out 3}
-@keyframes hop2{50%{transform:translateY(-22%)}}
-.say{position:absolute;left:50%;bottom:104%;transform:translateX(-50%);white-space:nowrap;background:#fff;
+/* たびびと（男の子と犬）。runner.webp は8コマ横ならび：0〜5 走る、6 とびはねる、7 ばんざい */
+.walker{position:absolute;z-index:4;width:clamp(124px,21vw,170px);transition:left 1.7s linear,opacity .2s}
+.spr{width:100%;aspect-ratio:340/280;background:url(runner.webp) 0 0/800% 100% no-repeat;
+  filter:drop-shadow(0 4px 3px rgba(30,40,60,.3))}
+.walker.idle .spr{animation:breath 1.6s ease-in-out infinite}
+@keyframes breath{50%{transform:translateY(-3%)}}
+.walker.jump .spr{animation:leap .55s cubic-bezier(.3,.7,.4,1) 2}
+@keyframes leap{0%,100%{transform:translateY(0)}45%{transform:translateY(-38%) rotate(-3deg)}}
+.say{position:absolute;right:40%;bottom:92%;z-index:1;white-space:nowrap;background:#fff;
   border:2.5px solid var(--ink);border-radius:999px;padding:1px 12px;font-size:.8rem;opacity:0;transition:opacity .2s}
 .say.on{opacity:1}
 
@@ -216,10 +215,6 @@ button{font-family:inherit;font-weight:700;cursor:pointer;color:inherit}
 @media (max-width:620px){
   .pad{padding:12px 12px 34px}
   .scene{min-height:190px}
-  .island{width:34%}
-  .island.l{left:-15%}.island.r{right:-15%}
-  .bridge{left:15%;right:4%}
-  .walker{width:62px}
 }
 @media (prefers-reduced-motion: reduce){
   *{animation:none!important;transition:none!important}
@@ -272,13 +267,10 @@ button{font-family:inherit;font-weight:700;cursor:pointer;color:inherit}
   <div class="scene" id="scene">
     <div class="jp" id="jp"></div>
     <div class="stage" id="stage">
-      <div class="island l"><svg viewBox="0 0 200 130" aria-hidden="true"><use href="#isle"/></svg></div>
-      <div class="island r"><svg viewBox="0 0 200 130" aria-hidden="true"><use href="#isle"/></svg></div>
       <svg class="castle" id="castle" viewBox="0 0 120 120" aria-hidden="true"><use href="#castleG"/></svg>
       <div class="bridge" id="bridge"></div>
     </div>
-    <div class="walker" id="walker"><span class="say" id="say">Yes!</span>
-      <svg viewBox="0 0 120 100" aria-hidden="true"><use href="#heroG"/></svg></div>
+    <div class="walker idle" id="walker"><span class="say" id="say">Yes!</span><div class="spr" id="spr"></div></div>
   </div>
   <div class="pad2">
     <div class="tools"><span id="tip">あなに入る ことばは？</span><button class="hintb" id="hintb" type="button">💡 1文字おしえて</button></div>
@@ -296,14 +288,6 @@ button{font-family:inherit;font-weight:700;cursor:pointer;color:inherit}
 <!-- 絵の部品（島・お城・たびびと）。<use> で使いまわす -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
-    <g id="isle">
-      <path d="M8 34 Q100 18 192 34 L176 58 Q150 92 118 104 Q100 128 84 104 Q48 92 26 60 Z" fill="#8a6a4a" stroke="#4a3320" stroke-width="4" stroke-linejoin="round"/>
-      <path d="M40 62 Q60 70 76 64 M110 76 Q128 80 150 66 M84 92 Q96 98 108 90" fill="none" stroke="#6b4f35" stroke-width="3" stroke-linecap="round"/>
-      <path d="M4 34 Q100 12 196 34 Q198 46 184 46 Q150 52 100 50 Q50 52 16 46 Q2 46 4 34 Z" fill="#6cc35a" stroke="#2f6b2a" stroke-width="4" stroke-linejoin="round"/>
-      <path d="M22 36 Q30 26 36 36 M150 32 Q158 22 164 32 M92 30 Q98 22 104 30" fill="none" stroke="#2f6b2a" stroke-width="3" stroke-linecap="round"/>
-      <circle cx="60" cy="32" r="4" fill="#fff59a" stroke="#b98a18" stroke-width="1.5"/>
-      <circle cx="132" cy="30" r="4" fill="#ffb6c9" stroke="#c0567a" stroke-width="1.5"/>
-    </g>
     <g id="castleG" stroke="#4a4a5a" stroke-width="3" stroke-linejoin="round">
       <rect x="22" y="50" width="76" height="62" fill="#f1eee6"/>
       <rect x="10" y="36" width="22" height="76" fill="#e6e2d8"/>
@@ -313,38 +297,6 @@ button{font-family:inherit;font-weight:700;cursor:pointer;color:inherit}
       <path d="M50 112 V88 Q60 76 70 88 V112 Z" fill="#b8793e"/>
       <path d="M60 -4 V-18 L74 -13 L60 -8" fill="#ffd43b"/>
       <circle cx="21" cy="56" r="4" fill="#7ec8e3"/><circle cx="99" cy="56" r="4" fill="#7ec8e3"/><circle cx="60" cy="44" r="5" fill="#7ec8e3"/>
-    </g>
-    <g id="heroG" stroke="#33312a" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round">
-      <!-- 犬 -->
-      <g transform="translate(66 52)">
-        <ellipse cx="22" cy="30" rx="18" ry="12" fill="#fff"/>
-        <path d="M10 38 v8 M20 40 v7 M30 40 v7 M38 36 v8" fill="none"/>
-        <path d="M39 24 q10 -6 8 -14" fill="none"/>
-        <circle cx="10" cy="16" r="13" fill="#fff"/>
-        <path d="M0 8 L2 -6 L10 4 Z M14 4 L22 -6 L22 9 Z" fill="#fff"/>
-        <circle cx="6" cy="16" r="1.8" fill="#33312a" stroke="none"/><circle cx="14" cy="16" r="1.8" fill="#33312a" stroke="none"/>
-        <path d="M8 21 q2 2 4 0" fill="none" stroke-width="2"/>
-        <path d="M1 26 q10 6 20 0 l-2 5 q-8 3 -16 0 Z" fill="#e0483a"/>
-      </g>
-      <!-- たびびと -->
-      <g>
-        <path d="M34 50 q-24 8 -28 40 q14 -8 26 -10 Z" fill="#d8453a"/>
-        <rect x="26" y="52" width="16" height="22" rx="5" fill="#9a6a3a"/>
-        <path d="M30 60 h10" fill="none" stroke-width="2"/>
-        <rect x="34" y="50" width="26" height="30" rx="9" fill="#3f5f9a"/>
-        <path d="M40 80 v14 M54 80 v14" fill="none" stroke-width="5"/>
-        <path d="M36 95 h8 M50 95 h9" fill="none" stroke-width="5" stroke="#6b4a2a"/>
-        <path d="M58 58 q10 2 12 -8" fill="none" stroke-width="5" stroke="#3f5f9a"/>
-        <circle cx="70" cy="49" r="3.5" fill="#f6d2b0"/>
-        <circle cx="48" cy="36" r="16" fill="#f6d2b0"/>
-        <path d="M34 34 q2 -12 14 -12 q12 0 16 10 q-6 -2 -10 4 q-4 -6 -10 -2 q-4 -4 -10 0 Z" fill="#8a4f24"/>
-        <circle cx="53" cy="38" r="2.2" fill="#33312a" stroke="none"/>
-        <path d="M52 45 q3 2 6 -1" fill="none" stroke-width="2"/>
-        <circle cx="59" cy="42" r="2.6" fill="#f5a0a0" stroke="none"/>
-        <path d="M20 24 Q48 14 78 22 Q74 28 48 27 Q28 28 20 24 Z" fill="#8a5a2c"/>
-        <path d="M32 24 Q34 4 50 4 Q64 4 66 22 Z" fill="#9e6a35"/>
-        <path d="M33 20 Q50 16 65 19 L66 23 Q50 20 32 24 Z" fill="#3e8a4a"/>
-      </g>
     </g>
   </defs>
 </svg>
@@ -617,26 +569,41 @@ function fitBridge(){
   var br = $("bridge"), deck = $("deck"), sc = $("scene");
   var fs = Math.min(32, Math.max(19, sc.clientWidth/20));
   deck.style.fontSize = fs+"px";
+  // 左はしの板は、男の子と犬が立って待つぶん 広くしておく
+  var ww = $("walker").offsetWidth || 110;
+  deck.querySelector(".fill-l").style.minWidth = Math.round(ww*.6) + "px";
   while(deck.scrollWidth > br.clientWidth + 1 && fs > 11){ fs -= 1; deck.style.fontSize = fs+"px"; }
-  // 橋の高さ＝島の草の高さ
-  var isl = document.querySelector(".island.l");
-  var bb = $("stage").offsetHeight*0.04 + isl.offsetHeight*0.62;
-  br.style.bottom = bb + "px";
+  var top = $("stage").offsetHeight - parseFloat(getComputedStyle(br).bottom) - deck.offsetHeight;
+  $("castle").style.bottom = ($("stage").offsetHeight - top - 6) + "px";
   // 日本語の札は、橋と たびびとの すこし上に
-  var jb = bb + Math.max(deck.offsetHeight, 10) + ($("walker").offsetHeight||80) + 16;
+  var ground = $("stage").offsetHeight - top;
+  var jb = ground + ($("walker").offsetHeight||90) + 14;
   $("jp").style.bottom = Math.min(jb, sc.clientHeight - $("jp").offsetHeight - 10) + "px";
 }
+// 橋の板の上（シーンの下からの高さ）
+function groundY(){
+  var br = $("bridge"), deck = $("deck");
+  return parseFloat(getComputedStyle(br).bottom) + deck.offsetHeight - 8;
+}
+var RUN = null;
+function frame(i){ $("spr").style.backgroundPositionX = (i*100/7) + "%"; }
+function runAnim(on){
+  clearInterval(RUN); RUN = null;
+  if(on){ var i = 0; RUN = setInterval(function(){ frame(i = (i+1) % 6); }, 95); }
+}
 function placeWalker(across){
-  var w = $("walker"), sc = $("scene"), isl = document.querySelector(".island.l");
-  var ww = w.offsetWidth || 90, stageH = $("stage").offsetHeight;
-  var ground = stageH*0.04 + isl.offsetHeight*0.66;   // 草の上
-  w.style.bottom = ground + "px";
+  var w = $("walker"), sc = $("scene"), ww = w.offsetWidth || 110;
+  w.style.bottom = groundY() + "px";
   if(across){
-    w.style.left = (sc.clientWidth - ww - sc.clientWidth*0.02) + "px";
+    // 最後の橋は、お城の手前で止まる
+    var cs = $("castle").classList.contains("on") ? $("castle").offsetWidth*.85 : 0;
+    w.style.left = (sc.clientWidth - ww*.96 - cs) + "px";
   } else {
     w.style.transition = "none";
-    w.style.left = Math.max(2, sc.clientWidth*0.01) + "px";
+    w.style.left = (-ww*.14) + "px";
     void w.offsetWidth; w.style.transition = "";
+    runAnim(false); frame(1);
+    w.className = "walker idle";
   }
 }
 window.addEventListener("resize", function(){ if(G && $("game").classList.contains("on") && !G.busy){ fitBridge(); placeWalker(false); } });
@@ -743,28 +710,38 @@ function cross(){
   sDone();
   speak(q.pre + q.ans + q.post);
   var words = ["Yes!","Great!","Nice!","Good job!","Perfect!"];
-  var say = $("say"); say.textContent = G.qMiss||G.qHelp ? words[Math.floor(Math.random()*3)] : "Perfect!";
-  say.classList.add("on");
-  var w = $("walker");
+  var say = $("say"); say.textContent = G.qMiss||G.qHelp ? words[Math.floor(Math.random()*4)] : "Perfect!";
+  var w = $("walker"), last = G.n === G.items.length-1;
+  // 走って わたる
   setTimeout(function(){
+    if(!G) return;
+    w.className = "walker"; runAnim(true); placeWalker(true);
+  }, 350);
+  // わたりきったら、とびはねて よろこぶ
+  setTimeout(function(){
+    if(!G) return;
+    runAnim(false); frame(6);
+    w.className = "walker jump"; say.classList.add("on");
+    setTimeout(function(){ frame(7); }, 300);
+  }, reduce ? 400 : 2100);
+  if(last){ setTimeout(function(){ if(G) finish(); }, reduce ? 900 : 3000); return; }
+  setTimeout(function(){
+    if(!G) return;
     say.classList.remove("on");
-    w.classList.add("go"); placeWalker(true);
-  }, 700);
-  setTimeout(function(){
-    w.classList.remove("go");
     G.n++;
-    if(G.n >= G.items.length){ finish(); return; }
-    var stg = $("stage"); stg.classList.add("out");
-    setTimeout(function(){ stg.classList.remove("out"); setQ(false); }, reduce ? 0 : 380);
-  }, reduce ? 900 : 2300);
+    var stg = $("stage"); stg.classList.add("out"); w.style.opacity = "0";
+    setTimeout(function(){ stg.classList.remove("out"); w.style.opacity = ""; if(G) setQ(false); }, reduce ? 0 : 380);
+  }, reduce ? 1200 : 3300);
 }
 
 function finish(){
-  var w = $("walker"); w.classList.add("cheer");
+  var w = $("walker"); G.n++;
   var tt = document.createElement("div"); tt.className = "toast"; tt.textContent = "お城に ついた！";
   $("scene").appendChild(tt);
-  paintDots();
-  setTimeout(function(){ w.classList.remove("cheer"); tt.remove(); result(); }, 1700);
+  paintDots(); frame(7);
+  w.className = "walker"; void w.offsetWidth; w.className = "walker jump";
+  setTimeout(function(){ w.className = "walker"; void w.offsetWidth; w.className = "walker jump"; }, 1150);
+  setTimeout(function(){ $("say").classList.remove("on"); w.className = "walker"; tt.remove(); if(G) result(); }, 2400);
 }
 
 function result(){
@@ -807,7 +784,7 @@ function confetti(){
   }
 }
 
-function quit(){ G = null; if(window.speechSynthesis) speechSynthesis.cancel(); paintTitle(); show("title"); }
+function quit(){ G = null; runAnim(false); $("say").classList.remove("on"); if(window.speechSynthesis) speechSynthesis.cancel(); paintTitle(); show("title"); }
 $("quit").addEventListener("click", quit);
 $("snd").addEventListener("click", function(){
   pref.sound = !pref.sound; save("kh_pref", pref);
