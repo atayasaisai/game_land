@@ -435,9 +435,12 @@ function choicesFor(it){
   var all = curPack().items,
       same = all.filter(function(x){ return x.key!==it.key && x.reg===it.reg && x.a!==it.a; }),
       rest = all.filter(function(x){ return x.key!==it.key && x.reg!==it.reg && x.a!==it.a; }),
-      out  = shuffle(same).slice(0,3);
-  if(out.length<3) out = out.concat(shuffle(rest).slice(0,3-out.length));
-  return shuffle(out.map(function(x){ return x.a; }).concat([it.a]));
+      out  = [];
+  // 答えが おなじ文字の問題は いくつもあるので、かぶらないように 1つずつ足す
+  shuffle(same).concat(shuffle(rest)).forEach(function(x){
+    if(out.length<3 && out.indexOf(x.a)<0) out.push(x.a);
+  });
+  return shuffle(out.concat([it.a]));
 }
 
 /* ═══════════ 戦場を描く ═══════════ */
