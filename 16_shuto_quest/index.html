@@ -116,6 +116,8 @@ svg{display:block}
 .pick:hover{transform:translateY(-2px)}
 .pick[aria-pressed="true"]{background:var(--ink);color:#fff;transform:translateY(2px);box-shadow:0 1px 0 var(--ink)}
 .pick[disabled]{opacity:.38;cursor:default;transform:none}
+.qnote{flex-basis:100%;margin:6px 0 0;text-align:center;font-size:.74rem;color:var(--sub)}
+.qnote b{color:var(--ink)}
 .start{display:block;margin:30px auto 0;font-size:1.3rem;padding:13px 46px}
 .note{margin:26px auto 0;max-width:30em;font-size:.76rem;color:var(--sub);line-height:1.9;
   background:#fff;border:2.5px dashed var(--ink);border-radius:18px;padding:13px 17px}
@@ -380,7 +382,9 @@ function paintTitle(){
   $("qnRow").innerHTML = QNLIST.map(function(q){
     return '<button class="pick" type="button" data-qn="'+q+'" aria-pressed="'+(sel.qn===q)+'">'
       + QNNAME[q] + '</button>';
-  }).join("");
+  }).join("")
+  + '<p class="qnote">この むずかしさの 問題は ぜんぶで <b>' + currentPool().length + '問</b>。'
+  + (sel.qn !== "endless" && sel.qn > currentPool().length ? 'ぜんぶ出たら おわりです。' : 'おなじ問題は 1回しか 出ません。') + '</p>';
 
   $("pkName").innerHTML = '<span class="pop">'+esc(curPack().title.split("▸")[0].trim())+'</span>'
     + '<small>'+esc(curPack().ask)+'</small>';
@@ -422,12 +426,10 @@ function currentPool(){
 }
 
 function pickItems(){
-  var list = currentPool();
-  if(sel.qn === "endless") return shuffle(list.slice());
-  // プールがすくなくても、出題数に足りるまで シャッフルした周回をつなげる
-  var need = sel.qn, out = [];
-  while(out.length < need) out = out.concat(shuffle(list.slice()));
-  return out.slice(0, need);
+  var list = shuffle(currentPool().slice());
+  if(sel.qn === "endless") return list;
+  // おなじ問題は 1回の あそびで 1回だけ。プールが出題数より少ないときは、プールぜんぶで おわり
+  return list.slice(0, sel.qn);
 }
 
 // まぎらわしい選択肢を、なるべく同じ地域からえらぶ
@@ -735,11 +737,19 @@ function tick(first){
 function maybeSpawn(){
   // エンドレスは 問題ぎれになるたび、おなじ条件のプールから もう一周ぶん補充する
   if(S.endless && !S.queue.length){
-    S.queue = shuffle(currentPool().slice()).map(function(it){ return {it:it, tries:0}; });
+    var pool = shuffle(currentPool().slice()),
+        busy = S.field.map(function(f){ return f.it.key; }).concat(S.recent || []),
+        fresh = pool.filter(function(it){ return busy.indexOf(it.key) < 0; }),
+        later = pool.filter(function(it){ return busy.indexOf(it.key) >= 0; });
+    S.queue = fresh.concat(later).map(function(it){ return {it:it, tries:0}; });
   }
   if(!S.queue.length || S.field.length >= MAXFLD) return;
   if(S.sinceSpawn < SPAWN && S.field.length > 0) return;
-  var q = S.queue.shift();
+  var onField = S.field.map(function(f){ return f.it.key; }), qi = -1;
+  for(var i = 0; i < S.queue.length; i++){ if(onField.indexOf(S.queue[i].it.key) < 0){ qi = i; break; } }
+  if(qi < 0) return;
+  var q = S.queue.splice(qi, 1)[0];
+  S.recent = (S.recent || []).concat([q.it.key]).slice(-Math.max(1, Math.floor(currentPool().length / 2)));
   if(q.tries === 0) S.attempted++;
   S.field.push({id: ++mid, it: q.it, tries: q.tries, step: 0, mon: MONS[mid % MONS.length], node: null});
   S.sinceSpawn = 0;
@@ -759,9 +769,9 @@ function breach(m){
   if(S.life <= 0){ finish(false); }
 }
 
-function requeue(m){
-  if(m.tries < 2) S.queue.push({it: m.it, tries: m.tries + 1});
-}
+// まえは お城に着かれた問題を あとで2回まで出しなおしていたが、「おなじ問題が なんども出る」ので やめた。
+// まちがえた問題は にがてに のこるので、「にがてだけ」で ふくしゅうできる
+function requeue(m){}
 
 function markWeak(it){
   S.weak[it.key] = (S.weak[it.key] || 0) + 1;
