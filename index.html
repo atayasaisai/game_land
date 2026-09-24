@@ -468,7 +468,14 @@ var ICON={
  cake:'<g '+S+'><rect x="12" y="30" width="36" height="20" rx="4" fill="#fff"/><path d="M12 36 q6 5 12 0 q6 5 12 0 q6 5 12 0" fill="none" stroke="#F58FB0"/><rect x="12" y="22" width="36" height="10" rx="3" fill="#F58FB0"/><path d="M22 22 v-8 M30 22 v-10 M38 22 v-8" /><path d="M22 10 q-2 -3 0 -5 q2 2 0 5z M30 8 q-2 -3 0 -5 q2 2 0 5z M38 10 q-2 -3 0 -5 q2 2 0 5z" fill="#F5B70A" stroke-width="2"/></g>',
  sofa:'<g '+S+'><rect x="12" y="18" width="36" height="18" rx="6" fill="#4A6BC0"/><rect x="6" y="28" width="48" height="16" rx="6" fill="#7EC8E3"/><path d="M12 44 v6 M48 44 v6" /><path d="M20 8 l4 4 M40 8 l-4 4" stroke-width="2.4"/></g>',
  milk:'<g '+S+'><path d="M22 8 h16 v8 l6 8 v26 h-28 v-26 l6 -8z" fill="#fff"/><rect x="22" y="4" width="16" height="6" rx="2" fill="#4A6BC0"/><rect x="16" y="30" width="28" height="12" fill="#7EC8E3"/><path d="M50 16 l4 -2 M52 24 l5 1 M8 16 l-4 -2" stroke-width="2.4"/><path d="M26 36 h8" stroke-width="2.4"/></g>',
- cross:'<g '+S+'><rect x="8" y="8" width="44" height="44" rx="10" fill="#fff"/><path d="M20 20 l20 20 M40 20 l-20 20" stroke-width="6"/></g>'
+ cross:'<g '+S+'><rect x="8" y="8" width="44" height="44" rx="10" fill="#fff"/><path d="M20 20 l20 20 M40 20 l-20 20" stroke-width="6"/></g>',
+ plus:'<g '+S+'><rect x="8" y="8" width="44" height="44" rx="10" fill="#fff"/><path d="M30 16 v28 M16 30 h28" stroke-width="6"/></g>',
+ minus:'<g '+S+'><rect x="8" y="8" width="44" height="44" rx="10" fill="#fff"/><path d="M16 30 h28" stroke-width="6"/></g>',
+ divide:'<g '+S+'><rect x="8" y="8" width="44" height="44" rx="10" fill="#fff"/><path d="M16 30 h28" stroke-width="6"/><circle cx="30" cy="18" r="3.4" fill="#33312A"/><circle cx="30" cy="42" r="3.4" fill="#33312A"/></g>',
+ kanji:'<g '+S+'><rect x="8" y="8" width="44" height="44" rx="10" fill="#fff"/><text x="30" y="41" text-anchor="middle" font-size="28" font-weight="900" font-family="Zen Maru Gothic,sans-serif" stroke="none" fill="#33312A">文</text></g>',
+ abc:'<g '+S+'><rect x="8" y="8" width="44" height="44" rx="10" fill="#fff"/><text x="30" y="38" text-anchor="middle" font-size="19" font-weight="900" font-family="Zen Maru Gothic,sans-serif" stroke="none" fill="#33312A">ABC</text></g>',
+ tile:'<g '+S+'><rect x="8" y="8" width="44" height="44" rx="10" fill="#fff"/><text x="16" y="22" font-size="10" font-weight="900" font-family="Zen Maru Gothic,sans-serif" stroke="none" fill="#5C574A">2</text><text x="30" y="40" text-anchor="middle" font-size="22" font-weight="900" font-family="Zen Maru Gothic,sans-serif" stroke="none" fill="#33312A">He</text></g>',
+ scroll:'<g '+S+'><path d="M14 12 h32 v36 q-4 4 -8 0 v-32 M14 12 q-4 0 -4 4 v28 q0 4 4 4" fill="#fff"/><path d="M20 22 h20 M20 30 h20 M20 38 h14" stroke-width="2.4"/></g>'
 };
 function svg(k){return '<svg viewBox="0 0 60 60" aria-hidden="true">'+ICON[k]+'</svg>';}
 var FEEL={ki:{t:"うれしい",c:"#F5B70A"},do:{t:"むかつく",c:"#F0603F"},ai:{t:"かなしい",c:"#4A6BC0"},raku:{t:"たのしい",c:"#4CB86B"}};
@@ -476,6 +483,14 @@ var CAT=["まなび","おかね","からだ","こえ・おと","くらし","み�
 var G=[
  {i:"flag",bg:"#E6F5EA",n:"なんでもラーニングクエスト",s:"live",c:["まなび"],f:"do",fun:5,use:4,b:"あたやさいさい",d:"問題をかかげたモンスターが、1びょうに1ぽずつお城にせまってくる。こたえを選んでやっつける学習ゲーム。いまは「せかいの国旗」36か国ぶん。",url:"02_nandemo_learning_quest/"},
  {i:"cross",bg:"#FFF1CC",n:"くくクエスト",s:"live",c:["まなび"],f:"do",fun:5,use:4,b:"あたやさいさい",d:"「なんでもラーニングクエスト」とおなじあそび方で、九九ぜんぶ（1の段〜9の段）にちょうせん。10問・30問・50問・エンドレスからえらべます。",url:"06_kuku_quest/"},
+ {i:"plus",bg:"#E6F5EA",n:"たしざんクエスト",s:"live",c:["まなび"],f:"do",fun:5,use:4,b:"あたやさいさい",d:"同じあそび方で、たし算にちょうせん。くり上がりなし→くり上がりあり→2けたと、だんだんむずかしく。",url:"07_tasizan_quest/"},
+ {i:"minus",bg:"#E6F5EA",n:"ひきざんクエスト",s:"live",c:["まなび"],f:"do",fun:5,use:4,b:"あたやさいさい",d:"同じあそび方で、ひき算にちょうせん。くり下がりなし→くり下がりあり→2けたと、だんだんむずかしく。",url:"08_hikizan_quest/"},
+ {i:"cross",bg:"#FFF1CC",n:"かけざんクエスト",s:"live",c:["まなび"],f:"do",fun:4,use:4,b:"あたやさいさい",d:"九九より大きいかけ算（何十×1けた、2けた×1けたなど）にちょうせん。九九そのものは「くくクエスト」で。",url:"09_kakezan_quest/"},
+ {i:"divide",bg:"#FFF1CC",n:"わりざんクエスト",s:"live",c:["まなび"],f:"do",fun:4,use:4,b:"あたやさいさい",d:"あまりの出ない、わり算にちょうせん。九九の逆で考える、九九ぜんぶぶんの九九の逆引き。",url:"10_warizan_quest/"},
+ {i:"kanji",bg:"#E4EBFA",n:"かんじクエスト",s:"live",c:["まなび"],f:"do",fun:4,use:3,b:"あたやさいさい",d:"小学校でならう漢字の読みがなにちょうせん。1文字の漢字から、2文字の熟語まで。",url:"11_kanji_yomi_quest/"},
+ {i:"abc",bg:"#DFF3FA",n:"えいたんごクエスト",s:"live",c:["まなび"],f:"do",fun:4,use:3,b:"あたやさいさい",d:"やさしい英単語と、その意味にちょうせん。どうぶつ・いろ・にちじょうのことば。",url:"12_eitango_quest/"},
+ {i:"tile",bg:"#E4EBFA",n:"げんそきごうクエスト",s:"live",c:["まなび"],f:"do",fun:4,use:3,b:"あたやさいさい",d:"水素からアルゴンまで、18この元素記号にちょうせん。「げんしのへや」でつくれる原子とおなじ顔ぶれ。",url:"13_genso_kigou_quest/"},
+ {i:"scroll",bg:"#FFE6EF",n:"ねんごうクエスト",s:"live",c:["まなび"],f:"do",fun:4,use:3,b:"あたやさいさい",d:"歴史のできごとが何年かにちょうせん。有名な語呂合わせつき。にがてリストでおさらいできます。",url:"14_nengou_quest/"},
  {i:"atom",bg:"#E4EBFA",n:"せかいのレシピ ／ げんしのへや",s:"live",c:["まなび"],f:"ki",fun:4,use:3,b:"あたやさいさい",d:"まんなかの陽子の数で、原子の名前は決まる。いちばん外がわの電子だけを自分で置いて、18この原子をつくります。",url:"04_sekai_no_recipe/"},
  {i:"monster",bg:"#FFE3DC",n:"借金退治クエスト",s:"prep",c:["おかね"],f:"do",fun:5,use:5,b:"おかねやさいさい",d:"返済日にせまるモンスターを、返済と繰り上げ返済でやっつけるRPG。完済までの見通しつき。"},
  {i:"shop",bg:"#FFE6EF",n:"リガットやさん",s:"prep",c:["おかね","みんなで"],f:"raku",fun:5,use:3,b:"おかねやさいさい（こども）",d:"おかね「リガット」で、おさかなとお米をこうかん！ お金は「ありがとう」を運ぶものだと、あそびながらわかるお店やさんごっこ。"},
