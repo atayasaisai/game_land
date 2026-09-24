@@ -1,296 +1,220 @@
-/* なんでもラーニングクエスト ─ 問題パック「せかいの国旗」
-   国旗はすべて 90x60 のSVGとして自前で描いています(外部画像を読みません)。
-   emblem:true のものは、中央のもよう(紋章)を簡略化して描いています。 */
+/* なんでもラーニングクエスト ─ 問題パック「せかいの国旗」（国連加盟国 193か国）
+   国旗の絵は flag-icons（https://github.com/lipis/flag-icons・MITライセンス・7.5.0）の 4x3 の SVG。
+   このフォルダの flags/ に入れてある（ライセンス文は flags/LICENSE.txt）。
+   国名は子ども向けの よびかた、首都は外務省・教科書に多い書き方。
+   国の一覧はウィキペディア「国際連合加盟国」、首都は「首都の一覧」と 2026-09-25 に照合した。 */
 (function(){
 "use strict";
+var C = [{"id":"is","n":"アイスランド","cap":"レイキャビク","reg":"ヨーロッパ","lv":2,"note":""},
+{"id":"ie","n":"アイルランド","cap":"ダブリン","reg":"ヨーロッパ","lv":2,"note":""},
+{"id":"az","n":"アゼルバイジャン","cap":"バクー","reg":"アジア","lv":3,"note":""},
+{"id":"af","n":"アフガニスタン","cap":"カブール","reg":"アジア","lv":2,"note":""},
+{"id":"us","n":"アメリカ","cap":"ワシントンD.C.","reg":"北アメリカ","lv":1,"note":""},
+{"id":"ae","n":"アラブ首長国連邦","cap":"アブダビ","reg":"アジア","lv":2,"note":""},
+{"id":"dz","n":"アルジェリア","cap":"アルジェ","reg":"アフリカ","lv":2,"note":""},
+{"id":"ar","n":"アルゼンチン","cap":"ブエノスアイレス","reg":"南アメリカ","lv":2,"note":""},
+{"id":"al","n":"アルバニア","cap":"ティラナ","reg":"ヨーロッパ","lv":3,"note":""},
+{"id":"am","n":"アルメニア","cap":"エレバン","reg":"アジア","lv":3,"note":""},
+{"id":"ao","n":"アンゴラ","cap":"ルアンダ","reg":"アフリカ","lv":3,"note":""},
+{"id":"ag","n":"アンティグア・バーブーダ","cap":"セントジョンズ","reg":"北アメリカ","lv":3,"note":""},
+{"id":"ad","n":"アンドラ","cap":"アンドララベリャ","reg":"ヨーロッパ","lv":3,"note":""},
+{"id":"ye","n":"イエメン","cap":"サヌア","reg":"アジア","lv":3,"note":""},
+{"id":"gb","n":"イギリス","cap":"ロンドン","reg":"ヨーロッパ","lv":1,"note":""},
+{"id":"il","n":"イスラエル","cap":"エルサレム","reg":"アジア","lv":2,"note":"イスラエルは エルサレムを首都としていますが、日本をふくむ 多くの国は みとめていません。"},
+{"id":"it","n":"イタリア","cap":"ローマ","reg":"ヨーロッパ","lv":1,"note":""},
+{"id":"iq","n":"イラク","cap":"バグダッド","reg":"アジア","lv":2,"note":""},
+{"id":"ir","n":"イラン","cap":"テヘラン","reg":"アジア","lv":2,"note":""},
+{"id":"in","n":"インド","cap":"ニューデリー","reg":"アジア","lv":1,"note":""},
+{"id":"id","n":"インドネシア","cap":"ジャカルタ","reg":"アジア","lv":1,"note":""},
+{"id":"ug","n":"ウガンダ","cap":"カンパラ","reg":"アフリカ","lv":2,"note":""},
+{"id":"ua","n":"ウクライナ","cap":"キーウ","reg":"ヨーロッパ","lv":2,"note":""},
+{"id":"uz","n":"ウズベキスタン","cap":"タシケント","reg":"アジア","lv":2,"note":""},
+{"id":"uy","n":"ウルグアイ","cap":"モンテビデオ","reg":"南アメリカ","lv":2,"note":""},
+{"id":"ec","n":"エクアドル","cap":"キト","reg":"南アメリカ","lv":2,"note":""},
+{"id":"eg","n":"エジプト","cap":"カイロ","reg":"アフリカ","lv":1,"note":""},
+{"id":"ee","n":"エストニア","cap":"タリン","reg":"ヨーロッパ","lv":2,"note":""},
+{"id":"sz","n":"エスワティニ","cap":"ムババーネ","reg":"アフリカ","lv":3,"note":""},
+{"id":"et","n":"エチオピア","cap":"アディスアベバ","reg":"アフリカ","lv":2,"note":""},
+{"id":"er","n":"エリトリア","cap":"アスマラ","reg":"アフリカ","lv":3,"note":""},
+{"id":"sv","n":"エルサルバドル","cap":"サンサルバドル","reg":"北アメリカ","lv":3,"note":""},
+{"id":"au","n":"オーストラリア","cap":"キャンベラ","reg":"オセアニア","lv":1,"note":""},
+{"id":"at","n":"オーストリア","cap":"ウィーン","reg":"ヨーロッパ","lv":2,"note":""},
+{"id":"om","n":"オマーン","cap":"マスカット","reg":"アジア","lv":3,"note":""},
+{"id":"nl","n":"オランダ","cap":"アムステルダム","reg":"ヨーロッパ","lv":1,"note":"首都は アムステルダム。政府や国会は デン・ハーグに あります。"},
+{"id":"gh","n":"ガーナ","cap":"アクラ","reg":"アフリカ","lv":2,"note":""},
+{"id":"cv","n":"カーボベルデ","cap":"プライア","reg":"アフリカ","lv":3,"note":""},
+{"id":"gy","n":"ガイアナ","cap":"ジョージタウン","reg":"南アメリカ","lv":3,"note":""},
+{"id":"kz","n":"カザフスタン","cap":"アスタナ","reg":"アジア","lv":2,"note":""},
+{"id":"qa","n":"カタール","cap":"ドーハ","reg":"アジア","lv":2,"note":""},
+{"id":"ca","n":"カナダ","cap":"オタワ","reg":"北アメリカ","lv":1,"note":""},
+{"id":"ga","n":"ガボン","cap":"リーブルビル","reg":"アフリカ","lv":3,"note":""},
+{"id":"cm","n":"カメルーン","cap":"ヤウンデ","reg":"アフリカ","lv":2,"note":""},
+{"id":"kr","n":"かんこく","cap":"ソウル","reg":"アジア","lv":1,"note":""},
+{"id":"gm","n":"ガンビア","cap":"バンジュール","reg":"アフリカ","lv":3,"note":""},
+{"id":"kh","n":"カンボジア","cap":"プノンペン","reg":"アジア","lv":2,"note":""},
+{"id":"kp","n":"きたちょうせん","cap":"ピョンヤン","reg":"アジア","lv":2,"note":""},
+{"id":"mk","n":"北マケドニア","cap":"スコピエ","reg":"ヨーロッパ","lv":3,"note":""},
+{"id":"gn","n":"ギニア","cap":"コナクリ","reg":"アフリカ","lv":3,"note":""},
+{"id":"gw","n":"ギニアビサウ","cap":"ビサウ","reg":"アフリカ","lv":3,"note":""},
+{"id":"cy","n":"キプロス","cap":"ニコシア","reg":"ヨーロッパ","lv":2,"note":""},
+{"id":"cu","n":"キューバ","cap":"ハバナ","reg":"北アメリカ","lv":2,"note":""},
+{"id":"gr","n":"ギリシャ","cap":"アテネ","reg":"ヨーロッパ","lv":1,"note":""},
+{"id":"ki","n":"キリバス","cap":"タラワ","reg":"オセアニア","lv":3,"note":""},
+{"id":"kg","n":"キルギス","cap":"ビシュケク","reg":"アジア","lv":3,"note":""},
+{"id":"gt","n":"グアテマラ","cap":"グアテマラシティ","reg":"北アメリカ","lv":3,"note":""},
+{"id":"kw","n":"クウェート","cap":"クウェート","reg":"アジア","lv":3,"note":""},
+{"id":"gd","n":"グレナダ","cap":"セントジョージズ","reg":"北アメリカ","lv":3,"note":""},
+{"id":"hr","n":"クロアチア","cap":"ザグレブ","reg":"ヨーロッパ","lv":2,"note":""},
+{"id":"ke","n":"ケニア","cap":"ナイロビ","reg":"アフリカ","lv":2,"note":""},
+{"id":"ci","n":"コートジボワール","cap":"ヤムスクロ","reg":"アフリカ","lv":2,"note":"首都は ヤムスクロ。いちばん大きな町は アビジャンです。"},
+{"id":"cr","n":"コスタリカ","cap":"サンホセ","reg":"北アメリカ","lv":2,"note":""},
+{"id":"km","n":"コモロ","cap":"モロニ","reg":"アフリカ","lv":3,"note":""},
+{"id":"co","n":"コロンビア","cap":"ボゴタ","reg":"南アメリカ","lv":2,"note":""},
+{"id":"cg","n":"コンゴ共和国","cap":"ブラザビル","reg":"アフリカ","lv":3,"note":""},
+{"id":"cd","n":"コンゴ民主共和国","cap":"キンシャサ","reg":"アフリカ","lv":3,"note":""},
+{"id":"sa","n":"サウジアラビア","cap":"リヤド","reg":"アジア","lv":1,"note":""},
+{"id":"ws","n":"サモア","cap":"アピア","reg":"オセアニア","lv":3,"note":""},
+{"id":"st","n":"サントメ・プリンシペ","cap":"サントメ","reg":"アフリカ","lv":3,"note":""},
+{"id":"zm","n":"ザンビア","cap":"ルサカ","reg":"アフリカ","lv":3,"note":""},
+{"id":"sm","n":"サンマリノ","cap":"サンマリノ","reg":"ヨーロッパ","lv":3,"note":""},
+{"id":"sl","n":"シエラレオネ","cap":"フリータウン","reg":"アフリカ","lv":3,"note":""},
+{"id":"dj","n":"ジブチ","cap":"ジブチ","reg":"アフリカ","lv":3,"note":""},
+{"id":"jm","n":"ジャマイカ","cap":"キングストン","reg":"北アメリカ","lv":2,"note":""},
+{"id":"ge","n":"ジョージア","cap":"トビリシ","reg":"アジア","lv":2,"note":""},
+{"id":"sy","n":"シリア","cap":"ダマスカス","reg":"アジア","lv":3,"note":""},
+{"id":"sg","n":"シンガポール","cap":"シンガポール","reg":"アジア","lv":1,"note":""},
+{"id":"zw","n":"ジンバブエ","cap":"ハラレ","reg":"アフリカ","lv":2,"note":""},
+{"id":"ch","n":"スイス","cap":"ベルン","reg":"ヨーロッパ","lv":1,"note":"スイスは 法律で首都をきめていません。政府は ベルンに あります。"},
+{"id":"se","n":"スウェーデン","cap":"ストックホルム","reg":"ヨーロッパ","lv":1,"note":""},
+{"id":"sd","n":"スーダン","cap":"ハルツーム","reg":"アフリカ","lv":2,"note":""},
+{"id":"es","n":"スペイン","cap":"マドリード","reg":"ヨーロッパ","lv":1,"note":""},
+{"id":"sr","n":"スリナム","cap":"パラマリボ","reg":"南アメリカ","lv":3,"note":""},
+{"id":"lk","n":"スリランカ","cap":"スリジャヤワルダナプラコッテ","reg":"アジア","lv":2,"note":"首都は スリジャヤワルダナプラコッテ。いちばん大きな町は コロンボです。"},
+{"id":"sk","n":"スロバキア","cap":"ブラチスラバ","reg":"ヨーロッパ","lv":2,"note":""},
+{"id":"si","n":"スロベニア","cap":"リュブリャナ","reg":"ヨーロッパ","lv":2,"note":""},
+{"id":"sc","n":"セーシェル","cap":"ビクトリア","reg":"アフリカ","lv":3,"note":""},
+{"id":"gq","n":"せきどうギニア","cap":"マラボ","reg":"アフリカ","lv":3,"note":""},
+{"id":"sn","n":"セネガル","cap":"ダカール","reg":"アフリカ","lv":2,"note":""},
+{"id":"rs","n":"セルビア","cap":"ベオグラード","reg":"ヨーロッパ","lv":2,"note":""},
+{"id":"kn","n":"セントクリストファー・ネイビス","cap":"バセテール","reg":"北アメリカ","lv":3,"note":""},
+{"id":"vc","n":"セントビンセント・グレナディーン","cap":"キングスタウン","reg":"北アメリカ","lv":3,"note":""},
+{"id":"lc","n":"セントルシア","cap":"カストリーズ","reg":"北アメリカ","lv":3,"note":""},
+{"id":"so","n":"ソマリア","cap":"モガディシュ","reg":"アフリカ","lv":3,"note":""},
+{"id":"sb","n":"ソロモン諸島","cap":"ホニアラ","reg":"オセアニア","lv":3,"note":""},
+{"id":"th","n":"タイ","cap":"バンコク","reg":"アジア","lv":1,"note":""},
+{"id":"tj","n":"タジキスタン","cap":"ドゥシャンベ","reg":"アジア","lv":3,"note":""},
+{"id":"tz","n":"タンザニア","cap":"ドドマ","reg":"アフリカ","lv":2,"note":"首都は ドドマ。いちばん大きな町は ダルエスサラームです。"},
+{"id":"cz","n":"チェコ","cap":"プラハ","reg":"ヨーロッパ","lv":2,"note":""},
+{"id":"td","n":"チャド","cap":"ンジャメナ","reg":"アフリカ","lv":3,"note":""},
+{"id":"cf","n":"中央アフリカ","cap":"バンギ","reg":"アフリカ","lv":3,"note":""},
+{"id":"cn","n":"中国","cap":"ペキン","reg":"アジア","lv":1,"note":""},
+{"id":"tn","n":"チュニジア","cap":"チュニス","reg":"アフリカ","lv":2,"note":""},
+{"id":"cl","n":"チリ","cap":"サンティアゴ","reg":"南アメリカ","lv":2,"note":""},
+{"id":"tv","n":"ツバル","cap":"フナフティ","reg":"オセアニア","lv":3,"note":""},
+{"id":"dk","n":"デンマーク","cap":"コペンハーゲン","reg":"ヨーロッパ","lv":2,"note":""},
+{"id":"de","n":"ドイツ","cap":"ベルリン","reg":"ヨーロッパ","lv":1,"note":""},
+{"id":"tg","n":"トーゴ","cap":"ロメ","reg":"アフリカ","lv":3,"note":""},
+{"id":"do","n":"ドミニカ共和国","cap":"サントドミンゴ","reg":"北アメリカ","lv":3,"note":""},
+{"id":"dm","n":"ドミニカ国","cap":"ロゾー","reg":"北アメリカ","lv":3,"note":""},
+{"id":"tt","n":"トリニダード・トバゴ","cap":"ポートオブスペイン","reg":"北アメリカ","lv":3,"note":""},
+{"id":"tm","n":"トルクメニスタン","cap":"アシガバート","reg":"アジア","lv":3,"note":""},
+{"id":"tr","n":"トルコ","cap":"アンカラ","reg":"アジア","lv":1,"note":""},
+{"id":"to","n":"トンガ","cap":"ヌクアロファ","reg":"オセアニア","lv":3,"note":""},
+{"id":"ng","n":"ナイジェリア","cap":"アブジャ","reg":"アフリカ","lv":2,"note":""},
+{"id":"nr","n":"ナウル","cap":"ヤレン","reg":"オセアニア","lv":3,"note":"ナウルには きまった首都が ありません。政府は ヤレンに あります。"},
+{"id":"na","n":"ナミビア","cap":"ウィントフック","reg":"アフリカ","lv":3,"note":""},
+{"id":"ni","n":"ニカラグア","cap":"マナグア","reg":"北アメリカ","lv":3,"note":""},
+{"id":"ne","n":"ニジェール","cap":"ニアメ","reg":"アフリカ","lv":3,"note":""},
+{"id":"jp","n":"日本","cap":"東京","reg":"アジア","lv":1,"note":""},
+{"id":"nz","n":"ニュージーランド","cap":"ウェリントン","reg":"オセアニア","lv":1,"note":""},
+{"id":"np","n":"ネパール","cap":"カトマンズ","reg":"アジア","lv":2,"note":""},
+{"id":"no","n":"ノルウェー","cap":"オスロ","reg":"ヨーロッパ","lv":2,"note":""},
+{"id":"bh","n":"バーレーン","cap":"マナーマ","reg":"アジア","lv":3,"note":""},
+{"id":"ht","n":"ハイチ","cap":"ポルトープランス","reg":"北アメリカ","lv":3,"note":""},
+{"id":"pk","n":"パキスタン","cap":"イスラマバード","reg":"アジア","lv":2,"note":""},
+{"id":"pa","n":"パナマ","cap":"パナマシティ","reg":"北アメリカ","lv":2,"note":""},
+{"id":"vu","n":"バヌアツ","cap":"ポートビラ","reg":"オセアニア","lv":3,"note":""},
+{"id":"bs","n":"バハマ","cap":"ナッソー","reg":"北アメリカ","lv":3,"note":""},
+{"id":"pg","n":"パプアニューギニア","cap":"ポートモレスビー","reg":"オセアニア","lv":2,"note":""},
+{"id":"pw","n":"パラオ","cap":"マルキョク","reg":"オセアニア","lv":3,"note":""},
+{"id":"py","n":"パラグアイ","cap":"アスンシオン","reg":"南アメリカ","lv":2,"note":""},
+{"id":"bb","n":"バルバドス","cap":"ブリッジタウン","reg":"北アメリカ","lv":3,"note":""},
+{"id":"hu","n":"ハンガリー","cap":"ブダペスト","reg":"ヨーロッパ","lv":2,"note":""},
+{"id":"bd","n":"バングラデシュ","cap":"ダッカ","reg":"アジア","lv":2,"note":""},
+{"id":"tl","n":"ひがしティモール","cap":"ディリ","reg":"アジア","lv":3,"note":""},
+{"id":"fj","n":"フィジー","cap":"スバ","reg":"オセアニア","lv":2,"note":""},
+{"id":"ph","n":"フィリピン","cap":"マニラ","reg":"アジア","lv":1,"note":""},
+{"id":"fi","n":"フィンランド","cap":"ヘルシンキ","reg":"ヨーロッパ","lv":2,"note":""},
+{"id":"bt","n":"ブータン","cap":"ティンプー","reg":"アジア","lv":3,"note":""},
+{"id":"br","n":"ブラジル","cap":"ブラジリア","reg":"南アメリカ","lv":1,"note":""},
+{"id":"fr","n":"フランス","cap":"パリ","reg":"ヨーロッパ","lv":1,"note":""},
+{"id":"bg","n":"ブルガリア","cap":"ソフィア","reg":"ヨーロッパ","lv":2,"note":""},
+{"id":"bf","n":"ブルキナファソ","cap":"ワガドゥグー","reg":"アフリカ","lv":3,"note":""},
+{"id":"bn","n":"ブルネイ","cap":"バンダルスリブガワン","reg":"アジア","lv":3,"note":""},
+{"id":"bi","n":"ブルンジ","cap":"ギテガ","reg":"アフリカ","lv":3,"note":"2019年に 首都が ブジュンブラから ギテガに うつりました。"},
+{"id":"vn","n":"ベトナム","cap":"ハノイ","reg":"アジア","lv":1,"note":""},
+{"id":"bj","n":"ベナン","cap":"ポルトノボ","reg":"アフリカ","lv":3,"note":""},
+{"id":"ve","n":"ベネズエラ","cap":"カラカス","reg":"南アメリカ","lv":2,"note":""},
+{"id":"by","n":"ベラルーシ","cap":"ミンスク","reg":"ヨーロッパ","lv":2,"note":""},
+{"id":"bz","n":"ベリーズ","cap":"ベルモパン","reg":"北アメリカ","lv":3,"note":""},
+{"id":"pe","n":"ペルー","cap":"リマ","reg":"南アメリカ","lv":2,"note":""},
+{"id":"be","n":"ベルギー","cap":"ブリュッセル","reg":"ヨーロッパ","lv":2,"note":""},
+{"id":"pl","n":"ポーランド","cap":"ワルシャワ","reg":"ヨーロッパ","lv":2,"note":""},
+{"id":"ba","n":"ボスニア・ヘルツェゴビナ","cap":"サラエボ","reg":"ヨーロッパ","lv":3,"note":""},
+{"id":"bw","n":"ボツワナ","cap":"ハボローネ","reg":"アフリカ","lv":3,"note":""},
+{"id":"bo","n":"ボリビア","cap":"スクレ","reg":"南アメリカ","lv":2,"note":"憲法できめた首都は スクレ。政府は ラパスに あります。"},
+{"id":"pt","n":"ポルトガル","cap":"リスボン","reg":"ヨーロッパ","lv":2,"note":""},
+{"id":"hn","n":"ホンジュラス","cap":"テグシガルパ","reg":"北アメリカ","lv":3,"note":""},
+{"id":"mh","n":"マーシャル諸島","cap":"マジュロ","reg":"オセアニア","lv":3,"note":""},
+{"id":"mg","n":"マダガスカル","cap":"アンタナナリボ","reg":"アフリカ","lv":2,"note":""},
+{"id":"mw","n":"マラウイ","cap":"リロングウェ","reg":"アフリカ","lv":3,"note":""},
+{"id":"ml","n":"マリ","cap":"バマコ","reg":"アフリカ","lv":3,"note":""},
+{"id":"mt","n":"マルタ","cap":"バレッタ","reg":"ヨーロッパ","lv":2,"note":""},
+{"id":"my","n":"マレーシア","cap":"クアラルンプール","reg":"アジア","lv":1,"note":""},
+{"id":"fm","n":"ミクロネシア連邦","cap":"パリキール","reg":"オセアニア","lv":3,"note":""},
+{"id":"za","n":"みなみアフリカ","cap":"プレトリア","reg":"アフリカ","lv":2,"note":"みなみアフリカには首都が3つあります。行政の首都がプレトリアです。"},
+{"id":"ss","n":"みなみスーダン","cap":"ジュバ","reg":"アフリカ","lv":3,"note":""},
+{"id":"mm","n":"ミャンマー","cap":"ネーピードー","reg":"アジア","lv":2,"note":""},
+{"id":"mx","n":"メキシコ","cap":"メキシコシティ","reg":"北アメリカ","lv":1,"note":""},
+{"id":"mu","n":"モーリシャス","cap":"ポートルイス","reg":"アフリカ","lv":3,"note":""},
+{"id":"mr","n":"モーリタニア","cap":"ヌアクショット","reg":"アフリカ","lv":3,"note":""},
+{"id":"mz","n":"モザンビーク","cap":"マプト","reg":"アフリカ","lv":3,"note":""},
+{"id":"mc","n":"モナコ","cap":"モナコ","reg":"ヨーロッパ","lv":2,"note":""},
+{"id":"mv","n":"モルディブ","cap":"マレ","reg":"アジア","lv":3,"note":""},
+{"id":"md","n":"モルドバ","cap":"キシナウ","reg":"ヨーロッパ","lv":3,"note":""},
+{"id":"ma","n":"モロッコ","cap":"ラバト","reg":"アフリカ","lv":2,"note":""},
+{"id":"mn","n":"モンゴル","cap":"ウランバートル","reg":"アジア","lv":2,"note":""},
+{"id":"me","n":"モンテネグロ","cap":"ポドゴリツァ","reg":"ヨーロッパ","lv":3,"note":""},
+{"id":"jo","n":"ヨルダン","cap":"アンマン","reg":"アジア","lv":2,"note":""},
+{"id":"la","n":"ラオス","cap":"ビエンチャン","reg":"アジア","lv":3,"note":""},
+{"id":"lv","n":"ラトビア","cap":"リガ","reg":"ヨーロッパ","lv":2,"note":""},
+{"id":"lt","n":"リトアニア","cap":"ビリニュス","reg":"ヨーロッパ","lv":2,"note":""},
+{"id":"ly","n":"リビア","cap":"トリポリ","reg":"アフリカ","lv":2,"note":""},
+{"id":"li","n":"リヒテンシュタイン","cap":"ファドゥーツ","reg":"ヨーロッパ","lv":3,"note":""},
+{"id":"lr","n":"リベリア","cap":"モンロビア","reg":"アフリカ","lv":3,"note":""},
+{"id":"ro","n":"ルーマニア","cap":"ブカレスト","reg":"ヨーロッパ","lv":2,"note":""},
+{"id":"lu","n":"ルクセンブルク","cap":"ルクセンブルク","reg":"ヨーロッパ","lv":2,"note":""},
+{"id":"rw","n":"ルワンダ","cap":"キガリ","reg":"アフリカ","lv":3,"note":""},
+{"id":"ls","n":"レソト","cap":"マセル","reg":"アフリカ","lv":3,"note":""},
+{"id":"lb","n":"レバノン","cap":"ベイルート","reg":"アジア","lv":2,"note":""},
+{"id":"ru","n":"ロシア","cap":"モスクワ","reg":"ヨーロッパ","lv":1,"note":""}];
 
-/* ---- 描画ヘルパー ---------------------------------------------------- */
-
-// n角の星。rot は度、0で真上に頂点。
-function star(cx,cy,r,rot,fill,n){
-  n=n||5;
-  var inner=(n===5)?r*0.382:r*0.5, p="", i, rr, a;
-  for(i=0;i<n*2;i++){
-    rr=(i%2)?inner:r;
-    a=(rot-90+i*(180/n))*Math.PI/180;
-    p+=(i?"L":"M")+(cx+rr*Math.cos(a)).toFixed(2)+","+(cy+rr*Math.sin(a)).toFixed(2);
-  }
-  return '<path d="'+p+'Z" fill="'+fill+'"/>';
+// 4:3 の旗を、エンジンの 90x60 の枠の まんなかに（左右に すこし よはくが出る）
+function flag(id){
+  return '<rect x="4.5" y="-.5" width="81" height="61" fill="#33312A"/>'
+       + '<image href="flags/'+id+'.svg" x="5" y="0" width="80" height="60" preserveAspectRatio="none"/>';
 }
-
-// 北欧十字。縦棒は旗ざお寄り。
-function nordic(bg,cross,inner){
-  var s='<rect width="90" height="60" fill="'+bg+'"/>'
-       +'<rect x="24" width="13" height="60" fill="'+cross+'"/>'
-       +'<rect y="23.5" width="90" height="13" fill="'+cross+'"/>';
-  if(inner){
-    s+='<rect x="27.5" width="6" height="60" fill="'+inner+'"/>'
-      +'<rect y="27" width="90" height="6" fill="'+inner+'"/>';
-  }
-  return s;
-}
-
-// ユニオンジャック(単体でも、他国のカントンとしても使う)
-function unionjack(){
-  return '<rect width="90" height="60" fill="#012169"/>'
-   +'<path d="M0,0 L90,60 M90,0 L0,60" stroke="#fff" stroke-width="12"/>'
-   +'<path d="M0,0 L90,60 M90,0 L0,60" stroke="#C8102E" stroke-width="5"/>'
-   +'<path d="M45,0 V60 M0,30 H90" stroke="#fff" stroke-width="20"/>'
-   +'<path d="M45,0 V60 M0,30 H90" stroke="#C8102E" stroke-width="12"/>';
-}
-// 入れ子の <svg> はビューポートで切り取られるので、はみ出しを気にせず置ける
-function canton(w,h,inner){
-  return '<svg x="0" y="0" width="'+w+'" height="'+h+'" viewBox="0 0 90 60">'+inner+'</svg>';
-}
-
-// 八卦(ハングルの旗の四隅)。pat は上から 1=つながった棒 0=切れた棒
-function trigram(cx,cy,rot,pat){
-  var s='<g transform="translate('+cx+','+cy+') rotate('+rot+')">',i,y,
-      bw=13, bh=2.3, gap=3.5, half=bw*0.41;
-  for(i=0;i<3;i++){
-    y=(i-1)*gap-bh/2;
-    if(pat[i]) s+='<rect x="'+(-bw/2)+'" y="'+y+'" width="'+bw+'" height="'+bh+'" fill="#000"/>';
-    else s+='<rect x="'+(-bw/2)+'" y="'+y+'" width="'+half+'" height="'+bh+'" fill="#000"/>'
-          +'<rect x="'+(bw/2-half)+'" y="'+y+'" width="'+half+'" height="'+bh+'" fill="#000"/>';
-  }
-  return s+'</g>';
-}
-
-/* ---- 旗ごとの絵 ------------------------------------------------------ */
-
-function usa(){
-  var s='<rect width="90" height="60" fill="#fff"/>',i,r,c,x,y,n;
-  for(i=0;i<13;i+=2) s+='<rect y="'+(i*60/13).toFixed(3)+'" width="90" height="'+(60/13).toFixed(3)+'" fill="#B22234"/>';
-  s+='<rect width="36" height="'+(7*60/13).toFixed(3)+'" fill="#3C3B6E"/>';
-  for(r=0;r<9;r++){                       // 6個の列と5個の列が交互に9段
-    n=(r%2)?5:6;
-    y=2.2+r*3.35;
-    for(c=0;c<n;c++){
-      x=(r%2)?5.6+c*5.6:2.8+c*5.6;
-      s+=star(x,y,1.5,0,"#fff");
-    }
-  }
-  return s;
-}
-
-function china(){
-  var s='<rect width="90" height="60" fill="#EE1C25"/>'+star(15,15,9,0,"#FFDE00"),
-      pts=[[30,6],[36,12],[36,21],[30,27]],i,a;
-  for(i=0;i<4;i++){                       // 小さい星は大きい星のほうを向く
-    a=Math.atan2(15-pts[i][1],15-pts[i][0])*180/Math.PI+90;
-    s+=star(pts[i][0],pts[i][1],3,a,"#FFDE00");
-  }
-  return s;
-}
-
-function korea(){
-  return '<rect width="90" height="60" fill="#fff"/>'
-   +'<g transform="translate(45,30) rotate(-123.69)">'
-   +'<circle r="12" fill="#0047A0"/>'
-   +'<path d="M0,-12 A12,12 0 0,1 0,12 A6,6 0 0,1 0,0 A6,6 0 0,0 0,-12 Z" fill="#CD2E3A"/>'
-   +'</g>'
-   +trigram(19,12.5,-56.31,[1,1,1])   // 건
-   +trigram(71,12.5, 56.31,[0,1,0])   // 감
-   +trigram(19,47.5, 56.31,[1,0,1])   // 리
-   +trigram(71,47.5,-56.31,[0,0,0]);  // 곤
-}
-
-function india(){
-  var s='<rect width="90" height="20" fill="#FF9933"/><rect y="20" width="90" height="20" fill="#fff"/>'
-       +'<rect y="40" width="90" height="20" fill="#138808"/>'
-       +'<circle cx="45" cy="30" r="8.6" fill="none" stroke="#000080" stroke-width="0.9"/>'
-       +'<circle cx="45" cy="30" r="1.7" fill="#000080"/>',i,a;
-  for(i=0;i<24;i++){                      // 法輪のスポーク24本
-    a=i*15*Math.PI/180;
-    s+='<line x1="'+(45+1.7*Math.cos(a)).toFixed(2)+'" y1="'+(30+1.7*Math.sin(a)).toFixed(2)
-      +'" x2="'+(45+8.2*Math.cos(a)).toFixed(2)+'" y2="'+(30+8.2*Math.sin(a)).toFixed(2)
-      +'" stroke="#000080" stroke-width="0.7"/>';
-  }
-  return s;
-}
-
-function brazil(){
-  var s='<rect width="90" height="60" fill="#009C3B"/>'
-   +'<path d="M45,5 L85,30 L45,55 L5,30 Z" fill="#FFDF00"/>'
-   +'<circle cx="45" cy="30" r="15" fill="#002776"/>',
-   pts=[[38,20,1.4],[46,16.5,1.1],[53,21,1.3],[41,25,1],[58,27,1.1],[33,26,1],
-        [49,26,0.9],[62,33,1],[45,44,1.2]],i;
-  for(i=0;i<pts.length;i++) s+=star(pts[i][0],pts[i][1],pts[i][2],0,"#fff");
-  // 「ORDEM E PROGRESSO」の白い帯(文字は入れていません)
-  return s+'<path d="M31.98,37.46 A25.1,25.1 0 0,0 58.02,37.46 A15,15 0 0,0 60,30.86 '
-   +'A21.1,21.1 0 0,1 30,30.86 A15,15 0 0,0 31.98,37.46 Z" fill="#fff"/>';
-}
-
-function australia(){
-  return '<rect width="90" height="60" fill="#00008B"/>'
-   +canton(45,30,unionjack())
-   +star(22.5,45,6,0,"#fff",7)                               // 連邦の星
-   +star(75,12,3.2,0,"#fff",7)+star(83,30,3.6,0,"#fff",7)
-   +star(72,45,3.2,0,"#fff",7)+star(62,36,2.4,0,"#fff",7)
-   +star(78,39,1.8,0,"#fff",5);
-}
-
-function turkey(){
-  return '<rect width="90" height="60" fill="#E30A17"/>'
-   +'<circle cx="33" cy="30" r="12" fill="#fff"/><circle cx="37.5" cy="30" r="9.6" fill="#E30A17"/>'
-   +star(53,30,6,-15,"#fff");
-}
-
-function greece(){
-  var s='<rect width="90" height="60" fill="#fff"/>',i,st=60/9;
-  for(i=0;i<9;i+=2) s+='<rect y="'+(i*st).toFixed(3)+'" width="90" height="'+st.toFixed(3)+'" fill="#0D5EAF"/>';
-  s+='<rect width="'+(5*st).toFixed(3)+'" height="'+(5*st).toFixed(3)+'" fill="#0D5EAF"/>';
-  s+='<rect x="'+(2*st).toFixed(3)+'" width="'+st.toFixed(3)+'" height="'+(5*st).toFixed(3)+'" fill="#fff"/>';
-  s+='<rect y="'+(2*st).toFixed(3)+'" width="'+(5*st).toFixed(3)+'" height="'+st.toFixed(3)+'" fill="#fff"/>';
-  return s;
-}
-
-function argentina(){
-  var s='<rect width="90" height="60" fill="#74ACDF"/><rect y="20" width="90" height="20" fill="#fff"/>',i,a;
-  for(i=0;i<16;i++){
-    a=i*22.5;
-    s+='<g transform="translate(45,30) rotate('+a+')"><path d="M0,-5 L1.5,-9.5 L0,-11 L-1.5,-9.5 Z" fill="#F6B40E"/></g>';
-  }
-  return s+'<circle cx="45" cy="30" r="5" fill="#F6B40E" stroke="#C8901A" stroke-width="0.6"/>';
-}
-
-function canada(){
-  return '<rect width="90" height="60" fill="#FF0000"/><rect x="22.5" width="45" height="60" fill="#fff"/>'
-   +'<path transform="translate(45,30)" fill="#FF0000" d="'
-   +'M0,-20 L2.4,-12.4 L9.2,-13.8 L7.4,-7.2 L17.6,-8.6 L15.8,-4.4 L21.6,1 L18,2.8 '
-   +'L19.4,8 L11.2,6.6 L10,9.2 L3.4,8 L4.6,20 L-4.6,20 L-3.4,8 L-10,9.2 L-11.2,6.6 '
-   +'L-19.4,8 L-18,2.8 L-21.6,1 L-15.8,-4.4 L-17.6,-8.6 L-7.4,-7.2 L-9.2,-13.8 L-2.4,-12.4 Z"/>';
-}
-
-function switzerland(){                    // 正方形の旗なので、枠の中でも正方形のまま描く(左右は透明)
-  return '<rect x="15" width="60" height="60" fill="#DA291C"/>'
-   +'<rect x="42" y="13" width="6" height="34" fill="#fff"/><rect x="28" y="27" width="34" height="6" fill="#fff"/>';
-}
-
-function spain(){
-  return '<rect width="90" height="60" fill="#AA151B"/><rect y="15" width="90" height="30" fill="#F1BF00"/>'
-   +'<g transform="translate(24,30)">'                       // 紋章は簡略化
-   +'<rect x="-6" y="-8" width="12" height="14" rx="1.5" fill="#AA151B" stroke="#8B6914" stroke-width="0.7"/>'
-   +'<rect x="-6" y="-8" width="6" height="7" fill="#F1BF00"/><rect x="0" y="-1" width="6" height="7" fill="#F1BF00"/>'
-   +'<path d="M-6,6 q6,5 12,0" fill="#AA151B" stroke="#8B6914" stroke-width="0.7"/>'
-   +'<path d="M-3,-8 q3,-4 6,0" fill="none" stroke="#8B6914" stroke-width="1.2"/>'
-   +'<rect x="-9.5" y="-9" width="2" height="20" fill="#8B6914"/><rect x="7.5" y="-9" width="2" height="20" fill="#8B6914"/>'
-   +'</g>';
-}
-
-function portugal(){
-  return '<rect width="90" height="60" fill="#DA291C"/><rect width="36" height="60" fill="#046A38"/>'
-   +'<g transform="translate(36,30)">'                       // 渾天儀は簡略化
-   +'<circle r="10.5" fill="#FFD100" stroke="#8B6914" stroke-width="0.7"/>'
-   +'<ellipse rx="10.5" ry="4" fill="none" stroke="#8B6914" stroke-width="0.7"/>'
-   +'<ellipse rx="4" ry="10.5" fill="none" stroke="#8B6914" stroke-width="0.7"/>'
-   +'<line x1="-10.5" y1="0" x2="10.5" y2="0" stroke="#8B6914" stroke-width="0.7"/>'
-   +'<rect x="-3.4" y="-5" width="6.8" height="10" rx="1" fill="#fff" stroke="#8B6914" stroke-width="0.7"/>'
-   +'<rect x="-2.6" y="-4.2" width="5.2" height="8.4" rx="0.8" fill="#DA291C"/>'
-   +'<circle cx="0" cy="-1.6" r="0.7" fill="#fff"/><circle cx="-1.5" cy="0.6" r="0.7" fill="#fff"/>'
-   +'<circle cx="1.5" cy="0.6" r="0.7" fill="#fff"/><circle cx="0" cy="2.4" r="0.7" fill="#fff"/>'
-   +'</g>';
-}
-
-function mexico(){
-  return '<rect width="90" height="60" fill="#006847"/><rect x="30" width="30" height="60" fill="#fff"/>'
-   +'<rect x="60" width="30" height="60" fill="#CE1126"/>'
-   +'<g transform="translate(45,30)">'                       // わしとサボテンは簡略化
-   +'<path d="M-9,5 q-1.5,7 5,10 M9,5 q1.5,7 -5,10" fill="none" stroke="#2E7D32" stroke-width="1.3"/>'
-   +'<path d="M0,11 v-7 M-4,11 q-4,0 -4,-4.5 q0,-3 1.6,-3 M4,11 q4,0 4,-4.5 q0,-3 -1.6,-3"'
-   +' fill="none" stroke="#2E7D32" stroke-width="1.7" stroke-linecap="round"/>'
-   +'<path d="M-1,-8 q-6,-2 -9,1 q4,-0.5 6,2 Z" fill="#7A5230"/>'
-   +'<path d="M2,-8 q6,-3 10,0 q-5,0 -7,2.5 Z" fill="#94693E"/>'
-   +'<path d="M-1.5,-7 q3.5,-3 5,0 q1,4 -1.5,7 q-2.5,-2 -3.5,-7 Z" fill="#6D4C2E"/>'
-   +'<path d="M3,-7.5 q2.5,-2.5 4.5,-1 q-1.5,2.5 -3.5,2.5 Z" fill="#6D4C2E"/>'
-   +'<path d="M6,-6 q4,1.5 4.5,-1.5" fill="none" stroke="#2E7D32" stroke-width="1"/>'
-   +'</g>';
-}
-
-function southafrica(){
-  return '<rect width="90" height="60" fill="#E03C31"/>'
-   +'<path d="M0,60 L33,30 L90,30 L90,60 Z" fill="#001489"/>'
-   +'<path d="M-3,-3 L35,30 L-3,63 M35,30 H93" fill="none" stroke="#fff" stroke-width="14"/>'
-   +'<path d="M-3,-3 L35,30 L-3,63 M35,30 H93" fill="none" stroke="#007A4D" stroke-width="9"/>'
-   +'<path d="M0,2 L32,30 L0,58 Z" fill="#FFB81C"/>'
-   +'<path d="M0,10 L23,30 L0,50 Z" fill="#000"/>';
-}
-
-function chile(){
-  return '<rect width="90" height="60" fill="#D52B1E"/><rect width="90" height="30" fill="#fff"/>'
-   +'<rect width="30" height="30" fill="#0039A6"/>'+star(15,15,9,0,"#fff");
-}
-
-function singaporeLike(){ return ""; } // 未使用
-
-/* 単純な帯の旗をまとめて作る */
-function bandsH(){ var a=arguments,s="",i,y=0,h=60/a.length;
-  for(i=0;i<a.length;i++){ s+='<rect y="'+(i*h).toFixed(3)+'" width="90" height="'+h.toFixed(3)+'" fill="'+a[i]+'"/>'; }
-  return s; }
-function bandsV(){ var a=arguments,s="",i,w=90/a.length;
-  for(i=0;i<a.length;i++){ s+='<rect x="'+(i*w).toFixed(3)+'" width="'+w.toFixed(3)+'" height="60" fill="'+a[i]+'"/>'; }
-  return s; }
-
-/* ---- 国のデータ ------------------------------------------------------
-   lv 1=やさしい 2=ふつう 3=むずかしい / reg は選択肢を近い地域から選ぶのに使う */
-
-var C = [
- // ── lv1 ──────────────────────────────────────────────────────────────
- {id:"jp",n:"日本",       cap:"東京",         reg:"アジア",     lv:1, f:'<rect width="90" height="60" fill="#fff"/><circle cx="45" cy="30" r="18" fill="#BC002D"/>'},
- {id:"us",n:"アメリカ",   cap:"ワシントンD.C.",reg:"アメリカ",   lv:1, f:usa()},
- {id:"gb",n:"イギリス",   cap:"ロンドン",     reg:"ヨーロッパ", lv:1, f:unionjack()},
- {id:"fr",n:"フランス",   cap:"パリ",         reg:"ヨーロッパ", lv:1, f:bandsV("#002395","#FFFFFF","#ED2939")},
- {id:"it",n:"イタリア",   cap:"ローマ",       reg:"ヨーロッパ", lv:1, f:bandsV("#009246","#FFFFFF","#CE2B37")},
- {id:"de",n:"ドイツ",     cap:"ベルリン",     reg:"ヨーロッパ", lv:1, f:bandsH("#000000","#DD0000","#FFCE00")},
- {id:"ca",n:"カナダ",     cap:"オタワ",       reg:"アメリカ",   lv:1, f:canada()},
- {id:"cn",n:"中国",       cap:"ペキン",       reg:"アジア",     lv:1, f:china()},
- {id:"kr",n:"かんこく",   cap:"ソウル",       reg:"アジア",     lv:1, f:korea()},
- {id:"br",n:"ブラジル",   cap:"ブラジリア",   reg:"アメリカ",   lv:1, f:brazil(), emblem:true},
- {id:"in",n:"インド",     cap:"ニューデリー", reg:"アジア",     lv:1, f:india()},
- {id:"au",n:"オーストラリア",cap:"キャンベラ",reg:"オセアニア", lv:1, f:australia()},
- // ── lv2 ──────────────────────────────────────────────────────────────
- {id:"ru",n:"ロシア",     cap:"モスクワ",     reg:"ヨーロッパ", lv:2, f:bandsH("#FFFFFF","#0039A6","#D52B1E")},
- {id:"nl",n:"オランダ",   cap:"アムステルダム",reg:"ヨーロッパ",lv:2, f:bandsH("#AE1C28","#FFFFFF","#21468B")},
- {id:"ch",n:"スイス",     cap:"ベルン",       reg:"ヨーロッパ", lv:2, f:switzerland()},
- {id:"se",n:"スウェーデン",cap:"ストックホルム",reg:"ヨーロッパ",lv:2, f:nordic("#006AA7","#FECC00")},
- {id:"es",n:"スペイン",   cap:"マドリード",   reg:"ヨーロッパ", lv:2, f:spain(), emblem:true},
- {id:"mx",n:"メキシコ",   cap:"メキシコシティ",reg:"アメリカ",  lv:2, f:mexico(), emblem:true},
- {id:"th",n:"タイ",       cap:"バンコク",     reg:"アジア",     lv:2, f:'<rect width="90" height="60" fill="#A51931"/><rect y="10" width="90" height="40" fill="#F4F5F8"/><rect y="20" width="90" height="20" fill="#2D2A4A"/>'},
- {id:"vn",n:"ベトナム",   cap:"ハノイ",       reg:"アジア",     lv:2, f:'<rect width="90" height="60" fill="#DA251D"/>'+star(45,30,15,0,"#FFFF00")},
- {id:"id",n:"インドネシア",cap:"ジャカルタ",  reg:"アジア",     lv:2, f:bandsH("#FF0000","#FFFFFF")},
- {id:"tr",n:"トルコ",     cap:"アンカラ",     reg:"アジア",     lv:2, f:turkey()},
- {id:"gr",n:"ギリシャ",   cap:"アテネ",       reg:"ヨーロッパ", lv:2, f:greece()},
- {id:"ar",n:"アルゼンチン",cap:"ブエノスアイレス",reg:"アメリカ",lv:2,f:argentina()},
- // ── lv3 ──────────────────────────────────────────────────────────────
- {id:"no",n:"ノルウェー", cap:"オスロ",       reg:"ヨーロッパ", lv:3, f:nordic("#BA0C2F","#FFFFFF","#00205B")},
- {id:"dk",n:"デンマーク", cap:"コペンハーゲン",reg:"ヨーロッパ",lv:3, f:nordic("#C8102E","#FFFFFF")},
- {id:"fi",n:"フィンランド",cap:"ヘルシンキ",  reg:"ヨーロッパ", lv:3, f:nordic("#FFFFFF","#003580")},
- {id:"pt",n:"ポルトガル", cap:"リスボン",     reg:"ヨーロッパ", lv:3, f:portugal(), emblem:true},
- {id:"pl",n:"ポーランド", cap:"ワルシャワ",   reg:"ヨーロッパ", lv:3, f:bandsH("#FFFFFF","#DC143C")},
- {id:"ua",n:"ウクライナ", cap:"キーウ",       reg:"ヨーロッパ", lv:3, f:bandsH("#0057B7","#FFD700")},
- {id:"be",n:"ベルギー",   cap:"ブリュッセル", reg:"ヨーロッパ", lv:3, f:bandsV("#000000","#FAE042","#ED2939")},
- {id:"at",n:"オーストリア",cap:"ウィーン",    reg:"ヨーロッパ", lv:3, f:bandsH("#ED2939","#FFFFFF","#ED2939")},
- {id:"ie",n:"アイルランド",cap:"ダブリン",    reg:"ヨーロッパ", lv:3, f:bandsV("#169B62","#FFFFFF","#FF883E")},
- {id:"pe",n:"ペルー",     cap:"リマ",         reg:"アメリカ",   lv:3, f:bandsV("#D91023","#FFFFFF","#D91023")},
- {id:"cl",n:"チリ",       cap:"サンティアゴ", reg:"アメリカ",   lv:3, f:chile()},
- {id:"za",n:"みなみアフリカ",cap:"プレトリア",reg:"アフリカ",   lv:3, f:southafrica(), emblem:true,
-   note:"みなみアフリカには首都が3つあります。行政の首都がプレトリアです。"}
-];
-
-/* ---- パックとして公開 ------------------------------------------------ */
-
 function build(kind){
   return C.map(function(c){
     return {
       key:c.id,
-      q:'<svg class="flagsvg" viewBox="0 0 90 60" role="img" aria-label="国旗">'+c.f+'</svg>',
+      q:'<svg class="flagsvg" viewBox="0 0 90 60" role="img" aria-label="国旗">'+flag(c.id)+'</svg>',
       a:(kind==="cap")?c.cap:c.n,
-      sub:(kind==="cap")?c.n:"",           // 答えあわせのときに添える情報
-      lv:c.lv, reg:c.reg, note:c.note||"", emblem:!!c.emblem
+      sub:(kind==="cap")?c.n:"",
+      lv:c.lv, reg:c.reg, note:c.note||""
     };
   });
 }
-
 window.PACKS = window.PACKS || {};
 window.PACKS.flagName = {
   id:"flag-name", title:"せかいの国旗 ▸ 国の名前", subject:"ちり",
@@ -300,5 +224,4 @@ window.PACKS.flagCapital = {
   id:"flag-capital", title:"せかいの国旗 ▸ しゅと", subject:"ちり",
   ask:"この国の しゅとは？", mode:"answer", items:build("cap")
 };
-
 })();
