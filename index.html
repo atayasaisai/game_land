@@ -134,6 +134,7 @@ section{padding-block:72px;position:relative}
 .stage{background:#7EC8E3;border-right:3px solid var(--ink);position:relative;min-height:280px;overflow:hidden}
 @media(max-width:820px){.stage{border-right:0;border-bottom:3px solid var(--ink)}}
 .stage svg{width:100%;height:100%;position:absolute;inset:0}
+.stage img{width:100%;height:100%;position:absolute;inset:0;object-fit:cover}
 .walker{animation:walk 8s linear infinite}
 .walker.w2{animation-delay:-2.7s}.walker.w3{animation-delay:-5.4s}
 @keyframes walk{from{transform:translateX(0)}to{transform:translateX(-220px)}}
@@ -301,56 +302,7 @@ footer .fine{font-size:.72rem;color:var(--faint);margin:0}
   <article class="spot">
     <div class="stage" aria-hidden="true">
       <span class="newtag">公開中！</span>
-      <svg viewBox="0 0 420 300" preserveAspectRatio="xMidYMid slice">
-        <rect width="420" height="190" fill="#7EC8E3"/>
-        <path d="M250 60 q8 -18 28 -13 q7 -11 21 -6 q15 -5 18 10 q13 3 6 14 q-38 7 -73 -5z" fill="#fff" stroke="#33312A" stroke-width="3" stroke-linejoin="round"/>
-        <path d="M0 190 Q100 160 210 185 T420 180 V300 H0z" fill="#4CB86B" stroke="#33312A" stroke-width="3"/>
-        <path d="M0 238 Q210 218 420 236 V262 Q210 244 0 264z" fill="#E9C58E" stroke="#33312A" stroke-width="3"/>
-        <!-- castle -->
-        <g stroke="#33312A" stroke-width="3" stroke-linejoin="round">
-          <rect x="18" y="140" width="80" height="110" fill="#fff"/>
-          <rect x="8" y="118" width="26" height="132" fill="#fff"/><rect x="82" y="118" width="26" height="132" fill="#fff"/>
-          <path d="M4 120 l17 -30 17 30z M78 120 l17 -30 17 30z" fill="#4A6BC0"/>
-          <path d="M44 250 v-34 q14 -16 28 0 v34z" fill="#C98A4B"/>
-          <path d="M21 90 v-22 l16 6 -16 6" fill="#F0603F"/>
-        </g>
-        <!-- hero -->
-        <g class="floaty" stroke="#33312A" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
-          <circle cx="146" cy="196" r="14" fill="#FFD9A0"/>
-          <path d="M132 192 q14 -14 28 0 v-5 q-14 -12 -28 0z" fill="#33312A"/>
-          <circle cx="141" cy="196" r="1.8" fill="#33312A"/><circle cx="151" cy="196" r="1.8" fill="#33312A"/>
-          <path d="M141 203 q5 4 10 0" fill="none"/>
-          <path d="M135 212 q11 6 22 0 l3 28 h-28z" fill="#F0603F"/>
-          <path d="M157 216 l20 -22" /><path d="M172 188 l14 -16 4 4 -16 14z" fill="#DFE6EC"/>
-        </g>
-        <text class="pow" x="192" y="170" font-family="Zen Maru Gothic,sans-serif" font-weight="900" font-size="22" fill="#F5B70A" stroke="#33312A" stroke-width="1.5">えいっ！</text>
-        <!-- monsters -->
-        <g class="walker">
-          <g transform="translate(330 214)" stroke="#33312A" stroke-width="3" stroke-linejoin="round">
-            <path d="M-22 22 q-2 -34 22 -34 q24 0 22 34z" fill="#9B7BE0"/>
-            <circle cx="-7" cy="0" r="3" fill="#33312A"/><circle cx="7" cy="0" r="3" fill="#33312A"/>
-            <path d="M-8 10 q8 -5 16 0" fill="none"/>
-            <rect x="-18" y="-34" width="36" height="16" rx="4" fill="#fff"/><text x="0" y="-22" text-anchor="middle" font-size="10" font-weight="900" fill="#4CB86B" stroke="none" font-family="Zen Maru Gothic,sans-serif">90てん</text>
-          </g>
-        </g>
-        <g class="walker w2">
-          <g transform="translate(330 214)" stroke="#33312A" stroke-width="3" stroke-linejoin="round">
-            <path d="M-20 22 q0 -30 20 -30 q20 0 20 30z" fill="#4CB86B"/>
-            <circle cx="-7" cy="2" r="3" fill="#33312A"/><circle cx="7" cy="2" r="3" fill="#33312A"/>
-            <path d="M-8 -8 l-6 -10 M8 -8 l6 -10" fill="none"/>
-            <rect x="-18" y="-36" width="36" height="16" rx="4" fill="#fff"/><text x="0" y="-24" text-anchor="middle" font-size="10" font-weight="900" fill="#4CB86B" stroke="none" font-family="Zen Maru Gothic,sans-serif">120てん</text>
-          </g>
-        </g>
-        <g class="walker w3">
-          <g transform="translate(340 206)" stroke="#33312A" stroke-width="3" stroke-linejoin="round">
-            <path d="M-28 30 q-6 -46 28 -46 q34 0 28 46z" fill="#F0603F"/>
-            <path d="M-18 -12 l-8 -14 12 6 M18 -12 l8 -14 -12 6" fill="#F5B70A"/>
-            <circle cx="-9" cy="2" r="3.4" fill="#33312A"/><circle cx="9" cy="2" r="3.4" fill="#33312A"/>
-            <path d="M-10 14 l4 -4 4 4 4 -4 4 4 4 -4" fill="none"/>
-            <rect x="-20" y="-46" width="40" height="16" rx="4" fill="#fff"/><text x="0" y="-34" text-anchor="middle" font-size="10" font-weight="900" fill="#F0603F" stroke="none" font-family="Zen Maru Gothic,sans-serif">20てん</text>
-          </g>
-        </g>
-      </svg>
+      <img src="nlq_shot.png" alt="なんでもラーニングクエストの実際のゲーム画面。旗をかかげたモンスターにお城の勇者が立ち向かっている。" loading="lazy" width="840" height="570">
     </div>
     <div class="spot-tx">
       <h3>なんでもラーニングクエスト</h3>
