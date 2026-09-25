@@ -82,10 +82,13 @@ svg{display:block}
 @keyframes bob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-4px) rotate(2deg)}}
 .rainy .drops line{animation:drop .7s linear infinite}
 @keyframes drop{0%{transform:translateY(0);opacity:1}100%{transform:translateY(30px);opacity:0}}
-.drive{animation:drive 9s ease-in-out infinite alternate}
-@keyframes drive{0%{transform:translate(-60px,-40px)}100%{transform:translate(60px,40px)}}
-.launch{animation:launch 7s ease-in infinite}
-@keyframes launch{0%,45%{transform:translateY(0);opacity:1}90%{transform:translateY(-760px);opacity:1}91%,95%{transform:translateY(0);opacity:0}100%{opacity:1}}
+/* 発射台から 小さな ロケットだけが 飛んでいく（発射台は 動かない） */
+.rk{animation:rk 8s ease-in infinite}
+@keyframes rk{0%,30%{transform:translateY(0);opacity:0}32%{opacity:1}85%{transform:translateY(-720px);opacity:1}86%,100%{transform:translateY(-720px);opacity:0}}
+.rk .flame{transform-box:fill-box;transform-origin:50% 0;animation:flame .12s steps(2) infinite}
+@keyframes flame{0%{transform:scaleY(.8)}100%{transform:scaleY(1.15)}}
+.puff{transform-box:fill-box;transform-origin:50% 50%;animation:puff 8s ease-out infinite;opacity:0}
+@keyframes puff{0%,30%{transform:scale(.3);opacity:0}34%{opacity:.85}55%{transform:scale(2.2) translateY(-6px);opacity:0}100%{opacity:0}}
 .lantern{transform-box:fill-box;transform-origin:50% 0;animation:sway 1.6s ease-in-out infinite}
 @keyframes sway{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
 .dancer{transform-box:fill-box;transform-origin:50% 100%;animation:dance .6s ease-in-out infinite}
@@ -311,7 +314,7 @@ img.sage.hop{animation:hop .3s steps(2)}
 
 <script src="rules.js?v=12"></script>
 <script src="obj/sizes.js?v=8"></script>
-<script src="art.js?v=18"></script>
+<script src="art.js?v=20"></script>
 <script src="shakai.js?v=2"></script>
 <script>
 // ============================================================
@@ -392,7 +395,7 @@ function drawCombos(pop) {
   const fresh = active.filter((c) => !prev.includes(c.id));
   $("L-combo").innerHTML = active.map((c) => ART.comboMarkup(c, pop && fresh.includes(c) ? "popin" : "")).join("");
   st.combos = active.map((c) => c.id);
-  if (fresh.some((c) => c.site || c.sky)) drawPeople(pop);
+  if (fresh.some((c) => c.site || c.sky || c.cars)) drawPeople(pop);
   return fresh;
 }
 function drawAll() { RULES.ELEMS.forEach((e) => drawLayer(e, st.lv[e], false)); st.siteStages = null; st.siteOv = null; st.combos = null; drawCombos(false); drawMonsters(st.threat); setMood(); }
@@ -407,10 +410,20 @@ function drawPeople(pop) {
   $("L-people").innerHTML = stages.map((g, k) => ART.siteMarkup(k, g, pop && (g !== prev[k] || (ov[k] && !prevOv[k])) ? "popin" : "", ov[k])).join("");
   st.siteStages = stages; st.siteOv = ov;
   $("L-flags").innerHTML = s >= 100 ? ART.flags() : "";
-  const S = RULES.stats(st); $("L-life").innerHTML = ART.life(s, S) + ART.sea(S); $("L-sky").innerHTML = ART.sky(s, S, ART.activeCombos(st.lv)); $("L-decor").innerHTML = ART.decor(S); $("L-trouble").innerHTML = ART.trouble(S, s, st.turn);
+  const S = RULES.stats(st); $("L-life").innerHTML = ART.life(s, S) + ART.sea(S);
+  { const ids = ART.activeCombos(st.lv).map((c) => c.id); const st4 = stages.map((g, k) => (ov[k] ? 4 : g));
+    // 人は 建物より 手前の 層（建物の 絵の 上に なる 場所には 立たせない）。自動車は 道の 層（建物の うしろを 通る）
+    $("L-crowd").innerHTML = ART.crowd(S.pop, st.lv, ids, st4, ov); $("L-cars").innerHTML = ids.includes("m_car") ? ART.cars(st.lv.road, ids) : ""; } $("L-sky").innerHTML = ART.sky(s, S, ART.activeCombos(st.lv)); $("L-decor").innerHTML = ART.decor(S); $("L-trouble").innerHTML = ART.trouble(S, s, st.turn, badSigns(S));
   $("L-volcano").innerHTML = s < 0 ? ART.volcano() : "";
   $("fx-sky").innerHTML = s >= 100 ? ART.fireworks(true) : st.lv.fun >= 3 ? ART.fireworks(false) : "";
   return stages.some((g, k) => g !== prev[k]);
+}
+// 悪化の しるし（洪水・雨雲）：4回目より あとで、はってん度が 30% に とどかず、食べもの／しあわせが たりないときだけ。
+// 順調な 道でも 序盤は 食料や 幸福度が ひくいので、数だけでは 出さない。
+// 46656 通り（6人×6回）を ぜんぶ ためして、さいごに 75% 以上に なる 道では 1回も 出ないことを たしかめた（2026-09-25）
+function badSigns(S) {
+  const worse = st.turn >= 4 && RULES.score(st) < 30;
+  return { flood: worse && S.food < 25, rain: worse && S.happy < 20 };
 }
 function setMood() {
   const s = RULES.score(st); const t = $("tint"); if (!t) return;
@@ -499,7 +512,7 @@ function learnTriggers() {
   if (st.lv.guard >= 2) ids.push("lv_guard");           // 城壁が できたら「関所と お城」
   (st.combos || []).forEach((id) => { ids.push(id); if (id === "m_kokkai") ids.push("bandits"); }); // 国会が できたら「きまりが ある わけ」も
   if (st.turn >= 1 && S.safety <= 10) ids.push("unite");
-  if (st.turn >= 2 && S.food < 25) ids.push("flood");
+  if (badSigns(S).flood) ids.push("flood");
   if (s < 0) ids.push("volcano", "ruins");
   if ((st.siteStages || []).some((g) => g >= 3)) ids.push("pop_jp");
   if (s >= 100) ids.push("castle", "rocket", "pop_world");

@@ -28,8 +28,6 @@ const ART = (() => {
     const [W, H] = FX_SIZE[name]; const h = w * H / W;
     return `<image class="${cls}" style="${style}" href="fx/${name}.png" x="${cx - w / 2}" y="${cy - h}" width="${w}" height="${h}"/>`;
   }
-  // 人は 少し ゆれて にぎやかに（ゆれの タイミングは 場所ごとに ずらす）
-  function person(name, cx, cy, w) { return fimg(name, cx, cy, w, "bob", `animation-delay:-${((cx * 7 + cy * 3) % 12) / 10}s`); }
   const O = 1, O2 = 2, O3 = 3; // シート（O3 = 発展記の素材２。番号の かわりに 名前）
   function img(sheet, n, cx, cy, w, cls = "") {
     if (sheet === O3) { const [W, H] = OBJ3_SIZE[n]; const h = w * H / W; return `<image class="${cls}" href="obj3/${n}.png" x="${cx - w / 2}" y="${cy - h}" width="${w}" height="${h}"/>`; }
@@ -96,16 +94,11 @@ const ART = (() => {
       [[O, 27, 700, 280, 210], [O2, 3, 880, 470, 90]],
       [[O, 15, 700, 285, 240], [O2, 3, 880, 470, 90], [O2, 25, 900, 640, 170], [O2, 25, 400, 760, 170], [O2, 1, 600, 470, 120], [O2, 1, 1100, 500, 120]]],
   };
-  const PEOPLE_AT = { // [名前, 足もとの x, y, 横はば]
-    road: [["walkers", 730, 600, 90]], farm: [["farmer", 470, 500, 46], ["harvest", 1230, 350, 90]], guard: [["soldier", 1000, 590, 44]],
-    market: [["merchant", 900, 500, 44], ["fishing", 1270, 830, 70]], school: [["lesson", 1090, 430, 90], ["student", 930, 430, 44]], fun: [["kids", 800, 360, 90]],
-  };
   function layer(elem, lv) {
-    if (elem === "road") return roadLayer(lv) + (lv >= 2 ? `<g class="body">${PEOPLE_AT.road.slice(0, lv - 1).map((a) => person(...a)).join("")}</g>` : "");
+    if (elem === "road") return roadLayer(lv);
     const items = L[elem][Math.max(0, Math.min(3, lv))] || [];
     if (!items.length) return "";
-    const people = lv >= 2 ? PEOPLE_AT[elem].slice(0, lv - 1).map((a) => person(...a)) : [];
-    return `<g class="body">${items.map((a) => img(...a)).join("")}${people.join("")}</g>`;
+    return `<g class="body">${items.map((a) => img(...a)).join("")}</g>`;
   }
 
   // ---- 組み合わせで ふえる もの：2つの 要素が そろうと、大陸の べつの 場所に 関係する 施設が できる ----
@@ -132,7 +125,7 @@ const ART = (() => {
     { id: "m_mall",      need: { market: 3, fun: 2 },    say: "大きな ショッピングモールが できた！", site: [3, "mall", 230] },
     { id: "m_tower",     need: { fun: 2, school: 2 },    say: "高い 電波塔が たった！",       site: [11, "tower", 140] },
     { id: "m_airport",   need: { road: 2, market: 3, school: 2 }, say: "南に 空港が できた！",  site: [10, "airport", 230], sky: ["plane", 560, 110, 150] },
-    { id: "m_car",       need: { road: 2, school: 2 },   say: "自動車が 走りだした！",         move: ["car", 600, 560, 70, "drive"] },
+    { id: "m_car",       need: { road: 2, school: 2 },   say: "自動車が 走りだした！",         cars: true },
     { id: "m_ferry",     need: { market: 2, fun: 1 },    say: "大きな フェリーが 来た！",       move: ["ferry", 330, 1000, 190, "sail"] },
     { id: "m_heli",      need: { guard: 3, school: 2 },  say: "ヘリコプターが 飛んできた！",   sky: ["heli", 1250, 170, 110] },
     { id: "m_telescope", need: { school: 3, fun: 1 },    say: "山の 上に 天文台が できた！",   items: [[O3, "telescope", 600, 150, 120]] },
@@ -169,16 +162,77 @@ const ART = (() => {
   const FLAGS = [[700, 250], [1000, 500], [350, 500], [1200, 600]];
   function flags() {
     return FLAGS.map(([x, y]) => img(O2, 1, x, y, 110)).join("") + fimg("rainbow", 330, 200, 360)
-      + `<g class="launch">${img(O3, "rocket", 1420, 810, 150)}</g>` // 100% だけ：右下の 島から ロケットが 打ち上がる
-      + [[560, 330], [1120, 250], [980, 660], [260, 620]].map(([x, y]) => person("walkers", x, y + 40, 90)).join("");
+      + img(O3, "rocket", 1420, 810, 150) + rocketLaunch(1420, 700); // 100% だけ：右下の 島の 発射台から ロケットが 打ち上がる（発射台は 動かさない）
   }
+  // 発射台から 飛んでいく 小さな ロケット（SVGで かく）。発射台の 絵は そのまま
+  function rocketLaunch(x, y) {
+    return `<g transform="translate(${x} ${y})"><g class="rk">
+      <path d="M0 -34 C9 -22 10 -8 9 10 L-9 10 C-10 -8 -9 -22 0 -34Z" fill="#f4f1ea" stroke="#33312A" stroke-width="2.5"/>
+      <path d="M0 -34 C5 -28 7 -22 7 -18 L-7 -18 C-7 -22 -5 -28 0 -34Z" fill="#d9483b"/>
+      <path d="M-9 2 L-17 14 L-9 12Z M9 2 L17 14 L9 12Z" fill="#4A6BC0" stroke="#33312A" stroke-width="2"/>
+      <path class="flame" d="M-6 11 Q0 44 6 11Z" fill="#ffb13b"/><path class="flame" d="M-3 11 Q0 30 3 11Z" fill="#fff3a0"/>
+    </g>${[0, 1, 2].map((i) => `<circle class="puff" style="animation-delay:${i * .25}s" cx="${(i - 1) * 16}" cy="30" r="14" fill="#fff" opacity=".8"/>`).join("")}</g>`;
+  }
+
+  // ---- 道：いまの 道の 中心線（[x0, y0, x1, y1] の ならび）。人と 自動車は ここに 立つ・走る ----
+  function seg(x0, y0, dir, n) { return [x0, y0, x0 + n * STEP, dir === "NE" ? y0 - n * STEPY : y0 + n * STEPY]; }
+  const ROAD_SEGS = { 1: [seg(605, 466, "SE", 2)], 2: [seg(500, 383, "SE", 6), seg(330, 640, "NE", 6)] };
+  ROAD_SEGS[3] = [...ROAD_SEGS[2], seg(960, 220, "SE", 4), seg(803, 620, "NE", 5)];
+  const COMBO_SEGS = { farm_road: [seg(330, 330, "SE", 2)], market_road: [seg(1025, 798, "SE", 1)] };
+  function roadSegs(lv, comboIds) { return [...(ROAD_SEGS[Math.min(3, lv)] || []), ...comboIds.flatMap((id) => COMBO_SEGS[id] || [])]; }
+
+  // ---- 人：人口に あわせて ふえる。立つのは 道の上と 家の前だけ（空中に うかないように）----
+  // 大きさは 高さで そろえる（家の 高さの 4分の1 くらい）
+  const WALKERS = ["walkers", "merchant", "kids", "student", "farmer", "walkers", "soldier", "kids"];
+  function personAt(name, x, y, k) {
+    const [W, H] = FX_SIZE[name]; const h = W > H ? 30 : 36; // 1人の 絵は 36、何人かの 絵は 30
+    return fimg(name, x, y, h * W / H, "bob", `animation-delay:-${(k % 12) / 10}s`);
+  }
+  // stages = 人の すみかの だんかい（近代の 建物に 建てかわった所は 4 として わたす）
+  function groundSpots(lv, comboIds, stages) {
+    const out = [];
+    roadSegs(lv, comboIds).forEach(([x0, y0, x1, y1]) => {
+      const n = Math.max(1, Math.round(Math.hypot(x1 - x0, y1 - y0) / 45));
+      for (let i = 0; i < n; i++) { const t = (i + .5) / n; const side = i % 2 ? 7 : -7; out.push([x0 + (x1 - x0) * t + side, y0 + (y1 - y0) * t + 4]); }
+    });
+    stages.forEach((g, k) => { if (g >= 1) { const [x, y] = SITES[k]; out.push([x - 48, y + 10], [x + 52, y + 14]); } });
+    // 同じ 場所に かたまらないよう、決まった 順で まぜる
+    return out.map((p, i) => [p, (i * 37) % 101]).sort((a, b) => a[1] - b[1]).map((a) => a[0]);
+  }
+  // 建物の 絵が しめている 場所（人を 屋根の上に 立たせないため）。[左, 上, 右, 下]
+  function sizeOf(sheet, n) { return sheet === O3 ? OBJ3_SIZE[n] : (sheet === O ? OBJ_SIZE : OBJ2_SIZE)[n]; }
+  function boxOf(sheet, n, cx, cy, w) { const [W, H] = sizeOf(sheet, n); const h = w * H / W; return [cx - w * .42, cy - h, cx + w * .42, cy - 8]; }
+  function buildingBoxes(lvAll, comboIds, stages, ov) {
+    const out = [];
+    Object.keys(L).forEach((e) => (L[e][Math.min(3, lvAll[e])] || []).forEach((a) => out.push(boxOf(...a))));
+    COMBOS.filter((c) => comboIds.includes(c.id) && c.items).forEach((c) => c.items.forEach((a) => { if (a[0] !== "tiles") out.push(boxOf(...a)); }));
+    stages.forEach((g, k) => {
+      const [x, y] = SITES[k];
+      if (ov[k]) out.push(boxOf(O3, ov[k][1], x, y + 10, ov[k][2]));
+      else if (g === 4 && k === 0) out.push(boxOf(O2, 14, x, y + 10, 230));
+      else if (g >= 1) { const [sh, n, w] = STAGE[g]; out.push(boxOf(sh, n, x, y, w)); }
+    });
+    return out;
+  }
+  function crowd(pop, lvAll, comboIds, stages, ov) {
+    const boxes = buildingBoxes(lvAll, comboIds, stages, ov);
+    const free = ([x, y]) => !boxes.some(([l, t, r, b]) => x > l && x < r && y > t && y < b);
+    const spots = groundSpots(lvAll.road, comboIds, stages).filter(free);
+    const n = Math.min(spots.length, Math.floor(pop / 35));
+    return spots.slice(0, n).sort((a, b) => a[1] - b[1]).map(([x, y], k) => personAt(WALKERS[k % WALKERS.length], x, y, k)).join("");
+  }
+  // ---- 自動車：道の上を 行ったり 来たり（1本の 道に 1台、3台まで）----
+  function cars(lv, comboIds) {
+    return roadSegs(lv, comboIds).slice(0, 3).map(([x0, y0, x1, y1], i) => {
+      const w = 42, [W, H] = OBJ3_SIZE.car, h = w * H / W, dur = 14 + i * 3;
+      // 絵の 車は 左向き。右へ 行くときは 左右反転
+      return `<g><animateMotion dur="${dur}s" begin="-${i * 4}s" repeatCount="indefinite" keyPoints="0;1;0" keyTimes="0;.5;1" calcMode="linear" path="M${x0} ${y0 + 2} L${x1} ${y1 + 2}"/>
+        <g><animateTransform attributeName="transform" type="scale" values="-1 1;1 1" keyTimes="0;.5" calcMode="discrete" dur="${dur}s" begin="-${i * 4}s" repeatCount="indefinite"/>
+        <image href="obj3/car.png" x="${-w / 2}" y="${-h + 4}" width="${w}" height="${h}"/></g></g>`;
+    }).join("");
+  }
+
   // 国土の 人・鳥・動物：はってん度が 上がるほど 数が ふえる
-  const CROWD = [ // [絵, 足もとの x, y, 横はば] はってん度 8% ごとに 1つ ふえる
-    ["walkers", 760, 600, 90], ["farmer", 620, 590, 44], ["kids", 900, 545, 90], ["merchant", 1000, 525, 44], ["walkers", 560, 380, 90],
-    ["student", 1120, 300, 44], ["walkers", 980, 700, 90], ["harvest", 260, 660, 90], ["soldier", 830, 340, 44], ["walkers", 1200, 690, 90],
-    ["kids", 330, 470, 90], ["fishing", 700, 900, 70], ["walkers", 1300, 490, 90], ["farmer", 480, 660, 44],
-    ["walkers", 820, 240, 90], ["merchant", 1250, 420, 44], ["kids", 600, 760, 90], ["student", 200, 380, 44], ["walkers", 1080, 840, 90], ["soldier", 1320, 620, 44],
-  ];
   // サブ指標で ふえる 小さな かざり：幸福度→花、商業→小さな お店、文化→モニュメント（噴水・花の庭）
   const FLOWERS = [[500, 250], [700, 240], [1150, 180], [320, 420], [800, 760], [1250, 300], [400, 720], [1000, 860]];
   const SHOPS = [[660, 640], [1000, 470], [430, 560], [1180, 400], [300, 500], [1120, 760]];
@@ -200,8 +254,6 @@ const ART = (() => {
   // score = はってん度、S = サブ指標（人口で 人の数、幸福度で 鳥の群れ、食料で 動物）
   function life(score, S) {
     let out = ANIMALS.filter((a) => S.food >= a[4] || score >= a[4]).map((a) => fimg(a[0], a[1], a[2], a[3], "bob", `animation-delay:-${(a[1] % 10) / 8}s`)).join("");
-    const n = score >= 100 ? CROWD.length : Math.min(CROWD.length, Math.floor(S.pop / 70));
-    out += CROWD.slice(0, n).map((a) => person(...a)).join("");
     return out;
   }
   // ---- 空を 飛ぶもの：建物より 上の 層（L-sky）に 描く。羽ばたかない 絵なので、ぐるぐる 回さず その場で ゆらゆら ----
@@ -228,15 +280,17 @@ const ART = (() => {
   //  治安が 70 を 切ると モンスターが うろつき（10 ごとに 1ぴき）、30 を 切ると 山賊、10 以下で 魔王の城と ドラゴン
   //  食料が 25 を 切ると 川が あふれる（洪水）、幸福度が 20 を 切ると 雨雲、はってん度が マイナスなら 遺跡と 噴火
   const MONSTER_SPOTS = [["goblin", 650, 700, 48], ["orc", 800, 725, 52], ["wolf", 560, 765, 55], ["skeleton", 900, 765, 50], ["slime", 730, 790, 45], ["spider", 1000, 745, 58], ["ogre", 480, 725, 55]];
-  function trouble(S, score, turn) {
+  // bad = 国が 悪くなっている（モンスターに あらされた・5回目を すぎても 食べもの／しあわせが たりない）。
+  //   順調な 道でも 序盤は 食料や 幸福度が ひくいので、数だけで 洪水や 雨雲を 出さない
+  function trouble(S, score, turn, bad) {
     if (turn < 1) return "";
     let out = "";
     const nm = Math.max(0, Math.min(MONSTER_SPOTS.length, Math.floor((70 - S.safety) / 10)));
     out += MONSTER_SPOTS.slice(0, nm).map((a) => fimg(a[0], a[1], a[2], a[3], "bob", `animation-delay:-${(a[1] % 7) / 6}s`)).join("");
     if (S.safety < 30) out += fimg("bandits", 350, 700, 90);
     if (S.safety <= 10) out += fimg("darkcastle", 1400, 200, 130); // ドラゴンは 空の 層（sky）
-    if (S.food < 25 && turn >= 2) out += [[935, 470], [955, 560], [640, 370]].map(([x, y]) => fimg("wave", x, y, 90, "bob")).join("");
-    if (S.happy < 20 && turn >= 2) out += raincloud(880, 250) + raincloud(540, 190);
+    if (bad.flood) out += [[935, 470], [955, 560], [640, 370]].map(([x, y]) => fimg("wave", x, y, 90, "bob")).join("");
+    if (bad.rain) out += raincloud(880, 250) + raincloud(540, 190);
     if (score < 0) out += raincloud(1100, 150);
     return out;
   }
@@ -251,6 +305,7 @@ const ART = (() => {
       <g id="L-trouble"></g>
       <g id="mon-slots">${[0, 1, 2].map((i) => `<g class="mon" data-i="${i}"></g>`).join("")}</g>
       <g id="L-road" class="layer"></g>
+      <g id="L-cars"></g>
       <g id="L-combo" class="layer"></g>
       <g id="L-people" class="layer"></g>
       <g id="L-decor"></g>
@@ -259,6 +314,7 @@ const ART = (() => {
       <g id="L-farm" class="layer"></g>
       <g id="L-market" class="layer"></g>
       <g id="L-guard" class="layer"></g>
+      <g id="L-crowd"></g>
       <g id="L-flags" class="layer"></g>
       <g id="L-sky"></g>
       <g id="fx-sky"></g>
@@ -291,5 +347,5 @@ const ART = (() => {
     return P.map(([x, y], i) => fimg("fireworks", x, y, 230, "fw") .replace('class="fw"', `class="fw" style="animation-delay:${i * 0.45}s"`)).join("");
   }
 
-  return { sage, king, preload, POSES, field, life, sky, sea, trouble, decor, activeCombos, comboMarkup, layer, siteStages, siteMarkup, flags, monster, volcano, fireworks, SITES };
+  return { sage, king, preload, POSES, field, life, sky, sea, crowd, cars, trouble, decor, activeCombos, comboMarkup, layer, siteStages, siteMarkup, flags, monster, volcano, fireworks, SITES };
 })();
