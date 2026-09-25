@@ -30,8 +30,9 @@ const ART = (() => {
   }
   // 人は 少し ゆれて にぎやかに（ゆれの タイミングは 場所ごとに ずらす）
   function person(name, cx, cy, w) { return fimg(name, cx, cy, w, "bob", `animation-delay:-${((cx * 7 + cy * 3) % 12) / 10}s`); }
-  const O = 1, O2 = 2; // シート
+  const O = 1, O2 = 2, O3 = 3; // シート（O3 = 発展記の素材２。番号の かわりに 名前）
   function img(sheet, n, cx, cy, w, cls = "") {
+    if (sheet === O3) { const [W, H] = OBJ3_SIZE[n]; const h = w * H / W; return `<image class="${cls}" href="obj3/${n}.png" x="${cx - w / 2}" y="${cy - h}" width="${w}" height="${h}"/>`; }
     const [W, H] = (sheet === O ? OBJ_SIZE : OBJ2_SIZE)[n]; const h = w * H / W;
     return `<image class="${cls}" href="${sheet === O ? "obj" : "obj2"}/${String(n).padStart(2, "0")}.png" x="${cx - w / 2}" y="${cy - h}" width="${w}" height="${h}"/>`;
   }
@@ -122,9 +123,27 @@ const ART = (() => {
     { id: "fun_market",   need: { fun: 2, market: 2 },  say: "東の はずれに 市が たった！",  items: [[O, 17, 1380, 470, 170]] },
     { id: "farm_school",  need: { farm: 1, school: 1 }, say: "風車が まわりだした！",         items: [[O2, 16, 300, 700, 100]] },
     { id: "guard_market", need: { guard: 2, market: 2 }, say: "東に 警備所が できた！",     items: [[O, 21, 1250, 660, 150]] },
+    // ---- 近代の 建物・乗りもの（obj3/）。site = 人の すみか（SITES の 番号）を この建物に おきかえる ----
+    //  地図が こんでいるので、建物は 町の 1つを 建てかえる（時代が すすむ）。乗りものは 空・海・道を うごく
+    { id: "m_kokkai",    need: { school: 2, guard: 2 },  say: "北の 町に 国会議事堂が できた！", site: [6, "kokkai", 200] },
+    { id: "m_saiban",    need: { guard: 3, school: 1 },  say: "裁判所が できた！",           site: [2, "saiban", 170] },
+    { id: "m_super",     need: { market: 2, farm: 2 },   say: "スーパーマーケットが できた！", site: [9, "super", 170] },
+    { id: "m_depart",    need: { market: 3, road: 2 },   say: "東の 町に デパートが できた！", site: [5, "depart", 170] },
+    { id: "m_mall",      need: { market: 3, fun: 2 },    say: "大きな ショッピングモールが できた！", site: [3, "mall", 230] },
+    { id: "m_tower",     need: { fun: 2, school: 2 },    say: "高い 電波塔が たった！",       site: [11, "tower", 140] },
+    { id: "m_airport",   need: { road: 2, market: 3, school: 2 }, say: "南に 空港が できた！",  site: [10, "airport", 230], sky: ["plane", 200, 120, 150, "fly"] },
+    { id: "m_car",       need: { road: 2, school: 2 },   say: "自動車が 走りだした！",         move: ["car", 600, 560, 70, "drive"] },
+    { id: "m_ferry",     need: { market: 2, fun: 1 },    say: "大きな フェリーが 来た！",       move: ["ferry", 330, 1000, 190, "sail"] },
+    { id: "m_heli",      need: { guard: 3, school: 2 },  say: "ヘリコプターが 飛んできた！",   sky: ["heli", 1250, 170, 110, "hover"] },
+    { id: "m_telescope", need: { school: 3, fun: 1 },    say: "山の 上に 天文台が できた！",   items: [[O3, "telescope", 600, 150, 120]] },
+    { id: "m_parabola",  need: { school: 3, market: 2 }, say: "西の 町に 大きな アンテナが できた！", site: [4, "parabola", 130] },
   ];
   function activeCombos(lv) { return COMBOS.filter((c) => Object.entries(c.need).every(([k, v]) => lv[k] >= v)); }
-  function comboMarkup(c, cls) { return `<g class="body" data-id="${c.id}">${c.items.map((a) => a[0] === "tiles" ? drawTiles(chain(a[1], a[2], a[3], a[4], a[5])) : img(...a, cls)).join("")}</g>`; }
+  // 近代の 乗りもの（空と 海と 道を うごく）
+  function vehicle([name, x, y, w, anim], cls) { return `<g class="${anim}">${img(O3, name, x, y, w, cls)}</g>`; }
+  function comboMarkup(c, cls) {
+    if (!c.items) return `<g class="body" data-id="${c.id}">${c.move ? vehicle(c.move, cls) : ""}${c.sky ? vehicle(c.sky, cls) : ""}</g>`; // site は L-people で 描く
+    return `<g class="body" data-id="${c.id}">${c.items.map((a) => a[0] === "tiles" ? drawTiles(chain(a[1], a[2], a[3], a[4], a[5])) : img(...a, cls)).join("")}</g>`; }
 
   // ---- 人の すみか：国土の 12か所。はってん度が 上がるほど 遠くまで ふえ、家→住宅地→村→町 と 育つ。100% で まん中に 城 ----
   const SITES = [[880, 380], [430, 300], [1000, 130], [960, 640], [200, 330], [1300, 420], [760, 155], [230, 600], [1120, 800], [480, 640], [500, 880], [1320, 250]];
@@ -137,8 +156,10 @@ const ART = (() => {
       return Math.min(4, 1 + Math.floor((score - t) / 28));
     });
   }
-  function siteMarkup(k, stage, cls) {
+  // ov = このすみかを 建てかえた 近代の 建物 [番号, 名前, 横はば]
+  function siteMarkup(k, stage, cls, ov) {
     const [x, y] = SITES[k];
+    if (ov) return img(O3, ov[1], x, y + 10, ov[2], cls);
     if (stage === -1) return img(O2, 24, x, y, 160, cls);
     if (stage <= 0) return "";
     if (stage === 4 && k === 0) return img(O2, 14, x, y + 10, 230, cls); // 王さまの 城
@@ -148,6 +169,7 @@ const ART = (() => {
   const FLAGS = [[700, 250], [1000, 500], [350, 500], [1200, 600]];
   function flags() {
     return FLAGS.map(([x, y]) => img(O2, 1, x, y, 110)).join("") + fimg("rainbow", 330, 200, 360)
+      + `<g class="launch">${img(O3, "rocket", 1420, 810, 150)}</g>` // 100% だけ：右下の 島から ロケットが 打ち上がる
       + [[560, 330], [1120, 250], [980, 660], [260, 620]].map(([x, y]) => person("walkers", x, y + 40, 90)).join("");
   }
   // 国土の 人・鳥・動物：はってん度が 上がるほど 数が ふえる

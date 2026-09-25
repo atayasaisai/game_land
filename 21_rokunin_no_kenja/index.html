@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>6人の賢者 〜あたやさいさい国発展記〜｜順番で国がかわる無料ゲーム｜あたやさいさいゲームランド</title>
-<meta name="description" content="まっさらな国を、6人の賢者に6回だけ相談して発展させるゲーム。だれに、どの順番でたのむかで、国のすがたが変わります。広告なし・会員登録なし。">
+<meta name="description" content="まっさらな国を、6人の賢者に6回だけ相談して発展させるゲーム。だれに、どの順番でたのむかで、国のすがたが変わります。「社会を学べる王国記」では、国会・裁判所・港・空港などができるたびに、地理・歴史・公民の解説が読めます。広告なし・会員登録なし。">
 <meta name="robots" content="index,follow">
 <link rel="canonical" href="https://atayasaisai.github.io/game_land/21_rokunin_no_kenja/">
 <meta property="og:type" content="article">
@@ -83,6 +83,12 @@ svg{display:block}
 @keyframes bob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-4px) rotate(2deg)}}
 .rainy .drops line{animation:drop .7s linear infinite}
 @keyframes drop{0%{transform:translateY(0);opacity:1}100%{transform:translateY(30px);opacity:0}}
+.hover{animation:hover 3s ease-in-out infinite alternate}
+@keyframes hover{0%{transform:translate(0,0)}50%{transform:translate(-60px,-14px)}100%{transform:translate(-120px,6px)}}
+.drive{animation:drive 9s ease-in-out infinite alternate}
+@keyframes drive{0%{transform:translate(-60px,-40px)}100%{transform:translate(60px,40px)}}
+.launch{animation:launch 7s ease-in infinite}
+@keyframes launch{0%,45%{transform:translateY(0);opacity:1}90%{transform:translateY(-760px);opacity:1}91%,95%{transform:translateY(0);opacity:0}100%{opacity:1}}
 .lantern{transform-box:fill-box;transform-origin:50% 0;animation:sway 1.6s ease-in-out infinite}
 @keyframes sway{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
 .dancer{transform-box:fill-box;transform-origin:50% 100%;animation:dance .6s ease-in-out infinite}
@@ -190,6 +196,31 @@ img.sage.hop{animation:hop .3s steps(2)}
 .zukan div.got{background:#fff;color:var(--ink)}
 .zukan div.got small{display:block;font-weight:500;color:var(--sub);margin-top:3px;font-size:.66rem;line-height:1.4}
 .result .btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:6px}
+/* ───────── 社会を学べる王国記：しらべ札 ───────── */
+.btn.learn{background:var(--ai)}
+.learnchips{position:absolute;left:8px;top:clamp(150px,30vh,260px);z-index:5;display:flex;flex-direction:column;gap:6px;align-items:flex-start;max-width:calc(100vw - 16px)}
+.chip{display:flex;align-items:center;gap:6px;background:#fff;border:3px solid var(--ink);border-radius:999px;padding:3px 12px 3px 4px;box-shadow:3px 3px 0 var(--ink);
+  font-size:clamp(.72rem,2.3vw,.9rem);text-align:left;animation:chipin .45s cubic-bezier(.2,1.6,.4,1)}
+.chip span{white-space:nowrap}
+.chip img{width:34px;height:34px;object-fit:contain;flex:none}
+.chip.read{background:#eef3ff;opacity:.85}
+.chip.new::after{content:"NEW";font-size:.6rem;background:var(--do);color:#fff;border-radius:999px;padding:0 5px;margin-left:2px}
+@keyframes chipin{0%{transform:translateX(-120%)}100%{transform:none}}
+.kcard{position:fixed;inset:0;z-index:20;background:rgba(30,25,15,.55);display:none;align-items:center;justify-content:center;padding:14px}
+.kcard.on{display:flex}
+.kcard .inner{background:var(--paper);border:4px solid var(--ink);border-radius:22px;box-shadow:0 8px 0 var(--ink);max-width:520px;width:100%;max-height:calc(100vh - 28px);overflow:auto;padding:14px 18px 18px;text-align:left;animation:fade .25s}
+.kcard .pic{display:block;height:130px;width:auto;max-width:100%;object-fit:contain;margin:0 auto 6px}
+.kcard .field{display:inline-block;font-size:.72rem;border:2px solid var(--ink);border-radius:999px;padding:0 10px;background:var(--paper2)}
+.kcard h3{font-size:1.25rem;margin:6px 0 8px}
+.kcard p{margin:0 0 10px;line-height:1.85;font-size:.98rem}
+.kcard .chu{font-size:.85rem;background:#eef3ff;border-radius:12px;padding:6px 10px}
+.kcard .src{font-size:.72rem;color:var(--sub)}
+.kcard .close{display:flex;justify-content:center}
+.notegrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:6px;margin:8px 0 12px}
+.notegrid button{border:2px solid var(--ink);border-radius:12px;background:#fff;padding:6px 4px;font-size:.72rem;line-height:1.3}
+.notegrid button img{display:block;height:48px;width:100%;object-fit:contain;margin-bottom:3px}
+.notegrid button:disabled{background:#eee;color:#999;cursor:default}
+.notegrid h4{grid-column:1/-1;margin:8px 0 0;font-size:.85rem;text-align:left}
 .showres{position:absolute;right:10px;bottom:10px;z-index:6;font-size:.9rem;padding:8px 18px}
 </style>
 </head>
@@ -207,10 +238,12 @@ img.sage.hop{animation:hop .3s steps(2)}
       おなじ人に なんども たのんでも いいよ。</p>
     <p class="small">だれに、<b>どの順番で</b> たのむかで、国の すがたが かわります。<br>めざせ、はってん 100%！</p>
     <button class="btn pop" id="go">はじめる ▶</button>
+    <p style="margin:14px 0 4px"><button class="btn pop learn" id="goLearn">社会を学べる王国記 ▶</button></p>
+    <p class="small" style="margin:0">国に 建物が できたり 何かが おきたりすると、<br>社会（地理・歴史・公民）の おはなしが 読めるよ。</p>
     <p class="best" id="bestLine"></p>
-    <p style="margin:10px 0 0"><button class="btn sub" id="toZukan" style="font-size:.9rem;padding:6px 18px">見つけた けつまつ</button></p>
+    <p style="margin:10px 0 0;display:flex;gap:8px;justify-content:center;flex-wrap:wrap"><button class="btn sub" id="toZukan" style="font-size:.9rem;padding:6px 18px">見つけた けつまつ</button><button class="btn sub" id="toNote" style="font-size:.9rem;padding:6px 18px">しゃかいノート</button></p>
   </div>
-  <p class="note">きろく（さいこうの はってん度と 見つけた けつまつ）は、この端末の ブラウザの中だけに のこります。</p>
+  <p class="note">きろく（さいこうの はってん度・見つけた けつまつ・しゃかいノート）は、この端末の ブラウザの中だけに のこります。</p>
 </div></section>
 
 <!-- ═══════════ 見つけた けつまつ（図鑑） ═══════════ -->
@@ -222,6 +255,27 @@ img.sage.hop{animation:hop .3s steps(2)}
     <button class="btn sub" id="zukanBack">タイトルへ</button>
   </div>
 </div></section>
+
+<!-- ═══════════ しゃかいノート ═══════════ -->
+<section class="screen" id="noteScreen"><div class="pad">
+  <div class="panel">
+    <h2 style="font-size:1.3rem;margin-bottom:4px">しゃかいノート</h2>
+    <p class="small" id="noteNum"></p>
+    <div class="notegrid" id="notegrid"></div>
+    <button class="btn sub" id="noteBack">タイトルへ</button>
+  </div>
+</div></section>
+
+<!-- しらべ札を ひらいたところ -->
+<div class="kcard" id="kcard" role="dialog" aria-modal="true"><div class="inner">
+  <img class="pic" id="kcPic" alt="">
+  <span class="field" id="kcField"></span>
+  <h3 id="kcTitle"></h3>
+  <p id="kcBody"></p>
+  <p class="chu" id="kcChu"></p>
+  <p class="src" id="kcSrc"></p>
+  <div class="close"><button class="btn" id="kcClose">とじる</button></div>
+</div></div>
 
 <!-- ═══════════ ゲーム ═══════════ -->
 <section class="screen" id="game">
@@ -238,6 +292,7 @@ img.sage.hop{animation:hop .3s steps(2)}
     <button class="iconbtn" id="sound" type="button" aria-label="おと">🔊</button>
   </div>
   <div class="stats" id="stats"></div>
+  <div class="learnchips" id="chips"></div>
 
   <div class="bottom" id="bottom">
     <div class="bubble sbubble" id="sbubble"><p class="name" id="bname"></p><div id="lines"></div></div>
@@ -251,14 +306,16 @@ img.sage.hop{animation:hop .3s steps(2)}
     <div class="score" id="endScore"></div>
     <p id="endText"></p>
     <p id="endStats" style="font-size:.8rem;color:var(--sub)"></p>
+    <p id="endLearn" style="font-size:.85rem;display:none"></p>
     <div class="btns"><button class="btn" id="retry">もういちど ▶</button><button class="btn sub" id="hideRes">国を 見る</button><button class="btn sub" id="toTitle">タイトルへ</button></div>
   </div>
   <button class="btn showres" id="showRes" type="button" style="display:none">けっかを 見る</button>
 </section>
 
 <script src="rules.js?v=12"></script>
-<script src="obj/sizes.js?v=7"></script>
-<script src="art.js?v=16"></script>
+<script src="obj/sizes.js?v=8"></script>
+<script src="art.js?v=17"></script>
+<script src="shakai.js?v=1"></script>
 <script>
 // ============================================================
 // おと（ファイルは 使わず、その場で 音を つくる）
@@ -298,7 +355,7 @@ const SND = (() => {
 // ============================================================
 const $ = (id) => document.getElementById(id);
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
-const LS_BEST = "kenja.best", LS_ZUKAN = "kenja.endings";
+const LS_BEST = "kenja.best", LS_ZUKAN = "kenja.endings", LS_NOTE = "kenja.note";
 const lsGet = (k, d) => { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } };
 const lsSet = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
 
@@ -309,7 +366,9 @@ function showScreen(id) { document.querySelectorAll(".screen").forEach((s) => s.
 
 function bestLine() {
   const best = lsGet(LS_BEST, null); const z = lsGet(LS_ZUKAN, []);
+  const n = lsGet(LS_NOTE, []).filter((id) => SHAKAI_BY[id]).length;
   $("bestLine").textContent = best === null ? "" : `さいこう きろく：${best}%　／　見つけた けつまつ：${z.length}／${RULES.ENDINGS.length}`;
+  $("toNote").textContent = `しゃかいノート ${n}／${SHAKAI.length}`;
 }
 
 // ---- 地図 ----
@@ -336,16 +395,20 @@ function drawCombos(pop) {
   const fresh = active.filter((c) => !prev.includes(c.id));
   $("L-combo").innerHTML = active.map((c) => ART.comboMarkup(c, pop && fresh.includes(c) ? "popin" : "")).join("");
   st.combos = active.map((c) => c.id);
+  if (fresh.some((c) => c.site)) drawPeople(pop);
   return fresh;
 }
-function drawAll() { RULES.ELEMS.forEach((e) => drawLayer(e, st.lv[e], false)); st.siteStages = null; st.combos = null; drawCombos(false); drawMonsters(st.threat); setMood(); }
+function drawAll() { RULES.ELEMS.forEach((e) => drawLayer(e, st.lv[e], false)); st.siteStages = null; st.siteOv = null; st.combos = null; drawCombos(false); drawMonsters(st.threat); setMood(); }
 // まもりが 3だんかい（じょうへき）なら、モンスターは 近づけない
 function drawMonsters(n) { if (st && st.lv.guard >= RULES.MAX_LV) n = 0; document.querySelectorAll("#mon-slots .mon").forEach((g, i) => { g.style.display = i < n ? "" : "none"; }); }
 // 国土ぜんたいの ようす：人の すみか（12か所）・旗・花火・噴火 を はってん度から 決める
 function drawPeople(pop) {
   const s = RULES.score(st); const stages = ART.siteStages(s); const prev = st.siteStages || stages.map(() => 0);
-  $("L-people").innerHTML = stages.map((g, k) => ART.siteMarkup(k, g, pop && g !== prev[k] ? "popin" : "")).join("");
-  st.siteStages = stages;
+  // 近代の 建物に 建てかわった すみか
+  const ov = {}; ART.activeCombos(st.lv).forEach((c) => { if (c.site) ov[c.site[0]] = c.site; });
+  const prevOv = st.siteOv || {};
+  $("L-people").innerHTML = stages.map((g, k) => ART.siteMarkup(k, g, pop && (g !== prev[k] || (ov[k] && !prevOv[k])) ? "popin" : "", ov[k])).join("");
+  st.siteStages = stages; st.siteOv = ov;
   $("L-flags").innerHTML = s >= 100 ? ART.flags() : "";
   const S = RULES.stats(st); $("L-life").innerHTML = ART.life(s, S); $("L-decor").innerHTML = ART.decor(S); $("L-trouble").innerHTML = ART.trouble(S, s, st.turn);
   $("L-volcano").innerHTML = s < 0 ? ART.volcano() : "";
@@ -429,14 +492,71 @@ function setChoices(enabled, pickedId) {
   $("choices").querySelectorAll(".card").forEach((b) => { b.disabled = !enabled; b.classList.toggle("picked", b.dataset.id === pickedId); });
 }
 
+// ============================================================
+// 社会を学べる王国記：国に 何かが できたら、左に しらべ札が 出る（えらぶ前には 出さない＝答えの ヒントに しない）
+// ============================================================
+function learnTriggers() {
+  const ids = []; const s = RULES.score(st); const S = RULES.stats(st);
+  RULES.ELEMS.forEach((e) => { if (st.lv[e] >= 1) ids.push("lv_" + e); });
+  (st.combos || []).forEach((id) => ids.push(id));
+  if (st.turn >= 1 && S.safety < 70 && st.lv.guard < RULES.MAX_LV) ids.push("monster");
+  if (st.turn >= 1 && S.safety < 30) ids.push("bandits");
+  if (st.turn >= 1 && S.safety <= 10) ids.push("unite");
+  if (st.turn >= 2 && S.food < 25) ids.push("flood");
+  if (s < 0) ids.push("volcano", "ruins");
+  if ((st.siteStages || []).some((g) => g >= 3)) ids.push("pop_jp");
+  if (s >= 100) ids.push("castle", "rocket", "pop_world");
+  return ids.filter((id) => SHAKAI_BY[id]);
+}
+async function checkLearn() {
+  if (!st.learn) return;
+  const fresh = learnTriggers().filter((id) => !st.learned.includes(id));
+  if (!fresh.length) return;
+  const note = lsGet(LS_NOTE, []);
+  for (const id of fresh) {
+    st.learned.push(id);
+    const isNew = !note.includes(id); if (isNew) note.push(id);
+    addChip(id, isNew); SND.tap(); await wait(220);
+  }
+  lsSet(LS_NOTE, note);
+}
+function addChip(id, isNew) {
+  const c = SHAKAI_BY[id]; const b = document.createElement("button");
+  b.type = "button"; b.className = "chip" + (isNew ? " new" : ""); b.dataset.id = id;
+  b.innerHTML = `<img src="${c.pic}" alt=""><span>📖 ${c.q}</span>`;
+  b.addEventListener("click", () => { b.classList.add("read"); b.classList.remove("new"); openCard(id); });
+  const box = $("chips"); box.prepend(b);
+  // 画面が せまいので、出ているのは あたらしい 4まいまで（のこりは けっかと ノートで 読める）
+  [...box.children].slice(4).forEach((x) => x.remove());
+}
+function openCard(id) {
+  const c = SHAKAI_BY[id]; SND.tap();
+  $("kcPic").src = c.pic; $("kcField").textContent = c.field; $("kcTitle").textContent = c.title; $("kcBody").textContent = c.body;
+  $("kcChu").textContent = "中学では：" + c.chu;
+  $("kcSrc").textContent = c.src ? "数の 出どころ：" + c.src : ""; $("kcSrc").style.display = c.src ? "" : "none";
+  $("kcard").classList.add("on");
+}
+$("kcClose").addEventListener("click", () => { SND.tap(); $("kcard").classList.remove("on"); });
+$("kcard").addEventListener("click", (e) => { if (e.target.id === "kcard") $("kcard").classList.remove("on"); });
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") $("kcard").classList.remove("on"); });
+function showNote() {
+  const got = lsGet(LS_NOTE, []);
+  $("noteNum").textContent = `${got.filter((id) => SHAKAI_BY[id]).length}／${SHAKAI.length} まい 見つけた（「社会を学べる王国記」で あつまるよ）`;
+  $("notegrid").innerHTML = ["地理", "歴史", "公民"].map((f) => `<h4>${f}</h4>` + SHAKAI.filter((c) => c.field === f).map((c) =>
+    got.includes(c.id) ? `<button type="button" data-id="${c.id}"><img src="${c.pic}" alt="">${c.title}</button>` : `<button type="button" disabled>？？？</button>`).join("")).join("");
+  $("notegrid").querySelectorAll("button[data-id]").forEach((b) => b.addEventListener("click", () => openCard(b.dataset.id)));
+  showScreen("noteScreen");
+}
+
 // ---- はじめる ----
-function startGame() {
+function startGame(learn = st ? st.learn : false) {
   st = RULES.newState(); busy = false; prevStats = null;
+  st.learn = learn; st.learned = []; $("chips").innerHTML = "";
   $("result").classList.remove("on"); $("showRes").style.display = "none"; $("bottom").style.display = ""; $("sbubble").classList.remove("on");
   if (!$("kingPic").firstChild) $("kingPic").innerHTML = ART.king();
   buildField(); drawAll(); drawHud();
   showScreen("game");
-  kingSay(["まっさらな この国を、さかえさせておくれ。", "けんじゃたちに 6回だけ そうだんできるぞ。"]);
+  kingSay(learn ? ["まっさらな この国を、さかえさせておくれ。", "国に 何かが できたら、左の 札で 社会の おはなしが 読めるぞ。"] : ["まっさらな この国を、さかえさせておくれ。", "けんじゃたちに 6回だけ そうだんできるぞ。"]);
   setChoices(true);
 }
 
@@ -503,6 +623,7 @@ async function pick(id) {
   const wasNeg = RULES.score(st) < 0 && !st.erupted;
   setMood(); drawHud();
   if (wasNeg) { st.erupted = true; SND.raid(); $("map").classList.add("shake"); fxText("火山が ふんかした！", "bad"); kingSay(["火山が…！ 国が あれてきたぞ…"]); await wait(1000); $("map").classList.remove("shake"); }
+  await checkLearn();
   busy = false;
   if (st.turn >= 6) { await wait(700); showResult(); } else { setChoices(true); }
 }
@@ -519,6 +640,8 @@ function showResult() {
   { const S = RULES.stats(st); $("endStats").textContent = RULES.STAT_NAMES.map(([k, n]) => `${n} ${k === "pop" ? S[k].toLocaleString() : S[k]}`).join("　"); }
 
 
+  const el = $("endLearn"); el.style.display = st.learn ? "" : "none";
+  if (st.learn) el.textContent = `この国で 見つけた しらべ札：${st.learned.length}まい（「国を 見る」で 左の 札が 読めるよ。「しゃかいノート」にも のこります）`;
   const best = lsGet(LS_BEST, null); if (best === null || sc > best) lsSet(LS_BEST, sc);
   const z = lsGet(LS_ZUKAN, []); if (!z.includes(end.id)) { z.push(end.id); lsSet(LS_ZUKAN, z); }
 
@@ -527,7 +650,10 @@ function showResult() {
 }
 
 // ---- ボタン ----
-$("go").addEventListener("click", () => { SND.tap(); startGame(); });
+$("go").addEventListener("click", () => { SND.tap(); startGame(false); });
+$("goLearn").addEventListener("click", () => { SND.tap(); startGame(true); });
+$("toNote").addEventListener("click", () => { SND.tap(); showNote(); });
+$("noteBack").addEventListener("click", () => { SND.tap(); bestLine(); showScreen("title"); });
 $("retry").addEventListener("click", () => { SND.tap(); startGame(); });
 $("toTitle").addEventListener("click", () => { SND.tap(); bestLine(); showScreen("title"); });
 // 図鑑：見つけた けつまつは 名前と ひとことが 読める。まだのは ？？？
