@@ -57,6 +57,7 @@
 |---|---|---|
 | `index.html` | トップページ（科目ごとのゲーム一覧・JSON-LD・OGP） | 公開中 |
 | `img/` | トップページの題字・背景・札の絵 | 公開中 |
+| `googleed8e4df7967b8491.html` | Google Search Console の持ち主確認（2026-09-25 に確認ずみ）。**消すと確認が外れる** | 公開中 |
 | `02_nandemo_learning_quest/` | なんでもラーニングクエスト | 公開中 |
 | `04_sekai_no_recipe/` | せかいのレシピ ／ げんしのへや（118この原子。データは `elements.js`） | 公開中 |
 | `15_kokki_quest/` `16_shuto_quest/` | 国旗クエスト・首都あてクエスト（02と同じエンジン。国連加盟国193か国。旗の絵は flag-icons（MIT）を各フォルダの `flags/` に入れている。`packs/flags.js` を直したら index.html の `?v=` を新しくする） | 公開中 |
