@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>6人の賢者 〜あたやさいさい国発展記〜｜順番で国がかわる無料ゲーム｜あたやさいさいゲームランド</title>
-<meta name="description" content="まっさらな国を、6人の賢者に6回だけ相談して発展させるゲーム。だれに、どの順番でたのむかで、国のすがたが変わります。「社会を学べる王国記」では、国会・裁判所・港・空港などができるたびに、地理・歴史・公民の解説が読めます。広告なし・会員登録なし。">
+<meta name="description" content="まっさらな国を、6人の賢者に6回だけ相談して発展させるゲーム。だれに、どの順番でたのむかで、国のすがたが変わります。国会・裁判所・港・空港などができるたびに、地理・歴史・公民の解説が読めます。広告なし・会員登録なし。">
 <meta name="robots" content="index,follow">
 <link rel="canonical" href="https://atayasaisai.github.io/game_land/21_rokunin_no_kenja/">
 <meta property="og:type" content="article">
@@ -194,8 +194,7 @@ img.sage.hop{animation:hop .3s steps(2)}
 .zukan div.got{background:#fff;color:var(--ink)}
 .zukan div.got small{display:block;font-weight:500;color:var(--sub);margin-top:3px;font-size:.66rem;line-height:1.4}
 .result .btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:6px}
-/* ───────── 社会を学べる王国記：しらべ札 ───────── */
-.btn.learn{background:var(--ai)}
+/* ───────── しらべ札（社会の おはなし）───────── */
 .learnchips{position:absolute;left:8px;top:clamp(150px,30vh,260px);z-index:5;display:flex;flex-direction:column;gap:6px;align-items:flex-start;max-width:calc(100vw - 16px)}
 .chip{display:flex;align-items:center;gap:6px;background:#fff;border:3px solid var(--ink);border-radius:999px;padding:3px 12px 3px 4px;box-shadow:3px 3px 0 var(--ink);
   font-size:clamp(.72rem,2.3vw,.9rem);text-align:left;animation:chipin .45s cubic-bezier(.2,1.6,.4,1)}
@@ -235,9 +234,8 @@ img.sage.hop{animation:hop .3s steps(2)}
       6人の けんじゃに <b>6回だけ</b> そうだんできます。<br>
       おなじ人に なんども たのんでも いいよ。</p>
     <p class="small">だれに、<b>どの順番で</b> たのむかで、国の すがたが かわります。<br>めざせ、はってん 100%！</p>
+    <p class="small">国に 建物が できたり 何かが おきたりすると、<br>左に 出る 札で <b>社会（地理・歴史・公民）の おはなし</b>が 読めるよ。</p>
     <button class="btn pop" id="go">はじめる ▶</button>
-    <p style="margin:14px 0 4px"><button class="btn pop learn" id="goLearn">社会を学べる王国記 ▶</button></p>
-    <p class="small" style="margin:0">国に 建物が できたり 何かが おきたりすると、<br>社会（地理・歴史・公民）の おはなしが 読めるよ。</p>
     <p class="best" id="bestLine"></p>
     <p style="margin:10px 0 0;display:flex;gap:8px;justify-content:center;flex-wrap:wrap"><button class="btn sub" id="toZukan" style="font-size:.9rem;padding:6px 18px">見つけた けつまつ</button><button class="btn sub" id="toNote" style="font-size:.9rem;padding:6px 18px">しゃかいノート</button></p>
   </div>
@@ -529,7 +527,7 @@ function setChoices(enabled, pickedId) {
 }
 
 // ============================================================
-// 社会を学べる王国記：国に 何かが できたら、左に しらべ札が 出る（えらぶ前には 出さない＝答えの ヒントに しない）
+// しらべ札：国に 何かが できたら、左に しらべ札が 出る（えらぶ前には 出さない＝答えの ヒントに しない）
 // ============================================================
 function learnTriggers() {
   const ids = []; const s = RULES.score(st); const S = RULES.stats(st);
@@ -549,7 +547,6 @@ function learnTriggers() {
 // 1回 えらぶごとに 出すのは 2まいまで。まだ もっていない 札を 先に 出す（のこりは 次の 回へ）
 const CARDS_PER_PICK = 2;
 async function checkLearn() {
-  if (!st.learn) return;
   const note = lsGet(LS_NOTE, []);
   const cand = learnTriggers().filter((id) => !st.learned.includes(id));
   const fresh = [...cand.filter((id) => !note.includes(id)), ...cand.filter((id) => note.includes(id))].slice(0, CARDS_PER_PICK);
@@ -582,7 +579,7 @@ $("kcard").addEventListener("click", (e) => { if (e.target.id === "kcard") $("kc
 document.addEventListener("keydown", (e) => { if (e.key === "Escape") $("kcard").classList.remove("on"); });
 function showNote() {
   const got = lsGet(LS_NOTE, []);
-  $("noteNum").textContent = `${got.filter((id) => SHAKAI_BY[id]).length}／${SHAKAI.length} まい 見つけた（「社会を学べる王国記」で あつまるよ）`;
+  $("noteNum").textContent = `${got.filter((id) => SHAKAI_BY[id]).length}／${SHAKAI.length} まい 見つけた（国に 建物が できたり 何かが おきたりすると あつまるよ）`;
   $("notegrid").innerHTML = ["地理", "歴史", "公民"].map((f) => `<h4>${f}</h4>` + SHAKAI.filter((c) => c.field === f).map((c) =>
     got.includes(c.id) ? `<button type="button" data-id="${c.id}"><img src="${c.pic}" alt="">${c.title}</button>` : `<button type="button" disabled>？？？</button>`).join("")).join("");
   $("notegrid").querySelectorAll("button[data-id]").forEach((b) => b.addEventListener("click", () => openCard(b.dataset.id)));
@@ -590,15 +587,15 @@ function showNote() {
 }
 
 // ---- はじめる ----
-function startGame(learn = st ? st.learn : false) {
+function startGame() {
   st = RULES.newState(); busy = false; prevStats = null;
-  st.learn = learn; st.learned = []; $("chips").innerHTML = "";
+  st.learned = []; $("chips").innerHTML = "";
   $("result").classList.remove("on"); $("showRes").style.display = "none"; $("bottom").style.display = ""; $("sbubble").classList.remove("on");
   if (!$("kingPic").firstChild) $("kingPic").innerHTML = ART.king();
   buildField(); drawAll(); drawHud();
   $("game").classList.add("hidescore");
   showScreen("game");
-  kingSay(learn ? ["まっさらな この国を、さかえさせておくれ。", "国に 何かが できたら、左の 札で 社会の おはなしが 読めるぞ。"] : ["まっさらな この国を、さかえさせておくれ。", "けんじゃたちに 6回だけ そうだんできるぞ。"]);
+  kingSay(["まっさらな この国を、さかえさせておくれ。", "けんじゃたちに 6回だけ そうだんできるぞ。"]);
   setChoices(true);
 }
 
@@ -684,8 +681,8 @@ function showResult() {
   { const S = RULES.stats(st); $("endStats").textContent = RULES.STAT_NAMES.map(([k, n]) => `${n} ${k === "pop" ? S[k].toLocaleString() : S[k]}`).join("　"); }
 
 
-  const el = $("endLearn"); el.style.display = st.learn ? "" : "none";
-  if (st.learn) el.textContent = `この国で 見つけた しらべ札：${st.learned.length}まい（「国を 見る」で 左の 札が 読めるよ。「しゃかいノート」にも のこります）`;
+  const el = $("endLearn"); el.style.display = st.learned.length ? "" : "none";
+  el.textContent = `この国で 見つけた しらべ札：${st.learned.length}まい（「国を 見る」で 左の 札が 読めるよ。「しゃかいノート」にも のこります）`;
   const best = lsGet(LS_BEST, null); if (best === null || sc > best) lsSet(LS_BEST, sc);
   const z = lsGet(LS_ZUKAN, []); if (!z.includes(end.id)) { z.push(end.id); lsSet(LS_ZUKAN, z); }
 
@@ -694,8 +691,7 @@ function showResult() {
 }
 
 // ---- ボタン ----
-$("go").addEventListener("click", () => { SND.tap(); startGame(false); });
-$("goLearn").addEventListener("click", () => { SND.tap(); startGame(true); });
+$("go").addEventListener("click", () => { SND.tap(); startGame(); });
 $("toNote").addEventListener("click", () => { SND.tap(); showNote(); });
 $("noteBack").addEventListener("click", () => { SND.tap(); bestLine(); showScreen("title"); });
 $("retry").addEventListener("click", () => { SND.tap(); startGame(); });
