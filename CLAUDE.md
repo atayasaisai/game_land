@@ -99,8 +99,20 @@ CSSアニメの0%フレームしか映らず、直前のフレームが残るこ
 `05_kiri_no_sekiban` は**序章＋第一話だけの試作品**で、`img/` の絵9枚は作り直せません。
 どちらもトップページの一覧には載せていません。
 
+## Google 検索への登録（2026-09-25）
+
+- Google Search Console に「URL プレフィックス」で `https://atayasaisai.github.io/game_land/` を登録した。
+  `github.io` は GitHub のドメインなので「ドメイン」の登録は使えない。
+- 持ち主の確認は HTML ファイル方式で、`googleed8e4df7967b8491.html` を置いてある（中身は Google が決めた1行）。消すと確認が外れる。
+- `sitemap.xml` を送信ずみ。送信した直後の表示は「取得できませんでした」だった（公開先のファイルは正常に開けて、20件）。
+  何日たっても赤いままなら、行を開いて送信先に `game_land/` が入っているか見る。入っていなければフルの URL で送りなおす。
+- トップの URL は「インデックス登録をリクエスト」ずみ。
+- ゲームを足したら `sitemap.xml` に1行足すだけでよい。Google が自分で読みに来る。
+- `#` から後ろは同じページの中の位置を表す印で、Google は別のページとしては登録しない。
+
 ## 積み残し
 
+- Search Console のサイトマップが「成功しました」・ページ数 20 になったかを、数日後に確かめる。
 - 訪問者カウント（GoatCounter）が3ページとも未設定。
   `index.html` / `02_nandemo_learning_quest/index.html` / `04_sekai_no_recipe/index.html`
   の末尾にコメントアウトされた1行があり、goatcounter.com で取ったコードを
