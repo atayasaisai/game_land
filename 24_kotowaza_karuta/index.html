@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>ことわざかるた｜モンスターと札とり勝負｜あたやさいさいゲームランド</title>
-<meta name="description" content="小学生向けのことわざかるた。ことわざの前半が読まれたら、後半の札を モンスターより先にタッチ！ 取ったことわざは ふりがな・やさしい意味つきで出てきます。50こ収録。子供用の無料学習ゲーム。広告なし・会員とうろくなし。">
+<meta name="description" content="小学生向けのことわざかるた。ことわざの前半が読まれたら、後半の札を モンスターより先にタッチ！ 取ったことわざは ふりがな・やさしい意味つきで出てきます。100こ収録。子供用の無料学習ゲーム。広告なし・会員とうろくなし。">
 <meta name="robots" content="index,follow">
 <link rel="canonical" href="https://atayasaisai.github.io/game_land/24_kotowaza_karuta/">
 <meta property="og:type" content="article">
@@ -228,7 +228,7 @@ rt{font-size:.5em;font-family:"Zen Maru Gothic",sans-serif;font-weight:700;color
   </div>
 
   <p class="note">
-    <b>小学生のうちに 知っておきたい ことわざ 50こ</b>が入っています。1回の勝負は 20まい。たたみの上には 8まいずつ ならびます。<br>
+    <b>小学生のうちに 知っておきたい ことわざ 100こ</b>が入っています。1回の勝負は 20まい。たたみの上には 8まいずつ ならびます。<br>
     読み札は 1文字ずつ 出てきます。<b>赤い字は「決まり字」</b>。そこまで 読まれたら、どの札か わかる字です。<br>
     まちがえて ちがう札に さわると「おてつき」で、すこしの間 さわれません。
     モンスターに とられたものは「にがて」として のこります。きろくは この端末の中だけです。
@@ -271,7 +271,7 @@ function kana(s){ return s.replace(/([一-龯々〆ヶ]+)\(([^)]+)\)/g, "$2").re
 var P = window.WORDS.map(function(w, i){
   return {n:i+1, k:w.k, s:w.s, i:w.i, kk:kana(w.k), c:kana(w.s)};
 });
-// 決まり字：ほかの読み札と ちがってくるところまで（50こ ぜんぶの中で くらべる）
+// 決まり字：ほかの読み札と ちがってくるところまで（ぜんぶの中で くらべる）
 P.forEach(function(p){
   var len = 1;
   P.forEach(function(q){
@@ -282,9 +282,11 @@ P.forEach(function(p){
   p.m = p.kk.slice(0, Math.min(len, p.kk.length));
 });
 var RANGES = [
-  {k:"1",  nm:"やさしい<small>（1〜25）</small>",  from:1,  to:25},
-  {k:"26", nm:"むずかしい<small>（26〜50）</small>", from:26, to:50},
-  {k:"all",nm:"50"+CFG.unit+"から",all:true}
+  {k:"1",  nm:"やさしい①<small>（1〜25）</small>",  from:1,  to:25},
+  {k:"51", nm:"やさしい②<small>（51〜75）</small>", from:51, to:75},
+  {k:"26", nm:"むずかしい①<small>（26〜50）</small>", from:26, to:50},
+  {k:"76", nm:"むずかしい②<small>（76〜100）</small>", from:76, to:100},
+  {k:"all",nm:P.length+CFG.unit+"から",all:true}
 ];
 // あいて：base＝読みはじめてから 札をとるまでの時間（ミリ秒）。決まり字が長いほど すこし おそくなる
 var FOES = [
@@ -367,7 +369,7 @@ function show(id){
 function rangeName(){
   if(pref.rg==="weak") return "にがての"+CFG.what;
   var r = RANGES.filter(function(x){ return x.k===pref.rg; })[0];
-  return r.all ? "50"+CFG.unit+"から 20まい" : r.nm.replace(/<[^>]+>/g, "");
+  return r.all ? P.length+CFG.unit+"から 20まい" : r.nm.replace(/<[^>]+>/g, "");
 }
 function start(){
   var pool;
