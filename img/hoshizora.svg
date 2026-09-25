@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- 星空のイラスト（ほしぞらくるくる用）。夜空の丸に、北極星と まわる星の あと、北斗七星 -->
+  <defs>
+    <radialGradient id="space" cx="50%" cy="45%" r="60%">
+      <stop offset="0" stop-color="#23346e"/><stop offset=".55" stop-color="#101838"/><stop offset="1" stop-color="#05070f"/>
+    </radialGradient>
+  </defs>
+  <circle cx="100" cy="100" r="96" fill="url(#space)"/>
+  <circle cx="100" cy="100" r="96" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="3"/>
+  <g fill="none" stroke-linecap="round" stroke-width="2.4">
+    <path d="M100,40 A60,60 0 0 1 160,100" stroke="#8fc5ff" opacity=".55"/>
+    <path d="M100,62 A38,38 0 0 1 138,100" stroke="#ffd98a" opacity=".6"/>
+    <path d="M100,150 A50,50 0 0 1 50,100" stroke="#c3a6ff" opacity=".55"/>
+    <path d="M100,126 A26,26 0 0 1 74,100" stroke="#8fc5ff" opacity=".5"/>
+  </g>
+  <g stroke="#ffe7a0" stroke-width="2" opacity=".85" fill="none">
+    <path d="M40,150 L58,160 L78,150 L96,152 L112,166 L136,164 L150,178"/>
+  </g>
+  <g fill="#fff">
+    <circle cx="40" cy="150" r="3.4"/><circle cx="58" cy="160" r="3"/><circle cx="78" cy="150" r="3"/><circle cx="96" cy="152" r="2.6"/><circle cx="112" cy="166" r="3"/><circle cx="136" cy="164" r="3"/><circle cx="150" cy="178" r="2.6"/>
+    <circle cx="160" cy="100" r="2.6"/><circle cx="138" cy="100" r="2.2"/><circle cx="50" cy="100" r="2.4"/><circle cx="74" cy="100" r="2"/>
+    <circle cx="40" cy="60" r="1.4"/><circle cx="160" cy="46" r="1.6"/><circle cx="130" cy="30" r="1.2"/><circle cx="60" cy="34" r="1.2"/>
+  </g>
+  <path d="M100,86 L104,96 L114,100 L104,104 L100,114 L96,104 L86,100 L96,96 Z" fill="#fff6c8"/>
+  <circle cx="100" cy="100" r="14" fill="#fff6c8" opacity=".2"/>
+</svg>

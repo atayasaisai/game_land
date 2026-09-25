@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>ほしぞら くるくる｜空を回して星の動きを知る無料の理科教材ゲーム｜あたやさいさいゲームランド</title>
+<meta name="description" content="日づけと時こくを えらぶと、日本の 夜空が そのとおりに 回る。北の空は 北極星を 中心に、東の星は のぼり、西の星は しずむ。オリオン座・さそり座・夏の大三角など 季節の 星座も さがせる。小学4年の理科「月と星」、中学3年「地球と宇宙」に合わせた、子ども向けの無料の理科教材ゲーム。">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://atayasaisai.github.io/game_land/26_hoshizora_kurukuru/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="あたやさいさいゲームランド">
+<meta property="og:title" content="ほしぞら くるくる｜空を回して星の動きを知る">
+<meta property="og:url" content="https://atayasaisai.github.io/game_land/26_hoshizora_kurukuru/">
+<meta property="og:image" content="https://atayasaisai.github.io/game_land/ogp.png">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap">
+<style>
+:root{
+  --bg0:#05070F;
+  --ink:#EAF0FF; --sub:#9AA6C4; --faint:#5C6B8A;
+  --line:rgba(255,255,255,.12);
+  --panel:rgba(255,255,255,.055);
+  --ok:#4CD9A0; --ng:#FF7A6B;
+  color-scheme:dark;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  margin:0;font-family:"Zen Kaku Gothic New",-apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif;
+  color:var(--ink);background:var(--bg0);line-height:1.8;overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+#sky{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(1200px 800px at 50% -10%, #1E2A57 0%, transparent 60%),
+    radial-gradient(900px 700px at 85% 100%, #2A1840 0%, transparent 62%),
+    radial-gradient(800px 600px at 8% 80%, #0C2B41 0%, transparent 60%),
+    linear-gradient(180deg,#070B18 0%,#05070F 100%);
+}
+.wrap{position:relative;z-index:1;max-width:620px;margin:0 auto;padding:0 16px calc(24px + env(safe-area-inset-bottom))}
+button{font-family:inherit;color:inherit;cursor:pointer}
+
+/* ---------- buttons ---------- */
+.btn{
+  border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.07);
+  color:var(--ink);font-weight:700;font-size:1rem;padding:13px 26px;border-radius:14px;
+  letter-spacing:.04em;white-space:nowrap;transition:transform .12s ease, background .2s, border-color .2s;
+}
+.btn:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.3)}
+.btn:active{transform:scale(.96)}
+.btn.pri{
+  background:linear-gradient(140deg,#4D7BFF,#8A5BFF 60%,#C24BFF);
+  border-color:rgba(255,255,255,.34);color:#fff;
+  box-shadow:0 8px 30px -8px rgba(110,90,255,.85), inset 0 1px 0 rgba(255,255,255,.4);
+}
+.btn.go{
+  font-size:1.06rem;font-weight:900;padding:15px 10px;width:100%;
+  background:linear-gradient(140deg,#00C2A8,#00A4E0 55%,#3D7BFF);
+  border-color:rgba(255,255,255,.34);
+  box-shadow:0 10px 32px -10px rgba(0,180,220,.95), inset 0 1px 0 rgba(255,255,255,.45);
+}
+.btn.sm{font-size:.82rem;padding:7px 12px;border-radius:11px;font-weight:500}
+.btn.on{background:rgba(111,227,255,.18);border-color:rgba(111,227,255,.6);color:#fff}
+
+/* ---------- title（トップと同じ空の絵＋木の看板のロゴ。中身は夜空の板にのせる） ---------- */
+#title{position:relative;z-index:1;min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;padding:24px 16px 40px;
+  background:#bfe3f5 url(bg.jpg) center 30%/cover no-repeat}
+.tlead{display:inline-block;font-size:.72rem;letter-spacing:.2em;border:2.5px solid #33312A;border-radius:999px;padding:3px 15px;
+  background:#fff;color:#33312A;box-shadow:3px 3px 0 #33312A;text-decoration:none;font-weight:700}
+.logo{position:relative;display:flex;align-items:center;justify-content:center;gap:4px;margin:26px auto 0;max-width:640px}
+.logo .side{width:clamp(56px,16vw,110px);height:auto;flex:none;filter:drop-shadow(0 4px 4px rgba(0,0,0,.25));animation:hop 1.6s ease-in-out infinite}
+.logo .side.r{animation-delay:-.8s}
+@keyframes hop{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-10px) rotate(3deg)}}
+.sign{position:relative;padding:20px clamp(12px,4vw,30px) 18px;border-radius:26px;line-height:1.1;
+  background:linear-gradient(#c98a4b,#a86a33 55%,#8d5528);border:4px solid #5b3417;
+  box-shadow:inset 0 3px 0 rgba(255,255,255,.35),inset 0 -5px 0 rgba(0,0,0,.18),0 8px 0 #5b3417,0 14px 22px rgba(40,30,10,.35);
+  animation:swing 3.2s ease-in-out infinite;transform-origin:50% 0}
+@keyframes swing{0%,100%{transform:rotate(-1.2deg)}50%{transform:rotate(1.2deg)}}
+.sign .crown{position:absolute;left:50%;top:-32px;width:58px;transform:translateX(-50%) rotate(-4deg);filter:drop-shadow(0 3px 0 #5b3417)}
+.sign .star{position:absolute;font-size:1.3rem;color:#ffd43b;text-shadow:0 2px 0 #7a4a12;animation:twk 1.4s ease-in-out infinite}
+.sign .star.a{left:8px;top:6px}.sign .star.b{right:10px;bottom:4px;animation-delay:-.7s}
+@keyframes twk{0%,100%{transform:scale(1)}50%{transform:scale(1.35) rotate(15deg)}}
+.logo h1{font-family:"Mochiy Pop One",sans-serif;font-weight:400;line-height:1.1;letter-spacing:0;margin:0;font-size:1rem}
+.logo h1 .sm{display:block;font-size:clamp(.8rem,3.2vw,1.15rem);color:#fff;letter-spacing:.2em;
+  text-shadow:0 2px 0 #5b3417,2px 0 0 #5b3417,-2px 0 0 #5b3417,0 -2px 0 #5b3417;margin-bottom:4px}
+.logo h1 .bg,.logo h1 .q{display:block;white-space:nowrap}
+.logo h1 .lt{display:inline-block;font-size:min(4.4rem,11vw,calc(46vw / var(--n,2)),calc(17rem / var(--n,2)));color:var(--k);
+  text-shadow:3px 0 0 #fff,-3px 0 0 #fff,0 3px 0 #fff,0 -3px 0 #fff,2px 2px 0 #fff,-2px -2px 0 #fff,2px -2px 0 #fff,-2px 2px 0 #fff,
+    0 7px 0 #5b3417,4px 5px 0 #5b3417,-4px 5px 0 #5b3417;
+  transform:rotate(var(--r,0deg));animation:jump 2.4s ease-in-out infinite;animation-delay:calc(var(--i) * .12s)}
+.logo h1 .q{margin-top:4px}
+.logo h1 .q .lt{font-size:clamp(1.5rem,6.6vw,2.6rem);color:#ffd84d;
+  text-shadow:3px 0 0 #7a3f12,-3px 0 0 #7a3f12,0 3px 0 #7a3f12,0 -3px 0 #7a3f12,2px 2px 0 #7a3f12,-2px -2px 0 #7a3f12,2px -2px 0 #7a3f12,-2px 2px 0 #7a3f12,0 6px 0 #3e1f08}
+@keyframes jump{0%,78%,100%{transform:translateY(0) rotate(var(--r,0deg))}86%{transform:translateY(-9px) rotate(var(--r,0deg))}}
+.tpanel{margin-top:22px;width:100%;max-width:520px;display:flex;flex-direction:column;align-items:center;gap:6px;
+  background:linear-gradient(165deg,rgba(20,28,58,.93),rgba(8,11,26,.95));border:3px solid #2a3560;border-radius:28px;
+  padding:18px 16px 22px;box-shadow:0 10px 30px rgba(10,20,50,.45)}
+.kicker{font-size:.7rem;letter-spacing:.42em;color:var(--sub);text-transform:uppercase;margin:0 0 0 .42em}
+.tpanel p{max-width:26em;color:var(--sub);font-size:.9rem;margin:10px 0 4px;text-wrap:balance}
+.tpanel p b{color:var(--ink);font-weight:700}
+.tbtns{display:flex;flex-direction:column;gap:9px;margin-top:16px;width:100%;max-width:340px}
+.stg{display:flex;align-items:center;gap:12px;text-align:left;width:100%;
+  border:1px solid var(--line);border-radius:14px;padding:10px 14px;background:rgba(255,255,255,.04);transition:.15s}
+.stg:hover{border-color:rgba(120,180,255,.5);background:rgba(80,140,255,.1)}
+.stg .n{font-family:"Mochiy Pop One",sans-serif;font-size:1.2rem;color:#8FC5FF;min-width:1.4em;text-align:center}
+.stg b{display:block;font-size:.95rem}
+.stg small{display:block;font-size:.72rem;color:var(--sub);line-height:1.5}
+.stg .rec{margin-left:auto;color:#ffd43b;font-size:.9rem;letter-spacing:.05em;white-space:nowrap}
+.stg .rec i{color:#3a4668;font-style:normal}
+.backlink{display:inline-block;margin-top:22px;font-size:.82rem;letter-spacing:.06em;color:var(--sub);
+  text-decoration:none;border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:6px 18px;transition:.15s}
+.backlink:hover{color:#fff;border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.06)}
+.grade{font-size:.72rem;color:var(--faint);margin-top:10px}
+
+/* ---------- 共通の画面 ---------- */
+.scr{display:none;padding-top:14px}
+.hud{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.hud h2{font-size:1rem;margin:0;font-weight:900;letter-spacing:.06em}
+.hudR{display:flex;align-items:baseline;gap:10px;font-variant-numeric:tabular-nums}
+.prog{font-size:.78rem;color:var(--sub);letter-spacing:.08em}
+.score{font-size:1.3rem;font-weight:900}
+.score small{font-size:.6rem;color:var(--sub);font-weight:500;letter-spacing:.15em;margin-left:2px}
+.bar{height:5px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden;margin-bottom:12px}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#00C2A8,#3D7BFF);transition:width .3s}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:10px;margin-bottom:12px}
+.cvw{position:relative}
+canvas.sky{display:block;width:100%;border-radius:12px;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+#labCv{cursor:grab}
+.when{display:flex;align-items:baseline;justify-content:center;gap:12px;flex-wrap:wrap;margin:2px 0 6px;font-weight:900;font-size:1.05rem}
+.when small{font-size:.78rem;color:var(--sub);font-weight:500}
+.row{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:8px}
+.row .lab{font-size:.72rem;color:var(--sub);align-self:center;margin-right:2px}
+.sl{display:flex;align-items:center;gap:10px;margin-top:8px;font-size:.78rem;color:var(--sub)}
+.sl span{min-width:4.4em}
+input[type=range]{flex:1;accent-color:#6FE3FF}
+.note{font-size:.76rem;color:var(--sub);text-align:center;margin:6px 0 0}
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.chips span{font-size:.74rem;border:1px solid rgba(255,214,90,.35);color:#ffe7a0;border-radius:99px;padding:1px 10px;background:rgba(255,214,90,.06)}
+.hintbox{font-size:.84rem;background:rgba(111,227,255,.07);border:1px solid rgba(111,227,255,.25);border-radius:12px;padding:8px 12px;margin-top:8px}
+.hintbox b{color:#fff}
+
+/* ---------- クイズ ---------- */
+.qtext{font-size:1.02rem;font-weight:700;text-align:center;margin:4px 0 8px;text-wrap:balance}
+.chs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.chs.two{grid-template-columns:repeat(2,1fr)}
+.ch{padding:12px 4px;border-radius:14px;font-weight:900;font-size:1rem;
+  border:2px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);transition:.15s}
+.ch:hover{border-color:rgba(255,255,255,.4)}
+.ch.ok{border-color:var(--ok);background:rgba(76,217,160,.16)}
+.ch.ng{border-color:var(--ng);background:rgba(255,122,107,.14)}
+.ch:disabled{cursor:default}
+.fb{display:none;margin-top:12px;border-radius:16px;padding:12px 14px;border:1px solid var(--line);background:rgba(255,255,255,.06)}
+.fb.on{display:block;animation:pop .25s ease}
+@keyframes pop{from{transform:scale(.96);opacity:0}to{transform:none;opacity:1}}
+.fb .mk{font-size:1.2rem;font-weight:900}
+.fb.ok .mk{color:var(--ok)} .fb.ng .mk{color:var(--ng)}
+.fb p{margin:4px 0 0;font-size:.88rem}
+.fb .btn{margin-top:10px;width:100%}
+
+/* ---------- 結果 ---------- */
+.ov{position:fixed;inset:0;z-index:10;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(3,5,14,.72)}
+.ov.on{display:flex}
+.ovc{width:100%;max-width:380px;text-align:center;background:linear-gradient(165deg,#18204a,#0a0e22);border:2px solid #2a3560;border-radius:24px;padding:24px 20px}
+.ovc .big{font-size:2.4rem;color:#ffd43b;letter-spacing:.1em}
+.ovc .big i{color:#34405e;font-style:normal}
+.ovc h3{margin:6px 0;font-size:1.2rem}
+.ovc p{color:var(--sub);font-size:.9rem;margin:4px 0 16px}
+.ovc .row .btn{flex:1}
+@media (max-width:380px){.chs{grid-template-columns:repeat(2,1fr)}}
+</style>
+
+<!-- ▼ 訪問者カウント（GoatCounter）。Cookieも個人情報も使わない集計。
+     goatcounter.com で決めたコードを MYCODE に入れて、この行のコメントを外すと動きます -->
+<!-- <script data-goatcounter="https://MYCODE.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script> -->
+</head>
+<body>
+
+<div id="sky"></div>
+
+<!-- ================= TITLE ================= -->
+<section id="title">
+  <a class="tlead" href="../">◀ あたやさいさいゲームランド</a>
+  <div class="logo">
+    <img class="side l" src="icon.svg" alt="" width="110" height="110">
+    <div class="sign"><svg class="crown" viewBox="0 0 60 40" aria-hidden="true"><path d="M4 34 L8 10 L20 22 L30 4 L40 22 L52 10 L56 34 Z" fill="#ffd43b" stroke="#5b3417" stroke-width="3" stroke-linejoin="round"/><circle cx="30" cy="25" r="4" fill="#F0603F" stroke="#5b3417" stroke-width="2"/></svg><span class="star a">★</span><span class="star b">★</span>
+      <h1 aria-label="ほしぞら くるくる"><span class="sm">空を まわして 星を 見よう</span><span class="bg" style="--n:4"><span class="lt" style="--k:#4A6BC0;--i:0;--r:-6deg">ほ</span><span class="lt" style="--k:#8A5BD6;--i:1;--r:4deg">し</span><span class="lt" style="--k:#F0A93F;--i:2;--r:-3deg">ぞ</span><span class="lt" style="--k:#4CB86B;--i:3;--r:5deg">ら</span></span><span class="q"><span class="lt" style="--i:4">く</span><span class="lt" style="--i:5">る</span><span class="lt" style="--i:6">く</span><span class="lt" style="--i:7">る</span></span></h1>
+    </div>
+    <img class="side r" src="icon.svg" alt="" width="110" height="110">
+  </div>
+
+  <div class="tpanel">
+  <p class="kicker">Turn the Night Sky</p>
+  <p>日づけと 時こくを えらぶと、<br>
+     日本の 夜空が <b>そのとおりに 回る</b>。<br>
+     星は どっちへ 動く？ 季節で 何が かわる？<br>
+     空を 指で まわして、たしかめよう。</p>
+
+  <div class="tbtns">
+    <button class="btn go" id="labBtn">空を まわす（じゆうに 見る）</button>
+    <button class="stg" data-st="0"><span class="n">1</span><span><b>北の空</b><small>北斗七星や カシオペヤ座は、何時間後に どこ？</small></span><span class="rec" id="rec0"></span></button>
+    <button class="stg" data-st="1"><span class="n">2</span><span><b>東・南・西の空</b><small>この 星は、これから どっちへ 動く？</small></span><span class="rec" id="rec1"></span></button>
+    <button class="stg" data-st="2"><span class="n">3</span><span><b>季節の 星座</b><small>この 星座は なに？ この 空は いつ？</small></span><span class="rec" id="rec2"></span></button>
+  </div>
+  <p class="grade">小学4年「月と星」・中学3年「地球と宇宙」</p>
+
+  <a class="backlink" href="../">◀ あたやさいさいゲームランドへ もどる</a>
+  </div>
+</section>
+
+<!-- ================= 空を まわす ================= -->
+<section class="scr" id="lab"><div class="wrap">
+  <div class="hud">
+    <button class="btn sm" data-back>◀ もどる</button>
+    <h2>空を まわす</h2>
+    <button class="btn sm" id="playBtn">▶ 時間を すすめる</button>
+  </div>
+
+  <div class="card">
+    <div class="when"><span id="labDate"></span><span id="labTime"></span></div>
+    <div class="cvw"><canvas class="sky" id="labCv"></canvas></div>
+    <p class="note" id="labNote">空を 指で 左右に うごかすと、時間が すすむ・もどる</p>
+    <div class="row"><span class="lab">見る 方角</span>
+      <button class="btn sm" data-v="N">北</button><button class="btn sm" data-v="E">東</button><button class="btn sm" data-v="S">南</button><button class="btn sm" data-v="W">西</button><button class="btn sm" data-v="Z">まうえ</button>
+    </div>
+    <div class="sl"><span>時こく</span><input type="range" id="tSl" min="0" max="24" step="0.1666667" aria-label="時こく"></div>
+    <div class="sl"><span>日づけ</span><input type="range" id="dSl" min="1" max="365" step="1" aria-label="日づけ"></div>
+    <div class="row"><span class="lab">季節の 夜9時</span>
+      <button class="btn sm" data-s="0">春</button><button class="btn sm" data-s="1">夏</button><button class="btn sm" data-s="2">秋</button><button class="btn sm" data-s="3">冬</button>
+    </div>
+    <div class="row"><span class="lab">しめす もの</span>
+      <button class="btn sm" data-o="lines">星座の線</button><button class="btn sm" data-o="names">名前</button><button class="btn sm" data-o="tri">大三角</button><button class="btn sm" data-o="trail">星の 通り道</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div style="font-size:.8rem;color:var(--sub);letter-spacing:.1em">いま 空に 出ている 星座</div>
+    <div class="chips" id="labChips"></div>
+    <div class="hintbox" id="labSay"></div>
+  </div>
+</div></section>
+
+<!-- ================= クイズ ================= -->
+<section class="scr" id="quiz"><div class="wrap">
+  <div class="hud">
+    <button class="btn sm" id="quizBack">◀ もどる</button>
+    <h2 id="qStage"></h2>
+    <div class="hudR"><span class="prog" id="qProg"></span><span class="score" id="qScore">0<small>てん</small></span></div>
+  </div>
+  <div class="bar"><i id="qBar"></i></div>
+  <div class="card">
+    <div class="qtext" id="qText"></div>
+    <div class="when" id="qWhen"></div>
+    <div class="cvw"><canvas class="sky" id="qCv"></canvas></div>
+  </div>
+  <div id="qChoices" class="chs"></div>
+  <div class="fb" id="fb"><div class="mk" id="fbMk"></div><div id="fbBody"></div><button class="btn pri" id="nextBtn">つぎへ ▶</button></div>
+</div></section>
+
+<div class="ov" id="resultOv"><div class="ovc">
+  <div class="big" id="rStars"></div>
+  <h3 id="rTitle"></h3>
+  <p id="rText"></p>
+  <div class="row"><button class="btn" id="rAgain">もういちど</button><button class="btn pri" id="rTitleBtn">タイトルへ</button></div>
+</div></div>
+
+<script>
+(function(){
+"use strict";
+var $=function(s){return document.querySelector(s);};
+var $$=function(s){return Array.prototype.slice.call(document.querySelectorAll(s));};
+var RAD=Math.PI/180;
+function mod(a,n){return ((a%n)+n)%n;}
+function rnd(n){return Math.floor(Math.random()*n);}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=rnd(i+1),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function load(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+
+/* ---------- 星のデータ ----------
+   [赤経（時）, 赤緯（度）, 等級, 色]。2000年の位置。色 r=赤 o=だいだい y=黄 b=青白、なし＝白。
+   星座の線を引くのに いる星と、名前のある明るい星だけを入れている（暗い星は入れていない）。 */
+var ST={
+ polaris:[2.530,89.26,2.0,"y"], kochab:[14.845,74.16,2.1,"o"], pherkad:[15.345,71.83,3.0], umiD:[17.537,86.59,4.4], umiE:[16.766,82.04,4.2], umiZ:[15.734,77.79,4.3], umiH:[16.292,75.76,5.0],
+ dubhe:[11.062,61.75,1.8,"o"], merak:[11.031,56.38,2.4], phecda:[11.897,53.69,2.4], megrez:[12.257,57.03,3.3], alioth:[12.900,55.96,1.8], mizar:[13.399,54.93,2.2], alkaid:[13.792,49.31,1.9],
+ caph:[0.153,59.15,2.3], schedar:[0.675,56.54,2.2,"o"], casG:[0.945,60.72,2.2], ruchbah:[1.430,60.24,2.7], segin:[1.907,63.67,3.4],
+ betelgeuse:[5.919,7.41,0.5,"r"], rigel:[5.242,-8.20,0.1,"b"], bellatrix:[5.419,6.35,1.6,"b"], saiph:[5.796,-9.67,2.1,"b"], alnitak:[5.679,-1.94,1.8,"b"], alnilam:[5.604,-1.20,1.7,"b"], mintaka:[5.533,-0.30,2.2,"b"], meissa:[5.585,9.93,3.4],
+ sirius:[6.752,-16.72,-1.5,"b"], mirzam:[6.378,-17.96,2.0], adhara:[6.977,-28.97,1.5], wezen:[7.140,-26.39,1.8], aludra:[7.402,-29.30,2.4],
+ procyon:[7.655,5.22,0.4], gomeisa:[7.453,8.29,2.9],
+ castor:[7.577,31.89,1.6], pollux:[7.755,28.03,1.1,"o"], alhena:[6.629,16.40,1.9], wasat:[7.335,21.98,3.5], mebsuta:[6.732,25.13,3.0], gemMu:[6.383,22.51,2.9],
+ aldebaran:[4.599,16.51,0.9,"r"], elnath:[5.438,28.61,1.7], tauZ:[5.627,21.14,3.0], tauG:[4.330,15.63,3.6], tauE:[4.477,19.18,3.5], pleiades:[3.790,24.12,1.6,"b"],
+ capella:[5.278,46.00,0.1,"y"], menkalinan:[5.992,44.95,1.9], aurT:[5.995,37.21,2.6], aurI:[4.950,33.17,2.7],
+ regulus:[10.140,11.97,1.4,"b"], denebola:[11.818,14.57,2.1], algieba:[10.333,19.84,2.0,"o"], zosma:[11.235,20.52,2.6], chertan:[11.237,15.43,3.3], leoH:[10.122,16.76,3.5], leoE:[9.764,23.77,3.0], leoMu:[9.879,26.01,3.9], adhafera:[10.278,23.42,3.4],
+ spica:[13.420,-11.16,1.0,"b"], porrima:[12.694,-1.45,2.7], vindemiatrix:[13.036,10.96,2.8], virD:[12.927,3.40,3.4], virB:[11.845,1.76,3.6],
+ arcturus:[14.261,19.18,-0.05,"o"], izar:[14.750,27.07,2.4], booD:[15.258,33.31,3.5], nekkar:[15.032,40.39,3.5], seginus:[14.535,38.31,3.0], booR:[14.530,30.37,3.6], muphrid:[13.911,18.40,2.7],
+ crvG:[12.263,-17.54,2.6], crvB:[12.573,-23.40,2.7], crvD:[12.498,-16.52,2.9], crvE:[12.169,-22.62,3.0],
+ antares:[16.490,-26.43,1.0,"r"], scoS:[16.353,-25.59,2.9], dschubba:[16.006,-22.62,2.3], acrab:[16.091,-19.81,2.6], scoPi:[15.981,-26.11,2.9], scoT:[16.598,-28.22,2.8], scoE:[16.836,-34.29,2.3], scoMu:[16.864,-38.05,3.0], scoZ:[16.910,-42.36,3.6], scoEta:[17.203,-43.24,3.3], sargas:[17.622,-43.00,1.9], scoI:[17.793,-40.13,3.0], scoK:[17.708,-39.03,2.4], shaula:[17.560,-37.10,1.6], lesath:[17.513,-37.30,2.7],
+ vega:[18.616,38.78,0.0,"b"], lyrE:[18.739,39.67,4.7], lyrZ:[18.746,37.61,4.3], sheliak:[18.835,33.36,3.5], sulafat:[18.982,32.69,3.2], lyrD:[18.908,36.90,4.3],
+ altair:[19.846,8.87,0.8], tarazed:[19.771,10.61,2.7,"o"], alshain:[19.922,6.41,3.7], aqlD:[19.425,3.11,3.4], aqlZ:[19.090,13.86,3.0], aqlT:[20.188,-0.82,3.2], aqlL:[19.104,-4.88,3.4],
+ deneb:[20.690,45.28,1.25], sadr:[20.370,40.26,2.2], albireo:[19.512,27.96,3.1,"o"], cygE:[20.770,33.97,2.5], cygD:[19.750,45.13,2.9], cygH:[19.938,35.08,3.9],
+ sgrPhi:[18.761,-26.99,3.2], nunki:[18.921,-26.30,2.0], sgrT:[19.116,-27.67,3.3], ascella:[19.043,-29.88,2.6], kausB:[18.466,-25.42,2.8], sgrMu:[18.229,-21.06,3.8],
+ markab:[23.079,15.21,2.5], scheat:[23.063,28.08,2.4,"o"], algenib:[0.220,15.18,2.8], alpheratz:[0.140,29.09,2.1], enif:[21.736,9.88,2.4,"o"], pegT:[22.170,6.20,3.5], pegZ:[22.691,10.83,3.4],
+ andD:[0.655,30.86,3.3], mirach:[1.162,35.62,2.1,"o"], almach:[2.065,42.33,2.1],
+ fomalhaut:[22.961,-29.62,1.2],
+ mirfak:[3.405,49.86,1.8], algol:[3.136,40.96,2.1], perG:[3.080,53.51,2.9], perD:[3.715,47.79,3.0], perE:[3.964,40.01,2.9], perZ:[3.902,31.88,2.9],
+ alphard:[9.460,-8.66,2.0,"o"], alphecca:[15.578,26.71,2.2], rasalhague:[17.582,12.56,2.1], hamal:[2.120,23.46,2.0,"o"], diphda:[0.727,-17.99,2.0], menkar:[3.038,4.09,2.5,"r"],
+ alderamin:[21.310,62.59,2.5], eltanin:[17.943,51.49,2.2,"o"], thuban:[14.073,64.38,3.7], zubenG:[14.848,-16.04,2.8], zubenB:[15.283,-9.38,2.6]
+};
+/* 名前を出す星（1等星と北極星など） */
+var SNAME={polaris:"北極星",sirius:"シリウス",betelgeuse:"ベテルギウス",rigel:"リゲル",procyon:"プロキオン",aldebaran:"アルデバラン",capella:"カペラ",
+ pollux:"ポルックス",castor:"カストル",regulus:"レグルス",spica:"スピカ",arcturus:"アークトゥルス",antares:"アンタレス",vega:"ベガ（おりひめ星）",
+ altair:"アルタイル（ひこ星）",deneb:"デネブ",fomalhaut:"フォーマルハウト",pleiades:"すばる"};
+/* 星座。ln は「星-星-星」でつなぐ線。lb は名前を書く星。s は季節（0春 1夏 2秋 3冬、-1 は一年中北の空） */
+var CON=[
+ {id:"umi",nm:"こぐま座",lb:"umiZ",s:-1,ln:["polaris-umiD-umiE-umiZ-kochab-pherkad-umiH-umiZ"],
+  tip:"しっぽの 先が 北極星。"},
+ {id:"hokuto",nm:"北斗七星",lb:"megrez",s:0,ln:["dubhe-merak-phecda-megrez-dubhe","megrez-alioth-mizar-alkaid"],
+  tip:"おおぐま座の せなかと しっぽ。ひしゃくの 形。ひしゃくの 先の 2つの 星の あいだを 5ばい のばすと 北極星。春の 夜に 高く 見える。"},
+ {id:"cas",nm:"カシオペヤ座",lb:"casG",s:2,ln:["caph-schedar-casG-ruchbah-segin"],
+  tip:"W の 形。北極星を はさんで、北斗七星の はんたいがわに ある。秋の 夜に 高く 見える。"},
+ {id:"ori",nm:"オリオン座",lb:"alnilam",s:3,ln:["betelgeuse-bellatrix-mintaka-rigel-saiph-alnitak-betelgeuse","mintaka-alnilam-alnitak","betelgeuse-meissa-bellatrix"],
+  tip:"まん中に 3つ ならんだ 三つ星が 目じるし。赤い ベテルギウスと 青白い リゲル。冬の 星座。"},
+ {id:"cma",nm:"おおいぬ座",lb:"wezen",s:3,ln:["mirzam-sirius-wezen-adhara","wezen-aludra"],
+  tip:"夜空で いちばん 明るい 星 シリウスが ある。冬の 星座。"},
+ {id:"cmi",nm:"こいぬ座",lb:"procyon",s:3,ln:["procyon-gomeisa"],
+  tip:"プロキオンが ある。シリウス・ベテルギウスと 冬の 大三角を つくる。"},
+ {id:"gem",nm:"ふたご座",lb:"wasat",s:3,ln:["castor-pollux","castor-mebsuta-gemMu","pollux-wasat-alhena"],
+  tip:"カストルと ポルックス、ふたごの 明るい 星が ならぶ。冬の 星座。"},
+ {id:"tau",nm:"おうし座",lb:"tauE",s:3,ln:["tauZ-aldebaran-tauG-tauE-elnath"],
+  tip:"赤い アルデバランと、星の あつまり すばる が ある。冬の 星座。"},
+ {id:"aur",nm:"ぎょしゃ座",lb:"capella",s:3,ln:["capella-menkalinan-aurT-elnath-aurI-capella"],
+  tip:"黄色い カペラが ある 五角形。冬の 星座。"},
+ {id:"leo",nm:"しし座",lb:"chertan",s:0,ln:["regulus-leoH-algieba-adhafera-leoMu-leoE","algieba-zosma-denebola-chertan-regulus","zosma-chertan"],
+  tip:"「？」を うらがえしに した 形が ししの 頭。春の 星座。"},
+ {id:"vir",nm:"おとめ座",lb:"porrima",s:0,ln:["spica-porrima-virD-vindemiatrix","porrima-virB"],
+  tip:"青白い スピカが ある。春の 星座。"},
+ {id:"boo",nm:"うしかい座",lb:"booR",s:0,ln:["arcturus-izar-booD-nekkar-seginus-booR-arcturus","arcturus-muphrid"],
+  tip:"オレンジ色の アークトゥルスが ある。北斗七星の しっぽを のばすと アークトゥルス、さらに のばすと スピカ（春の 大曲線）。"},
+ {id:"crv",nm:"からす座",lb:"crvD",s:0,ln:["crvG-crvD-crvB-crvE-crvG"],
+  tip:"小さな 四角形。春の 南の 空。"},
+ {id:"sco",nm:"さそり座",lb:"antares",s:1,ln:["acrab-dschubba-scoPi","dschubba-scoS-antares-scoT-scoE-scoMu-scoZ-scoEta-sargas-scoI-scoK-shaula-lesath"],
+  tip:"S の 字の 形。赤い アンタレスが さそりの 心ぞう。夏の 南の 空の ひくい ところ。"},
+ {id:"lyr",nm:"こと座",lb:"lyrD",s:1,ln:["vega-lyrE","vega-lyrZ-sheliak-sulafat-lyrD-lyrZ"],
+  tip:"ベガ（おりひめ星）が ある。夏の 大三角の 1つ。"},
+ {id:"aql",nm:"わし座",lb:"aqlD",s:1,ln:["tarazed-altair-alshain","altair-aqlD-aqlL","aqlD-aqlZ","alshain-aqlT"],
+  tip:"アルタイル（ひこ星）が ある。夏の 大三角の 1つ。"},
+ {id:"cyg",nm:"はくちょう座",lb:"sadr",s:1,ln:["deneb-sadr-cygH-albireo","cygD-sadr-cygE"],
+  tip:"大きな 十字の 形（北十字）。しっぽの デネブは 夏の 大三角の 1つ。"},
+ {id:"sgr",nm:"いて座",lb:"nunki",s:1,ln:["sgrMu-kausB-sgrPhi-nunki-sgrT-ascella-sgrPhi"],
+  tip:"ひしゃくの 形の 南斗六星が 目じるし。さそり座の 東どなり。夏の 星座。"},
+ {id:"peg",nm:"ペガスス座",lb:"markab",s:2,ln:["markab-scheat-alpheratz-algenib-markab","markab-pegZ-pegT-enif"],
+  tip:"大きな 四角形（秋の 四辺形）が 目じるし。秋の 星座。"},
+ {id:"and",nm:"アンドロメダ座",lb:"mirach",s:2,ln:["alpheratz-andD-mirach-almach"],
+  tip:"ペガスス座の 四角の かどから のびる 星の ならび。秋の 星座。"},
+ {id:"per",nm:"ペルセウス座",lb:"perD",s:2,ln:["perG-mirfak-perD-perE-perZ","mirfak-algol"],
+  tip:"カシオペヤ座の となり。秋から 冬の 星座。"}
+];
+var CONID={};CON.forEach(function(c){c.seg=[];c.stars=[];c.ln.forEach(function(l){var a=l.split("-");
+  for(var i=0;i<a.length;i++){if(c.stars.indexOf(a[i])<0)c.stars.push(a[i]);if(i)c.seg.push([a[i-1],a[i]]);}});CONID[c.id]=c;});
+var TRI=[
+ {nm:"夏の 大三角",st:["vega","altair","deneb"],col:"rgba(120,220,255,.75)"},
+ {nm:"冬の 大三角",st:["betelgeuse","sirius","procyon"],col:"rgba(255,160,200,.75)"},
+ {nm:"春の 大曲線",st:["alkaid","arcturus","spica"],col:"rgba(255,220,120,.7)",open:true},
+ {nm:"秋の 四辺形",st:["markab","scheat","alpheratz","algenib"],col:"rgba(160,255,170,.65)"}
+];
+var SEASON=["春","夏","秋","冬"];
+var SEASON_DOY=[110,200,290,20];   // 4/20・7/19・10/17・1/20
+var SEASON_SOUTH=["しし座・おとめ座・うしかい座","さそり座・いて座（頭の 上には 夏の 大三角）","ペガスス座（秋の 四辺形）・アンドロメダ座","オリオン座・おおいぬ座・冬の 大三角"];
+
+/* ---------- 空の 計算 ----------
+   場所は 北緯35度・東経135度（日本の まん中あたり。東経135度なので 時計の時こくが そのまま使える）。 */
+var LAT=35*RAD, SINL=Math.sin(LAT), COSL=Math.cos(LAT);
+function lst(doy,T){return mod(T-12+(doy-79)*24/365.2422,24);}          // 恒星時（時）
+function altaz(ra,dec,L){                                                  // → [高度, 方位（北0・東90）]
+  var H=(L-ra)*15*RAD, d=dec*RAD;
+  var alt=Math.asin(SINL*Math.sin(d)+COSL*Math.cos(d)*Math.cos(H));
+  var az=Math.atan2(-Math.cos(d)*Math.sin(H), Math.sin(d)*COSL-Math.cos(d)*Math.cos(H)*SINL);
+  return [alt/RAD, mod(az/RAD,360)];
+}
+function sunRaDec(doy){var l=(doy-80)*360/365.2422*RAD, e=23.44*RAD;
+  return [mod(Math.atan2(Math.cos(e)*Math.sin(l),Math.cos(l))/RAD/15,24), Math.asin(Math.sin(e)*Math.sin(l))/RAD];}
+
+/* 見る方角の 絵（地平線が下、見上げた空が上。魚眼レンズのように 少し ゆがめて 広く 見せる）と、まうえ（頭の上が まん中） */
+var VIEWS={N:0,E:90,S:180,W:270}, H0=32*RAD;
+var VNAME={N:"北",E:"東",S:"南",W:"西",Z:"まうえ"};
+function projector(view,W,H){
+  if(view==="Z"){var R=W/2-26,cx=W/2,cy=H/2;
+    return {dome:true,R:R,cx:cx,cy:cy,p:function(alt,az){if(alt<-0.5)return null;var r=R*(90-alt)/90,a=az*RAD;return [cx-r*Math.sin(a),cy-r*Math.cos(a)];}};}
+  var A0=VIEWS[view], s=W/2.53, cy=s*1.15;
+  return {A0:A0,s:s,cy:cy,p:function(alt,az){
+    var h=alt*RAD, dA=(mod(az-A0+180,360)-180)*RAD;
+    var cc=Math.sin(H0)*Math.sin(h)+Math.cos(H0)*Math.cos(h)*Math.cos(dA);
+    if(cc<-0.2)return null;
+    var k=2/(1+cc), x=W/2+s*k*Math.cos(h)*Math.sin(dA), y=cy-s*k*(Math.cos(H0)*Math.sin(h)-Math.sin(H0)*Math.cos(h)*Math.cos(dA));
+    if(x<-80||x>W+80||y<-80||y>H+80)return null;
+    return [x,y];}};
+}
+function mix(c1,c2,t){var a=parseInt(c1.slice(1),16),b=parseInt(c2.slice(1),16),r="#";
+  [16,8,0].forEach(function(sh){var x=Math.round(((a>>sh)&255)*(1-t)+((b>>sh)&255)*t);r+=("0"+x.toString(16)).slice(-2);});return r;}
+function skyCols(sa){
+  var N=["#03061a","#0e1a3c"],D=["#1c2f6b","#e0905a"],Y=["#3d8fd6","#bfe3ff"];
+  if(sa<=-12)return N; if(sa>=8)return Y;
+  if(sa<0){var t=(sa+12)/12;return [mix(N[0],D[0],t),mix(N[1],D[1],t)];}
+  var u=sa/8;return [mix(D[0],Y[0],u),mix(D[1],Y[1],u)];
+}
+var SCOL={r:"#ffb08a",o:"#ffd7a0",y:"#fff0bf",b:"#cfe0ff"};
+
+function fit(cv,view){
+  var w=cv.parentNode.clientWidth||320, h=view==="Z"?w:Math.round(w*0.78), d=window.devicePixelRatio||1;
+  if(cv.width!==Math.round(w*d)||cv.height!==Math.round(h*d)){cv.width=Math.round(w*d);cv.height=Math.round(h*d);}
+  cv.style.height=h+"px";
+  var c=cv.getContext("2d");c.setTransform(d,0,0,d,0,0);
+  return {c:c,W:w,H:h};
+}
+function arrowTo(c,x1,y1,x2,y2,col,w){
+  var a=Math.atan2(y2-y1,x2-x1);c.strokeStyle=col;c.fillStyle=col;c.lineWidth=w;
+  c.beginPath();c.moveTo(x1,y1);c.lineTo(x2-Math.cos(a)*6,y2-Math.sin(a)*6);c.stroke();
+  c.beginPath();c.moveTo(x2,y2);c.lineTo(x2-Math.cos(a-0.45)*13,y2-Math.sin(a-0.45)*13);c.lineTo(x2-Math.cos(a+0.45)*13,y2-Math.sin(a+0.45)*13);c.closePath();c.fill();
+}
+function badge(c,x,y,t,col){
+  c.beginPath();c.arc(x,y,12,0,7);c.fillStyle=col;c.fill();c.strokeStyle="#fff";c.lineWidth=2;c.stroke();
+  c.fillStyle="#fff";c.font="900 13px 'Zen Kaku Gothic New',sans-serif";c.textAlign="center";c.textBaseline="middle";c.fillText(t,x,y+1);
+}
+
+/* 空を かく。st＝{view,doy,T, lines,names,tri,trail, hi:星座id, ghosts:[{off,lb,col}], ring:星id, arrows:[{a,lb,col}], quiet} */
+function draw(cv,st){
+  var f=fit(cv,st.view), c=f.c, W=f.W, H=f.H, P=projector(st.view,W,H), L=lst(st.doy,st.T);
+  var su=sunRaDec(st.doy), sAA=altaz(su[0],su[1],L), sa=sAA[0], col=skyCols(sa);
+  var sAlpha=sa<=-12?1:sa>=0?0.16:0.16+0.84*(-sa/12), k=Math.max(0.8,W/420);
+  c.clearRect(0,0,W,H);
+  var g;
+  if(P.dome){
+    c.fillStyle="#0a1024";c.fillRect(0,0,W,H);
+    c.save();c.beginPath();c.arc(P.cx,P.cy,P.R,0,7);c.clip();
+    g=c.createRadialGradient(P.cx,P.cy,0,P.cx,P.cy,P.R);g.addColorStop(0,col[0]);g.addColorStop(1,col[1]);
+  }else{g=c.createLinearGradient(0,0,0,H);g.addColorStop(0,col[0]);g.addColorStop(0.8,col[1]);}
+  c.fillStyle=g;c.fillRect(0,0,W,H);
+  var pos={};
+  for(var id in ST){var s=ST[id],aa=altaz(s[0],s[1],L);pos[id]={alt:aa[0],az:aa[1],xy:P.p(aa[0],aa[1])};}
+  function seg(a,b){var p=pos[a].xy,q=pos[b].xy;if(!p||!q)return;c.beginPath();c.moveTo(p[0],p[1]);c.lineTo(q[0],q[1]);c.stroke();}
+  // 星の 通り道（3時間ぶん）
+  if(st.trail){
+    c.lineWidth=1.3*k;
+    for(var tid in ST){var ts=ST[tid];if(ts[2]>2.6&&tid!=="polaris")continue;
+      c.strokeStyle="rgba(255,230,160,"+(0.45*sAlpha)+")";c.beginPath();var first=true;
+      for(var kk=0;kk<=36;kk++){var aa2=altaz(ts[0],ts[1],L-3+kk/12),q2=P.p(aa2[0],aa2[1]);
+        if(!q2){first=true;continue;}if(first){c.moveTo(q2[0],q2[1]);first=false;}else c.lineTo(q2[0],q2[1]);}
+      c.stroke();}
+  }
+  if(st.tri){TRI.forEach(function(t){c.strokeStyle=t.col;c.lineWidth=1.6*k;c.setLineDash([6,5]);
+    for(var i=0;i<t.st.length-(t.open?1:0);i++)seg(t.st[i],t.st[(i+1)%t.st.length]);c.setLineDash([]);});}
+  if(st.lines){CON.forEach(function(cn){var hi=st.hi===cn.id;
+    c.strokeStyle=hi?"rgba(255,214,90,.95)":"rgba(140,190,255,"+(0.5*sAlpha)+")";c.lineWidth=(hi?2.6:1.2)*k;
+    cn.seg.forEach(function(sg){seg(sg[0],sg[1]);});});}
+  else if(st.hi){c.strokeStyle="rgba(255,214,90,.95)";c.lineWidth=2.6*k;CONID[st.hi].seg.forEach(function(sg){seg(sg[0],sg[1]);});}
+  // 星
+  for(var sid in pos){var p=pos[sid].xy;if(!p)continue;var m=ST[sid][2],r=Math.max(0.9,3.5-0.62*m)*k,cc=SCOL[ST[sid][3]]||"#ffffff";
+    if(m<1.6){var gl=c.createRadialGradient(p[0],p[1],0,p[0],p[1],r*3.2);gl.addColorStop(0,cc);gl.addColorStop(1,"rgba(255,255,255,0)");
+      c.globalAlpha=0.35*sAlpha;c.fillStyle=gl;c.beginPath();c.arc(p[0],p[1],r*3.2,0,7);c.fill();}
+    c.globalAlpha=sAlpha;c.fillStyle=cc;c.beginPath();c.arc(p[0],p[1],r,0,7);c.fill();}
+  c.globalAlpha=1;
+  // 名前
+  var fs=Math.round(Math.max(10,11*k));
+  if(st.names){
+    // 右はしに 近い 名前は、星の 左がわに 書く
+    var label=function(t,x,y){var w=c.measureText(t).width;if(x+6+w>W-4){c.textAlign="right";c.fillText(t,x-6,y);}else{c.textAlign="left";c.fillText(t,x+6,y);}};
+    c.textBaseline="alphabetic";
+    c.font="700 "+fs+"px 'Zen Kaku Gothic New',sans-serif";c.fillStyle="rgba(255,228,150,"+(0.9*Math.max(sAlpha,0.5))+")";
+    CON.forEach(function(cn){var p=pos[cn.lb].xy;if(p&&pos[cn.lb].alt>1)label(cn.nm,p[0],p[1]-7);});
+    c.font="500 "+(fs-1)+"px 'Zen Kaku Gothic New',sans-serif";c.fillStyle="rgba(210,225,255,"+(0.85*Math.max(sAlpha,0.5))+")";
+    for(var nid in SNAME){var np=pos[nid].xy;if(np&&pos[nid].alt>1)label(SNAME[nid],np[0],np[1]+13);}
+  }
+  // 太陽
+  if(sa>-4){var sp=P.p(sa,sAA[1]);if(sp){var sg2=c.createRadialGradient(sp[0],sp[1],0,sp[0],sp[1],40*k);
+    sg2.addColorStop(0,"#fff6c8");sg2.addColorStop(.25,"#ffd34d");sg2.addColorStop(1,"rgba(255,160,40,0)");
+    c.fillStyle=sg2;c.beginPath();c.arc(sp[0],sp[1],40*k,0,7);c.fill();}}
+  // 地面と 方角
+  var DIRS=[["北",0],["北東",45],["東",90],["南東",135],["南",180],["南西",225],["西",270],["北西",315]];
+  if(P.dome){
+    c.restore();
+    c.strokeStyle="rgba(255,255,255,.35)";c.lineWidth=2;c.beginPath();c.arc(P.cx,P.cy,P.R,0,7);c.stroke();
+    c.textAlign="center";c.textBaseline="middle";
+    DIRS.forEach(function(d){var a=d[1]*RAD,x=P.cx-(P.R+13)*Math.sin(a),y=P.cy-(P.R+13)*Math.cos(a);
+      c.font=(d[0].length>1?"500 11px":"900 14px")+" 'Zen Kaku Gothic New',sans-serif";c.fillStyle=d[0].length>1?"#8fa3c8":"#e6efff";c.fillText(d[0],x,y);});
+  }else{
+    var hz=[];for(var da=-110;da<=110;da+=2){var hp=P.p(0,P.A0+da);if(hp)hz.push(hp);}
+    var gg=c.createLinearGradient(0,H*0.6,0,H);gg.addColorStop(0,"#16301f");gg.addColorStop(1,"#0b1a10");
+    c.fillStyle=gg;c.beginPath();c.moveTo(hz[0][0],H+2);hz.forEach(function(q){c.lineTo(q[0],q[1]);});c.lineTo(hz[hz.length-1][0],H+2);c.closePath();c.fill();
+    c.strokeStyle="rgba(170,220,180,.35)";c.lineWidth=1;c.beginPath();hz.forEach(function(q,i){if(i)c.lineTo(q[0],q[1]);else c.moveTo(q[0],q[1]);});c.stroke();
+    c.textAlign="center";c.textBaseline="top";
+    DIRS.forEach(function(d){var dq=P.p(0,d[1]);if(!dq||dq[0]<14||dq[0]>W-14)return;
+      c.font=(d[0].length>1?"500 12px":"900 16px")+" 'Zen Kaku Gothic New',sans-serif";c.fillStyle=d[0].length>1?"#8fb59a":"#d8f5e0";c.fillText(d[0],dq[0],dq[1]+6);});
+  }
+  // クイズの しるし
+  if(st.ghosts){st.ghosts.forEach(function(gh){
+    var L2=lst(st.doy,st.T+gh.off), gp={}, cn=CONID[gh.con], sx=0, sy=0, n=0;
+    cn.stars.forEach(function(id){var s=ST[id],aa=altaz(s[0],s[1],L2),q=P.p(aa[0],aa[1]);gp[id]=q;if(q){sx+=q[0];sy+=q[1];n++;}});
+    c.strokeStyle=gh.col;c.lineWidth=2.4*k;c.setLineDash([5,4]);
+    cn.seg.forEach(function(sg){var p=gp[sg[0]],q=gp[sg[1]];if(p&&q){c.beginPath();c.moveTo(p[0],p[1]);c.lineTo(q[0],q[1]);c.stroke();}});
+    c.setLineDash([]);
+    cn.stars.forEach(function(id){var q=gp[id];if(q){c.fillStyle=gh.col;c.beginPath();c.arc(q[0],q[1],2.2*k,0,7);c.fill();}});
+    if(n)badge(c,sx/n,sy/n,gh.lb,gh.bg||"rgba(40,60,120,.9)");});}
+  if(st.ring&&pos[st.ring].xy){var rp=pos[st.ring].xy;
+    c.strokeStyle="#ffd65a";c.lineWidth=2.5;c.beginPath();c.arc(rp[0],rp[1],13,0,7);c.stroke();
+    if(st.arrows)st.arrows.forEach(function(ar){var x2=rp[0]+Math.cos(ar.a)*56,y2=rp[1]+Math.sin(ar.a)*56;
+      arrowTo(c,rp[0]+Math.cos(ar.a)*16,rp[1]+Math.sin(ar.a)*16,x2,y2,ar.col||"rgba(255,255,255,.85)",3);
+      badge(c,rp[0]+Math.cos(ar.a)*74,rp[1]+Math.sin(ar.a)*74,ar.lb,ar.bg||"rgba(40,60,120,.9)");});}
+  if(sa>0&&!st.quiet){c.textAlign="center";c.textBaseline="top";c.font="700 12px 'Zen Kaku Gothic New',sans-serif";
+    c.fillStyle="rgba(10,30,60,.8)";c.fillText("昼は 太陽が まぶしくて 星は 見えない（うすく かいています）",W/2,8);}
+  return {pos:pos,P:P,W:W,H:H,sunAlt:sa};
+}
+function starXY(view,W,H,doy,T,id){var P=projector(view,W,H),s=ST[id],aa=altaz(s[0],s[1],lst(doy,T));return {alt:aa[0],az:aa[1],xy:P.p(aa[0],aa[1])};}
+
+/* ---------- ことばの 部品 ---------- */
+function timeLabel(T){
+  T=mod(T,24);var h=Math.floor(T),m=Math.round((T-h)*60);if(m===60){h=(h+1)%24;m=0;}
+  var w=T<4?"まよなか":T<7?"あけがた":T<10?"あさ":T<15?"ひる":T<17?"ゆうがた":T<19?"ゆうがた":T<23?"よる":"まよなか";
+  var hh=h===0?"よる12時":h<12?"ごぜん"+h+"時":h===12?"ひる12時":"ごご"+(h-12)+"時";
+  return hh+(m?m+"分":"")+" <small>"+w+"</small>";
+}
+function dateLabel(doy){var d=new Date(2026,0,doy);return (d.getMonth()+1)+"月"+d.getDate()+"日";}
+
+/* ---------- 画面の 切りかえ ---------- */
+function show(id){
+  ["#title","#lab","#quiz"].forEach(function(s){$(s).style.display=(s==="#"+id)?(id==="title"?"":"block"):"none";});
+  window.scrollTo(0,0);
+}
+$$("[data-back]").forEach(function(b){b.addEventListener("click",function(){stopPlay();show("title");paintRec();});});
+
+/* ---------- 空を まわす ---------- */
+var lab={view:"S",doy:20,T:21,lines:true,names:true,tri:false,trail:false};
+var SAY={
+ N:"北の 空の 星は、<b>北極星を 中心に</b> 時計の はりと <b>はんたいむき</b>に 回る。1時間で 15度。北極星は ほとんど 動かない。「星の 通り道」を つけると 円が 見える。",
+ E:"東の 空の 星は、<b>右ななめ上へ のぼって</b> いく。",
+ S:"南の 空の 星は、<b>東（左）から 西（右）へ</b> 動く。南で いちばん 高く なる。",
+ W:"西の 空の 星は、<b>右ななめ下へ しずんで</b> いく。",
+ Z:"頭の 上から 見ると、空 ぜんたいが <b>北極星の まわりを 回って</b> いる。上が 北、左が 東（見上げているので、地図とは 左右が はんたい）。"
+};
+function drawLab(){
+  var r=draw($("#labCv"),{view:lab.view,doy:lab.doy,T:lab.T,lines:lab.lines,names:lab.names,tri:lab.tri,trail:lab.trail});
+  $("#labDate").textContent=dateLabel(lab.doy);
+  $("#labTime").innerHTML=timeLabel(lab.T);
+  $("#tSl").value=lab.T;$("#dSl").value=lab.doy;
+  $$("[data-v]").forEach(function(b){b.classList.toggle("on",b.dataset.v===lab.view);});
+  $$("[data-o]").forEach(function(b){b.classList.toggle("on",!!lab[b.dataset.o]);});
+  var up=CON.filter(function(cn){return r.pos[cn.lb].alt>10;});
+  $("#labChips").innerHTML=up.length?up.map(function(cn){return "<span>"+cn.nm+"</span>";}).join(""):"<span>（なし）</span>";
+  $("#labSay").innerHTML=(r.sunAlt>0?"いまは 昼。星は 昼も 空に あるけれど、太陽が まぶしくて 見えない。<br>":"")+SAY[lab.view];
+}
+(function(){
+  var cv=$("#labCv"),down=false,x0=0,T0=0;
+  cv.addEventListener("pointerdown",function(e){down=true;x0=e.clientX;T0=lab.T;try{cv.setPointerCapture(e.pointerId);}catch(_){}stopPlay();});
+  cv.addEventListener("pointermove",function(e){if(!down)return;
+    // 北を 見るときは 星が 右から 左へ 回るので、ゆびの 向きと そろえる
+    var dir=lab.view==="N"?-1:1, W=cv.clientWidth||320;
+    lab.T=mod(T0+dir*(e.clientX-x0)/W*6,24);drawLab();});
+  ["pointerup","pointercancel","lostpointercapture"].forEach(function(t){cv.addEventListener(t,function(){down=false;});});
+})();
+$$("[data-v]").forEach(function(b){b.addEventListener("click",function(){lab.view=b.dataset.v;drawLab();});});
+$$("[data-o]").forEach(function(b){b.addEventListener("click",function(){lab[b.dataset.o]=!lab[b.dataset.o];drawLab();});});
+$$("[data-s]").forEach(function(b){b.addEventListener("click",function(){lab.doy=SEASON_DOY[+b.dataset.s];lab.T=21;drawLab();});});
+$("#tSl").addEventListener("input",function(){lab.T=mod(+this.value,24);drawLab();});
+$("#dSl").addEventListener("input",function(){lab.doy=+this.value;drawLab();});
+var playing=0,lastTs=0;
+function stopPlay(){if(playing){cancelAnimationFrame(playing);playing=0;}$("#playBtn").textContent="▶ 時間を すすめる";}
+function step(ts){if(lastTs){var t=lab.T+(ts-lastTs)/1000;if(t>=24){t-=24;lab.doy=lab.doy%365+1;}lab.T=t;}lastTs=ts;drawLab();playing=requestAnimationFrame(step);}
+$("#playBtn").addEventListener("click",function(){if(playing){stopPlay();return;}lastTs=0;playing=requestAnimationFrame(step);this.textContent="■ とめる";});
+$("#labBtn").addEventListener("click",function(){show("lab");drawLab();});
+addEventListener("resize",function(){if($("#lab").style.display==="block")drawLab();if($("#quiz").style.display==="block")redrawQ();});
+
+/* ---------- クイズ ---------- */
+var LB=["ア","イ","ウ","エ"];
+var NIGHT=[19,19.5,20,20.5,21,21.5,22,22.5,23];
+function conOK(con,doy,T,minAlt,maxAlt){var L=lst(doy,T);return CONID[con].stars.every(function(id){var h=altaz(ST[id][0],ST[id][1],L)[0];return h>=minAlt&&h<=(maxAlt||90);});}
+
+/* 1 北の空：何時間後に どこ？ */
+function genNorth(i){
+  var con=i%2?"cas":"hokuto";
+  for(var t=0;t<600;t++){
+    // 3時間なら 45度、4時間なら 60度ずつ 北極星の まわりに ちらばる。
+    // いまの 形と こたえは 地平線の 上に、ほかの こたえは 地平線の 少し下まで ゆるす（地面の 上に 点線で かく）
+    var d=[3,4][rnd(2)], doy=1+rnd(365), T=NIGHT[rnd(NIGHT.length)], offs=[d,-d,2*d,-2*d];
+    if(conOK(con,doy,T,5)&&conOK(con,doy,T+d,5)&&[-d,2*d,-2*d].every(function(o){return conOK(con,doy,T+o,-8);}))return {con:con,d:d,doy:doy,T:T,offs:shuffle(offs)};
+  }
+  return {con:"cas",d:3,doy:20,T:21,offs:shuffle([3,-3,6,-6])};
+}
+/* 2 東・南・西：この星は どっちへ？ */
+var BRIGHT=["sirius","betelgeuse","rigel","procyon","aldebaran","capella","pollux","regulus","spica","arcturus","antares","vega","altair","deneb","fomalhaut","alphard","hamal"];
+function genDir(i){
+  var view=["E","S","W"][i%3];
+  for(var t=0;t<800;t++){
+    var doy=1+rnd(365), T=NIGHT[rnd(NIGHT.length)], id=BRIGHT[rnd(BRIGHT.length)];
+    var L=lst(doy,T), aa=altaz(ST[id][0],ST[id][1],L), dA=mod(aa[1]-VIEWS[view]+180,360)-180;
+    var su=sunRaDec(doy);if(altaz(su[0],su[1],L)[0]>-12)continue;
+    if(aa[0]>14&&aa[0]<50&&Math.abs(dA)<35)return {view:view,doy:doy,T:T,star:id};
+  }
+  return {view:"S",doy:20,T:21,star:"sirius"};
+}
+/* 3 季節：この星座は？／この空は いつ？ */
+function genSeason(i){
+  if(i%3===2){var s=rnd(4);return {kind:"when",s:s,doy:SEASON_DOY[s],T:21,view:"S"};}
+  for(var t=0;t<200;t++){
+    var s2=rnd(4), doy=SEASON_DOY[s2], pool=CON.filter(function(cn){return cn.s===s2&&conOK(cn.id,doy,21,15);});
+    if(!pool.length)continue;
+    var cn=pool[rnd(pool.length)], others=shuffle(CON.filter(function(x){return x.id!==cn.id&&x.id!=="umi";})).slice(0,3);
+    return {kind:"con",s:s2,doy:doy,T:21,view:"Z",con:cn.id,ch:shuffle([cn].concat(others)).map(function(x){return x.id;})};
+  }
+}
+var STAGES=[
+  {nm:"北の空",make:function(){var a=[];for(var i=0;i<8;i++)a.push(genNorth(i));return a;}},
+  {nm:"東・南・西の空",make:function(){var a=[];for(var i=0;i<9;i++)a.push(genDir(i));return shuffle(a).slice(0,8);}},
+  {nm:"季節の 星座",make:function(){var a=[],used={};
+    for(var i=0;i<8;i++){var q;do{q=genSeason(i);}while(q.kind==="con"&&used[q.con]);if(q.con)used[q.con]=1;a.push(q);}
+    return a;}}
+];
+var rec=load("hoshizora_kurukuru_rec",[0,0,0]);
+function starStr(n){var s="";for(var i=0;i<3;i++)s+=i<n?"★":"<i>★</i>";return s;}
+function paintRec(){for(var i=0;i<3;i++)$("#rec"+i).innerHTML=starStr(rec[i]||0);}
+var Q={st:0,qs:[],i:0,score:0,done:false,view:"S",dr:{}};
+var anim=0;
+
+function startStage(st){
+  Q={st:st,qs:STAGES[st].make(),i:0,score:0,done:false,dr:{}};
+  $("#qStage").textContent=STAGES[st].nm;
+  show("quiz");ask();
+}
+function redrawQ(){draw($("#qCv"),Q.dr);}
+function ask(){
+  if(anim){cancelAnimationFrame(anim);anim=0;}
+  var q=Q.qs[Q.i], st=Q.st;
+  Q.done=false;
+  $("#qProg").textContent=(Q.i+1)+" / "+Q.qs.length;
+  $("#qScore").innerHTML=Q.score+"<small>てん</small>";
+  $("#qBar").style.width=(Q.i/Q.qs.length*100)+"%";
+  $("#fb").className="fb";
+  $("#qWhen").innerHTML=dateLabel(q.doy)+"　"+timeLabel(q.T);
+  var chs=$("#qChoices");chs.className="chs";
+  if(st===0){
+    var nm=CONID[q.con].nm;
+    $("#qText").innerHTML="北の 空。<b>"+q.d+"時間後</b>、"+nm+"は ア〜エの どこに ある？";
+    Q.dr={view:"N",doy:q.doy,T:q.T,lines:false,names:false,hi:q.con,quiet:true,
+      ghosts:q.offs.map(function(o,i){return {con:q.con,off:o,lb:LB[i],col:"rgba(160,200,255,.8)"};})};
+    chs.innerHTML=LB.map(function(l,i){return '<button class="ch" data-i="'+i+'">'+l+'</button>';}).join("");
+  }else if(st===1){
+    $("#qText").innerHTML=VNAME[q.view]+"の 空。<b>"+(SNAME[q.star]||"")+"</b> は、これから どっちへ 動く？";
+    var cv=$("#qCv"), W=cv.parentNode.clientWidth||320, Hh=Math.round(W*0.78);
+    var a=starXY(q.view,W,Hh,q.doy,q.T,q.star).xy, b=starXY(q.view,W,Hh,q.doy,q.T+1.5,q.star).xy;
+    var ang=Math.atan2(b[1]-a[1],b[0]-a[0]);
+    q.ans=[0,1,2,3].map(function(k){return ang+k*Math.PI/2;});   // 0番が こたえ
+    q.order=shuffle([0,1,2,3]);
+    Q.dr={view:q.view,doy:q.doy,T:q.T,lines:true,names:false,quiet:true,ring:q.star,
+      arrows:q.order.map(function(k,i){return {a:q.ans[k],lb:LB[i]};})};
+    chs.innerHTML=LB.map(function(l,i){return '<button class="ch" data-i="'+i+'">'+l+'</button>';}).join("");
+  }else{
+    if(q.kind==="con"){
+      $("#qText").innerHTML="頭の 上の 空。<b>きいろい 線</b>の 星座は どれ？";
+      Q.dr={view:"Z",doy:q.doy,T:q.T,lines:true,names:false,hi:q.con,quiet:true};
+      chs.className="chs two";
+      chs.innerHTML=q.ch.map(function(id,i){return '<button class="ch" data-i="'+i+'">'+CONID[id].nm+'</button>';}).join("");
+    }else{
+      $("#qText").innerHTML="よる9時の 南の 空。これは どの 季節？";
+      $("#qWhen").innerHTML="？月？日　"+timeLabel(q.T);
+      Q.dr={view:"S",doy:q.doy,T:q.T,lines:true,names:false,quiet:true};
+      chs.innerHTML=SEASON.map(function(s,i){return '<button class="ch" data-i="'+i+'">'+s+'</button>';}).join("");
+    }
+  }
+  redrawQ();
+  $$("#qChoices .ch").forEach(function(b){b.addEventListener("click",function(){answer(+b.dataset.i);});});
+}
+function animateT(from,to,ms,after){
+  var t0=0;
+  function f(ts){if(!t0)t0=ts;var u=Math.min(1,(ts-t0)/ms);u=u<.5?2*u*u:1-Math.pow(-2*u+2,2)/2;
+    Q.dr.T=from+(to-from)*u;redrawQ();if(u<1)anim=requestAnimationFrame(f);else{anim=0;if(after)after();}}
+  anim=requestAnimationFrame(f);
+}
+function answer(i){
+  if(Q.done)return;Q.done=true;
+  var q=Q.qs[Q.i], st=Q.st, ok, right, body="";
+  if(st===0){
+    right=q.offs.indexOf(q.d);ok=i===right;
+    Q.dr.ghosts=[{con:q.con,off:q.d,lb:LB[right],col:"rgba(76,217,160,.95)",bg:"rgba(20,120,80,.95)"}];
+    if(!ok)Q.dr.ghosts.push({con:q.con,off:q.offs[i],lb:LB[i],col:"rgba(255,122,107,.8)",bg:"rgba(150,40,30,.95)"});
+    var T0=q.T;animateT(T0,T0+q.d,1600,function(){Q.dr.T=T0+q.d;$("#qWhen").innerHTML=dateLabel(q.doy)+"　"+timeLabel(T0+q.d);});
+    body='<p>こたえは <b>'+LB[right]+'</b>。北の 空の 星は、<b>北極星を 中心に 時計の はりと はんたいむき</b>に 回る。1時間で 15度、'+q.d+'時間なら '+(q.d*15)+'度。</p><p style="color:var(--sub)">'+CONID[q.con].tip+'</p>';
+  }else if(st===1){
+    right=q.order.indexOf(0);ok=i===right;
+    Q.dr.arrows=[{a:q.ans[0],lb:LB[right],col:"#4CD9A0",bg:"rgba(20,120,80,.95)"}];
+    if(!ok)Q.dr.arrows.push({a:q.ans[q.order[i]],lb:LB[i],col:"rgba(255,122,107,.9)",bg:"rgba(150,40,30,.95)"});
+    Q.dr.trail=false;
+    var T1=q.T;animateT(T1,T1+2,1600,function(){Q.dr.trail=true;Q.dr.T=T1+2;Q.dr.ring=q.star;Q.dr.arrows=null;redrawQ();
+      $("#qWhen").innerHTML=dateLabel(q.doy)+"　"+timeLabel(T1+2)+" <small>（2時間後）</small>";});
+    var how={E:"東の 空の 星は、<b>右ななめ上へ のぼって</b> いく。",S:"南の 空の 星は、<b>東（左）から 西（右）へ</b> 動く。",W:"西の 空の 星は、<b>右ななめ下へ しずんで</b> いく。"}[q.view];
+    body='<p>こたえは <b>'+LB[right]+'</b>。'+how+'</p><p style="color:var(--sub)">星は 太陽と 同じように、東から のぼって 南の 空を 通り、西へ しずむ。地球が 1日に 1回 回っているから。</p>';
+  }else{
+    if(q.kind==="con"){
+      right=q.ch.indexOf(q.con);ok=i===right;
+      Q.dr.names=true;redrawQ();
+      body='<p>こたえは <b>'+CONID[q.con].nm+'</b>。'+CONID[q.con].tip+'</p>';
+    }else{
+      right=q.s;ok=i===right;
+      Q.dr.names=true;redrawQ();
+      $("#qWhen").innerHTML=dateLabel(q.doy)+"　"+timeLabel(q.T);
+      body='<p>こたえは <b>'+SEASON[q.s]+'</b>。'+SEASON[q.s]+'の よる9時ごろ、南の 空には '+SEASON_SOUTH[q.s]+'が 見える。</p><p style="color:var(--sub)">同じ 時こくでも、季節が かわると 見える 星座が かわる。地球が 太陽の まわりを 1年で 回っているから。</p>';
+    }
+  }
+  $$("#qChoices .ch").forEach(function(b,k){b.disabled=true;if(k===right)b.classList.add("ok");else if(k===i)b.classList.add("ng");});
+  if(ok)Q.score++;
+  $("#qScore").innerHTML=Q.score+"<small>てん</small>";
+  $("#fbMk").textContent=ok?"◎ せいかい！":"✕ おしい！";
+  $("#fbBody").innerHTML=body;
+  $("#nextBtn").textContent=Q.i+1<Q.qs.length?"つぎへ ▶":"けっかを 見る ▶";
+  $("#fb").className="fb on "+(ok?"ok":"ng");
+  setTimeout(function(){$("#fb").scrollIntoView({behavior:"smooth",block:"nearest"});},60);
+}
+$("#nextBtn").addEventListener("click",function(){
+  Q.i++;
+  if(Q.i<Q.qs.length){ask();window.scrollTo({top:0,behavior:"smooth"});return;}
+  if(anim){cancelAnimationFrame(anim);anim=0;}
+  $("#qBar").style.width="100%";
+  var n=Q.qs.length, stars=Q.score===n?3:Q.score>=n*0.75?2:Q.score>0?1:0;
+  if(stars>(rec[Q.st]||0)){rec[Q.st]=stars;save("hoshizora_kurukuru_rec",rec);}
+  $("#rStars").innerHTML=starStr(stars);
+  $("#rTitle").textContent=stars===3?"パーフェクト！":stars===2?"よく できました！":"また ちょうせんしよう！";
+  $("#rText").textContent=n+"もん中 "+Q.score+"もん せいかい"+(stars<3?"。「空を まわす」で 星を 動かしてから、もういちど やってみよう。":"。");
+  $("#resultOv").classList.add("on");
+});
+$("#rAgain").addEventListener("click",function(){$("#resultOv").classList.remove("on");startStage(Q.st);});
+$("#rTitleBtn").addEventListener("click",function(){$("#resultOv").classList.remove("on");show("title");paintRec();});
+$("#quizBack").addEventListener("click",function(){
+  if(Q.i>0&&!confirm("とちゅうで やめて、タイトルに もどる？"))return;
+  if(anim){cancelAnimationFrame(anim);anim=0;}
+  show("title");paintRec();
+});
+$$(".stg").forEach(function(b){b.addEventListener("click",function(){startStage(+b.dataset.st);});});
+
+paintRec();
+})();
+</script>
+</body>
+</html>
