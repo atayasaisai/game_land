@@ -131,10 +131,10 @@ const ART = (() => {
     { id: "m_depart",    need: { market: 3, road: 2 },   say: "東の 町に デパートが できた！", site: [5, "depart", 170] },
     { id: "m_mall",      need: { market: 3, fun: 2 },    say: "大きな ショッピングモールが できた！", site: [3, "mall", 230] },
     { id: "m_tower",     need: { fun: 2, school: 2 },    say: "高い 電波塔が たった！",       site: [11, "tower", 140] },
-    { id: "m_airport",   need: { road: 2, market: 3, school: 2 }, say: "南に 空港が できた！",  site: [10, "airport", 230], sky: ["plane", 200, 120, 150, "fly"] },
+    { id: "m_airport",   need: { road: 2, market: 3, school: 2 }, say: "南に 空港が できた！",  site: [10, "airport", 230], sky: ["plane", 560, 110, 150] },
     { id: "m_car",       need: { road: 2, school: 2 },   say: "自動車が 走りだした！",         move: ["car", 600, 560, 70, "drive"] },
     { id: "m_ferry",     need: { market: 2, fun: 1 },    say: "大きな フェリーが 来た！",       move: ["ferry", 330, 1000, 190, "sail"] },
-    { id: "m_heli",      need: { guard: 3, school: 2 },  say: "ヘリコプターが 飛んできた！",   sky: ["heli", 1250, 170, 110, "hover"] },
+    { id: "m_heli",      need: { guard: 3, school: 2 },  say: "ヘリコプターが 飛んできた！",   sky: ["heli", 1250, 170, 110] },
     { id: "m_telescope", need: { school: 3, fun: 1 },    say: "山の 上に 天文台が できた！",   items: [[O3, "telescope", 600, 150, 120]] },
     { id: "m_parabola",  need: { school: 3, market: 2 }, say: "西の 町に 大きな アンテナが できた！", site: [4, "parabola", 130] },
   ];
@@ -142,7 +142,7 @@ const ART = (() => {
   // 近代の 乗りもの（空と 海と 道を うごく）
   function vehicle([name, x, y, w, anim], cls) { return `<g class="${anim}">${img(O3, name, x, y, w, cls)}</g>`; }
   function comboMarkup(c, cls) {
-    if (!c.items) return `<g class="body" data-id="${c.id}">${c.move ? vehicle(c.move, cls) : ""}${c.sky ? vehicle(c.sky, cls) : ""}</g>`; // site は L-people で 描く
+    if (!c.items) return `<g class="body" data-id="${c.id}">${c.move ? vehicle(c.move, cls) : ""}</g>`; // site は L-people、sky は L-sky で 描く
     return `<g class="body" data-id="${c.id}">${c.items.map((a) => a[0] === "tiles" ? drawTiles(chain(a[1], a[2], a[3], a[4], a[5])) : img(...a, cls)).join("")}</g>`; }
 
   // ---- 人の すみか：国土の 12か所。はってん度が 上がるほど 遠くまで ふえ、家→住宅地→村→町 と 育つ。100% で まん中に 城 ----
@@ -202,10 +202,23 @@ const ART = (() => {
     let out = ANIMALS.filter((a) => S.food >= a[4] || score >= a[4]).map((a) => fimg(a[0], a[1], a[2], a[3], "bob", `animation-delay:-${(a[1] % 10) / 8}s`)).join("");
     const n = score >= 100 ? CROWD.length : Math.min(CROWD.length, Math.floor(S.pop / 70));
     out += CROWD.slice(0, n).map((a) => person(...a)).join("");
+    return out;
+  }
+  // ---- 空を 飛ぶもの：建物より 上の 層（L-sky）に 描く。羽ばたかない 絵なので、ぐるぐる 回さず その場で ゆらゆら ----
+  function drift(html, i) { return `<g class="drift" style="animation-duration:${3 + (i % 3) * .7}s;animation-delay:-${i * .9}s">${html}</g>`; }
+  const FLOCKS = [[400, 110, 150], [1000, 80, 135], [260, 330, 120], [1160, 330, 110]];
+  function sky(score, S, combos) {
+    let out = ""; let i = 0;
     const flocks = score >= 100 ? 4 : S.happy >= 75 ? 3 : S.happy >= 50 ? 2 : S.happy >= 25 ? 1 : 0;
-    for (let i = 0; i < flocks; i++) out += `<g class="fly" style="animation-duration:${22 + i * 5}s;animation-delay:-${i * 7}s">${fimg("birds", 400, 110 + i * 90, 150 - i * 15)}</g>`;
-    if (score >= 50) out += `<g class="soar">${fimg("eagle", 1250, 120, 110)}</g>`;
-    if (score >= 80) out += `<g class="soar" style="animation-delay:-8s">${fimg("eagle", 350, 560, 95)}</g>`;
+    FLOCKS.slice(0, flocks).forEach(([x, y, w]) => { out += drift(fimg("birds", x, y, w), i++); });
+    if (score >= 50) out += drift(fimg("eagle", 1250, 120, 110), i++);
+    if (score >= 80) out += drift(fimg("eagle", 350, 560, 95), i++);
+    combos.filter((c) => c.sky).forEach((c) => { const [n, x, y, w] = c.sky; out += drift(img(O3, n, x, y, w), i++); });
+    if (S.safety <= 10) out += drift(fimg("dragon", 1250, 260, 130), i++);
+    return out;
+  }
+  function sea(S) {
+    let out = "";
     // 船：商業が さかんなほど ふえる（25 ごとに 1せき）
     const SHIPS = [[1200, 900, 120], [1420, 640, 100], [150, 720, 100], [700, 980, 110]];
     SHIPS.slice(0, Math.min(4, Math.floor(S.trade / 25))).forEach(([x, y, w], i) => { out += `<g class="sail" style="animation-duration:${26 + i * 6}s;animation-delay:-${i * 9}s">${fimg("ship", x, y, w)}</g>`; });
@@ -221,7 +234,7 @@ const ART = (() => {
     const nm = Math.max(0, Math.min(MONSTER_SPOTS.length, Math.floor((70 - S.safety) / 10)));
     out += MONSTER_SPOTS.slice(0, nm).map((a) => fimg(a[0], a[1], a[2], a[3], "bob", `animation-delay:-${(a[1] % 7) / 6}s`)).join("");
     if (S.safety < 30) out += fimg("bandits", 350, 700, 90);
-    if (S.safety <= 10) out += fimg("darkcastle", 1400, 200, 130) + `<g class="soar" style="animation-duration:10s">${fimg("dragon", 1250, 260, 130)}</g>`;
+    if (S.safety <= 10) out += fimg("darkcastle", 1400, 200, 130); // ドラゴンは 空の 層（sky）
     if (S.food < 25 && turn >= 2) out += [[935, 470], [955, 560], [640, 370]].map(([x, y]) => fimg("wave", x, y, 90, "bob")).join("");
     if (S.happy < 20 && turn >= 2) out += raincloud(880, 250) + raincloud(540, 190);
     if (score < 0) out += raincloud(1100, 150);
@@ -247,6 +260,7 @@ const ART = (() => {
       <g id="L-market" class="layer"></g>
       <g id="L-guard" class="layer"></g>
       <g id="L-flags" class="layer"></g>
+      <g id="L-sky"></g>
       <g id="fx-sky"></g>
       <g id="fx-land"></g>
     </svg>`;
@@ -277,5 +291,5 @@ const ART = (() => {
     return P.map(([x, y], i) => fimg("fireworks", x, y, 230, "fw") .replace('class="fw"', `class="fw" style="animation-delay:${i * 0.45}s"`)).join("");
   }
 
-  return { sage, king, preload, POSES, field, life, trouble, decor, activeCombos, comboMarkup, layer, siteStages, siteMarkup, flags, monster, volcano, fireworks, SITES };
+  return { sage, king, preload, POSES, field, life, sky, sea, trouble, decor, activeCombos, comboMarkup, layer, siteStages, siteMarkup, flags, monster, volcano, fireworks, SITES };
 })();
