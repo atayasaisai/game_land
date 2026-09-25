@@ -124,6 +124,64 @@ button{font-family:inherit;font-weight:700;cursor:pointer}
 .rbox .btn{padding:8px 22px;font-size:1rem}
 .rbox .btn.sub{font-size:.85rem;padding:6px 16px}
 .rbox .hintk{font-size:.72rem;color:var(--sub)}
+
+/* ───────── えいごアイテム モード ───────── */
+.eigo{width:100%;border:2.5px solid var(--ink);border-radius:18px;background:#fff;padding:10px 12px 14px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.eigo .etag{font-family:"Mochiy Pop One",sans-serif;font-weight:400;font-size:1.05rem;border:2.5px solid var(--ink);border-radius:12px;padding:2px 14px;background:linear-gradient(#b9d3ff,#6f93e6);color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.25)}
+.eigo p{font-size:.86rem!important;line-height:1.7!important}
+.btn.eg{background:var(--ai)}
+.modes .btn{min-width:200px}
+.zukan{width:100%;text-align:left}
+.zukan .zh{font-size:.8rem!important;margin:6px 0 4px!important;color:var(--sub)}
+.zukan .zh b{color:var(--do);font-size:1.05rem}
+.zukan summary{cursor:pointer;text-align:center;font-size:.95rem;border:2.5px solid var(--ink);border-radius:999px;padding:4px 12px;background:#fffbe8;box-shadow:0 3px 0 var(--ink);list-style:none}
+.zukan summary::-webkit-details-marker{display:none}
+.zukan summary b{color:var(--do);font-size:1.15rem}
+.zg{display:grid;grid-template-columns:repeat(auto-fill,minmax(62px,1fr));gap:4px}
+.zc{display:flex;flex-direction:column;align-items:center;border:2px solid #d9d2c0;border-radius:10px;background:#fffdf6;padding:3px 2px 4px;line-height:1.25;font:inherit;color:inherit}
+button.zc{border-color:var(--ai);cursor:pointer}
+button.zc:active{transform:scale(.95)}
+.zc .e{font-size:1.3rem;line-height:1.3}
+.zc b{font-family:"Mochiy Pop One",sans-serif;font-weight:400;font-size:.9rem;color:var(--ai);letter-spacing:.05em}
+.zc.no b{color:#c8c0ad;letter-spacing:0}
+.zc.no .e{filter:grayscale(1);opacity:.45}
+.zc small{font-size:.62rem;color:var(--sub);text-align:center}
+.zs{display:grid;grid-template-columns:1fr;gap:4px}
+.zk{display:flex;align-items:center;gap:10px;border:2px solid #d9d2c0;border-radius:12px;padding:5px 10px;font-size:.8rem;line-height:1.45;background:#fffdf6}
+.zk .w{font-family:"Mochiy Pop One",sans-serif;font-weight:400;font-size:1.25rem;letter-spacing:.08em;min-width:4.6em;color:var(--ai)}
+.zk.no .w{color:#b8b09c}
+.zk .m{flex:1;color:var(--sub)}
+.zk .m b{color:var(--ink)}
+.zk .n{font-size:.75rem;color:var(--do);white-space:nowrap}
+.zk .say{border:2px solid var(--ink);border-radius:999px;background:#fff;font-size:.75rem;padding:1px 8px;box-shadow:0 2px 0 var(--ink)}
+.wordbar{position:absolute;left:50%;top:clamp(36px,9vw,54px);transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:3px;pointer-events:none}
+.wordbar .sl{display:flex;gap:clamp(4px,1.2vw,8px)}
+.wordbar .sl i{font-style:normal;width:clamp(34px,8.4vw,62px);height:clamp(40px,9.6vw,70px);display:grid;place-items:center;border:3px solid var(--ink);border-radius:12px;
+  background:rgba(255,252,240,.94);font-family:"Mochiy Pop One",sans-serif;font-size:clamp(1.4rem,5.6vw,2.7rem);box-shadow:0 4px 0 var(--ink);color:var(--ai)}
+.wordbar .sl i.pop{animation:lpop .35s cubic-bezier(.2,1.8,.4,1)}
+@keyframes lpop{0%{transform:scale(.3)}100%{transform:scale(1)}}
+.wordbar .sl.done i{background:#FFE27A;color:var(--do)}
+.wordbar .sl i.g{color:rgba(74,107,192,.45)}
+.wordbar .wo{font-size:clamp(.8rem,2.8vw,1.3rem);background:rgba(255,252,240,.94);border:2.5px solid var(--ink);border-radius:999px;padding:0 14px;box-shadow:0 3px 0 var(--ink);white-space:nowrap}
+.wordbar .wo .e{font-size:1.25em;margin-right:4px;vertical-align:-.1em}
+.wordbar .wo .sp{font-size:.7em;color:#fff;background:var(--do);border-radius:999px;padding:0 7px;margin-left:6px;vertical-align:.15em}
+.wordbar .sl.ng{animation:ng .35s}
+@keyframes ng{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.wordbar .hn{font-size:clamp(.65rem,2.1vw,.9rem);background:rgba(255,252,240,.85);border-radius:999px;padding:0 8px;color:var(--sub)}
+.wpop{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:none;flex-direction:column;align-items:center;gap:2px;pointer-events:none;
+  background:rgba(255,252,240,.95);border:3px solid var(--ink);border-radius:20px;padding:4px 16px 8px;box-shadow:0 6px 0 rgba(51,49,42,.85);text-align:center;max-width:94%}
+.wpop.on{display:flex;animation:wpop .45s ease-out}
+@keyframes wpop{0%{opacity:0;transform:translate(-50%,-50%) scale(.4)}60%{opacity:1;transform:translate(-50%,-50%) scale(1.06)}100%{transform:translate(-50%,-50%) scale(1)}}
+.wpop .wt{font-size:clamp(.7rem,2.3vw,1rem);color:var(--sub);margin-top:4px;animation:blink 1.1s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+.stage.reading canvas{filter:brightness(.8)}
+.wpop .ww{font-family:"Mochiy Pop One",sans-serif;font-size:clamp(1.4rem,5.4vw,2.9rem);letter-spacing:.08em;line-height:1.1;color:var(--c)}
+.wpop .wm{font-size:clamp(.78rem,2.6vw,1.25rem);line-height:1.4}
+.wpop .wm b{color:var(--c)}
+.wpop .wf{font-family:"Mochiy Pop One",sans-serif;font-size:clamp(.78rem,2.9vw,1.5rem);line-height:1.35;color:#fff;background:var(--c);border:2.5px solid var(--ink);border-radius:12px;padding:2px 12px;margin-top:3px}
+.wpop.on ~ .wordbar,.wordbar.hide{visibility:hidden}
+.fxs{position:absolute;left:8px;bottom:8px;display:flex;gap:5px;pointer-events:none}
+.fxs span{font-family:"Mochiy Pop One",sans-serif;font-weight:400;font-size:clamp(.6rem,2vw,.85rem);color:#fff;border:2px solid var(--ink);border-radius:999px;padding:0 8px;box-shadow:0 2px 0 var(--ink)}
 </style>
 </head>
 <body>
@@ -141,7 +199,15 @@ button{font-family:inherit;font-weight:700;cursor:pointer}
     </div>
     <p style="font-size:.92rem">ゴールは ないよ。<b>ずっと つづいて</b>、どんどん <b>はやく</b> なる！<br>どこまで 走れるかな？</p>
     <p class="best" id="tBest"></p>
-    <button class="btn" id="startBtn">はしる ▶</button>
+    <div class="row modes"><button class="btn" id="startBtn">ふつうに はしる ▶</button><button class="btn eg" id="eigoBtn">えいごモード ▶</button></div>
+    <div class="eigo">
+      <b class="etag">えいごモード（えいごアイテム）</b>
+      <p>画面の 上に <b>おだい</b>（🐱 ねこ など）が 出るよ。<br>おちている <b>アルファベット</b>を えいごの つづりの <b>じゅんばんに ひろおう</b>。<br>
+         上の もじは ジャンプで、下の もじは そのまま 走って とる。いらない もじは よけよう。<br>できたら 意味が わかって、<b>ふしぎな こうか</b>が おきる！</p>
+      <div class="zukan" id="zukan"></div>
+      <button class="btn eg" id="eigoBtn2">えいごモードで はしる ▶</button>
+      <p class="best" id="tBestE"></p>
+    </div>
     <div class="row"><button class="btn sub" id="soundBtn">おと：あり</button></div>
   </div>
 </section>
@@ -157,6 +223,9 @@ button{font-family:inherit;font-weight:700;cursor:pointer}
         <button class="icon" id="hSound" aria-label="おとの きりかえ">♪</button><button class="icon" id="hHome" aria-label="さいしょの画面へ">✕</button></div>
     </div>
     <div class="banner" id="banner"></div>
+    <div class="wpop" id="wpop"><div class="ww" id="wpW"></div><div class="wm" id="wpM"></div><div class="wf" id="wpF"></div><div class="wt">タップで つづき ▶</div></div>
+    <div class="wordbar" id="wordbar" hidden><div class="wo" id="wOdai"></div><div class="sl" id="wSlots"></div><div class="hn" id="wHint"></div></div>
+    <div class="fxs" id="hFx"></div>
     <div class="result" id="result">
       <div class="rbox">
         <div class="nj" id="rNj"></div>
@@ -250,8 +319,10 @@ const SE={
 };
 
 /* ───────── きろく ───────── */
-function loadBest(){ try{ return +localStorage.getItem("ninjaDash.best")||0; }catch(e){ return 0; } }
-function saveBest(m){ try{ localStorage.setItem("ninjaDash.best",String(m)); }catch(e){} }
+let mode="normal";   // normal ／ eigo（えいごアイテム）
+const bestKey=()=>mode==="eigo"?"ninjaDash.bestEigo":"ninjaDash.best";
+function loadBest(){ try{ return +localStorage.getItem(bestKey())||0; }catch(e){ return 0; } }
+function saveBest(m){ try{ localStorage.setItem(bestKey(),String(m)); }catch(e){} }
 
 /* ───────── 画面 ───────── */
 const $=id=>document.getElementById(id);
@@ -266,7 +337,7 @@ addEventListener("resize",()=>{ if(state!=="title") fit(); });
 function show(id){ document.querySelectorAll(".screen").forEach(s=>s.classList.toggle("on",s.id===id)); }
 function paintSound(){ $("soundBtn").textContent="おと："+(soundOn?"あり":"なし"); $("hSound").textContent=soundOn?"♪":"×"; }
 function toggleSound(){ soundOn=!soundOn; try{localStorage.setItem("ninjaDash.sound",soundOn?"on":"off");}catch(e){} paintSound(); if(soundOn)ac(); }
-function paintTitleBest(){ const b=loadBest(); $("tBest").innerHTML=b?`いままでの さいこう：<b>${b}</b> m`:"さいこうきろくを つくろう！"; }
+function paintTitleBest(){ const md=mode; mode="normal"; const b=loadBest(); mode=md; $("tBest").innerHTML=b?`いままでの さいこう：<b>${b}</b> m`:"さいこうきろくを つくろう！"; }
 function obIcons(el,keys,h){   // さいしょの画面の 小さな絵
   el.innerHTML=keys.map(k=>{ const a=ATLAS[k], s=h/a[3];
     return `<i style="width:${a[2]*s}px;height:${h}px;background-size:${1024*s}px auto;background-position:${-a[0]*s}px ${-a[1]*s}px"></i>`; }).join("");
@@ -283,7 +354,10 @@ function speedAt(m){ return m<=1200 ? 220 + m*0.2 : 460 + (m-1200)*0.06; }
 function reset(){
   dist=0; speed=speedAt(0); t=0; vy=0; jy=0; air=false; landT=0; joyT=0; hitT=0; hitOb=null;
   obs=[]; lastKs=[]; nextWX=NX+W*1.4; buffered=0; fade={from:0,to:0,a:1}; curArea=0; dust=[];
-  $("result").classList.remove("on"); $("hArea").textContent=AREAS[0]; paintHud();
+  letters=[]; buf=""; odai=null; odaiN=0; recent=[]; doneWord=null; doneT=0; nextT=0; jumpK=1; reading=0; $("wpop").classList.remove("on"); $("stage").classList.remove("reading");
+  fxT={}; flakes=[]; drops=[]; sparks=[]; parade=[]; made={}; gapStart=null; lastLetter="";
+  if(mode==="eigo") newOdai();
+  $("result").classList.remove("on"); $("hArea").textContent=AREAS[0]; paintHud(); paintWord(); paintFx();
 }
 let looping=false;
 function start(){
@@ -364,7 +438,7 @@ function makeCombo(m,v){
 }
 let lastKs=[];
 function spawn(){
-  while(nextWX < dist + W + 40){
+  while(nextWX < dist + W + 40 + (mode==="eigo"?700:0)){    // えいごアイテムは さきまで 作っておき、もじを 画面の外に おく
     const m=nextWX/PXM, v=speedAt(m), stage=Math.floor(m/AREA_M);
     const skip=areaGap(nextWX); if(skip){ nextWX=skip; continue; }
     let tail;
@@ -372,6 +446,9 @@ function spawn(){
     const c=Math.random()<pCombo ? makeCombo(m,v) : null;
     if(c){ c.wx=nextWX; c.ph=0; obs.push(c); tail=c.w; lastKs=c.parts.map(p=>p.k); }
     else{ const k=pick(m); tail=addOb(k,nextWX); lastKs=[k]; }
+    // えいごアイテム：まえの 障害物との あいだに もじを おく（じぶんで 走ってくる ものの 手前には おかない）
+    if(mode==="eigo" && gapStart!=null){ const L=lastKs.length===1&&KINDS[lastKs[0]]; if(!(L&&L.vx)) placeLetter(gapStart,nextWX,v); }
+    gapStart=nextWX+tail;
     // 間の とりかた（秒）：1ステージめは いつも おなじ。そのあとは ステージごとに ばらつきを ふやす
     const tMin=AIR+0.32, tBase=1.5;
     const spread=Math.min(1,stage*0.25);
@@ -382,22 +459,25 @@ function spawn(){
       if(Math.random()<0.12*spread) tg+=0.9;                 // たまに ひと休み
     }
     tg=Math.max(tMin,tg);
+    if(mode==="eigo") tg+=.4;                                // えいごアイテムは もじを おく ぶん 間を ひろく
     const last=obs[obs.length-1], LK=KINDS[last.k];
     const mv=LK&&LK.vx? LK.vx*((W-NX)/v+AIR) : 0;             // じぶんで 走ってくるものは そのぶん 間を あける
     nextWX += tail + v*tg + mv;
   }
-  obs=obs.filter(o=>o.wx-dist > -NX-320);
+  obs=obs.filter(o=>o.wx-dist > -NX-320 && !(o.squish>.35));
+  letters=letters.filter(L=>L.wx-dist > -NX-60);
 }
 
 function jump(){
+  if(reading>0){ closeRead(); return; }
   if(state==="over"){ start(); return; }
-  if(state!=="run") return;
+  if(state!=="run"||fxT.STOP>0) return;
   ac();
-  if(!air){ vy=V0; air=true; joyT=0; landT=0; SE.jump(); }
+  if(!air){ jumpK=fxT.JUMP>0?1.35:1; vy=V0*jumpK; air=true; joyT=0; landT=0; SE.jump(); }   // JUMP：高さだけ 1.35ばい（とんでいる 時間は おなじ）
   else buffered=0.13;                                      // 着地の すこし前に おしても とべる
 }
 
-function banner(txt){ const b=$("banner"); b.textContent=txt; b.classList.remove("show"); void b.offsetWidth; b.classList.add("show"); }
+function banner(txt){ const b=$("banner"); b.style.top=mode==="eigo"?"44%":""; b.textContent=txt; b.classList.remove("show"); void b.offsetWidth; b.classList.add("show"); }
 function paintHud(){
   $("hDist").textContent=Math.floor(dist/PXM);
   $("hSpeed").textContent="×"+(speed/220).toFixed(1);
@@ -422,10 +502,22 @@ function obBox(o){
 
 function update(dt){
   t+=dt;
+  if(reading) return;                   // 説明を 読んでいる あいだは ぜんぶ とまる
+  for(const w in fxT) if(fxT[w]>0 && !(w!=="STOP"&&fxT.STOP>0)){
+    fxT[w]=Math.max(0,fxT[w]-dt);
+    if(w==="DASH"&&fxT[w]===0) fxT.SAFE=Math.max(fxT.SAFE||0,1.2);   // ダッシュの おわりは 速さが かわるので 少しだけ むてきを のこす
+  }
+  stepWeather(dt);
+  if(mode==="eigo") paintFx();
+  if(state==="run" && fxT.STOP>0){                        // STOP：ぜんぶ とまって ひとやすみ
+    const s=Math.ceil(fxT.STOP); if(s!==update.lastS){ update.lastS=s; banner(s>1?`ひとやすみ… ${s-1}`:"また 走るよ！"); }
+    return;
+  }
   if(state==="run"){
-    speed=speedAt(dist/PXM);
+    const slow=(fxT.SLOW>0?.6:1)*(fxT.DASH>0?1.4:1);
+    speed=speedAt(dist/PXM)*slow;
     const before=dist; dist+=speed*dt;
-    for(const o of obs){ const K=KINDS[o.k]; if(K && K.vx && ox(o)<W+30) o.wx-=K.vx*dt; }
+    for(const o of obs){ const K=KINDS[o.k]; if(K && K.vx && ox(o)<W+30) o.wx-=K.vx*slow*dt; if(o.squish!=null) o.squish+=dt; }
     // 景色のかわりめ
     const a=Math.floor(dist/PXM/AREA_M);
     if(a!==Math.floor(before/PXM/AREA_M)){
@@ -437,9 +529,10 @@ function update(dt){
     if(fade.a<1) fade.a=Math.min(1,fade.a+dt/1.4);
     // ジャンプ
     if(air){
-      jy+=vy*dt; vy-=G*dt;
+      const tk=fxT.SLOW>0?.6:1;                              // SLOW は じぶんも スローモーション（ジャンプも ゆっくり）
+      jy+=vy*dt*tk; vy-=G*jumpK*dt*tk;
       if(jy<=0){ jy=0; vy=0; air=false; landT=0.14; puff();
-        if(buffered>0){ buffered=0; vy=V0; air=true; landT=0; SE.jump(); } }
+        if(buffered>0){ buffered=0; jumpK=fxT.JUMP>0?1.35:1; vy=V0*jumpK; air=true; landT=0; SE.jump(); } }
     }
     if(buffered>0) buffered-=dt;
     if(landT>0) landT-=dt;
@@ -447,9 +540,18 @@ function update(dt){
     spawn();
     // あたり（忍者くんは からだの まんなかだけで はかる）
     const n=[NX-12, GROUND-jy-60, NX+14, GROUND-jy-4];
-    hit: for(const o of obs){
+    if(!(fxT.SAFE>0||fxT.STAR>0||fxT.DASH>0)) hit: for(const o of obs){
+      if(o.squish!=null) continue;
       for(const b of obBoxes(o))
-        if(b[2]>n[0] && b[0]<n[2] && b[3]>n[1] && b[1]<n[3]){ crash(o); break hit; }
+        if(b[2]>n[0] && b[0]<n[2] && b[3]>n[1] && b[1]<n[3]){
+          if(fxT.SOFT>0||fxT.BIG>0){ o.squish=0; tone(500,160,.25,"sine",.2); tone(260,520,.2,"sine",.12,.08); if(air) vy=Math.max(vy,V0*.45); break hit; }   // SOFT：ぷにっと つぶれて だいじょうぶ
+          crash(o); break hit; }
+    }
+    // もじを とる
+    for(const L of letters){
+      if(L.got) continue;
+      const x=NX+(L.wx-dist), y=GROUND-L.h;
+      if(x+16>n[0] && x-16<n[2] && y+16>n[1] && y-16<n[3]) grab(L);
     }
     paintHud();
   }else if(state==="hit"||state==="over"){
@@ -478,9 +580,229 @@ function gameOver(){
   const msgs=[[3000,"かみわざ！ もう だれにも とめられない！"],[1500,"ちょうじん にんじゃ！ 目にも とまらぬ はやさだ！"],[850,"すごすぎる！ でんせつの にんじゃだ！"],[600,"すごい！ おしろも こえたね！"],[300,"やったね！ つぎの まちまで いけたよ"],[100,"いいぞ！ もっと さきへ いこう"],
     [0, tunnel?"トンネルは とばずに そのまま 走りぬけよう！":"じゃまものは ジャンプで とびこえよう！"]];
   $("rMsg").textContent=(rec&&best?`まえの さいこうは ${best} m。`:"")+msgs.find(x=>m>=x[0])[1];
+  if(mode==="eigo"){ const ws=Object.keys(made); $("rMsg").textContent+= ws.length? `　つくった ことば：${ws.map(w=>w+(made[w]>1?"×"+made[w]:"")).join("・")}` : "　S から じゅんばんに ひろって ことばを つくろう！"; }
   $("result").classList.add("on");
   rec?SE.record():SE.over();
   setTimeout(()=>$("againBtn").focus({preventScroll:true}),50);
+}
+
+/* ───────── えいごアイテム モード（おだい方式） ─────────
+   画面の上に「おだい」（絵と 日本語）が 出る。落ちている アルファベットを その単語の じゅんばんに ひろう。
+   上の もじは ジャンプで、下の もじは 走って とる。ちがう もじを とると、ならびが きえる。
+   できたら 読み上げて 意味を 出し、その単語の 効果が 出る。つぎの おだいへ。
+   単語は 小学校の 外国語で 出てくる 3〜4もじの 50語（WORDS）と、とくべつな 5語（SPECIAL）。
+   効果（FX）は、意味に あうものは その効果、あわないものは 絵が 空を とぶ＋小さな おまけ（help）。 */
+const FX={
+  STOP:{dur:4,  c:"#F0603F",tag:"STOP", msg:"4びょう ぜんぶ とまるぞ！ ひとやすみ",       zk:"てきも じぶんも とまって ひとやすみ"},
+  SLOW:{dur:8,  c:"#4CB86B",tag:"SLOW", msg:"しばらく てきが ゆっくりに なるぞ！",       zk:"てきが ゆっくりに なる"},
+  SAFE:{dur:7,  c:"#F5B70A",tag:"SAFE", msg:"しばらく むてき！ ぶつかっても へいきだ！",   zk:"むてきに なる"},
+  SNOW:{dur:12, c:"#6FA8DC",tag:"SNOW", msg:"ゆきが ふってきたぞ！",                     zk:"ゆきが ふる"},
+  SOFT:{dur:10, c:"#E0569A",tag:"SOFT", msg:"しばらく しょうがいぶつが やわらかく なるぞ！", zk:"しょうがいぶつが やわらかくなって、ぶつかっても だいじょうぶ"},
+  JUMP:{dur:10, c:"#8A5BD6",tag:"JUMP", msg:"しばらく ジャンプが たかく なるぞ！",       zk:"ジャンプが たかく なる"},
+  BIG: {dur:8,  c:"#D2642E",tag:"BIG",  msg:"にんじゃくんが 大きく なって、しょうがいぶつを けちらすぞ！", zk:"大きく なって けちらす"},
+  DASH:{dur:5,  c:"#E0503A",tag:"RUN",  msg:"しばらく ダッシュ！ はやいけど むてきだ！",   zk:"はやく 走る（むてき）"},
+  STAR:{dur:7,  c:"#E8B400",tag:"STAR", msg:"ほしの ちからで しばらく むてき！",          zk:"ほしの ちからで むてき"},
+  RAIN:{dur:10, c:"#5A7FB0",tag:"RAIN", msg:"あめが ふってきたぞ！",                     zk:"あめが ふる"},
+  NIJI:{dur:10, c:"#E07A2A",tag:"SUN",  msg:"はれて にじが かかったぞ！",                zk:"にじが かかる"},
+  NIGHT:{dur:10,c:"#3A3F8A",tag:"MOON", msg:"よるに なったぞ！ おつきさまが 見てる",     zk:"よるに なる"},
+  HANABI:{dur:6,c:"#E0569A",tag:"HOT",  msg:"はなびが あがったぞ！",                     zk:"はなびが あがる"},
+};
+/* help：絵が 空を とぶ 単語に つく 小さな おまけ（5びょう） */
+const HELP=["SAFE","SLOW","JUMP","SOFT"];
+const WORDS=[
+ // どうぶつ
+ ["CAT","🐱","ねこ","キャット"],["DOG","🐶","いぬ","ドッグ"],["PIG","🐷","ぶた","ピッグ"],["COW","🐮","うし","カウ"],["FOX","🦊","きつね","フォックス"],
+ ["BEAR","🐻","くま","ベア"],["LION","🦁","ライオン","ライオン"],["FISH","🐟","さかな","フィッシュ"],["BIRD","🐦","とり","バード"],["FROG","🐸","かえる","フロッグ"],
+ ["DUCK","🦆","あひる","ダック"],["BEE","🐝","はち","ビー"],["ANT","🐜","あり","アント"],["OWL","🦉","ふくろう","アウル"],
+ // たべもの
+ ["EGG","🥚","たまご","エッグ"],["PIE","🥧","パイ","パイ"],["CAKE","🍰","ケーキ","ケイク"],["MILK","🥛","ぎゅうにゅう","ミルク"],["RICE","🍚","ごはん・おこめ","ライス"],
+ ["TEA","🍵","おちゃ","ティー"],["CORN","🌽","とうもろこし","コーン"],
+ // しぜん
+ ["SUN","☀️","たいよう","サン","NIJI"],["MOON","🌙","つき","ムーン","NIGHT"],["STAR","⭐","ほし","スター","STAR"],["RAIN","🌧️","あめ","レイン","RAIN"],
+ ["TREE","🌳","き","ツリー"],["SEA","🌊","うみ","シー"],
+ // もの
+ ["CAR","🚗","くるま","カー"],["BUS","🚌","バス","バス"],["BOX","📦","はこ","ボックス"],["BAG","🎒","かばん","バッグ"],["CAP","🧢","（つばの ある）ぼうし","キャップ"],
+ ["CUP","☕","カップ・コップ","カップ"],["PEN","🖊️","ペン","ペン"],["BOOK","📖","ほん","ブック"],["BALL","⚽","ボール","ボール"],["BED","🛏️","ベッド","ベッド"],
+ ["KEY","🔑","かぎ","キー"],["SHIP","🚢","ふね","シップ"],
+ // いろ・からだ
+ ["RED","🔴","あか","レッド"],["BLUE","🔵","あお","ブルー"],["PINK","🌸","ピンク","ピンク"],["EYE","👀","め","アイ"],["HAND","✋","て","ハンド"],
+ // うごき・ようす
+ ["RUN","🏃","はしる","ラン","DASH"],["JUMP","🦘","とぶ・ジャンプする","ジャンプ","JUMP"],["SING","🎤","うたう","シング"],["SWIM","🏊","およぐ","スイム"],
+ ["BIG","🐘","おおきい","ビッグ","BIG"],["HOT","🔥","あつい","ホット","HANABI"],
+].map((a,i)=>({w:a[0],e:a[1],ja:a[2],kana:a[3],fx:a[4]||null,help:a[4]?null:HELP[i%HELP.length]}));
+const SPECIAL=[
+ ["STOP","✋","とまる・とまれ","ストップ","STOP"],["SLOW","🐢","おそい・ゆっくり","スロウ","SLOW"],["SAFE","🛡️","あんぜんな","セイフ","SAFE"],
+ ["SNOW","❄️","ゆき","スノウ","SNOW"],["SOFT","🍡","やわらかい","ソフト","SOFT"],
+].map(a=>({w:a[0],e:a[1],ja:a[2],kana:a[3],fx:a[4],sp:true}));
+const ALLW=[...WORDS,...SPECIAL];
+const AZ="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const HINT_M=Infinity;                  // おだいの つづりは いつも うすく 見せ、つぎの もじを 光らせる（600mで 消していたら「何を 集めるか わからない」と 言われた）
+let reading=0, odai=null, odaiN=0, recent=[], doneWord=null, doneT=0, nextT=0, letters=[], buf="", fxT={}, flakes=[], drops=[], sparks=[], parade=[], made={}, gapStart=null, lastLetter="", jumpK=1;
+function loadDex(){ try{ return JSON.parse(localStorage.getItem("ninjaDash.words")||"{}"); }catch(e){ return {}; } }
+function saveDex(d){ try{ localStorage.setItem("ninjaDash.words",JSON.stringify(d)); }catch(e){} }
+/* つぎの おだい：はじめは 3もじ、300mから 4もじも。とくべつな 5語は 3つめから ときどき。まだ 見つけていない 単語を 出やすく */
+function newOdai(){
+  const m=dist/PXM, dex=loadDex();
+  let pool;
+  if(odaiN>=2 && Math.random()<.22) pool=SPECIAL;
+  else pool=WORDS.filter(x=>m<300 ? x.w.length===3 : true);
+  pool=pool.filter(x=>!recent.includes(x.w));
+  const fresh=pool.filter(x=>!dex[x.w]);
+  if(fresh.length && Math.random()<.7) pool=fresh;
+  odai=pool[Math.floor(Math.random()*pool.length)];
+  recent=[odai.w,...recent].slice(0,8); odaiN++; buf="";
+  paintWord();
+}
+function need(){ return odai&&!doneWord ? odai.w[buf.length] : null; }
+function chooseLetter(){
+  const n=need(); let ch;
+  if(n && Math.random()<(dist/PXM<300?.82:.72)) ch=n;   // はじめは おだいの もじを 多めに
+  else { const bad=[...AZ].filter(c=>c!==n); ch=bad[Math.floor(Math.random()*bad.length)]; }
+  if(ch===lastLetter && ch!==n) return chooseLetter();
+  return lastLetter=ch;
+}
+/* 障害物の あいだ（gs〜ge）に 1もじ おく。
+   とる／よける ために とんでも、着地してから つぎの 障害物を とべるだけの 間が ある ところにだけ おく（あいだ 1.3秒 いじょう）。
+   上の もじは まんなか（てっぺんで とる）、下の もじは まえより（手前で とんで よけても 間に あう）。 */
+function placeLetter(gs,ge,v){
+  const tg=(ge-gs)/v; if(tg<1.3||Math.random()<.08) return;
+  const high=Math.random()<.5;
+  const wx=gs+(ge-gs)*(high?.5:.35);
+  if(wx-dist<W-NX+30) return;                              // 画面の中に いきなり 出ない
+  letters.push({wx,h:high?128:26,ch:chooseLetter(),ph:Math.random()*6});
+}
+/* 読み上げ：ブラウザに 入っている 声のうち、この 端末の中だけで 読む（外に 送らない）英語の 声だけ つかう */
+function say(txt,force){
+  try{
+    if((!soundOn&&!force)||!window.speechSynthesis) return;
+    const vs=speechSynthesis.getVoices().filter(v=>/^en[-_]/i.test(v.lang)&&v.localService);
+    if(!vs.length) return;
+    const u=new SpeechSynthesisUtterance(String(txt).toLowerCase());   // 大文字のままだと「キャピタル シー」や C・A・T と 読まれる
+    u.voice=vs.find(v=>/en[-_]US/i.test(v.lang))||vs[0]; u.lang=u.voice.lang; u.rate=.85;
+    speechSynthesis.cancel(); speechSynthesis.speak(u);
+  }catch(e){}
+}
+if(window.speechSynthesis) try{ speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged=()=>{}; }catch(e){}
+function grab(L){
+  L.got=true;
+  if(!odai||doneWord) return;
+  if(L.ch===need()){
+    buf+=L.ch; tone(880,1320,.1,"square",.07); say(L.ch);
+    if(buf===odai.w) wordDone();
+  }else{
+    tone(300,180,.18,"sawtooth",.07);
+    buf= L.ch===odai.w[0] ? L.ch : "";
+    const sl=$("wSlots"); sl.classList.remove("ng"); void sl.offsetWidth; sl.classList.add("ng");
+  }
+  paintWord();
+}
+function wordDone(){
+  const o=odai, k=o.fx||o.help, F=FX[k];
+  made[o.w]=(made[o.w]||0)+1;
+  const d=loadDex(); d[o.w]=(d[o.w]||0)+1; saveDex(d);
+  const pp=$("wpop"); pp.style.setProperty("--c",F.c);
+  $("wpW").textContent=`${o.e} ${o.w}！`;
+  $("wpM").innerHTML=`<b>${o.kana}</b> ＝ ${o.ja}`;
+  $("wpF").textContent=o.fx?F.msg:`${o.e} が とんでいくよ！ おまけ：${FX[k].zk}`;
+  pp.classList.remove("on"); void pp.offsetWidth; pp.classList.add("on");
+  say(o.w); reading=performance.now(); $("stage").classList.add("reading");   // 読むあいだは とまる（タップで つづき）
+  [523,659,784,1047,1319].forEach((f,i)=>tone(f,f,.14,"square",.07,i*.07));
+  fxT[k]=o.fx?F.dur:5;
+  if(!o.fx) for(let i=0;i<9;i++) parade.push({e:o.e,x:W+30+i*55,y:40+Math.random()*120,v:130+Math.random()*60,ph:Math.random()*6,s:22+Math.random()*14});
+  if(k==="STOP") vy=Math.min(vy,0);
+  if(k==="SNOW") for(let i=0;i<60;i++) flakes.push(newFlake(true));
+  if(k==="HANABI") for(let i=0;i<3;i++) setTimeout(()=>burstSky(),i*500);
+  buf="";
+}
+/* 説明の 板を とじて つづきから。すぐ 消えないよう 0.6秒は タップを うけつけない */
+function closeRead(){
+  if(performance.now()-reading<600) return;
+  reading=0; $("wpop").classList.remove("on"); $("stage").classList.remove("reading");
+  lastTs=performance.now(); newOdai(); SE.go();
+}
+function newFlake(any){ return {x:Math.random()*W,y:any?Math.random()*H:-8,r:1.5+Math.random()*2.6,v:30+Math.random()*50,ph:Math.random()*6}; }
+function burstSky(){ const x=100+Math.random()*(W-200), y=50+Math.random()*80, c=["#FF6B6B","#FFD93D","#6BCBFF","#B98CFF","#7CFFB2"][Math.floor(Math.random()*5)];
+  for(let i=0;i<34;i++){ const a=i/34*Math.PI*2, v=70+Math.random()*50; sparks.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,t:0,c}); } tone(180,90,.3,"triangle",.1); }
+function paintWord(){
+  const on=mode==="eigo"; $("wordbar").hidden=!on; if(!on){ $("hFx").innerHTML=""; return; }
+  const hint=dist/PXM<HINT_M, sl=$("wSlots");
+  if(!odai){ sl.innerHTML=""; $("wOdai").textContent=""; $("wHint").hidden=true; return; }
+  $("wOdai").innerHTML=`<span class="e">${odai.e}</span>${odai.ja}${odai.sp?'<span class="sp">とくべつ</span>':""}`;
+  if(doneWord){ sl.className="sl done"; sl.innerHTML=[...doneWord].map(c=>`<i>${c}</i>`).join(""); $("wHint").hidden=true; return; }
+  sl.className="sl";
+  sl.innerHTML=[...odai.w].map((c,i)=>buf[i]?`<i${i===buf.length-1?' class="pop"':''}>${buf[i]}</i>`:`<i class="g">${hint?c:""}</i>`).join("");
+  $("wHint").textContent= hint ? `つぎは「${need()}」を ひろおう！` : "";
+  $("wHint").hidden=!hint;
+}
+function paintFx(){
+  if(mode!=="eigo") return;
+  $("hFx").innerHTML=Object.keys(fxT).filter(k=>fxT[k]>0).map(k=>`<span style="background:${FX[k].c}">${FX[k].tag} ${Math.ceil(fxT[k])}</span>`).join("");
+}
+function drawLetters(){
+  const n=need(), hint=dist/PXM<HINT_M;
+  for(const L of letters){
+    if(L.got) continue;
+    const x=NX+(L.wx-dist), y=GROUND-L.h+Math.sin(t*4+L.ph)*3;
+    if(x<-30||x>W+30) continue;
+    if(hint && L.ch===n){ ctx.fillStyle=`rgba(255,240,120,${.35+.25*Math.sin(t*8)})`; ctx.beginPath(); ctx.arc(x,y,24,0,7); ctx.fill(); }
+    ctx.fillStyle="#fff"; ctx.strokeStyle="#33312A"; ctx.lineWidth=3;
+    ctx.beginPath(); ctx.arc(x,y,17,0,7); ctx.fill(); ctx.stroke();
+    ctx.fillStyle="#4A6BC0"; ctx.font="22px 'Mochiy Pop One',sans-serif"; ctx.textAlign="center"; ctx.textBaseline="middle";
+    ctx.fillText(L.ch,x,y+1);
+  }
+}
+/* 空の ようす（うしろ）：よる・にじ */
+function drawSky(){
+  if(fxT.NIJI>0){ const a=Math.min(1,fxT.NIJI/1.5,(FX.NIJI.dur-fxT.NIJI)/1);
+    ["#FF5A5A","#FFA23A","#FFE14A","#5CD66B","#4AA8FF","#6A6AF0","#B86AF0"].forEach((c,i)=>{ ctx.strokeStyle=c; ctx.globalAlpha=.55*a; ctx.lineWidth=7;
+      ctx.beginPath(); ctx.arc(W/2,GROUND+40,300-i*7,Math.PI*1.08,Math.PI*1.92); ctx.stroke(); }); ctx.globalAlpha=1; }
+}
+/* 手前の ようす：ゆき・あめ・はなび・空を とぶ 絵・よる */
+function drawWeather(){
+  if(fxT.NIGHT>0){ const a=Math.min(1,fxT.NIGHT/1.5,(FX.NIGHT.dur-fxT.NIGHT)/1)*.42;
+    ctx.fillStyle=`rgba(10,14,50,${a})`; ctx.fillRect(0,0,W,H);
+    ctx.fillStyle="#FFF3B0"; ctx.globalAlpha=a/.42; ctx.beginPath(); ctx.arc(W-70,56,20,0,7); ctx.fill();
+    ctx.fillStyle="rgba(10,14,50,1)"; ctx.globalAlpha=a/.42*.9; ctx.beginPath(); ctx.arc(W-61,50,17,0,7); ctx.fill(); ctx.globalAlpha=1; }
+  if(flakes.length){
+    if(fxT.SNOW>0){ ctx.fillStyle="rgba(235,244,255,.18)"; ctx.fillRect(0,0,W,H); ctx.fillStyle="rgba(255,255,255,.75)"; ctx.fillRect(0,GROUND+2,W,H-GROUND); }
+    ctx.fillStyle="#fff";
+    for(const f of flakes){ ctx.globalAlpha=.9; ctx.beginPath(); ctx.arc(f.x+Math.sin(t*2+f.ph)*6,f.y,f.r,0,7); ctx.fill(); }
+    ctx.globalAlpha=1;
+  }
+  if(drops.length){ ctx.strokeStyle="rgba(200,220,255,.7)"; ctx.lineWidth=1.5; ctx.beginPath();
+    for(const d of drops){ ctx.moveTo(d.x,d.y); ctx.lineTo(d.x-4,d.y+12); } ctx.stroke();
+    if(fxT.RAIN>0){ ctx.fillStyle="rgba(60,80,120,.12)"; ctx.fillRect(0,0,W,H); } }
+  for(const s of sparks){ ctx.globalAlpha=Math.max(0,1-s.t/1.2); ctx.fillStyle=s.c; ctx.fillRect(s.x-2,s.y-2,4,4); }
+  ctx.globalAlpha=1;
+  if(parade.length){ ctx.textAlign="center"; ctx.textBaseline="middle";
+    for(const p of parade){ ctx.font=`${p.s}px sans-serif`; ctx.fillText(p.e,p.x,p.y+Math.sin(t*5+p.ph)*6); } }
+}
+function stepWeather(dt){
+  for(const f of flakes) f.y+=f.v*dt;
+  flakes=flakes.filter(f=>f.y<H+10);
+  if(fxT.SNOW>0) while(flakes.length<70) flakes.push(newFlake(false));
+  for(const d of drops){ d.y+=d.v*dt; d.x-=d.v*dt*.3; }
+  drops=drops.filter(d=>d.y<H);
+  if(fxT.RAIN>0) while(drops.length<90) drops.push({x:Math.random()*(W+60),y:-Math.random()*H*.3,v:420+Math.random()*160});
+  for(const s of sparks){ s.t+=dt; s.x+=s.vx*dt; s.y+=s.vy*dt; s.vy+=40*dt; }
+  sparks=sparks.filter(s=>s.t<1.2);
+  if(fxT.HANABI>0 && Math.random()<dt*1.2) burstSky();
+  for(const p of parade) p.x-=p.v*dt;
+  parade=parade.filter(p=>p.x>-40);
+}
+function paintDex(){
+  const d=loadDex(), got=ALLW.filter(x=>d[x.w]).length;
+  const cell=x=>{ const n=d[x.w];
+    return n ? `<button class="zc" data-w="${x.w}" title="${x.kana}"><span class="e">${x.e}</span><b>${x.w}</b><small>${x.ja}</small></button>`
+             : `<div class="zc no"><span class="e">${x.e}</span><b>${"＿".repeat(x.w.length)}</b><small>${x.ja}</small></div>`; };
+  $("zukan").innerHTML=
+    `<details${$("zukan").querySelector("details[open]")?" open":""}><summary>📖 ことば ずかん　<b>${got}</b> ／ ${ALLW.length}</summary>`+
+    `<p class="zh">見つけた ことばを おすと 声が きこえるよ</p>`+
+    `<div class="zg">${WORDS.map(cell).join("")}</div>`+
+    `<p class="zh">とくべつな ことば（すごい こうか）</p>`+
+    `<div class="zs">${SPECIAL.map(x=>`<div class="zk${d[x.w]?"":" no"}"><span class="w">${d[x.w]?x.w:"S???"}</span><span class="m">${d[x.w]?`<b>${x.kana}</b> ＝ ${x.ja}<br>`:""}${FX[x.fx].zk}</span></div>`).join("")}</div></details>`;
+  const b=(()=>{ try{ return +localStorage.getItem("ninjaDash.bestEigo")||0; }catch(e){ return 0; } })();
+  $("tBestE").innerHTML=b?`えいごアイテムの さいこう：<b>${b}</b> m`:"";
 }
 
 /* ───────── 描く ───────── */
@@ -495,9 +817,9 @@ function drawBg(stage,alpha,camL){
   }
   ctx.globalAlpha=1;
 }
-function frame(i,ax,ay){
-  const s=SPR;
-  ctx.drawImage(imgN,i*s.cw,0,s.cw,s.ch, ax-s.ax*NS, ay-s.ay*NS, s.cw*NS, s.ch*NS);
+function frame(i,ax,ay,k=1){
+  const s=SPR, ns=NS*k;
+  ctx.drawImage(imgN,i*s.cw,0,s.cw,s.ch, ax-s.ax*ns, ay-s.ay*ns, s.cw*ns, s.ch*ns);
 }
 function part(k,x,y,w,h){ const a=ATLAS[k]; ctx.drawImage(imgO,a[0],a[1],a[2],a[3],x,y,w,h); }
 function shadow(x,h,wid=22,op=.4){
@@ -551,7 +873,13 @@ function draw(){
   if(fade.a<1){ drawBg(fade.from,1,camL); drawBg(fade.to,fade.a,camL); }
   else drawBg(curArea%4,1,camL);
 
-  for(const o of obs) drawOb(o);
+  if(mode==="eigo") drawSky();
+  for(const o of obs){
+    if(o.squish!=null){ const k=Math.max(.05,1-o.squish/.35); ctx.save(); ctx.globalAlpha=k; ctx.translate(0,GROUND*(1-k)); ctx.scale(1,k); drawOb(o); ctx.restore(); }
+    else if(fxT.SOFT>0){ const k=1+Math.sin(t*12+o.wx*.01)*.07; ctx.save(); ctx.translate(0,GROUND*(1-k)); ctx.scale(1,k); drawOb(o); ctx.restore(); }   // やわらかい：ぷるぷる
+    else drawOb(o);
+  }
+  if(mode==="eigo") drawLetters();
   for(const d of dust){ const k=d.t/.45; ctx.fillStyle=`rgba(245,235,215,${.8*(1-k)})`; ctx.beginPath(); ctx.arc(d.x+d.vx*d.t,d.y+d.vy*d.t,3+k*6,0,7); ctx.fill(); }
 
   // 忍者くん
@@ -562,8 +890,16 @@ function draw(){
     else if(landT>0) f=SPR.land[landT>.07?0:1];
     else if(joyT>0){ f=SPR.joy[Math.floor(t/.15)%4]; bob=-Math.abs(Math.sin(t*10))*10; }
     else { const dur=Math.max(.05,.1*220/speed); f=SPR.run[Math.floor(t/dur)%4]; }
+    if(fxT.STOP>0) f=SPR.joy[Math.floor(t/.3)%4];
     shadow(NX,jy);
-    frame(f,NX,feet+bob);
+    const inv=Math.max(fxT.SAFE||0,fxT.STAR||0,fxT.DASH||0);
+    if(inv>0 && !(inv<1.5 && Math.floor(t*8)%2)){                   // むてき：光の まく
+      ctx.fillStyle=fxT.DASH>0?"rgba(255,120,80,.25)":"rgba(255,225,90,.28)"; ctx.strokeStyle=fxT.DASH>0?"rgba(240,80,50,.9)":"rgba(255,200,40,.9)"; ctx.lineWidth=3;
+      ctx.beginPath(); ctx.ellipse(NX,feet-34,40,46,0,0,7); ctx.fill(); ctx.stroke();
+      if(fxT.STAR>0){ ctx.font="16px sans-serif"; ctx.textAlign="center"; for(let i=0;i<4;i++){ const a=t*3+i*Math.PI/2; ctx.fillText("⭐",NX+Math.cos(a)*44,feet-34+Math.sin(a)*48); } }
+      if(fxT.DASH>0){ ctx.strokeStyle="rgba(255,255,255,.8)"; ctx.lineWidth=2; for(let i=0;i<5;i++){ const yy=feet-60+i*12+((t*40+i*7)%6); ctx.beginPath(); ctx.moveTo(NX-60-i*6,yy); ctx.lineTo(NX-30,yy); ctx.stroke(); } }
+    }
+    frame(f,NX,feet+bob,fxT.BIG>0?1.5:1);
   }else{
     const b=obBox(hitOb), hitX=Math.min(b[0],NX+14);   // ぶつかった ものの 左はし
     if(hitT<.5){ const kb=Math.min(1,hitT/.12)*6; shadow(hitX-18,jy); frame(SPR.bump, hitX-4-kb, feet); }
@@ -572,14 +908,16 @@ function draw(){
 }
 function loop(ts){
   if(state==="title"){ looping=false; return; }
-  const dt=Math.min(.05,(ts-lastTs)/1000); lastTs=ts;
-  update(dt); draw();
+  const dt=Math.max(0,Math.min(.05,(ts-lastTs)/1000)); lastTs=ts;   // rAF の 時刻が すこし 前に なることが あるので 0 より 小さくしない
+  update(dt); draw(); drawWeather();
   requestAnimationFrame(loop);
 }
 
 /* ───────── ボタン・キー ───────── */
-function goTitle(){ state="title"; show("title"); paintTitleBest(); }
-$("startBtn").onclick=start;
+function goTitle(){ state="title"; show("title"); paintTitleBest(); paintDex(); }
+$("startBtn").onclick=()=>{ mode="normal"; start(); };
+$("eigoBtn").onclick=$("eigoBtn2").onclick=()=>{ mode="eigo"; start(); };
+$("zukan").addEventListener("click",e=>{ const b=e.target.closest(".zc[data-w]"); if(b) say(b.dataset.w,true); });
 $("soundBtn").onclick=toggleSound; $("hSound").onclick=e=>{e.stopPropagation();toggleSound();};
 $("hHome").onclick=e=>{e.stopPropagation();goTitle();};
 $("againBtn").onclick=e=>{e.stopPropagation();start();};
@@ -590,7 +928,7 @@ jb.addEventListener("pointerdown",e=>{e.preventDefault();jb.classList.add("down"
 cv.addEventListener("pointerdown",e=>{e.preventDefault();if(state==="run")jump();});
 addEventListener("keydown",e=>{
   const J=e.code==="Space"||e.code==="ArrowUp"||e.code==="KeyW";
-  if(state==="title"){ if(e.code==="Space"&&!e.repeat){ e.preventDefault(); start(); } return; }
+  if(state==="title"){ if(e.code==="Space"&&!e.repeat){ e.preventDefault(); mode="normal"; start(); } return; }
   if(J||(e.code==="Enter"&&state==="over")){ e.preventDefault(); if(!e.repeat){ jb.classList.add("down"); jump(); } }
   if(e.code==="Escape") goTitle();
 });
@@ -599,7 +937,7 @@ document.addEventListener("contextmenu",e=>{ if(state!=="title") e.preventDefaul
 
 obIcons($("obJ"),["crate","barrel","fence","dog","lion","fire"],34);
 obIcons($("obR"),["barrel","crate","crate"],24);
-paintSound(); paintTitleBest();
+paintSound(); paintTitleBest(); paintDex();
 </script>
 </body>
 </html>
