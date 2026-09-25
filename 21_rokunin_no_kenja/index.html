@@ -80,8 +80,6 @@ svg{display:block}
 @keyframes sail{0%{transform:translateX(-260px)}100%{transform:translateX(160px)}}
 .bob{transform-box:fill-box;transform-origin:50% 100%;animation:bob 1.1s ease-in-out infinite}
 @keyframes bob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-4px) rotate(2deg)}}
-.rainy .drops line{animation:drop .7s linear infinite}
-@keyframes drop{0%{transform:translateY(0);opacity:1}100%{transform:translateY(30px);opacity:0}}
 /* 発射台から ロケットだけが 飛んでいく（発射台は 動かない）。台の上で 待つ → 火が つく → 上がる → 見えなくなって 台に もどる */
 .rk{animation:rk 9s ease-in infinite}
 @keyframes rk{0%,32%{transform:translateY(0);opacity:1}85%{transform:translateY(-760px);opacity:1}86%,92%{transform:translateY(0);opacity:0}100%{opacity:1}}
@@ -314,7 +312,7 @@ img.sage.hop{animation:hop .3s steps(2)}
 
 <script src="rules.js?v=12"></script>
 <script src="obj/sizes.js?v=9"></script>
-<script src="art.js?v=25"></script>
+<script src="art.js?v=26"></script>
 <script src="shakai.js?v=2"></script>
 <script>
 // ============================================================
@@ -431,17 +429,27 @@ function drawPeople(pop, stagesNow) {
   const S = RULES.stats(st); $("L-life").innerHTML = ART.life(s, S) + ART.sea(S);
   { const ids = shownCombos().map((c) => c.id); const st4 = stages.map((g, k) => (ov[k] ? 4 : g));
     // 人は 建物より 手前の 層（建物の 絵の 上に なる 場所には 立たせない）。自動車は 道の 層（建物の うしろを 通る）
-    $("L-crowd").innerHTML = ART.crowd(S.pop, st.lv, ids, st4, ov); $("L-cars").innerHTML = ids.includes("m_car") ? ART.cars(st.lv.road, ids) : ""; } $("L-sky").innerHTML = ART.sky(s, S, shownCombos()); $("L-decor").innerHTML = ART.decor(S); $("L-trouble").innerHTML = ART.trouble(S, s, st.turn, badSigns(S));
-  $("L-volcano").innerHTML = s < 0 ? ART.volcano() : "";
+    const free = ART.freeGround(st.lv, ids, st4, ov); const bad = badSigns(S);
+    $("L-crowd").innerHTML = ART.crowd(S.pop, free); $("L-trouble").innerHTML = ART.trouble(S, s, st.turn, bad, free); $("L-volcano").innerHTML = ART.volcanoes(bad.volcanoes); $("L-sky").innerHTML = ART.sky(s, S, shownCombos(), bad); $("L-cars").innerHTML = ids.includes("m_car") ? ART.cars(st.lv.road, ids) : ""; } $("L-decor").innerHTML = ART.decor(S);
   $("fx-sky").innerHTML = s >= 100 ? ART.fireworks(true) : st.lv.fun >= 3 ? ART.fireworks(false) : "";
   return stages.some((g, k) => g !== prev[k]);
 }
-// 悪化の しるし（洪水・雨雲）：4回目より あとで、はってん度が 30% に とどかず、食べもの／しあわせが たりないときだけ。
-// 順調な 道でも 序盤は 食料や 幸福度が ひくいので、数だけでは 出さない。
-// 46656 通り（6人×6回）を ぜんぶ ためして、さいごに 75% 以上に なる 道では 1回も 出ないことを たしかめた（2026-09-25）
+// 悪化の しるし：数が わるいほど、モンスター・山賊・ドラゴン・洪水・噴火が 国じゅうに ふえる。
+// 「悪くなっている」のは 4回目より あとで はってん度が 30% に とどかないとき（worse）。順調な 道でも 序盤は 数が ひくいので、
+// それだけでは 出さない（巣の まわりに 2ひきまで）。46656 通り（6人×6回）を ぜんぶ ためして、さいごに 75% 以上に なる 道では
+// worse に ならないことを たしかめた（2026-09-26）。モンスターの国（まもりなしで 2回 あらされた）は 治安 0 → いちばん ひどい 絵
 function badSigns(S) {
-  const worse = st.turn >= 4 && RULES.score(st) < 30;
-  return { flood: worse && S.food < 25, rain: worse && S.happy < 20 };
+  const sc = RULES.score(st); const worse = st.turn >= 4 && sc < 30; const safe = st.lv.guard >= RULES.MAX_LV;
+  const danger = safe ? 0 : Math.max(0, 70 - S.safety); // 0〜70
+  return {
+    nest: st.turn >= 1 ? Math.min(2, Math.floor(danger / 15)) : 0,
+    monsters: worse ? Math.min(16, Math.round(danger / 70 * 12) + st.damage * 2) : 0,
+    bandits: worse && !safe && S.safety < 30 ? Math.min(4, 1 + Math.floor((30 - S.safety) / 10)) : 0,
+    dragons: worse && !safe && S.safety <= 20 ? Math.min(3, 1 + Math.floor((20 - S.safety) / 7)) : 0,
+    castle: worse && !safe && S.safety <= 10,
+    floods: worse && S.food < 40 ? Math.min(7, 1 + Math.floor((40 - S.food) / 7)) : 0,
+    volcanoes: sc < 0 ? Math.min(6, 1 + Math.floor(-sc / 15)) : worse ? Math.min(3, Math.floor((30 - sc) / 12)) : 0,
+  };
 }
 function setMood() {
   const s = RULES.score(st); const t = $("tint"); if (!t) return;
@@ -529,9 +537,11 @@ function learnTriggers() {
   if (st.picks.includes("guard")) ids.push("monster");   // 力の賢者を よんだら「国を まもる しくみ」
   if (st.lv.guard >= 2) ids.push("lv_guard");           // 城壁が できたら「関所と お城」
   (st.combos || []).forEach((id) => { ids.push(id); if (id === "m_kokkai") ids.push("bandits"); }); // 国会が できたら「きまりが ある わけ」も
-  if (st.turn >= 1 && S.safety <= 10) ids.push("unite");
-  if (badSigns(S).flood) ids.push("flood");
-  if (s < 0) ids.push("volcano", "ruins");
+  const bad = badSigns(S);
+  if (bad.castle) ids.push("unite");
+  if (bad.floods) ids.push("flood");
+  if (bad.volcanoes) ids.push("volcano");
+  if (s < 0) ids.push("ruins");
   if ((st.siteStages || []).some((g) => g >= 3)) ids.push("pop_jp");
   if (s >= 100) ids.push("castle", "rocket", "pop_world");
   return ids.filter((id) => SHAKAI_BY[id]);
