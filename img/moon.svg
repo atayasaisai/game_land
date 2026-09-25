@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- 月のイラスト（月のみちかけ用）。夜空の丸に、三日月と地球 -->
+  <defs>
+    <radialGradient id="space" cx="50%" cy="45%" r="60%">
+      <stop offset="0" stop-color="#23346e"/><stop offset=".55" stop-color="#101838"/><stop offset="1" stop-color="#05070f"/>
+    </radialGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#ffe7a0" stop-opacity=".55"/><stop offset=".6" stop-color="#ffe7a0" stop-opacity=".12"/><stop offset="1" stop-color="#ffe7a0" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="lit" cx="70%" cy="40%" r="75%">
+      <stop offset="0" stop-color="#fffbe6"/><stop offset=".6" stop-color="#ffe7a0"/><stop offset="1" stop-color="#e8c060"/>
+    </radialGradient>
+  </defs>
+  <circle cx="100" cy="100" r="96" fill="url(#space)"/>
+  <circle cx="100" cy="100" r="96" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="3"/>
+  <g fill="#fff">
+    <circle cx="40" cy="52" r="2"/><circle cx="150" cy="38" r="1.6"/><circle cx="162" cy="140" r="2"/><circle cx="58" cy="150" r="1.4"/><circle cx="120" cy="170" r="1.4"/><circle cx="30" cy="104" r="1.2"/>
+  </g>
+  <circle cx="100" cy="92" r="70" fill="url(#glow)"/>
+  <circle cx="100" cy="92" r="52" fill="#2c3552"/>
+  <path d="M100,40 A52,52 0 0 1 100,144 A26,52 0 0 0 100,40 Z" fill="url(#lit)" transform="rotate(-24 100 92)"/>
+  <g fill="#e2c068" opacity=".6"><circle cx="128" cy="84" r="6"/><circle cx="118" cy="116" r="4"/><circle cx="136" cy="108" r="3"/></g>
+</svg>
