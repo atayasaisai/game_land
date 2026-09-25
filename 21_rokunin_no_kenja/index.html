@@ -82,13 +82,11 @@ svg{display:block}
 @keyframes bob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-4px) rotate(2deg)}}
 .rainy .drops line{animation:drop .7s linear infinite}
 @keyframes drop{0%{transform:translateY(0);opacity:1}100%{transform:translateY(30px);opacity:0}}
-/* 発射台から 小さな ロケットだけが 飛んでいく（発射台は 動かない） */
-.rk{animation:rk 8s ease-in infinite}
-@keyframes rk{0%,30%{transform:translateY(0);opacity:0}32%{opacity:1}85%{transform:translateY(-720px);opacity:1}86%,100%{transform:translateY(-720px);opacity:0}}
-.rk .flame{transform-box:fill-box;transform-origin:50% 0;animation:flame .12s steps(2) infinite}
-@keyframes flame{0%{transform:scaleY(.8)}100%{transform:scaleY(1.15)}}
-.puff{transform-box:fill-box;transform-origin:50% 50%;animation:puff 8s ease-out infinite;opacity:0}
-@keyframes puff{0%,30%{transform:scale(.3);opacity:0}34%{opacity:.85}55%{transform:scale(2.2) translateY(-6px);opacity:0}100%{opacity:0}}
+/* 発射台から ロケットだけが 飛んでいく（発射台は 動かない）。台の上で 待つ → 火が つく → 上がる → 見えなくなって 台に もどる */
+.rk{animation:rk 9s ease-in infinite}
+@keyframes rk{0%,32%{transform:translateY(0);opacity:1}85%{transform:translateY(-760px);opacity:1}86%,92%{transform:translateY(0);opacity:0}100%{opacity:1}}
+.rk .rkflame{transform-box:fill-box;transform-origin:50% 0;animation:rkflame 9s linear infinite}
+@keyframes rkflame{0%,24%{opacity:0;transform:scaleY(.3)}28%{opacity:1;transform:scaleY(1)}30%{transform:scaleY(1.3)}32%{transform:scaleY(1)}40%,85%{opacity:1;transform:scaleY(1.4)}86%,100%{opacity:0}}
 .lantern{transform-box:fill-box;transform-origin:50% 0;animation:sway 1.6s ease-in-out infinite}
 @keyframes sway{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
 .dancer{transform-box:fill-box;transform-origin:50% 100%;animation:dance .6s ease-in-out infinite}
@@ -155,6 +153,8 @@ img.sage.hop{animation:hop .3s steps(2)}
 .stats em{font-style:normal;font-size:.62rem;width:1em;text-align:center}
 .stats em.up{color:var(--raku)}.stats em.down{color:var(--do)}
 @media(max-width:640px){.stats{display:none;top:60px}.stats.on{display:grid}.hud .dev{cursor:pointer}}
+/* はってん度と サブ指標は、6回 えらび おわるまで かくす（答えが わかって しまうので） */
+#game.hidescore .hud .dev,#game.hidescore .stats{display:none!important}
 .iconbtn{flex:none;background:#fff;border:3px solid var(--ink);border-radius:50%;width:40px;height:40px;font-size:1.1rem;box-shadow:3px 3px 0 var(--ink)}
 
 /* 下：けんじゃ6人が 地図の下辺に 立って ならぶ */
@@ -313,8 +313,8 @@ img.sage.hop{animation:hop .3s steps(2)}
 </section>
 
 <script src="rules.js?v=12"></script>
-<script src="obj/sizes.js?v=8"></script>
-<script src="art.js?v=20"></script>
+<script src="obj/sizes.js?v=9"></script>
+<script src="art.js?v=25"></script>
 <script src="shakai.js?v=2"></script>
 <script>
 // ============================================================
@@ -389,31 +389,49 @@ function drawLayer(elem, lv, pop) {
   const g = $("L-" + elem); g.innerHTML = ART.layer(elem, lv);
   if (pop) { g.classList.remove("pop"); void g.offsetWidth; g.classList.add("pop"); }
 }
-// 組み合わせで できたもの：いま そろっている ぶんを ぜんぶ 描く（pop なら 新しいものだけ はねる）
+// 組み合わせで できたもの。st.combos = いま 地図に 出している もの（1つずつ ふやして 見せるため、そろった ものと 別に もつ）
+function shownCombos() { const ids = st.combos || []; return ART.activeCombos(st.lv).filter((c) => ids.includes(c.id)); }
+function renderCombos(popId) { $("L-combo").innerHTML = shownCombos().map((c) => ART.comboMarkup(c, c.id === popId ? "popin" : "")).join(""); }
+// pop = false：そろっている ぶんを いっぺんに 出す（はじめ）。true：新しく そろった ものの ならびを かえす（pick が 1つずつ 出す）
 function drawCombos(pop) {
-  const active = ART.activeCombos(st.lv); const prev = st.combos || [];
-  const fresh = active.filter((c) => !prev.includes(c.id));
-  $("L-combo").innerHTML = active.map((c) => ART.comboMarkup(c, pop && fresh.includes(c) ? "popin" : "")).join("");
-  st.combos = active.map((c) => c.id);
-  if (fresh.some((c) => c.site || c.sky || c.cars)) drawPeople(pop);
+  const active = ART.activeCombos(st.lv).map((c) => c.id);
+  st.combos = (st.combos || []).filter((id) => active.includes(id)); // あらされて なくなった ものは けす
+  const fresh = ART.activeCombos(st.lv).filter((c) => !st.combos.includes(c.id));
+  if (!pop) { st.combos = active; renderCombos(null); return []; }
+  renderCombos(null);
   return fresh;
+}
+// 1つ 出す：その 建物だけが ぽんと できる（人の すみかを 建てかえる ものは その すみかが かわる）
+function showCombo(c) {
+  st.combos.push(c.id); renderCombos(c.id);
+  if (c.site || c.sky || c.cars) drawPeople(true, st.siteStages);
+}
+// 人の すみか（12か所）を 1けんずつ 育てる
+async function growSites() {
+  const target = ART.siteStages(RULES.score(st)); const cur = (st.siteStages || target.map(() => 0)).slice();
+  for (let k = 0; k < target.length; k++) {
+    if (cur[k] === target[k]) continue;
+    const up = target[k] > cur[k]; cur[k] = target[k];
+    drawPeople(true, cur.slice()); if (up) SND.stage(1); await wait(up ? 320 : 150);
+  }
 }
 function drawAll() { RULES.ELEMS.forEach((e) => drawLayer(e, st.lv[e], false)); st.siteStages = null; st.siteOv = null; st.combos = null; drawCombos(false); drawMonsters(st.threat); setMood(); }
 // まもりが 3だんかい（じょうへき）なら、モンスターは 近づけない
 function drawMonsters(n) { if (st && st.lv.guard >= RULES.MAX_LV) n = 0; document.querySelectorAll("#mon-slots .mon").forEach((g, i) => { g.style.display = i < n ? "" : "none"; }); }
 // 国土ぜんたいの ようす：人の すみか（12か所）・旗・花火・噴火 を はってん度から 決める
-function drawPeople(pop) {
-  const s = RULES.score(st); const stages = ART.siteStages(s); const prev = st.siteStages || stages.map(() => 0);
-  // 近代の 建物に 建てかわった すみか
-  const ov = {}; ART.activeCombos(st.lv).forEach((c) => { if (c.site) ov[c.site[0]] = c.site; });
+// stages を わたすと その だんかいで 描く（1けんずつ 育てる とき）。わたさなければ はってん度 どおり
+function drawPeople(pop, stagesNow) {
+  const s = RULES.score(st); const stages = stagesNow || ART.siteStages(s); const prev = st.siteStages || stages.map(() => 0);
+  // 近代の 建物に 建てかわった すみか（地図に 出した ものだけ）
+  const ov = {}; shownCombos().forEach((c) => { if (c.site) ov[c.site[0]] = c.site; });
   const prevOv = st.siteOv || {};
   $("L-people").innerHTML = stages.map((g, k) => ART.siteMarkup(k, g, pop && (g !== prev[k] || (ov[k] && !prevOv[k])) ? "popin" : "", ov[k])).join("");
   st.siteStages = stages; st.siteOv = ov;
   $("L-flags").innerHTML = s >= 100 ? ART.flags() : "";
   const S = RULES.stats(st); $("L-life").innerHTML = ART.life(s, S) + ART.sea(S);
-  { const ids = ART.activeCombos(st.lv).map((c) => c.id); const st4 = stages.map((g, k) => (ov[k] ? 4 : g));
+  { const ids = shownCombos().map((c) => c.id); const st4 = stages.map((g, k) => (ov[k] ? 4 : g));
     // 人は 建物より 手前の 層（建物の 絵の 上に なる 場所には 立たせない）。自動車は 道の 層（建物の うしろを 通る）
-    $("L-crowd").innerHTML = ART.crowd(S.pop, st.lv, ids, st4, ov); $("L-cars").innerHTML = ids.includes("m_car") ? ART.cars(st.lv.road, ids) : ""; } $("L-sky").innerHTML = ART.sky(s, S, ART.activeCombos(st.lv)); $("L-decor").innerHTML = ART.decor(S); $("L-trouble").innerHTML = ART.trouble(S, s, st.turn, badSigns(S));
+    $("L-crowd").innerHTML = ART.crowd(S.pop, st.lv, ids, st4, ov); $("L-cars").innerHTML = ids.includes("m_car") ? ART.cars(st.lv.road, ids) : ""; } $("L-sky").innerHTML = ART.sky(s, S, shownCombos()); $("L-decor").innerHTML = ART.decor(S); $("L-trouble").innerHTML = ART.trouble(S, s, st.turn, badSigns(S));
   $("L-volcano").innerHTML = s < 0 ? ART.volcano() : "";
   $("fx-sky").innerHTML = s >= 100 ? ART.fireworks(true) : st.lv.fun >= 3 ? ART.fireworks(false) : "";
   return stages.some((g, k) => g !== prev[k]);
@@ -568,6 +586,7 @@ function startGame(learn = st ? st.learn : false) {
   $("result").classList.remove("on"); $("showRes").style.display = "none"; $("bottom").style.display = ""; $("sbubble").classList.remove("on");
   if (!$("kingPic").firstChild) $("kingPic").innerHTML = ART.king();
   buildField(); drawAll(); drawHud();
+  $("game").classList.add("hidescore");
   showScreen("game");
   kingSay(learn ? ["まっさらな この国を、さかえさせておくれ。", "国に 何かが できたら、左の 札で 社会の おはなしが 読めるぞ。"] : ["まっさらな この国を、さかえさせておくれ。", "けんじゃたちに 6回だけ そうだんできるぞ。"]);
   setChoices(true);
@@ -604,7 +623,7 @@ async function pick(id) {
     }
     if (gain.capped && gain.amount > 0) { SND.cap(); fxText("もう いっぱい！", "bad"); await wait(600); }
     // ほかの 要素との 組み合わせで、大陸の べつの 場所にも ふえる
-    for (const c of drawCombos(true)) { SND.stage(2); fxText(c.say); await wait(900); }
+    for (const c of drawCombos(true)) { showCombo(c); SND.stage(2); fxText(c.say); await wait(1000); }
     setPose(svg, "stand");
     if (gain.amount >= 3) kingSay(["おお、3だんかいも！"]); else if (gain.amount === 2) kingSay(["ほう、2だんかい すすんだ。"]);
   }
@@ -634,7 +653,8 @@ async function pick(id) {
   if (master) { drawLayer(master.elem, 3, true); SND.stage(3); fxText("その道を きわめた！", "big"); await wait(1000); }
 
   const wasNeg = RULES.score(st) < 0 && !st.erupted;
-  setMood(); drawHud();
+  for (const c of drawCombos(true)) { showCombo(c); SND.stage(2); fxText(c.say); await wait(1000); } // きわめた・あらされた あとに そろった もの
+  await growSites(); setMood(); drawHud();
   if (wasNeg) { st.erupted = true; SND.raid(); $("map").classList.add("shake"); fxText("火山が ふんかした！", "bad"); kingSay(["火山が…！ 国が あれてきたぞ…"]); await wait(1000); $("map").classList.remove("shake"); }
   await checkLearn();
   busy = false;
@@ -643,6 +663,7 @@ async function pick(id) {
 
 // ---- けっか ----
 function showResult() {
+  $("game").classList.remove("hidescore");
   const sc = RULES.score(st); const end = RULES.ending(st);
   $("bottom").style.display = "none";
   kingSay([sc >= 100 ? "みごとじゃ！ りそうの 国に なった！" : sc >= 50 ? "よく やった。もっと よい 順番も あるかもしれんぞ。" : sc >= 0 ? "ふむ…。順番を かえて、もういちど やってみよ。" : "なんということだ…。"]);

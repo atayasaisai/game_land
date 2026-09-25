@@ -26,13 +26,13 @@ const ART = (() => {
   // シート3・4から 切り出した 動きのある もの（fx/<名前>.png）
   function fimg(name, cx, cy, w, cls = "", style = "") {
     const [W, H] = FX_SIZE[name]; const h = w * H / W;
-    return `<image class="${cls}" style="${style}" href="fx/${name}.png" x="${cx - w / 2}" y="${cy - h}" width="${w}" height="${h}"/>`;
+    return `<image class="${cls}" style="${style}" href="fx/${name}.png?v=4" x="${cx - w / 2}" y="${cy - h}" width="${w}" height="${h}"/>`;
   }
   const O = 1, O2 = 2, O3 = 3; // シート（O3 = 発展記の素材２。番号の かわりに 名前）
   function img(sheet, n, cx, cy, w, cls = "") {
-    if (sheet === O3) { const [W, H] = OBJ3_SIZE[n]; const h = w * H / W; return `<image class="${cls}" href="obj3/${n}.png" x="${cx - w / 2}" y="${cy - h}" width="${w}" height="${h}"/>`; }
+    if (sheet === O3) { const [W, H] = OBJ3_SIZE[n]; const h = w * H / W; return `<image class="${cls}" href="obj3/${n}.png?v=4" x="${cx - w / 2}" y="${cy - h}" width="${w}" height="${h}"/>`; }
     const [W, H] = (sheet === O ? OBJ_SIZE : OBJ2_SIZE)[n]; const h = w * H / W;
-    return `<image class="${cls}" href="${sheet === O ? "obj" : "obj2"}/${String(n).padStart(2, "0")}.png" x="${cx - w / 2}" y="${cy - h}" width="${w}" height="${h}"/>`;
+    return `<image class="${cls}" href="${sheet === O ? "obj" : "obj2"}/${String(n).padStart(2, "0")}.png?v=4" x="${cx - w / 2}" y="${cy - h}" width="${w}" height="${h}"/>`;
   }
 
   // ---- 6つの「もの」：だんかいが 上がるほど、国土の いろいろな 場所に ふえる ----
@@ -162,16 +162,15 @@ const ART = (() => {
   const FLAGS = [[700, 250], [1000, 500], [350, 500], [1200, 600]];
   function flags() {
     return FLAGS.map(([x, y]) => img(O2, 1, x, y, 110)).join("") + fimg("rainbow", 330, 200, 360)
-      + img(O3, "rocket", 1420, 810, 150) + rocketLaunch(1420, 700); // 100% だけ：右下の 島の 発射台から ロケットが 打ち上がる（発射台は 動かさない）
+      + rocketLaunch(1420, 810, 150); // 100% だけ：右下の 島の 発射台から ロケットが 打ち上がる（発射台は 動かさない）
   }
-  // 発射台から 飛んでいく 小さな ロケット（SVGで かく）。発射台の 絵は そのまま
-  function rocketLaunch(x, y) {
-    return `<g transform="translate(${x} ${y})"><g class="rk">
-      <path d="M0 -34 C9 -22 10 -8 9 10 L-9 10 C-10 -8 -9 -22 0 -34Z" fill="#f4f1ea" stroke="#33312A" stroke-width="2.5"/>
-      <path d="M0 -34 C5 -28 7 -22 7 -18 L-7 -18 C-7 -22 -5 -28 0 -34Z" fill="#d9483b"/>
-      <path d="M-9 2 L-17 14 L-9 12Z M9 2 L17 14 L9 12Z" fill="#4A6BC0" stroke="#33312A" stroke-width="2"/>
-      <path class="flame" d="M-6 11 Q0 44 6 11Z" fill="#ffb13b"/><path class="flame" d="M-3 11 Q0 30 3 11Z" fill="#fff3a0"/>
-    </g>${[0, 1, 2].map((i) => `<circle class="puff" style="animation-delay:${i * .25}s" cx="${(i - 1) * 16}" cy="30" r="14" fill="#fff" opacity=".8"/>`).join("")}</g>`;
+  // ---- ロケット：発射台の 絵（obj3/rocket.png）から ロケットだけを 切り出した rocket_body と 炎 rocket_flame を 飛ばす。
+  //   発射台は ロケットを ぬいた rocket_pad。はじめは 台の 上に ロケットが のっていて、火が ついて 上がっていく ----
+  function rocketLaunch(cx, cy, w) {
+    const k = w / 213, x0 = cx - w / 2, y0 = cy - 206 * k;
+    const at = (n, ox, oy) => { const [W, H] = OBJ3_SIZE[n]; return `x="${x0 + ox * k}" y="${y0 + oy * k}" width="${W * k}" height="${H * k}"`; };
+    return `<image href="obj3/rocket_pad.png?v=4" ${at("rocket_pad", 0, 0)}/>
+      <g class="rk"><image class="rkflame" href="obj3/rocket_flame.png?v=4" ${at("rocket_flame", 96, 151)}/><image href="obj3/rocket_body.png?v=4" ${at("rocket_body", 85, 0)}/></g>`;
   }
 
   // ---- 道：いまの 道の 中心線（[x0, y0, x1, y1] の ならび）。人と 自動車は ここに 立つ・走る ----
@@ -188,17 +187,9 @@ const ART = (() => {
     const [W, H] = FX_SIZE[name]; const h = W > H ? 30 : 36; // 1人の 絵は 36、何人かの 絵は 30
     return fimg(name, x, y, h * W / H, "bob", `animation-delay:-${(k % 12) / 10}s`);
   }
-  // stages = 人の すみかの だんかい（近代の 建物に 建てかわった所は 4 として わたす）
-  function groundSpots(lv, comboIds, stages) {
-    const out = [];
-    roadSegs(lv, comboIds).forEach(([x0, y0, x1, y1]) => {
-      const n = Math.max(1, Math.round(Math.hypot(x1 - x0, y1 - y0) / 45));
-      for (let i = 0; i < n; i++) { const t = (i + .5) / n; const side = i % 2 ? 7 : -7; out.push([x0 + (x1 - x0) * t + side, y0 + (y1 - y0) * t + 4]); }
-    });
-    stages.forEach((g, k) => { if (g >= 1) { const [x, y] = SITES[k]; out.push([x - 48, y + 10], [x + 52, y + 14]); } });
-    // 同じ 場所に かたまらないよう、決まった 順で まぜる
-    return out.map((p, i) => [p, (i * 37) % 101]).sort((a, b) => a[1] - b[1]).map((a) => a[0]);
-  }
+  // 人が 立てる 地面：map.jpg の 草地と 砂地から ひろった 160か所（森・山・雪・水は のぞく）。
+  //   前から じゅんに とると 島じゅうに まばらに ちらばる ならび（いちばん 遠い 点を 足していく 順）
+  const GROUND = [[760,474],[1444,276],[58,528],[1228,726],[382,186],[436,780],[1048,204],[760,834],[472,474],[1048,492],[796,222],[1318,492],[274,618],[616,654],[598,294],[1228,294],[850,654],[940,348],[562,870],[256,258],[1462,420],[616,438],[994,636],[1354,654],[1084,348],[904,492],[724,348],[1174,456],[436,600],[472,276],[1102,744],[274,492],[1174,186],[724,708],[562,546],[706,582],[832,384],[940,222],[166,636],[616,762],[526,366],[832,762],[1354,240],[1084,582],[796,564],[526,636],[1120,258],[1012,294],[994,420],[976,546],[436,690],[868,258],[670,510],[202,564],[508,726],[904,600],[1210,366],[688,420],[1102,420],[544,456],[364,582],[706,780],[454,366],[904,420],[832,456],[1246,492],[634,582],[778,654],[508,222],[670,312],[760,402],[1408,456],[850,528],[112,564],[562,690],[652,708],[886,708],[562,798],[850,204],[1408,222],[994,240],[544,276],[1066,276],[1174,276],[580,348],[1048,402],[958,474],[1120,474],[598,492],[724,528],[256,546],[1030,564],[508,582],[328,636],[670,636],[256,672],[814,708],[958,294],[994,348],[670,366],[850,582],[220,618],[778,762],[292,222],[418,222],[508,312],[1120,312],[616,384],[1138,384],[562,402],[706,474],[796,510],[1120,546],[562,600],[742,618],[814,618],[400,636],[490,672],[1084,222],[1138,222],[832,240],[922,258],[1030,258],[1210,258],[1390,258],[292,276],[1408,294],[1048,312],[1192,312],[544,330],[616,330],[490,348],[796,366],[904,366],[706,384],[976,384],[652,402],[868,402],[940,402],[526,420],[796,420],[454,438],[724,438],[652,456],[886,456],[1012,456],[1066,456],[1282,474],[508,492],[994,510],[1102,510],[1354,510],[526,528],[616,528],[688,546],[760,546],[598,564],[922,564],[292,582],[778,600]];
   // 建物の 絵が しめている 場所（人を 屋根の上に 立たせないため）。[左, 上, 右, 下]
   function sizeOf(sheet, n) { return sheet === O3 ? OBJ3_SIZE[n] : (sheet === O ? OBJ_SIZE : OBJ2_SIZE)[n]; }
   function boxOf(sheet, n, cx, cy, w) { const [W, H] = sizeOf(sheet, n); const h = w * H / W; return [cx - w * .42, cy - h, cx + w * .42, cy - 8]; }
@@ -217,7 +208,7 @@ const ART = (() => {
   function crowd(pop, lvAll, comboIds, stages, ov) {
     const boxes = buildingBoxes(lvAll, comboIds, stages, ov);
     const free = ([x, y]) => !boxes.some(([l, t, r, b]) => x > l && x < r && y > t && y < b);
-    const spots = groundSpots(lvAll.road, comboIds, stages).filter(free);
+    const spots = GROUND.filter(free);
     const n = Math.min(spots.length, Math.floor(pop / 35));
     return spots.slice(0, n).sort((a, b) => a[1] - b[1]).map(([x, y], k) => personAt(WALKERS[k % WALKERS.length], x, y, k)).join("");
   }
@@ -228,7 +219,7 @@ const ART = (() => {
       // 絵の 車は 左向き。右へ 行くときは 左右反転
       return `<g><animateMotion dur="${dur}s" begin="-${i * 4}s" repeatCount="indefinite" keyPoints="0;1;0" keyTimes="0;.5;1" calcMode="linear" path="M${x0} ${y0 + 2} L${x1} ${y1 + 2}"/>
         <g><animateTransform attributeName="transform" type="scale" values="-1 1;1 1" keyTimes="0;.5" calcMode="discrete" dur="${dur}s" begin="-${i * 4}s" repeatCount="indefinite"/>
-        <image href="obj3/car.png" x="${-w / 2}" y="${-h + 4}" width="${w}" height="${h}"/></g></g>`;
+        <image href="obj3/car.png?v=4" x="${-w / 2}" y="${-h + 4}" width="${w}" height="${h}"/></g></g>`;
     }).join("");
   }
 
