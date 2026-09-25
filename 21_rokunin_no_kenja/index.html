@@ -73,18 +73,15 @@ svg{display:block}
 @keyframes monjump{0%,100%{transform:translateY(0)}50%{transform:translateY(-30px)}}
 .fw{transform-box:fill-box;transform-origin:50% 60%;animation:fw 1.8s ease-out infinite}
 @keyframes fw{0%{transform:scale(.2);opacity:0}30%{opacity:1}100%{transform:scale(1.15);opacity:0}}
-.fly{animation:fly 26s linear infinite}
-@keyframes fly{0%{transform:translateX(-300px)}100%{transform:translateX(1200px)}}
-.soar{animation:soar 16s ease-in-out infinite alternate}
-@keyframes soar{0%{transform:translate(-220px,0)}50%{transform:translate(0,-40px)}100%{transform:translate(200px,10px)}}
+/* 空を 飛ぶもの：その場で ゆらゆら（羽ばたかない 絵なので 大きく 動かさない） */
+.drift{animation:drift 3.4s ease-in-out infinite alternate}
+@keyframes drift{0%{transform:translate(0,0) rotate(-1.5deg)}100%{transform:translate(10px,-9px) rotate(1.5deg)}}
 .sail{animation:sail 30s ease-in-out infinite alternate}
 @keyframes sail{0%{transform:translateX(-260px)}100%{transform:translateX(160px)}}
 .bob{transform-box:fill-box;transform-origin:50% 100%;animation:bob 1.1s ease-in-out infinite}
 @keyframes bob{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-4px) rotate(2deg)}}
 .rainy .drops line{animation:drop .7s linear infinite}
 @keyframes drop{0%{transform:translateY(0);opacity:1}100%{transform:translateY(30px);opacity:0}}
-.hover{animation:hover 3s ease-in-out infinite alternate}
-@keyframes hover{0%{transform:translate(0,0)}50%{transform:translate(-60px,-14px)}100%{transform:translate(-120px,6px)}}
 .drive{animation:drive 9s ease-in-out infinite alternate}
 @keyframes drive{0%{transform:translate(-60px,-40px)}100%{transform:translate(60px,40px)}}
 .launch{animation:launch 7s ease-in infinite}
@@ -314,8 +311,8 @@ img.sage.hop{animation:hop .3s steps(2)}
 
 <script src="rules.js?v=12"></script>
 <script src="obj/sizes.js?v=8"></script>
-<script src="art.js?v=17"></script>
-<script src="shakai.js?v=1"></script>
+<script src="art.js?v=18"></script>
+<script src="shakai.js?v=2"></script>
 <script>
 // ============================================================
 // おと（ファイルは 使わず、その場で 音を つくる）
@@ -395,7 +392,7 @@ function drawCombos(pop) {
   const fresh = active.filter((c) => !prev.includes(c.id));
   $("L-combo").innerHTML = active.map((c) => ART.comboMarkup(c, pop && fresh.includes(c) ? "popin" : "")).join("");
   st.combos = active.map((c) => c.id);
-  if (fresh.some((c) => c.site)) drawPeople(pop);
+  if (fresh.some((c) => c.site || c.sky)) drawPeople(pop);
   return fresh;
 }
 function drawAll() { RULES.ELEMS.forEach((e) => drawLayer(e, st.lv[e], false)); st.siteStages = null; st.siteOv = null; st.combos = null; drawCombos(false); drawMonsters(st.threat); setMood(); }
@@ -410,7 +407,7 @@ function drawPeople(pop) {
   $("L-people").innerHTML = stages.map((g, k) => ART.siteMarkup(k, g, pop && (g !== prev[k] || (ov[k] && !prevOv[k])) ? "popin" : "", ov[k])).join("");
   st.siteStages = stages; st.siteOv = ov;
   $("L-flags").innerHTML = s >= 100 ? ART.flags() : "";
-  const S = RULES.stats(st); $("L-life").innerHTML = ART.life(s, S); $("L-decor").innerHTML = ART.decor(S); $("L-trouble").innerHTML = ART.trouble(S, s, st.turn);
+  const S = RULES.stats(st); $("L-life").innerHTML = ART.life(s, S) + ART.sea(S); $("L-sky").innerHTML = ART.sky(s, S, ART.activeCombos(st.lv)); $("L-decor").innerHTML = ART.decor(S); $("L-trouble").innerHTML = ART.trouble(S, s, st.turn);
   $("L-volcano").innerHTML = s < 0 ? ART.volcano() : "";
   $("fx-sky").innerHTML = s >= 100 ? ART.fireworks(true) : st.lv.fun >= 3 ? ART.fireworks(false) : "";
   return stages.some((g, k) => g !== prev[k]);
@@ -497,10 +494,10 @@ function setChoices(enabled, pickedId) {
 // ============================================================
 function learnTriggers() {
   const ids = []; const s = RULES.score(st); const S = RULES.stats(st);
-  RULES.ELEMS.forEach((e) => { if (st.lv[e] >= 1) ids.push("lv_" + e); });
-  (st.combos || []).forEach((id) => ids.push(id));
-  if (st.turn >= 1 && S.safety < 70 && st.lv.guard < RULES.MAX_LV) ids.push("monster");
-  if (st.turn >= 1 && S.safety < 30) ids.push("bandits");
+  RULES.ELEMS.forEach((e) => { if (e !== "guard" && st.lv[e] >= 1) ids.push("lv_" + e); });
+  if (st.picks.includes("guard")) ids.push("monster");   // 力の賢者を よんだら「国を まもる しくみ」
+  if (st.lv.guard >= 2) ids.push("lv_guard");           // 城壁が できたら「関所と お城」
+  (st.combos || []).forEach((id) => { ids.push(id); if (id === "m_kokkai") ids.push("bandits"); }); // 国会が できたら「きまりが ある わけ」も
   if (st.turn >= 1 && S.safety <= 10) ids.push("unite");
   if (st.turn >= 2 && S.food < 25) ids.push("flood");
   if (s < 0) ids.push("volcano", "ruins");
@@ -508,11 +505,14 @@ function learnTriggers() {
   if (s >= 100) ids.push("castle", "rocket", "pop_world");
   return ids.filter((id) => SHAKAI_BY[id]);
 }
+// 1回 えらぶごとに 出すのは 2まいまで。まだ もっていない 札を 先に 出す（のこりは 次の 回へ）
+const CARDS_PER_PICK = 2;
 async function checkLearn() {
   if (!st.learn) return;
-  const fresh = learnTriggers().filter((id) => !st.learned.includes(id));
-  if (!fresh.length) return;
   const note = lsGet(LS_NOTE, []);
+  const cand = learnTriggers().filter((id) => !st.learned.includes(id));
+  const fresh = [...cand.filter((id) => !note.includes(id)), ...cand.filter((id) => note.includes(id))].slice(0, CARDS_PER_PICK);
+  if (!fresh.length) return;
   for (const id of fresh) {
     st.learned.push(id);
     const isNew = !note.includes(id); if (isNew) note.push(id);
