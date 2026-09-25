@@ -129,6 +129,20 @@ img{display:block}
 .donate .by{margin-top:10px;font-size:.72rem;color:var(--sub)}
 .fine{margin:22px 0 0;font-size:.72rem;color:#9a8a72;font-family:"Noto Sans JP",sans-serif;line-height:1.8}
 </style>
+<script>
+/* 「…/#parents」のような印つきのURLで開いても、読みこみなおしても、いつもページの上から見せる。
+   ページの中のリンク（看板・「くわしくは下へ」）は、URLに印を残さずにその段へすべらせる */
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+addEventListener('pageshow', () => { if (!location.hash) scrollTo(0, 0); });
+document.addEventListener('click', e => {
+  const a = e.target.closest('a[href^="#"]');
+  const el = a && document.getElementById(a.getAttribute('href').slice(1));
+  if (!el) return;
+  e.preventDefault();
+  el.scrollIntoView({ behavior: 'smooth' });
+});
+</script>
 </head>
 <body>
 <div class="bg" aria-hidden="true"></div>
