@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>せかいのレシピ ぶんしのへや｜原子をつないで分子をつくる無料の理科教材ゲーム｜あたやさいさいゲームランド</title>
-<meta name="description" content="原子には くっつく手がある。H は1本、O は2本、N は3本、C は4本。手をぜんぶつないで、水・二酸化炭素・メタン・エタノールなど 20この分子をつくる、子ども向けの無料の理科教材ゲーム。">
+<meta name="description" content="原子には くっつく手がある。H は1本、O は2本、N は3本、C は4本。原子をえらぶと手がつながり、水・二酸化炭素・メタン・エタノールなど 20この分子をつくる、子ども向けの無料の理科教材ゲーム。">
 <meta name="robots" content="index,follow">
 <link rel="canonical" href="https://atayasaisai.github.io/game_land/20_bunshi_no_heya/">
 <meta property="og:type" content="article">
@@ -320,14 +320,20 @@ a.btn{text-decoration:none;display:inline-flex;align-items:center}
 .rule{margin-top:8px;font-size:.76rem;color:#9FD3FF;line-height:1.7}
 #board{display:block;width:min(92vw,400px);height:auto;margin:0 auto;touch-action:none;user-select:none;
   border:1px solid var(--line);border-radius:22px;background:radial-gradient(circle at 50% 45%,rgba(94,139,255,.10),rgba(94,139,255,0) 70%)}
-#board .atom{cursor:grab}
+#board .atom{cursor:pointer}
+#board .atom.extra .ball{stroke:#FF9B4A;stroke-width:3;stroke-dasharray:5 4}
+#board .atom.pop{animation:apop .35s cubic-bezier(.2,1.6,.4,1) both;transform-box:fill-box;transform-origin:center}
+@keyframes apop{from{transform:scale(.3);opacity:0}to{transform:none;opacity:1}}
+#board .bond.new line{stroke-dasharray:90;stroke-dashoffset:90;animation:bdraw .45s ease-out forwards}
+@keyframes bdraw{to{stroke-dashoffset:0}}
+#board.done{border-color:#4FE0A8;box-shadow:0 0 40px -8px #4FE0A8}
 #board .atom .ball{stroke:rgba(255,255,255,.55);stroke-width:1.5}
 #board .atom.sel .ball{stroke:#fff;stroke-width:4;filter:drop-shadow(0 0 10px #fff)}
 #board .atom text{font-weight:900;font-size:19px;fill:#111;pointer-events:none}
 #board .hand{stroke:var(--hc);stroke-width:5;stroke-linecap:round;opacity:.95}
 #board .bond line{stroke:#DDE6FF;stroke-width:5;stroke-linecap:round}
-#board .bond .hit{stroke:transparent;stroke-width:26;cursor:pointer}
 #board .empty{fill:#5E6B8A;font-size:14px}
+#board .xlab{fill:#FF9B4A;font-size:12px;font-weight:700}
 .tools2{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:10px 0}
 .tray2{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;border:1px solid var(--line);border-radius:20px;padding:12px;
   background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.02))}
@@ -373,6 +379,7 @@ a.btn{text-decoration:none;display:inline-flex;align-items:center}
   <img src="img/molecule.svg" alt="" width="200" height="200" style="width:min(50vw,200px);height:auto;margin:6px auto">
   <p>原子には <b>くっつく手</b> がある。<br>
      H は 1本、O は 2本、N は 3本、C は 4本。<br>
+     原子を えらぶと、手は <b>かってに つながる</b>。<br>
      <b>ぜんぶの手が つながったら</b>、分子の できあがり。</p>
 
   <div class="lvsel">
@@ -411,19 +418,15 @@ a.btn{text-decoration:none;display:inline-flex;align-items:center}
     <button class="btn sm hintbtn" id="hintBtn">ヒント</button>
     <div class="qname"><span id="qName">—</span><em id="qYomi"></em><span class="qsuf">を つくろう</span></div>
     <div class="recipe" id="recipe"></div>
-    <div class="rule">① 下の原子を おして ならべる　② 原子を 1つ タップ → つなぎたい原子を タップ で 手が つながる<br>
-      おなじ2つを もういちど つなぐと 2本（二重）に。線を タップすると はずれる。原子は ドラッグで うごかせる。</div>
+    <div class="rule">下の原子を おすと、手が かってに つながる。<b>ぜんぶの手が つながったら できあがり！</b><br>
+      まちがえて 入れた原子は、盤の上で タップすると はずせる。</div>
     <div class="hint" id="hintTxt"></div>
   </div>
 
   <svg id="board" viewBox="0 0 400 400"></svg>
   <p class="msg" id="msg"></p>
-  <div class="tools2">
-    <button class="btn sm" id="delBtn">えらんだ原子を けす</button>
-    <button class="btn sm" id="clrBtn">ぜんぶ けす</button>
-  </div>
   <div class="tray2" id="tray"></div>
-  <div class="tools2"><button class="btn go" id="goBtn">これで つくる！</button></div>
+  <div class="tools2"><button class="btn sm" id="clrBtn">ぜんぶ けす</button></div>
 </div></section>
 
 <!-- ================= OVERLAYS ================= -->
@@ -483,6 +486,31 @@ var MOLS=[
  {id:"c3h8",nm:"プロパン",   ym:"",             f:"C3H8",   a:{C:3,H:8},      lv:3, use:"ガスボンベの プロパンガス。"},
  {id:"c2h4o2",nm:"酢酸",     ym:"さくさん",     f:"CH3COOH",a:{C:2,H:4,O:2},  lv:3, use:"お酢の すっぱさの もと。"}
 ];
+// できあがりの形（400×400の盤の上の場所）。"元素 x,y" をならべ、| のあとに つながり（0-1＝1本、0=1＝2本、0#1＝3本）
+var SHAPE={
+ h2:"H 160,200 H 240,200|0-1", hcl:"H 165,200 Cl 245,200|0-1", hf:"H 165,200 F 240,200|0-1", cl2:"Cl 160,200 Cl 240,200|0-1",
+ h2o:"O 200,180 H 142,228 H 258,228|0-1 0-2",
+ nh3:"N 200,190 H 200,115 H 132,232 H 268,232|0-1 0-2 0-3",
+ ch4:"C 200,200 H 200,125 H 275,200 H 200,275 H 125,200|0-1 0-2 0-3 0-4",
+ o2:"O 160,200 O 240,200|0=1", n2:"N 160,200 N 240,200|0#1",
+ co2:"C 200,200 O 115,200 O 285,200|0=1 0=2",
+ h2s:"S 200,180 H 142,228 H 258,228|0-1 0-2",
+ h2o2:"O 162,200 O 238,200 H 105,245 H 295,155|0-1 0-2 1-3",
+ c2h6:"C 162,200 C 238,200 H 162,125 H 87,200 H 162,275 H 238,125 H 313,200 H 238,275|0-1 0-2 0-3 0-4 1-5 1-6 1-7",
+ c2h4:"C 165,200 C 235,200 H 122,138 H 122,262 H 278,138 H 278,262|0=1 0-2 0-3 1-4 1-5",
+ c2h2:"C 162,200 C 238,200 H 90,200 H 310,200|0#1 0-2 1-3",
+ ch2o:"C 200,215 O 200,130 H 140,265 H 260,265|0=1 0-2 0-3",
+ ch4o:"C 170,200 O 250,200 H 170,125 H 95,200 H 170,275 H 305,160|0-1 0-2 0-3 0-4 1-5",
+ c2h6o:"C 130,200 C 205,200 O 280,200 H 130,125 H 55,200 H 130,275 H 205,125 H 205,275 H 335,165|0-1 1-2 0-3 0-4 0-5 1-6 1-7 2-8",
+ c3h8:"C 125,200 C 200,200 C 275,200 H 125,125 H 52,200 H 125,275 H 200,125 H 200,275 H 275,125 H 348,200 H 275,275|0-1 1-2 0-3 0-4 0-5 1-6 1-7 2-8 2-9 2-10",
+ c2h4o2:"C 130,210 C 210,210 O 255,140 O 275,262 H 130,135 H 55,210 H 130,285 H 338,238|0-1 1=2 1-3 0-4 0-5 0-6 3-7"
+};
+function parseShape(t){
+  var p=t.split("|"),w=p[0].split(" "),sl=[],bd=[];
+  for(var i=0;i<w.length;i+=2){var xy=w[i+1].split(",");sl.push({el:w[i],x:+xy[0],y:+xy[1]});}
+  p[1].split(" ").forEach(function(b){var m=b.match(/^(\d+)([-=#])(\d+)$/);bd.push({a:+m[1],b:+m[3],o:m[2]==="-"?1:m[2]==="="?2:3});});
+  return {slots:sl,bonds:bd};
+}
 var LVS=[{k:1,nm:"やさしい"},{k:2,nm:"ふつう"},{k:3,nm:"むずかしい"},{k:0,nm:"ぜんぶ"}];
 
 /* ---------- 保存 ---------- */
@@ -508,7 +536,7 @@ $("#lvRow").addEventListener("click",function(e){var b=e.target.closest("[data-l
 
 /* ---------- ゲームの状態 ---------- */
 var order=[],qi=0,cur=null,score=0,tries=0,hinted=false,busy=false;
-var atoms=[],bonds=[],sel=null,nid=0;   // atoms:{id,el,x,y} bonds:{a,b,o}
+var atoms=[],bonds=[],nid=0,shape=null,seen={};   // atoms:{id,el,x,y,slot} bonds:{a,b,o}（できあがりの形から 自動で きまる）
 
 function start(){
   var pool=MOLS.filter(function(m){return !pref.lv||m.lv===pref.lv;});
@@ -518,7 +546,7 @@ function start(){
   newQuestion();window.scrollTo(0,0);
 }
 function newQuestion(){
-  cur=order[qi];tries=0;hinted=false;busy=false;atoms=[];bonds=[];sel=null;
+  cur=order[qi];tries=0;hinted=false;busy=false;atoms=[];bonds=[];seen={};shape=parseShape(SHAPE[cur.id]);$("#board").classList.remove("done");
   $("#qName").textContent=cur.nm;
   $("#qYomi").textContent=cur.ym&&cur.ym!==cur.nm?cur.ym:"";
   $("#hintTxt").className="hint";$("#hintTxt").innerHTML="";$("#hintBtn").disabled=false;
@@ -529,63 +557,76 @@ function newQuestion(){
   var need=Object.keys(cur.a), els=need.slice();
   if(cur.lv>=2){var other=shuffle(Object.keys(AT).filter(function(e){return need.indexOf(e)<0;}))[0];els.push(other);}
   els.sort(function(a,b){return Object.keys(AT).indexOf(a)-Object.keys(AT).indexOf(b);});
-  $("#tray").innerHTML='<p class="lab">おして 原子を ならべる</p>'+els.map(function(el){
+  $("#tray").innerHTML='<p class="lab">おして 原子を えらぶ</p>'+els.map(function(el){
     return '<button class="abtn" type="button" data-el="'+el+'">'+dot(el)+'<small>手 '+AT[el].h+'本</small></button>';}).join("");
   render();
 }
 
 /* ---------- 盤 ---------- */
+// 原子を えらぶたびに、できあがりの形の「席」に すわらせる。
+// 水素いがいを 先に すわらせ、水素は となりの原子が もういる席を 先に うめる。
+// 両はしの席に 原子がいる つながりは、かってに つながる。席のない原子は「いらない原子」。
 function used(a){return bonds.reduce(function(s,b){return s+((b.a===a.id||b.b===a.id)?b.o:0);},0);}
 function free(a){return AT[a.el].h-used(a);}
 function byId(id){for(var i=0;i<atoms.length;i++)if(atoms[i].id===id)return atoms[i];return null;}
+function arrange(){
+  var taken={},ex=0;
+  atoms.forEach(function(a){a.slot=null;});
+  function partnerIn(i){return shape.bonds.some(function(k){var o=k.a===i?k.b:k.b===i?k.a:-1;return o>=0&&taken[o];});}
+  function seat(a){
+    var cand=[];shape.slots.forEach(function(sl,i){if(sl.el===a.el&&!taken[i])cand.push(i);});
+    if(a.el==="H"){var near=cand.filter(partnerIn);if(near.length)cand=near;}
+    if(cand.length){a.slot=cand[0];taken[cand[0]]=a.id;a.x=shape.slots[cand[0]].x;a.y=shape.slots[cand[0]].y;}
+  }
+  atoms.filter(function(a){return a.el!=="H";}).forEach(seat);
+  atoms.filter(function(a){return a.el==="H";}).forEach(seat);
+  atoms.forEach(function(a){if(a.slot===null){a.x=36+(ex%7)*54;a.y=ex<7?372:28;ex++;}});
+  bonds=[];
+  shape.bonds.forEach(function(k){if(taken[k.a]&&taken[k.b])bonds.push({a:taken[k.a],b:taken[k.b],o:k.o});});
+}
 function addAtom(el){
   if(busy)return;
-  if(atoms.length>=12){say("盤が いっぱい");return;}
-  // あいている場所をさがす
-  // まん中に ちかくて、ほかの原子と かさならない 場所
-  var best=null,bd=1e9;
-  for(var gy=0;gy<5;gy++)for(var gx=0;gx<5;gx++){
-    var x=60+gx*70,y=60+gy*70,d=1e9;
-    atoms.forEach(function(a){d=Math.min(d,Math.hypot(a.x-x,a.y-y));});
-    if(d<66)continue;
-    var c=Math.hypot(x-200,y-200)+Math.random()*4;
-    if(c<bd){bd=c;best={x:x,y:y};}
-  }
-  if(!best)best={x:200,y:200};
-  atoms.push({id:++nid,el:el,x:best.x,y:best.y});
+  if(atoms.length>=14){say("盤が いっぱい");return;}
+  var need=cur.a[el]||0,have=atoms.filter(function(a){return a.el===el;}).length;
+  atoms.push({id:++nid,el:el,x:200,y:200,slot:null});
+  if(have>=need){
+    tries++;shakeBoard();
+    say(need?AT[el].nm+"（"+el+"）は "+need+"こで いいよ。多い原子は タップして はずそう":AT[el].nm+"（"+el+"）は この分子には いらないよ。タップして はずそう");
+  } else say("");
   render();
+  if(!check()){busy=true;setTimeout(done,700);}
 }
-function bondBetween(a,b){for(var i=0;i<bonds.length;i++){var k=bonds[i];if((k.a===a.id&&k.b===b.id)||(k.a===b.id&&k.b===a.id))return k;}return null;}
-function link(a,b){
-  var k=bondBetween(a,b);
-  if(free(a)<1||free(b)<1){say((free(a)<1?a.el:b.el)+" の手は もう ぜんぶ つながっている");shakeBoard();return;}
-  if(k){if(k.o>=3){say("3本より 多くは つなげない");return;}k.o++;}
-  else bonds.push({a:a.id,b:b.id,o:1});
-  say("");
+function removeAtom(id){
+  if(busy)return;
+  atoms=atoms.filter(function(a){return a.id!==id;});say("");render();
 }
 function render(){
-  var s="",i;
-  if(!atoms.length) s+='<text class="empty" x="200" y="205" text-anchor="middle">下の原子を おして ならべよう</text>';
-  bonds.forEach(function(k,idx){
+  arrange();
+  var s="";
+  if(!atoms.length) s+='<text class="empty" x="200" y="205" text-anchor="middle">下の原子を おして えらぼう</text>';
+  bonds.forEach(function(k){
     var a=byId(k.a),b=byId(k.b),dx=b.x-a.x,dy=b.y-a.y,L=Math.hypot(dx,dy)||1,nx=-dy/L,ny=dx/L,g='';
+    var key=Math.min(k.a,k.b)+"_"+Math.max(k.a,k.b),isNew=!seen[key];seen[key]=1;
     var offs=k.o===1?[0]:k.o===2?[-5,5]:[-8,0,8];
     offs.forEach(function(o){g+='<line x1="'+(a.x+nx*o)+'" y1="'+(a.y+ny*o)+'" x2="'+(b.x+nx*o)+'" y2="'+(b.y+ny*o)+'"/>';});
-    s+='<g class="bond" data-b="'+idx+'">'+g+'<line class="hit" x1="'+a.x+'" y1="'+a.y+'" x2="'+b.x+'" y2="'+b.y+'"/></g>';
+    s+='<g class="bond'+(isNew&&!RM?' new':'')+'">'+g+'</g>';
   });
   atoms.forEach(function(a){
-    var R=24,fh=free(a),g='<g class="atom'+(sel===a.id?' sel':'')+'" data-a="'+a.id+'" style="--hc:'+AT[a.el].col+'">';
+    var R=24,fh=free(a),g='<g class="atom'+(a.slot===null?' extra':'')+(a.shown||RM?'':' pop')+'" data-a="'+a.id+'" style="--hc:'+AT[a.el].col+'">';
+    a.shown=true;
     // のこっている手：つながっていない方向に 短い棒で
-    var taken=bonds.filter(function(k){return k.a===a.id||k.b===a.id;}).map(function(k){var o=byId(k.a===a.id?k.b:k.a);return Math.atan2(o.y-a.y,o.x-a.x);});
+    var tk=bonds.filter(function(k){return k.a===a.id||k.b===a.id;}).map(function(k){var o=byId(k.a===a.id?k.b:k.a);return Math.atan2(o.y-a.y,o.x-a.x);});
     var angs=[];
     for(var t=0;t<24&&angs.length<fh;t++){
       var an=-Math.PI/2+t*(Math.PI*2/ (fh<=2?2:fh<=3?3:4) )+ (t>=4?Math.PI/8*(t>>2):0);
-      if(taken.every(function(q){return Math.abs(Math.atan2(Math.sin(an-q),Math.cos(an-q)))>0.6;}) && angs.every(function(q){return Math.abs(Math.atan2(Math.sin(an-q),Math.cos(an-q)))>0.5;})) angs.push(an);
+      if(tk.every(function(q){return Math.abs(Math.atan2(Math.sin(an-q),Math.cos(an-q)))>0.6;}) && angs.every(function(q){return Math.abs(Math.atan2(Math.sin(an-q),Math.cos(an-q)))>0.5;})) angs.push(an);
     }
     angs.forEach(function(an){g+='<line class="hand" x1="'+(a.x+Math.cos(an)*R)+'" y1="'+(a.y+Math.sin(an)*R)+'" x2="'+(a.x+Math.cos(an)*(R+13))+'" y2="'+(a.y+Math.sin(an)*(R+13))+'"/>';});
     g+='<circle class="ball" cx="'+a.x+'" cy="'+a.y+'" r="'+R+'" fill="'+AT[a.el].col+'"/>';
     g+='<text x="'+a.x+'" y="'+(a.y+7)+'" text-anchor="middle">'+a.el+'</text></g>';
     s+=g;
   });
+  if(atoms.some(function(a){return a.slot===null;})) s+='<text class="xlab" x="200" y="340" text-anchor="middle">いらない原子（タップで はずす）</text>';
   $("#board").innerHTML=s;
   paintRecipe();
 }
@@ -601,71 +642,32 @@ function paintRecipe(){
 function say(t){$("#msg").textContent=t;}
 function shakeBoard(){var b=$("#board");b.classList.remove("shake");void b.getBoundingClientRect();b.classList.add("shake");}
 
-/* タップとドラッグ（原子をうごかす／えらぶ／つなぐ・線をはずす） */
-(function(){
-  var svg=$("#board"),drag=null;
-  function pt(e){var r=svg.getBoundingClientRect();return {x:(e.clientX-r.left)*400/r.width,y:(e.clientY-r.top)*400/r.height};}
-  svg.addEventListener("pointerdown",function(e){
-    if(busy)return;
-    var g=e.target.closest(".atom");
-    if(g){e.preventDefault();var a=byId(+g.dataset.a),p=pt(e);drag={a:a,dx:a.x-p.x,dy:a.y-p.y,sx:e.clientX,sy:e.clientY,moved:false};
-      window.addEventListener("pointermove",mv);window.addEventListener("pointerup",up);return;}
-    var bd=e.target.closest(".bond");
-    if(bd){var k=bonds[+bd.dataset.b];k.o--;if(k.o<=0)bonds.splice(+bd.dataset.b,1);sel=null;render();return;}
-    sel=null;render();
-  });
-  function mv(e){
-    if(!drag)return;
-    if(Math.abs(e.clientX-drag.sx)+Math.abs(e.clientY-drag.sy)>8)drag.moved=true;
-    if(drag.moved){var p=pt(e);drag.a.x=Math.max(28,Math.min(372,p.x+drag.dx));drag.a.y=Math.max(28,Math.min(372,p.y+drag.dy));render();}
-  }
-  function up(){
-    window.removeEventListener("pointermove",mv);window.removeEventListener("pointerup",up);
-    var d=drag;drag=null;if(!d||d.moved)return;
-    var a=d.a;
-    if(sel===null){sel=a.id;}
-    else if(sel===a.id){sel=null;}
-    else {link(byId(sel),a);sel=null;}
-    render();
-  }
-})();
+/* 盤の原子を タップすると はずす */
+$("#board").addEventListener("click",function(e){var g=e.target.closest(".atom");if(g)removeAtom(+g.dataset.a);});
 $("#tray").addEventListener("click",function(e){var b=e.target.closest("[data-el]");if(b)addAtom(b.dataset.el);});
-$("#delBtn").addEventListener("click",function(){
-  if(busy||sel===null){say("けしたい原子を タップしてから おしてね");return;}
-  bonds=bonds.filter(function(k){return k.a!==sel&&k.b!==sel;});atoms=atoms.filter(function(a){return a.id!==sel;});sel=null;render();
-});
-$("#clrBtn").addEventListener("click",function(){if(busy)return;atoms=[];bonds=[];sel=null;say("");render();});
+$("#clrBtn").addEventListener("click",function(){if(busy)return;atoms=[];bonds=[];say("");render();});
 
 /* ---------- ヒント ---------- */
 $("#hintBtn").addEventListener("click",function(){
   if(busy||hinted)return;hinted=true;this.disabled=true;
   var parts=Object.keys(cur.a).map(function(el){return el+"（手"+AT[el].h+"本）× "+cur.a[el];}).join("、");
   var total=Object.keys(cur.a).reduce(function(s,el){return s+AT[el].h*cur.a[el];},0);
-  var mult=cur.id==="o2"||cur.id==="co2"||cur.id==="c2h4"||cur.id==="ch2o"||cur.id==="c2h4o2"?"　2本で つなぐ ところが あるよ（二重）":
-           cur.id==="n2"||cur.id==="c2h2"?"　3本で つなぐ ところが あるよ（三重）":"";
+  var mult=shape.bonds.some(function(k){return k.o===3;})?"　3本で つながる ところが あるよ（三重）":
+           shape.bonds.some(function(k){return k.o===2;})?"　2本で つながる ところが あるよ（二重）":"";
   $("#hintTxt").innerHTML="手の数： "+parts+" → ぜんぶで <b>"+total+"</b> 本。2本で 1つの つながりに なるので、つながりは <b>"+(total/2)+"</b> こ。"+mult;
   $("#hintTxt").className="hint on";
 });
 
-/* ---------- 判定 ---------- */
+/* ---------- 判定：レシピどおりの数で、手が ぜんぶ つながっていれば できあがり ---------- */
 function check(){
   var have={};atoms.forEach(function(a){have[a.el]=(have[a.el]||0)+1;});
   var keys=Object.keys(cur.a).concat(Object.keys(have));
-  for(var i=0;i<keys.length;i++){var el=keys[i];if((have[el]||0)!==(cur.a[el]||0))return "レシピと 原子の数が ちがうよ（"+AT[el].nm+"）";}
-  var loose=atoms.filter(function(a){return free(a)>0;});
-  if(loose.length)return "手が あまっている原子が あるよ（"+loose.map(function(a){return a.el;}).join("・")+"）";
-  // ぜんぶが 1つに つながっているか
-  var seen={},st=[atoms[0].id];seen[atoms[0].id]=1;
-  while(st.length){var id=st.pop();bonds.forEach(function(k){var o=k.a===id?k.b:k.b===id?k.a:null;if(o!==null&&!seen[o]){seen[o]=1;st.push(o);}});}
-  if(Object.keys(seen).length!==atoms.length)return "ばらばらに なっているよ。1つに つなげよう";
+  for(var i=0;i<keys.length;i++){var el=keys[i];if((have[el]||0)!==(cur.a[el]||0))return "count";}
+  if(atoms.some(function(a){return free(a)>0;}))return "loose";
   return "";
 }
-$("#goBtn").addEventListener("click",function(){
-  if(busy)return;
-  if(!atoms.length){say("まず 原子を ならべよう");return;}
-  var err=check();
-  if(err){tries++;say(err);shakeBoard();return;}
-  busy=true;
+function done(){
+  $("#board").classList.add("done");
   var pts=[100,60,30][Math.min(tries,2)];if(hinted)pts=Math.min(pts,60);
   score+=pts;$("#scoreN").textContent=score;
   var isNew=zukan.indexOf(cur.id)<0;if(isNew){zukan.push(cur.id);save(ZKEY,zukan);}
@@ -678,7 +680,7 @@ $("#goBtn").addEventListener("click",function(){
     '<div class="cardBtns"><button class="btn pri" id="nextBtn">つぎへ</button></div>';
   $("#resultOv").classList.add("on");
   $("#nextBtn").addEventListener("click",next);
-});
+}
 function next(){
   $("#resultOv").classList.remove("on");qi++;
   if(qi>=order.length){finish();return;}
