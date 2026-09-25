@@ -205,10 +205,12 @@ const ART = (() => {
     });
     return out;
   }
-  function crowd(pop, lvAll, comboIds, stages, ov) {
+  // 人や モンスターが 立てる 地面（建物の 絵の 上に ならない 所）
+  function freeGround(lvAll, comboIds, stages, ov) {
     const boxes = buildingBoxes(lvAll, comboIds, stages, ov);
-    const free = ([x, y]) => !boxes.some(([l, t, r, b]) => x > l && x < r && y > t && y < b);
-    const spots = GROUND.filter(free);
+    return GROUND.filter(([x, y]) => !boxes.some(([l, t, r, b]) => x > l && x < r && y > t && y < b));
+  }
+  function crowd(pop, spots) {
     const n = Math.min(spots.length, Math.floor(pop / 35));
     return spots.slice(0, n).sort((a, b) => a[1] - b[1]).map(([x, y], k) => personAt(WALKERS[k % WALKERS.length], x, y, k)).join("");
   }
@@ -250,14 +252,14 @@ const ART = (() => {
   // ---- 空を 飛ぶもの：建物より 上の 層（L-sky）に 描く。羽ばたかない 絵なので、ぐるぐる 回さず その場で ゆらゆら ----
   function drift(html, i) { return `<g class="drift" style="animation-duration:${3 + (i % 3) * .7}s;animation-delay:-${i * .9}s">${html}</g>`; }
   const FLOCKS = [[400, 110, 150], [1000, 80, 135], [260, 330, 120], [1160, 330, 110]];
-  function sky(score, S, combos) {
+  function sky(score, S, combos, bad) {
     let out = ""; let i = 0;
     const flocks = score >= 100 ? 4 : S.happy >= 75 ? 3 : S.happy >= 50 ? 2 : S.happy >= 25 ? 1 : 0;
     FLOCKS.slice(0, flocks).forEach(([x, y, w]) => { out += drift(fimg("birds", x, y, w), i++); });
     if (score >= 50) out += drift(fimg("eagle", 1250, 120, 110), i++);
     if (score >= 80) out += drift(fimg("eagle", 350, 560, 95), i++);
     combos.filter((c) => c.sky).forEach((c) => { const [n, x, y, w] = c.sky; out += drift(img(O3, n, x, y, w), i++); });
-    if (S.safety <= 10) out += drift(fimg("dragon", 1250, 260, 130), i++);
+    [[1250, 260, 140], [420, 200, 120], [900, 150, 110]].slice(0, bad ? bad.dragons : 0).forEach(([x, y, w]) => { out += drift(fimg("dragon", x, y, w), i++); });
     return out;
   }
   function sea(S) {
@@ -267,24 +269,35 @@ const ART = (() => {
     SHIPS.slice(0, Math.min(4, Math.floor(S.trade / 25))).forEach(([x, y, w], i) => { out += `<g class="sail" style="animation-duration:${26 + i * 6}s;animation-delay:-${i * 9}s">${fimg("ship", x, y, w)}</g>`; });
     return out;
   }
-  // ---- 悪いもの：数が わるくなるほど ふえる ----
-  //  治安が 70 を 切ると モンスターが うろつき（10 ごとに 1ぴき）、30 を 切ると 山賊、10 以下で 魔王の城と ドラゴン
-  //  食料が 25 を 切ると 川が あふれる（洪水）、幸福度が 20 を 切ると 雨雲、はってん度が マイナスなら 遺跡と 噴火
-  const MONSTER_SPOTS = [["goblin", 650, 700, 48], ["orc", 800, 725, 52], ["wolf", 560, 765, 55], ["skeleton", 900, 765, 50], ["slime", 730, 790, 45], ["spider", 1000, 745, 58], ["ogre", 480, 725, 55]];
-  // bad = 国が 悪くなっている（モンスターに あらされた・5回目を すぎても 食べもの／しあわせが たりない）。
-  //   順調な 道でも 序盤は 食料や 幸福度が ひくいので、数だけで 洪水や 雨雲を 出さない
-  function trouble(S, score, turn, bad) {
+  // ---- 悪いもの：数が わるくなるほど ふえる（数は index.html の badSigns() が 決める）----
+  //  bad.monsters … 国じゅうに ちらばる モンスターの 数（治安が ひくいほど・あらされるほど 多い）
+  //  bad.bandits … 山賊の 数、bad.castle … 魔王の城、bad.floods … 川や 湖が あふれる 場所の 数、bad.volcanoes … 噴火する 山の 数
+  //  ドラゴン（bad.dragons）は 空の 層（sky）。順調な 道の 序盤は 巣の まわりに 少し うろつくだけ
+  const MONSTER_SPOTS = [["goblin", 650, 700], ["orc", 800, 725], ["wolf", 560, 765], ["skeleton", 900, 765], ["slime", 730, 790], ["spider", 1000, 745], ["ogre", 480, 725]];
+  const MONSTER_KINDS = ["goblin", "orc", "wolf", "skeleton", "slime", "spider", "ogre", "cyclops"];
+  function monsterAt(name, x, y, k) {
+    const [W, H] = FX_SIZE[name]; const h = name === "ogre" || name === "cyclops" ? 58 : name === "slime" || name === "spider" ? 36 : 46;
+    return fimg(name, x, y, h * W / H, "bob", `animation-delay:-${(k % 7) / 6}s`);
+  }
+  // 湖と 川べり（map.jpg で 水の ある 所）
+  const FLOOD_AT = [[620, 372], [792, 292], [918, 308], [1165, 418], [455, 462], [735, 745], [1040, 455]];
+  // 山（map.jpg で 山の ある 所）。いちばん はじめは 右下の 火山島
+  const VOLCANO_AT = [[1420, 805, 230], [1300, 300, 150], [370, 330, 140], [650, 215, 140], [1070, 690, 130], [500, 850, 120]];
+  function trouble(S, score, turn, bad, free) {
     if (turn < 1) return "";
     let out = "";
-    const nm = Math.max(0, Math.min(MONSTER_SPOTS.length, Math.floor((70 - S.safety) / 10)));
-    out += MONSTER_SPOTS.slice(0, nm).map((a) => fimg(a[0], a[1], a[2], a[3], "bob", `animation-delay:-${(a[1] % 7) / 6}s`)).join("");
-    if (S.safety < 30) out += fimg("bandits", 350, 700, 90);
-    if (S.safety <= 10) out += fimg("darkcastle", 1400, 200, 130); // ドラゴンは 空の 層（sky）
-    if (bad.flood) out += [[935, 470], [955, 560], [640, 370]].map(([x, y]) => fimg("wave", x, y, 90, "bob")).join("");
-    if (bad.rain) out += raincloud(880, 250) + raincloud(540, 190);
-    if (score < 0) out += raincloud(1100, 150);
+    // 巣の まわり（順調な 道でも 出る。2ひきまで）
+    out += MONSTER_SPOTS.slice(0, bad.nest).map(([n, x, y], k) => monsterAt(n, x, y, k)).join("");
+    // 国じゅうに ちらばる（人と ぶつからないよう、地面の 場所を 後ろから つかう）
+    const spots = free.slice().reverse();
+    out += spots.slice(0, bad.monsters).sort((a, b) => a[1] - b[1]).map(([x, y], k) => monsterAt(MONSTER_KINDS[(k * 3) % MONSTER_KINDS.length], x, y, k + 3)).join("");
+    out += spots.slice(bad.monsters, bad.monsters + bad.bandits).map(([x, y]) => fimg("bandits", x, y, 70)).join("");
+    if (bad.castle) out += fimg("darkcastle", 1400, 200, 150);
+    out += FLOOD_AT.slice(0, bad.floods).map(([x, y]) => fimg("wave", x, y + 20, 95, "bob")).join("");
     return out;
   }
+  // 噴火する 山（はってん度が マイナス、または 国が 悪くなっている とき）
+  function volcanoes(n) { return VOLCANO_AT.slice(0, n).map(([x, y, w], i) => volcano(x, y, w, i)).join(""); }
 
   function field() {
     return `<svg viewBox="0 0 1536 1024" class="land" preserveAspectRatio="xMidYMid slice" style="background:#1d5fa6">
@@ -318,18 +331,12 @@ const ART = (() => {
   function monster(i) { const m = MON[i]; return `<g class="monbody">${img(...m)}</g>`; }
 
   // ---- 火山（右下の 島）。はってん度が マイナスに なると 噴火 ----
-  function volcano() {
+  function volcano(x = 1420, y = 805, w = 230, i = 0) {
+    const k = w / 230, top = y - 115 * k;
     return `<g class="erupt">
-      <circle cx="1420" cy="720" r="120" fill="url(#glow)" class="lava"/>
-      ${img(O2, 23, 1420, 805, 230)}
-      ${[0, 1, 2].map((i) => `<circle class="smoke" style="animation-delay:${i * 0.6}s" cx="${1415 + i * 8}" cy="690" r="${22 + i * 6}" fill="#555" opacity=".7"/>`).join("")}
-    </g>`;
-  }
-  // ---- 雨雲（あれた国）：灰色の雲から 雨すじが 落ちる ----
-  function raincloud(x, y) {
-    return `<g class="rainy" transform="translate(${x} ${y})">
-      <g class="drops">${[-40, -20, 0, 20, 40].map((dx, i) => `<line x1="${dx}" y1="14" x2="${dx - 6}" y2="44" stroke="#5b8fc9" stroke-width="4" stroke-linecap="round" style="animation-delay:-${i * .15}s"/>`).join("")}</g>
-      <ellipse cx="0" cy="0" rx="62" ry="24" fill="#6b6f7a"/><ellipse cx="-30" cy="-10" rx="30" ry="22" fill="#7a7f8a"/><ellipse cx="26" cy="-14" rx="34" ry="26" fill="#7a7f8a"/><ellipse cx="0" cy="-4" rx="40" ry="24" fill="#858a95"/>
+      <circle cx="${x}" cy="${top}" r="${120 * k}" fill="url(#glow)" class="lava" style="animation-delay:-${i * .3}s"/>
+      ${img(O2, 23, x, y, w)}
+      ${[0, 1, 2].map((j) => `<circle class="smoke" style="animation-delay:${j * 0.6 + i * .2}s" cx="${x - 5 + j * 8 * k}" cy="${top - 30 * k}" r="${(22 + j * 6) * k}" fill="#555" opacity=".7"/>`).join("")}
     </g>`;
   }
   // ---- 花火：国土の あちこちの 空 ----
@@ -338,5 +345,5 @@ const ART = (() => {
     return P.map(([x, y], i) => fimg("fireworks", x, y, 230, "fw") .replace('class="fw"', `class="fw" style="animation-delay:${i * 0.45}s"`)).join("");
   }
 
-  return { sage, king, preload, POSES, field, life, sky, sea, crowd, cars, trouble, decor, activeCombos, comboMarkup, layer, siteStages, siteMarkup, flags, monster, volcano, fireworks, SITES };
+  return { sage, king, preload, POSES, field, life, sky, sea, crowd, cars, freeGround, volcanoes, trouble, decor, activeCombos, comboMarkup, layer, siteStages, siteMarkup, flags, monster, volcano, fireworks, SITES };
 })();
