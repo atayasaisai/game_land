@@ -195,14 +195,21 @@ img.sage.hop{animation:hop .3s steps(2)}
 .zukan div.got small{display:block;font-weight:500;color:var(--sub);margin-top:3px;font-size:.66rem;line-height:1.4}
 .result .btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:6px}
 /* ───────── しらべ札（社会の おはなし）───────── */
-.learnchips{position:absolute;left:8px;top:clamp(150px,30vh,260px);z-index:5;display:flex;flex-direction:column;gap:6px;align-items:flex-start;max-width:calc(100vw - 16px)}
+/* 「社会の豆知識」の囲み：札が 1まいでも 出たら 見える */
+.learnbox{position:absolute;left:8px;top:clamp(150px,30vh,260px);z-index:5;max-width:calc(100vw - 16px);display:none;
+  background:rgba(255,252,240,.9);border:3px solid var(--ink);border-radius:18px;padding:6px 8px 8px;box-shadow:3px 3px 0 var(--ink)}
+.learnbox.on{display:block;animation:fade .3s}
+.learnbox .lbhead{margin:0 0 6px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.learnbox .lbhead b{font-family:"Mochiy Pop One",sans-serif;font-weight:400;font-size:clamp(.8rem,2.4vw,.95rem);background:var(--ai);color:#fff;border-radius:999px;padding:1px 10px}
+.learnbox .lbhead small{font-size:.68rem;color:var(--sub)}
+.learnchips{display:flex;flex-direction:column;gap:6px;align-items:flex-start}
 .chip{display:flex;align-items:center;gap:6px;background:#fff;border:3px solid var(--ink);border-radius:999px;padding:3px 12px 3px 4px;box-shadow:3px 3px 0 var(--ink);
   font-size:clamp(.72rem,2.3vw,.9rem);text-align:left;animation:chipin .45s cubic-bezier(.2,1.6,.4,1)}
 .chip span{white-space:nowrap}
 .chip img{width:34px;height:34px;object-fit:contain;flex:none}
 .chip.read{background:#eef3ff;opacity:.85}
 .chip.new::after{content:"NEW";font-size:.6rem;background:var(--do);color:#fff;border-radius:999px;padding:0 5px;margin-left:2px}
-@keyframes chipin{0%{transform:translateX(-120%)}100%{transform:none}}
+@keyframes chipin{0%{transform:scale(.6);opacity:0}100%{transform:none;opacity:1}}
 .kcard{position:fixed;inset:0;z-index:20;background:rgba(30,25,15,.55);display:none;align-items:center;justify-content:center;padding:14px}
 .kcard.on{display:flex}
 .kcard .inner{background:var(--paper);border:4px solid var(--ink);border-radius:22px;box-shadow:0 8px 0 var(--ink);max-width:520px;width:100%;max-height:calc(100vh - 28px);overflow:auto;padding:14px 18px 18px;text-align:left;animation:fade .25s}
@@ -265,7 +272,7 @@ img.sage.hop{animation:hop .3s steps(2)}
 <!-- しらべ札を ひらいたところ -->
 <div class="kcard" id="kcard" role="dialog" aria-modal="true"><div class="inner">
   <img class="pic" id="kcPic" alt="">
-  <span class="field" id="kcField"></span>
+  <span class="field" style="background:var(--ai);color:#fff">社会の豆知識</span> <span class="field" id="kcField"></span>
   <h3 id="kcTitle"></h3>
   <p id="kcBody"></p>
   <p class="chu" id="kcChu"></p>
@@ -288,7 +295,10 @@ img.sage.hop{animation:hop .3s steps(2)}
     <button class="iconbtn" id="sound" type="button" aria-label="おと">🔊</button>
   </div>
   <div class="stats" id="stats"></div>
-  <div class="learnchips" id="chips"></div>
+  <div class="learnbox" id="learnbox">
+    <p class="lbhead"><b>📖 社会の豆知識</b><small>おすと 読めるよ</small></p>
+    <div class="learnchips" id="chips"></div>
+  </div>
 
   <div class="bottom" id="bottom">
     <div class="bubble sbubble" id="sbubble"><p class="name" id="bname"></p><div id="lines"></div></div>
@@ -561,9 +571,9 @@ async function checkLearn() {
 function addChip(id, isNew) {
   const c = SHAKAI_BY[id]; const b = document.createElement("button");
   b.type = "button"; b.className = "chip" + (isNew ? " new" : ""); b.dataset.id = id;
-  b.innerHTML = `<img src="${c.pic}" alt=""><span>📖 ${c.q}</span>`;
+  b.innerHTML = `<img src="${c.pic}" alt=""><span>${c.q}</span>`;
   b.addEventListener("click", () => { b.classList.add("read"); b.classList.remove("new"); openCard(id); });
-  const box = $("chips"); box.prepend(b);
+  const box = $("chips"); box.prepend(b); $("learnbox").classList.add("on");
   // 画面が せまいので、出ているのは あたらしい 4まいまで（のこりは けっかと ノートで 読める）
   [...box.children].slice(4).forEach((x) => x.remove());
 }
@@ -589,7 +599,7 @@ function showNote() {
 // ---- はじめる ----
 function startGame() {
   st = RULES.newState(); busy = false; prevStats = null;
-  st.learned = []; $("chips").innerHTML = "";
+  st.learned = []; $("chips").innerHTML = ""; $("learnbox").classList.remove("on");
   $("result").classList.remove("on"); $("showRes").style.display = "none"; $("bottom").style.display = ""; $("sbubble").classList.remove("on");
   if (!$("kingPic").firstChild) $("kingPic").innerHTML = ART.king();
   buildField(); drawAll(); drawHud();
