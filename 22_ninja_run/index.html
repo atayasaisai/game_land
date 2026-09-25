@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>走れ！にんじゃくん！｜ジャンプだけの横スクロール無料ゲーム｜あたやさいさいゲームランド</title>
+<meta name="description" content="にんじゃくんが まちを 走る！ はこや ライオンを ジャンプで とびこえよう。だんだん はやくなるよ。広告なし・会員登録なし。">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://atayasaisai.github.io/game_land/22_ninja_run/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="あたやさいさいゲームランド">
+<meta property="og:title" content="走れ！にんじゃくん！｜ジャンプだけの横スクロール無料ゲーム">
+<meta property="og:url" content="https://atayasaisai.github.io/game_land/22_ninja_run/">
+<meta property="og:image" content="https://atayasaisai.github.io/game_land/22_ninja_run/title.png">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Zen+Maru+Gothic:wght@500;700;900&display=swap">
+<style>
+:root{--ink:#33312A;--paper:#FFFCF2;--sub:#5C574A;--ai:#4A6BC0;--do:#F0603F;--raku:#4CB86B;--ki:#F5B70A;color-scheme:light}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:"Zen Maru Gothic","Hiragino Maru Gothic ProN",sans-serif;font-weight:700;color:var(--ink);background:#1b2340;
+  -webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent;overscroll-behavior:none}
+button{font-family:inherit;font-weight:700;cursor:pointer}
+.screen{display:none}
+.screen.on{display:flex}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--raku);color:#fff;border:3px solid var(--ink);
+  border-radius:999px;padding:12px 30px;font-size:1.15rem;box-shadow:0 5px 0 var(--ink);transition:transform .08s}
+.btn:hover{transform:translateY(-2px)}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--ink)}
+.btn.sub{background:#fff;color:var(--ink);font-size:.95rem;padding:9px 20px}
+.btn:focus-visible{outline:3px solid var(--ai);outline-offset:3px}
+
+/* ───────── さいしょの画面：トップと同じ空の絵＋先方の題字 ───────── */
+#title{position:relative;min-height:100dvh;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;padding:24px 16px 40px;
+  background:#bfe3f5 url(bg.jpg) center 30%/cover no-repeat}
+.tlead{display:inline-block;font-size:.72rem;letter-spacing:.2em;border:2.5px solid var(--ink);border-radius:999px;padding:3px 15px;
+  background:#fff;color:var(--ink);box-shadow:3px 3px 0 var(--ink);text-decoration:none}
+.titleart{display:block;width:100%;max-width:760px;height:auto;margin:14px auto 0;filter:drop-shadow(0 6px 8px rgba(20,30,60,.3));
+  animation:swing 3.2s ease-in-out infinite}
+@keyframes swing{0%,100%{transform:rotate(-1deg)}50%{transform:rotate(1deg) translateY(-4px)}}
+@keyframes twk{0%,100%{transform:scale(1)}50%{transform:scale(1.15) rotate(4deg)}}
+
+/* 忍者くんのコマ（ninja.png は 124×114 のコマが横に19こ） */
+.nj{width:124px;height:114px;background:url(ninja.png) 0 0/1900% 100% no-repeat;flex:none;filter:drop-shadow(0 4px 3px rgba(0,0,0,.25))}
+.nj.joy{animation:njjoy .6s steps(1) infinite}
+@keyframes njjoy{0%{background-position:66.667% 0}25%{background-position:72.222% 0}50%{background-position:77.778% 0}75%{background-position:83.333% 0}}
+.nj.down{background-position:61.111% 0}
+
+.tpanel{margin-top:18px;width:100%;max-width:560px;display:flex;flex-direction:column;align-items:center;gap:10px;
+  background:rgba(255,252,240,.95);border:3px solid var(--ink);border-radius:26px;padding:18px 18px 22px;box-shadow:0 8px 0 rgba(51,49,42,.85)}
+.tpanel p{margin:0;line-height:1.8;font-size:1rem}
+.how2{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%}
+.how2 .r b{background:linear-gradient(#9be39b,#4cb86b);color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.25)}
+.stk{display:flex;flex-direction:column;align-items:center;padding-bottom:26px;border-bottom:3px dashed #9a8f78;position:relative}
+.stk i{margin-top:-3px}
+.stk::after{content:"→";position:absolute;bottom:0;left:50%;transform:translateX(-50%);font-size:1.1rem;color:var(--raku)}
+.how2 > div{border:2.5px solid var(--ink);border-radius:18px;padding:8px 8px 10px;background:#fff;font-size:.86rem;line-height:1.6}
+.how2 b{display:block;font-family:"Mochiy Pop One",sans-serif;font-weight:400;font-size:1.05rem;border-radius:12px;border:2.5px solid var(--ink);margin:0 auto 6px;padding:2px 0;max-width:170px}
+.how2 .j b{background:linear-gradient(#ffd84d,#f5b70a)}
+.obrow{display:flex;justify-content:center;align-items:flex-end;gap:4px;flex-wrap:wrap;margin-top:6px;min-height:34px}
+.obrow i{display:block;background:url(obs.png) no-repeat;flex:none}
+.key{display:inline-block;border:2px solid var(--ink);border-radius:8px;padding:0 6px;background:#fff;box-shadow:0 2px 0 var(--ink);font-size:.8rem;line-height:1.5}
+.best{font-size:.95rem;color:var(--sub)}
+.best b{color:var(--do);font-size:1.2rem}
+.row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+@media (hover:none){.kb{display:none}}
+
+/* ───────── ゲーム画面 ───────── */
+#game{position:fixed;inset:0;flex-direction:column;align-items:center;justify-content:center;background:#1b2340;
+  padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);user-select:none;-webkit-user-select:none}
+.stage{position:relative;width:min(100vw,calc((100dvh - 150px) * 600 / 336));aspect-ratio:600/336;touch-action:none}
+.stage canvas{display:block;width:100%;height:100%;border-radius:6px}
+.stage.shake{animation:shake .45s}
+@keyframes shake{0%,100%{transform:translate(0)}20%{transform:translate(-7px,2px)}40%{transform:translate(7px,-2px)}60%{transform:translate(-4px,1px)}80%{transform:translate(4px,0)}}
+.hud{position:absolute;left:0;right:0;top:0;display:flex;justify-content:space-between;align-items:flex-start;padding:8px 10px;pointer-events:none;gap:8px}
+.chip{background:rgba(255,252,240,.92);border:2.5px solid var(--ink);border-radius:999px;padding:2px 12px;font-size:clamp(.72rem,2.2vw,1rem);box-shadow:0 3px 0 var(--ink);white-space:nowrap}
+.chip b{font-family:"Mochiy Pop One",sans-serif;font-weight:400;font-size:1.25em;color:var(--do)}
+.hud .r{display:flex;gap:6px;pointer-events:auto}
+.icon{width:34px;height:34px;border-radius:50%;border:2.5px solid var(--ink);background:#fff;box-shadow:0 3px 0 var(--ink);font-size:.95rem;padding:0;line-height:1}
+.banner{position:absolute;left:50%;top:30%;transform:translate(-50%,-50%);font-family:"Mochiy Pop One",sans-serif;font-size:clamp(1.1rem,4.4vw,2.2rem);
+  color:#fff;white-space:nowrap;pointer-events:none;opacity:0;
+  text-shadow:3px 0 0 var(--ink),-3px 0 0 var(--ink),0 3px 0 var(--ink),0 -3px 0 var(--ink),2px 2px 0 var(--ink),-2px -2px 0 var(--ink),2px -2px 0 var(--ink),-2px 2px 0 var(--ink),0 6px 0 rgba(0,0,0,.3)}
+.banner.show{animation:ban 1.8s ease-out forwards}
+@keyframes ban{0%{opacity:0;transform:translate(-50%,-50%) scale(.4)}12%{opacity:1;transform:translate(-50%,-50%) scale(1.12)}20%{transform:translate(-50%,-50%) scale(1)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,-70%)}}
+
+.jumpbar{width:min(100vw,calc((100dvh - 150px) * 600 / 336));display:flex;justify-content:center;padding:14px 12px 10px}
+.jumpbtn{width:min(100%,420px);height:96px;border-radius:30px;border:4px solid var(--ink);background:linear-gradient(#ffd84d,#f5b70a);color:var(--ink);
+  font-family:"Mochiy Pop One",sans-serif;font-weight:400;font-size:2rem;letter-spacing:.1em;box-shadow:0 8px 0 var(--ink);touch-action:none}
+.jumpbtn.down{transform:translateY(6px);box-shadow:0 2px 0 var(--ink)}
+.jumpbtn small{display:block;font-family:"Zen Maru Gothic",sans-serif;font-size:.8rem;letter-spacing:0;opacity:.7}
+@media (max-width:560px){
+  .hud{padding:5px 6px;gap:4px}
+  .chip{padding:1px 8px;border-width:2px;box-shadow:0 2px 0 var(--ink)}
+  .icon{width:26px;height:26px;font-size:.75rem;border-width:2px;box-shadow:0 2px 0 var(--ink)}
+  .sp-lab{display:none}
+}
+.turn{display:none;color:#cfd6f0;font-size:.8rem;text-align:center;margin:4px 0 0}
+@media (orientation:portrait) and (max-width:700px){.turn{display:block}}
+/* 横にした スマホ：ボタンは 絵の右に ならべる（障害物が くる 右がわを かくさない） */
+@media (orientation:landscape) and (max-height:520px){
+  #game{flex-direction:row}
+  .stage{width:min(calc(100vw - 150px),calc(100dvh * 600 / 336))}
+  .jumpbar{width:auto;padding:0 0 0 10px}
+  .jumpbtn{width:124px;height:124px;border-radius:50%;font-size:1.25rem}
+  .jumpbtn small{display:none}
+  .rbox{padding:8px 14px 10px;gap:3px}
+  .rbox .nj{width:54px}
+}
+
+/* けっかの板 */
+.result{position:absolute;inset:0;display:none;align-items:flex-start;justify-content:center;background:rgba(20,24,50,.18);padding:6% 10px 10px}
+.result.on{display:flex}
+.rbox{background:rgba(255,252,240,.97);border:3px solid var(--ink);border-radius:24px;padding:12px 18px 16px;box-shadow:0 8px 0 rgba(51,49,42,.85);text-align:center;
+  display:flex;flex-direction:column;align-items:center;gap:6px;max-width:92%;animation:pop .4s cubic-bezier(.2,1.6,.4,1)}
+@keyframes pop{0%{transform:scale(.5)}100%{transform:scale(1)}}
+.rbox .dist{font-family:"Mochiy Pop One",sans-serif;font-size:clamp(1.4rem,5vw,2.4rem);color:var(--do)}
+.rbox .msg{font-size:clamp(.8rem,2.4vw,1rem)}
+.rbox .rec{font-family:"Mochiy Pop One",sans-serif;color:#fff;background:var(--do);border:2.5px solid var(--ink);border-radius:999px;padding:1px 14px;font-size:.9rem;animation:twk 1s ease-in-out infinite}
+.rbox .nj{width:clamp(60px,12vw,100px);height:auto;aspect-ratio:124/114}
+.rbox .row{margin-top:4px}
+.rbox .btn{padding:8px 22px;font-size:1rem}
+.rbox .btn.sub{font-size:.85rem;padding:6px 16px}
+.rbox .hintk{font-size:.72rem;color:var(--sub)}
+</style>
+</head>
+<body>
+
+<!-- ============ さいしょの画面 ============ -->
+<section id="title" class="screen on">
+  <a class="tlead" href="../">◀ あたやさいさいゲームランド</a>
+  <h1 style="margin:0"><img class="titleart" src="title.png" alt="走れ！にんじゃくん！" width="1100" height="247"></h1>
+
+  <div class="tpanel">
+    <p>にんじゃくんが まちを 走るよ。<br>そうさは <b>ジャンプ</b> だけ！<span class="kb">（<span class="key">スペース</span> か <span class="key">↑</span> でも とべる）</span></p>
+    <div class="how2">
+      <div class="j"><b>とぶ！</b>はこや どうぶつは<br>ジャンプで とびこえる<div class="obrow" id="obJ"></div></div>
+      <div class="r"><b>とばない！</b>上が ふさがって いたら<br>そのまま 下を 走りぬける<div class="obrow"><div class="stk" id="obR"></div></div></div>
+    </div>
+    <p style="font-size:.92rem">ゴールは ないよ。<b>ずっと つづいて</b>、どんどん <b>はやく</b> なる！<br>どこまで 走れるかな？</p>
+    <p class="best" id="tBest"></p>
+    <button class="btn" id="startBtn">はしる ▶</button>
+    <div class="row"><button class="btn sub" id="soundBtn">おと：あり</button></div>
+  </div>
+</section>
+
+<!-- ============ ゲーム ============ -->
+<section id="game" class="screen">
+  <div class="stage" id="stage">
+    <canvas id="cv" aria-label="にんじゃくんが 走る ゲームの画面"></canvas>
+    <div class="hud">
+      <div class="chip"><b id="hDist">0</b> m</div>
+      <div class="chip" id="hArea">まちなみ</div>
+      <div class="r"><div class="chip"><span class="sp-lab">はやさ </span><b id="hSpeed">×1.0</b></div>
+        <button class="icon" id="hSound" aria-label="おとの きりかえ">♪</button><button class="icon" id="hHome" aria-label="さいしょの画面へ">✕</button></div>
+    </div>
+    <div class="banner" id="banner"></div>
+    <div class="result" id="result">
+      <div class="rbox">
+        <div class="nj" id="rNj"></div>
+        <div class="rec" id="rRec" hidden>しんきろく！</div>
+        <div class="dist"><span id="rDist">0</span> m</div>
+        <div class="msg" id="rMsg"></div>
+        <div class="row"><button class="btn" id="againBtn">もういちど</button><button class="btn sub" id="homeBtn">もどる</button></div>
+        <div class="hintk kb">スペースキー でも もういちど</div>
+      </div>
+    </div>
+  </div>
+  <div class="jumpbar"><button class="jumpbtn" id="jumpBtn">ジャンプ<small>がめんを タッチ でも とべるよ</small></button></div>
+  <p class="turn">スマホを よこに すると 大きく なるよ</p>
+</section>
+
+<script>
+/* ───────── 絵 ─────────
+   ninja.png : 124×114 のコマ×19（足もとの中心が 55,111）。00_incoming/忍者くん.jpg から切り出し。
+               16・17＝箱をけした「ぶつかる」、18＝はって進む（いまは使っていない）
+   obs.png   : 障害物（忍者くんタイトル.jpg から切り出し。犬とライオンは左むきに反転、トンネルの中の忍者くんは消してある）
+   stages.jpg: 1024×336 の背景×4段（まちなみ・ビル・おしろ・わのまち）。草の線が y=310 にそろえてある */
+const SPR={cw:124,ch:114,ax:55,ay:111,
+  run:[0,1,2,3],jump:[4,5],land:[6,7],fall:[10,11],joy:[12,13,14,15],bump:17};
+// [x,y,w,h,ふちの太さ]（まわりに 光る白いふちを 焼きこんである）
+const ATLAS={crate:[0,0,141,131,11],fence:[143,0,162,135,11],wall:[307,0,167,127,11],water:[476,0,189,122,11],barrel:[667,0,132,156,11],
+  fire:[801,0,156,153,11],logs:[0,158,168,119,11],spike:[170,158,132,133,11],dog:[304,158,156,123,11],lion:[462,158,211,169,11]};
+
+/* 障害物の しゅるい（ぜんぶ ジャンプで とびこえる）
+   h＝画面での高さ、box＝当たりの内がわ[左,上,右]（わりあい）、vx＝じぶんでも 左へ走る速さ、from＝何mから出るか
+   t:"run"＝とぶと失敗・そのまま走れば成功：はこ・たる・石がきを 画面の上から 積みあげて、下に OPEN の すきまだけ あける。
+     stack＝つかう部品、cols＝よこに ならべる数の [さいしょう, さいだい] */
+const KINDS={
+  crate :{t:"jump",h:58,box:[.08,.06,.08],from:0},
+  logs  :{t:"jump",h:50,box:[.06,.12,.06],from:0},
+  barrel:{t:"jump",h:62,box:[.1,.04,.1],from:0},
+  fence :{t:"jump",h:60,box:[.08,.1,.08],from:60},
+  wall  :{t:"jump",h:52,box:[.06,.08,.06],from:60},
+  dog   :{t:"jump",h:50,box:[.14,.2,.14],from:150,vx:70,hop:1},
+  water :{t:"jump",h:54,box:[.1,.66,.1],from:150},
+  fire  :{t:"jump",h:64,box:[.14,.2,.14],from:300,flick:1},
+  spike :{t:"jump",h:54,box:[.12,.1,.12],from:450,vx:60,roll:1},
+  lion  :{t:"jump",h:70,box:[.1,.12,.1],from:450,vx:110,hop:.5},
+  up_crate :{t:"run",stack:["crate"],cols:[1,2],from:60},
+  up_barrel:{t:"run",stack:["barrel"],cols:[1,2],from:150},
+  up_mix   :{t:"run",stack:["crate","barrel","wall","logs"],cols:[1,2],from:300},
+  up_long  :{t:"run",stack:["crate","barrel","wall","logs"],cols:[3,5],from:150},   // 3〜5列 つながった ながい もの（ずっと 下を 走る）
+};
+const OPEN=86;
+for(const k in KINDS){ if(KINDS[k].t==="run") continue; const K=KINDS[k], a=ATLAS[k], p=a[4];
+  K.s = K.h/(a[3]-2*p);                     // ふちを のぞいた 絵の高さが h になる
+  K.w = (a[2]-2*p)*K.s; K.dh = K.h; K.pad=p*K.s; }
+
+const AREAS=["まちなみ","ビルの まち","おしろの さと","わの まち"];
+const W=600,H=336,GROUND=300,NX=300;   // 忍者くんは いつも まんなか（NX）
+const NS=0.72;                         // 忍者くんの 大きさ
+const TILE=1024;
+const PXM=30;                          // 30px で 1m
+const AREA_M=300;                      // 300m ごとに 景色がかわる
+const G=2285, V0=868, AIR=0.76;        // ジャンプ：高さ約165・0.76秒（障害物を大きくしたので 高め）
+
+const imgN=new Image(); imgN.src="ninja.png";
+const imgB=new Image(); imgB.src="stages.jpg";
+const imgO=new Image(); imgO.src="obs.png";
+
+/* ───────── おと（WebAudio でその場で作る） ───────── */
+let AC=null, soundOn=true;
+try{ soundOn=localStorage.getItem("ninjaDash.sound")!=="off"; }catch(e){}
+function ac(){ if(!AC){ try{AC=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } if(AC&&AC.state==="suspended")AC.resume(); return AC; }
+function tone(f1,f2,dur,type="square",vol=.12,delay=0){
+  if(!soundOn)return; const a=ac(); if(!a)return;
+  const t=a.currentTime+delay, o=a.createOscillator(), g=a.createGain();
+  o.type=type; o.frequency.setValueAtTime(f1,t); o.frequency.exponentialRampToValueAtTime(f2,t+dur);
+  g.gain.setValueAtTime(vol,t); g.gain.exponentialRampToValueAtTime(.001,t+dur);
+  o.connect(g).connect(a.destination); o.start(t); o.stop(t+dur+.02);
+}
+function noise(dur,vol=.25){
+  if(!soundOn)return; const a=ac(); if(!a)return;
+  const b=a.createBuffer(1,a.sampleRate*dur,a.sampleRate), d=b.getChannelData(0);
+  for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*(1-i/d.length);
+  const s=a.createBufferSource(), g=a.createGain(), f=a.createBiquadFilter();
+  f.type="lowpass"; f.frequency.value=900; s.buffer=b; g.gain.value=vol;
+  s.connect(f).connect(g).connect(a.destination); s.start();
+}
+const SE={
+  jump(){ tone(420,880,.14,"square",.08); },
+  hit(){ noise(.35,.35); tone(200,60,.4,"triangle",.3); },
+  area(){ [523,659,784,1047].forEach((f,i)=>tone(f,f,.14,"square",.07,i*.09)); },
+  over(){ [392,330,262].forEach((f,i)=>tone(f,f*.98,.22,"triangle",.14,.25+i*.2)); },
+  record(){ [523,659,784,659,784,1047].forEach((f,i)=>tone(f,f,.16,"square",.08,.2+i*.11)); },
+  go(){ tone(660,660,.12,"square",.08); tone(990,990,.25,"square",.08,.15); }
+};
+
+/* ───────── きろく ───────── */
+function loadBest(){ try{ return +localStorage.getItem("ninjaDash.best")||0; }catch(e){ return 0; } }
+function saveBest(m){ try{ localStorage.setItem("ninjaDash.best",String(m)); }catch(e){} }
+
+/* ───────── 画面 ───────── */
+const $=id=>document.getElementById(id);
+const cv=$("cv"), ctx=cv.getContext("2d");
+let dpr=1;
+function fit(){
+  const r=cv.getBoundingClientRect(); dpr=Math.min(3,(window.devicePixelRatio||1)*r.width/W);
+  cv.width=Math.round(W*dpr); cv.height=Math.round(H*dpr);
+}
+addEventListener("resize",()=>{ if(state!=="title") fit(); });
+
+function show(id){ document.querySelectorAll(".screen").forEach(s=>s.classList.toggle("on",s.id===id)); }
+function paintSound(){ $("soundBtn").textContent="おと："+(soundOn?"あり":"なし"); $("hSound").textContent=soundOn?"♪":"×"; }
+function toggleSound(){ soundOn=!soundOn; try{localStorage.setItem("ninjaDash.sound",soundOn?"on":"off");}catch(e){} paintSound(); if(soundOn)ac(); }
+function paintTitleBest(){ const b=loadBest(); $("tBest").innerHTML=b?`いままでの さいこう：<b>${b}</b> m`:"さいこうきろくを つくろう！"; }
+function obIcons(el,keys,h){   // さいしょの画面の 小さな絵
+  el.innerHTML=keys.map(k=>{ const a=ATLAS[k], s=h/a[3];
+    return `<i style="width:${a[2]*s}px;height:${h}px;background-size:${1024*s}px auto;background-position:${-a[0]*s}px ${-a[1]*s}px"></i>`; }).join("");
+}
+
+/* ───────── ゲームのようす ───────── */
+let state="title";       // title / run / hit / over
+let dist, speed, t, vy, jy, air, landT, joyT, hitT, hitOb, obs, nextWX, buffered, fade, curArea, dust, lastTs;
+
+// エンドレス：子どもむけに ゆっくり 加速。1200mまでは 1mごとに +0.2、そのあとも もっと ゆっくり ずっと はやくなる（上かぎり なし）
+//   300m→×1.3　600m→×1.5　900m→×1.8　1200m→×2.1　2000m→×2.3
+function speedAt(m){ return m<=1200 ? 220 + m*0.2 : 460 + (m-1200)*0.06; }
+
+function reset(){
+  dist=0; speed=speedAt(0); t=0; vy=0; jy=0; air=false; landT=0; joyT=0; hitT=0; hitOb=null;
+  obs=[]; lastKs=[]; nextWX=NX+W*1.4; buffered=0; fade={from:0,to:0,a:1}; curArea=0; dust=[];
+  $("result").classList.remove("on"); $("hArea").textContent=AREAS[0]; paintHud();
+}
+let looping=false;
+function start(){
+  ac(); show("game"); fit(); reset(); state="run";
+  banner("よーい どん！"); SE.go();
+  if(!looping){ looping=true; lastTs=performance.now(); requestAnimationFrame(loop); }
+}
+
+/* 景色のかわりめ（300mごと）の前後には 障害物を おかない */
+function areaGap(wx){
+  const b=AREA_M*PXM, k=Math.round(wx/b);
+  if(k<1) return 0;
+  const lo=k*b-160, hi=k*b+speedAt(k*AREA_M)*1.8+60;
+  return (wx>lo&&wx<hi)?hi:0;
+}
+function pick(m,type,not=lastKs,filt){
+  let ks=Object.keys(KINDS).filter(k=>KINDS[k].from<=m && (!type||KINDS[k].t===type) && (!filt||filt(k)));
+  if(ks.some(k=>!not.includes(k))) ks=ks.filter(k=>!not.includes(k));   // 直前と 同じものは 出さない
+  // あたらしく出てきた しゅるいは 少し 出やすく
+  const wts=ks.map(k=>1+(m-KINDS[k].from<120?1.5:0));
+  let r=Math.random()*wts.reduce((a,b)=>a+b,0);
+  for(let i=0;i<ks.length;i++){ r-=wts[i]; if(r<=0) return ks[i]; }
+  return ks[ks.length-1];
+}
+function addOb(k,wx){
+  const o={k,wx,ph:Math.random()*6}, K=KINDS[k];
+  if(K.t==="run"){        // 積みあげを つくる：下の だんから 上へ、画面の上を こえるまで
+    const cols=K.cols[0]+Math.floor(Math.random()*(K.cols[1]-K.cols[0]+1)), pc=[], cl=[];
+    let wmax=0;
+    for(let c=0;c<cols;c++){
+      let y=GROUND-OPEN, x=pc.length? wmax-4 : 0, colw=0;
+      while(y>48){                                         // ジャンプの いちばん上より 高くまで 積む
+        const q=KINDS[K.stack[Math.floor(Math.random()*K.stack.length)]];
+        const k2=Object.keys(KINDS).find(n=>KINDS[n]===q);
+        y-=q.h-3; pc.push({k:k2,x:x+(Math.random()-.5)*4,y}); colw=Math.max(colw,q.w);
+      }
+      cl.push({x,w:colw,top:y}); wmax=x+colw;
+    }
+    o.pc=pc; o.cl=cl; o.w=wmax;
+  }
+  obs.push(o); return o.w||K.w;
+}
+/* とびこえられるか：高さ h・はば w（当たりの四角）を 速さ v で こえるとき、
+   足が 上にある 時間 − 通りすぎる 時間 ＝ ボタンを おせる 時間の はば（秒） */
+function jumpWindow(h,w,v){
+  const hmax=V0*V0/(2*G); if(h+4>=hmax) return -1;
+  const x=(1-Math.sqrt(1-(h+4)/hmax))/2;
+  return (1-2*x)*AIR - (w+26)/v;
+}
+/* 2つ組の障害物：ならび（よこに くっつく）／かさね（上に のる）。一気に とびこえられる 大きさの ものだけ */
+const BASES=["crate","wall","barrel","logs"], TOPS=["crate","barrel","logs"];
+function makeCombo(m,v){
+  const stat=k=>KINDS[k].t==="jump" && !KINDS[k].vx;
+  for(let tries=0;tries<12;tries++){
+    const parts=[];
+    if(Math.random()<.5){                                   // ならび
+      const a=pick(m,"jump",lastKs,stat); if(!a) continue;
+      const b=pick(m,"jump",[...lastKs,a],stat); if(!b||b===a) continue;
+      const sa=.8+Math.random()*.15, sb=.8+Math.random()*.15;
+      parts.push({k:a,dx:0,bot:0,sc:sa});
+      parts.push({k:b,dx:KINDS[a].w*sa-6-Math.random()*8,bot:0,sc:sb});
+    }else{                                                  // かさね
+      const a=pick(m,"jump",lastKs,k=>BASES.includes(k)); if(!BASES.includes(a)) continue;
+      const b=pick(m,"jump",[...lastKs,a],k=>TOPS.includes(k)); if(!TOPS.includes(b)||b===a) continue;
+      const sa=.72+Math.random()*.1, sb=.6+Math.random()*.12, A=KINDS[a], B=KINDS[b];
+      const wa=A.w*sa, wb=B.w*sb;
+      parts.push({k:a,dx:0,bot:0,sc:sa});
+      parts.push({k:b,dx:(wa-wb)/2+(Math.random()-.5)*wa*.3,bot:A.dh*sa-5,sc:sb});
+    }
+    const bx=parts.map(p=>jbox(p.k,p.dx,GROUND-p.bot,p.sc));
+    const x0=Math.min(...bx.map(b=>b[0])), x1=Math.max(...bx.map(b=>b[2])), top=Math.min(...bx.map(b=>b[1]));
+    if(jumpWindow(GROUND-top,x1-x0,v)>=0.24){
+      const w=Math.max(...parts.map(p=>p.dx+KINDS[p.k].w*p.sc));
+      return {k:"combo",parts,w};
+    }
+  }
+  return null;
+}
+let lastKs=[];
+function spawn(){
+  while(nextWX < dist + W + 40){
+    const m=nextWX/PXM, v=speedAt(m), stage=Math.floor(m/AREA_M);
+    const skip=areaGap(nextWX); if(skip){ nextWX=skip; continue; }
+    let tail;
+    const pCombo=stage<1?0:Math.min(.35,.12*stage);          // 2つ組は 2ステージめから、だんだん ふえる
+    const c=Math.random()<pCombo ? makeCombo(m,v) : null;
+    if(c){ c.wx=nextWX; c.ph=0; obs.push(c); tail=c.w; lastKs=c.parts.map(p=>p.k); }
+    else{ const k=pick(m); tail=addOb(k,nextWX); lastKs=[k]; }
+    // 間の とりかた（秒）：1ステージめは いつも おなじ。そのあとは ステージごとに ばらつきを ふやす
+    const tMin=AIR+0.32, tBase=1.5;
+    const spread=Math.min(1,stage*0.25);
+    let tg=tBase;
+    if(spread>0){
+      tg=tBase+(Math.random()*2-1)*0.65*spread;              // みじかい ときも ながい ときも
+      if(Math.random()<0.18*spread) tg=tMin;                 // たまに ぎりぎりの れんぞく
+      if(Math.random()<0.12*spread) tg+=0.9;                 // たまに ひと休み
+    }
+    tg=Math.max(tMin,tg);
+    const last=obs[obs.length-1], LK=KINDS[last.k];
+    const mv=LK&&LK.vx? LK.vx*((W-NX)/v+AIR) : 0;             // じぶんで 走ってくるものは そのぶん 間を あける
+    nextWX += tail + v*tg + mv;
+  }
+  obs=obs.filter(o=>o.wx-dist > -NX-320);
+}
+
+function jump(){
+  if(state==="over"){ start(); return; }
+  if(state!=="run") return;
+  ac();
+  if(!air){ vy=V0; air=true; joyT=0; landT=0; SE.jump(); }
+  else buffered=0.13;                                      // 着地の すこし前に おしても とべる
+}
+
+function banner(txt){ const b=$("banner"); b.textContent=txt; b.classList.remove("show"); void b.offsetWidth; b.classList.add("show"); }
+function paintHud(){
+  $("hDist").textContent=Math.floor(dist/PXM);
+  $("hSpeed").textContent="×"+(speed/220).toFixed(1);
+}
+
+const ox=o=>NX+(o.wx-dist);               // 画面での 左はし
+/* 当たりの四角 [x0,y0,x1,y1] */
+function jbox(k,x,bottom,sc=1){         // とびこえる ものの 当たり
+  const K=KINDS[k], w=K.w*sc, h=K.dh*sc, b=K.box;
+  return [x+w*b[0], bottom-h*(1-b[1]), x+w*(1-b[2]), bottom];
+}
+function obBoxes(o){
+  if(o.parts){ const x=ox(o); return o.parts.map(p=>jbox(p.k,x+p.dx,GROUND-p.bot,p.sc)); }
+  return [obBox(o)];
+}
+function obBox(o){
+  if(o.parts){ const bs=obBoxes(o); return [Math.min(...bs.map(b=>b[0])),Math.min(...bs.map(b=>b[1])),Math.max(...bs.map(b=>b[2])),GROUND]; }
+  const K=KINDS[o.k], x=ox(o);
+  if(K.t==="run") return [x+o.w*.06, -2000, x+o.w*.94, GROUND-OPEN+4];   // すきまより上は ぜんぶ ふさがっている
+  const b=K.box; return [x+K.w*b[0], GROUND-K.dh*(1-b[1]), x+K.w*(1-b[2]), GROUND];
+}
+
+function update(dt){
+  t+=dt;
+  if(state==="run"){
+    speed=speedAt(dist/PXM);
+    const before=dist; dist+=speed*dt;
+    for(const o of obs){ const K=KINDS[o.k]; if(K && K.vx && ox(o)<W+30) o.wx-=K.vx*dt; }
+    // 景色のかわりめ
+    const a=Math.floor(dist/PXM/AREA_M);
+    if(a!==Math.floor(before/PXM/AREA_M)){
+      curArea=a; fade={from:(a-1)%4,to:a%4,a:0};
+      $("hArea").textContent=AREAS[a%4]+(a>=4?`（${Math.floor(a/4)+1}しゅうめ）`:"");
+      banner(AREAS[a%4]+"に ついた！"); SE.area();
+      if(!air) joyT=1.3;
+    }
+    if(fade.a<1) fade.a=Math.min(1,fade.a+dt/1.4);
+    // ジャンプ
+    if(air){
+      jy+=vy*dt; vy-=G*dt;
+      if(jy<=0){ jy=0; vy=0; air=false; landT=0.14; puff();
+        if(buffered>0){ buffered=0; vy=V0; air=true; landT=0; SE.jump(); } }
+    }
+    if(buffered>0) buffered-=dt;
+    if(landT>0) landT-=dt;
+    if(joyT>0) joyT-=dt;
+    spawn();
+    // あたり（忍者くんは からだの まんなかだけで はかる）
+    const n=[NX-12, GROUND-jy-60, NX+14, GROUND-jy-4];
+    hit: for(const o of obs){
+      for(const b of obBoxes(o))
+        if(b[2]>n[0] && b[0]<n[2] && b[3]>n[1] && b[1]<n[3]){ crash(o); break hit; }
+    }
+    paintHud();
+  }else if(state==="hit"||state==="over"){
+    hitT+=dt;
+    if(jy>0){ vy-=G*dt; jy=Math.max(0,jy+vy*dt); }       // 空中で ぶつかったら 下に おちる
+    if(state==="hit" && hitT>1.25) gameOver();
+  }
+  for(const d of dust){ d.t+=dt; d.x-=(state==="run"?speed:0)*dt*0.6; }
+  dust=dust.filter(d=>d.t<.45);
+}
+function puff(){ for(let i=0;i<5;i++) dust.push({x:NX-10+Math.random()*24,y:GROUND-2,vx:(Math.random()-.5)*40,vy:-20-Math.random()*30,t:0}); }
+
+function crash(o){
+  state="hit"; hitT=0; hitOb=o; air=false; vy=0;
+  SE.hit();
+  const st=$("stage"); st.classList.remove("shake"); void st.offsetWidth; st.classList.add("shake");
+}
+function gameOver(){
+  state="over";
+  const m=Math.floor(dist/PXM), best=loadBest(), rec=m>best;
+  if(rec) saveBest(m);
+  $("rDist").textContent=m;
+  $("rRec").hidden=!rec;
+  $("rNj").className="nj "+(rec?"joy":"down");
+  const tunnel=!!KINDS[hitOb.k] && KINDS[hitOb.k].t==="run";
+  const msgs=[[3000,"かみわざ！ もう だれにも とめられない！"],[1500,"ちょうじん にんじゃ！ 目にも とまらぬ はやさだ！"],[850,"すごすぎる！ でんせつの にんじゃだ！"],[600,"すごい！ おしろも こえたね！"],[300,"やったね！ つぎの まちまで いけたよ"],[100,"いいぞ！ もっと さきへ いこう"],
+    [0, tunnel?"トンネルは とばずに そのまま 走りぬけよう！":"じゃまものは ジャンプで とびこえよう！"]];
+  $("rMsg").textContent=(rec&&best?`まえの さいこうは ${best} m。`:"")+msgs.find(x=>m>=x[0])[1];
+  $("result").classList.add("on");
+  rec?SE.record():SE.over();
+  setTimeout(()=>$("againBtn").focus({preventScroll:true}),50);
+}
+
+/* ───────── 描く ───────── */
+function drawBg(stage,alpha,camL){
+  if(alpha<=0) return;
+  ctx.globalAlpha=alpha;
+  const k0=Math.floor(camL/TILE);
+  for(let k=k0;k<=k0+1;k++){
+    const sx=Math.round((k*TILE-camL)*dpr)/dpr;
+    if(k%2===0) ctx.drawImage(imgB,0,stage*336,TILE,336,sx,0,TILE+.5,H);
+    else{ ctx.save(); ctx.translate(sx+TILE,0); ctx.scale(-1,1); ctx.drawImage(imgB,0,stage*336,TILE,336,-.5,0,TILE+.5,H); ctx.restore(); }  // 1まいおきに 左右はんてんして つなぎめを なくす
+  }
+  ctx.globalAlpha=1;
+}
+function frame(i,ax,ay){
+  const s=SPR;
+  ctx.drawImage(imgN,i*s.cw,0,s.cw,s.ch, ax-s.ax*NS, ay-s.ay*NS, s.cw*NS, s.ch*NS);
+}
+function part(k,x,y,w,h){ const a=ATLAS[k]; ctx.drawImage(imgO,a[0],a[1],a[2],a[3],x,y,w,h); }
+function shadow(x,h,wid=22,op=.4){
+  const k=Math.max(.35,1-h/180);
+  ctx.fillStyle=`rgba(30,22,14,${op*k})`;
+  ctx.beginPath(); ctx.ellipse(x,GROUND+2,wid*k,6*k,0,0,7); ctx.fill();
+}
+/* ロープ：画面の上から 2本おりてきて、いちばん下の 部品の 下を くぐって つつむ */
+function rope(pts){
+  ctx.lineJoin="round"; ctx.lineCap="round";
+  const path=()=>{ ctx.beginPath(); ctx.moveTo(pts[0][0],pts[0][1]); for(let i=1;i<pts.length;i++) ctx.lineTo(pts[i][0],pts[i][1]); };
+  path(); ctx.strokeStyle="#4a3116"; ctx.lineWidth=4.2; ctx.stroke();
+  path(); ctx.strokeStyle="#c9a063"; ctx.lineWidth=2.4; ctx.stroke();
+  path(); ctx.strokeStyle="#8a6534"; ctx.lineWidth=2.4; ctx.setLineDash([2,3]); ctx.stroke(); ctx.setLineDash([]);   // よじれ
+}
+function sling(x,w,top){
+  const b=GROUND-OPEN+4, l=x+w*.26, r=x+w*.74;
+  rope([[l,-6],[l,b-4],[l+4,b],[r-4,b],[r,b-4],[r,-6]]);
+  ctx.fillStyle="#6b4a22";                              // むすびめ
+  for(const xx of [l,r]){ ctx.beginPath(); ctx.arc(xx,top+4,3,0,7); ctx.fill(); }
+}
+function drawOb(o){
+  const K=KINDS[o.k], x=ox(o);
+  if(x>W+10 || x+(o.w||K.w)<-10) return;
+  if(o.parts){                                             // 2つ組：下の ものから 描く
+    shadow(x+o.w/2,0,o.w*.5,.42);
+    for(const q of [...o.parts].sort((a,b)=>a.bot-b.bot)){ const Q=KINDS[q.k], sc=q.sc, p=Q.pad*sc;
+      part(q.k,x+q.dx-p,GROUND+2-q.bot-Q.dh*sc-p,Q.w*sc+2*p,Q.dh*sc+2*p); }
+    return;
+  }
+  if(K.t==="run"){
+    // すきまの 下の 地面に うすい 影（「ここを 通る」の しるし）
+    ctx.fillStyle="rgba(30,22,14,.18)"; ctx.fillRect(x+4,GROUND-2,o.w-8,6);
+    for(let i=o.pc.length-1;i>=0;i--){ const q=o.pc[i], Q=KINDS[q.k], p=Q.pad;
+      part(q.k,x+q.x-p,q.y-p,Q.w+2*p,Q.h+2*p); }
+    for(const c of o.cl) sling(x+c.x, c.w, c.top);     // 上から ロープで つるす
+    return;
+  }
+  let y=GROUND+2-K.dh, h=K.dh;
+  shadow(x+K.w/2,0,K.w*.5,.42);
+  if(K.hop && state==="run") y-=Math.abs(Math.sin((t+o.ph)*(K.hop>.8?11:7)))*(K.hop>.8?5:3);
+  if(K.flick){ h*=1+Math.sin((t+o.ph)*18)*.04; y=GROUND+2-h; }
+  const p=K.pad, sy=h/K.dh;
+  if(K.roll){ ctx.save(); ctx.translate(x+K.w/2,y+h/2); ctx.rotate(-o.wx/(h/2)); part(o.k,-K.w/2-p,-h/2-p*sy,K.w+2*p,h+2*p*sy); ctx.restore(); return; }
+  part(o.k,x-p,y-p*sy,K.w+2*p,h+2*p*sy);
+}
+function draw(){
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.imageSmoothingEnabled=true; ctx.imageSmoothingQuality="high";
+  const camL=dist-NX;
+  if(fade.a<1){ drawBg(fade.from,1,camL); drawBg(fade.to,fade.a,camL); }
+  else drawBg(curArea%4,1,camL);
+
+  for(const o of obs) drawOb(o);
+  for(const d of dust){ const k=d.t/.45; ctx.fillStyle=`rgba(245,235,215,${.8*(1-k)})`; ctx.beginPath(); ctx.arc(d.x+d.vx*d.t,d.y+d.vy*d.t,3+k*6,0,7); ctx.fill(); }
+
+  // 忍者くん
+  const feet=GROUND-jy;
+  if(state==="run"){
+    let f, bob=0;
+    if(air) f=SPR.jump[vy>0?0:1];
+    else if(landT>0) f=SPR.land[landT>.07?0:1];
+    else if(joyT>0){ f=SPR.joy[Math.floor(t/.15)%4]; bob=-Math.abs(Math.sin(t*10))*10; }
+    else { const dur=Math.max(.05,.1*220/speed); f=SPR.run[Math.floor(t/dur)%4]; }
+    shadow(NX,jy);
+    frame(f,NX,feet+bob);
+  }else{
+    const b=obBox(hitOb), hitX=Math.min(b[0],NX+14);   // ぶつかった ものの 左はし
+    if(hitT<.5){ const kb=Math.min(1,hitT/.12)*6; shadow(hitX-18,jy); frame(SPR.bump, hitX-4-kb, feet); }
+    else { const i=hitT<.85?0:1; shadow(hitX-44,0,26); frame(SPR.fall[i], hitX-(i?48:34), GROUND); }
+  }
+}
+function loop(ts){
+  if(state==="title"){ looping=false; return; }
+  const dt=Math.min(.05,(ts-lastTs)/1000); lastTs=ts;
+  update(dt); draw();
+  requestAnimationFrame(loop);
+}
+
+/* ───────── ボタン・キー ───────── */
+function goTitle(){ state="title"; show("title"); paintTitleBest(); }
+$("startBtn").onclick=start;
+$("soundBtn").onclick=toggleSound; $("hSound").onclick=e=>{e.stopPropagation();toggleSound();};
+$("hHome").onclick=e=>{e.stopPropagation();goTitle();};
+$("againBtn").onclick=e=>{e.stopPropagation();start();};
+$("homeBtn").onclick=e=>{e.stopPropagation();goTitle();};
+const jb=$("jumpBtn");
+jb.addEventListener("pointerdown",e=>{e.preventDefault();jb.classList.add("down");jump();});
+["pointerup","pointerleave","pointercancel"].forEach(ev=>jb.addEventListener(ev,()=>jb.classList.remove("down")));
+cv.addEventListener("pointerdown",e=>{e.preventDefault();if(state==="run")jump();});
+addEventListener("keydown",e=>{
+  const J=e.code==="Space"||e.code==="ArrowUp"||e.code==="KeyW";
+  if(state==="title"){ if(e.code==="Space"&&!e.repeat){ e.preventDefault(); start(); } return; }
+  if(J||(e.code==="Enter"&&state==="over")){ e.preventDefault(); if(!e.repeat){ jb.classList.add("down"); jump(); } }
+  if(e.code==="Escape") goTitle();
+});
+addEventListener("keyup",()=>jb.classList.remove("down"));
+document.addEventListener("contextmenu",e=>{ if(state!=="title") e.preventDefault(); });
+
+obIcons($("obJ"),["crate","barrel","fence","dog","lion","fire"],34);
+obIcons($("obR"),["barrel","crate","crate"],24);
+paintSound(); paintTitleBest();
+</script>
+</body>
+</html>
