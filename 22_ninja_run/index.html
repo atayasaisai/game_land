@@ -158,16 +158,25 @@ button.zc:active{transform:scale(.95)}
 .wordbar .sl{display:flex;gap:clamp(4px,1.2vw,8px)}
 .wordbar .sl i{font-style:normal;width:clamp(34px,8.4vw,62px);height:clamp(40px,9.6vw,70px);display:grid;place-items:center;border:3px solid var(--ink);border-radius:12px;
   background:rgba(255,252,240,.94);font-family:"Mochiy Pop One",sans-serif;font-size:clamp(1.4rem,5.6vw,2.7rem);box-shadow:0 4px 0 var(--ink);color:var(--ai)}
+.wordbar .sl i.got{background:var(--ai);color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.25)}
 .wordbar .sl i.pop{animation:lpop .35s cubic-bezier(.2,1.8,.4,1)}
 @keyframes lpop{0%{transform:scale(.3)}100%{transform:scale(1)}}
-.wordbar .sl.done i{background:#FFE27A;color:var(--do)}
-.wordbar .sl i.g{color:rgba(74,107,192,.45)}
+.wordbar .sl.done i{background:#FFE27A;color:var(--do);text-shadow:none}
+.wordbar .sl i.g{color:rgba(74,107,192,.4);background:rgba(255,255,255,.8);border-style:dashed;box-shadow:none}
 .wordbar .wo{font-size:clamp(.8rem,2.8vw,1.3rem);background:rgba(255,252,240,.94);border:2.5px solid var(--ink);border-radius:999px;padding:0 14px;box-shadow:0 3px 0 var(--ink);white-space:nowrap}
 .wordbar .wo .e{font-size:1.25em;margin-right:4px;vertical-align:-.1em}
 .wordbar .wo .sp{font-size:.7em;color:#fff;background:var(--do);border-radius:999px;padding:0 7px;margin-left:6px;vertical-align:.15em}
 .wordbar .sl.ng{animation:ng .35s}
 @keyframes ng{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 .wordbar .hn{font-size:clamp(.65rem,2.1vw,.9rem);background:rgba(255,252,240,.85);border-radius:999px;padding:0 8px;color:var(--sub)}
+.wrong{position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);display:none;flex-direction:column;align-items:center;pointer-events:none;text-align:center;white-space:nowrap}
+.wrong.on{display:flex;animation:wrong 2.2s ease-out forwards}
+@keyframes wrong{0%{opacity:0;transform:translate(-50%,-50%) scale(.5)}10%{opacity:1;transform:translate(-50%,-50%) scale(1.1)}18%{transform:translate(-50%,-50%) scale(1)}80%{opacity:1}100%{opacity:0}}
+.wrong b,.wrong span{font-family:"Mochiy Pop One",sans-serif;font-weight:400;color:#fff;
+  text-shadow:3px 0 0 var(--ink),-3px 0 0 var(--ink),0 3px 0 var(--ink),0 -3px 0 var(--ink),2px 2px 0 var(--ink),-2px -2px 0 var(--ink),2px -2px 0 var(--ink),-2px 2px 0 var(--ink)}
+.wrong b{font-size:clamp(1.3rem,5vw,2.6rem);color:#FF6B5B}
+.wrong span{font-size:clamp(.9rem,3.4vw,1.7rem)}
+.wrong span em{font-style:normal;color:#FFE27A;font-size:1.3em}
 .wpop{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:none;flex-direction:column;align-items:center;gap:2px;pointer-events:none;
   background:rgba(255,252,240,.95);border:3px solid var(--ink);border-radius:20px;padding:4px 16px 8px;box-shadow:0 6px 0 rgba(51,49,42,.85);text-align:center;max-width:94%}
 .wpop.on{display:flex;animation:wpop .45s ease-out}
@@ -223,6 +232,7 @@ button.zc:active{transform:scale(.95)}
         <button class="icon" id="hSound" aria-label="おとの きりかえ">♪</button><button class="icon" id="hHome" aria-label="さいしょの画面へ">✕</button></div>
     </div>
     <div class="banner" id="banner"></div>
+    <div class="wrong" id="wrong"><b id="wrB"></b><span id="wrS"></span></div>
     <div class="wpop" id="wpop"><div class="ww" id="wpW"></div><div class="wm" id="wpM"></div><div class="wf" id="wpF"></div><div class="wt">タップで つづき ▶</div></div>
     <div class="wordbar" id="wordbar" hidden><div class="wo" id="wOdai"></div><div class="sl" id="wSlots"></div><div class="hn" id="wHint"></div></div>
     <div class="fxs" id="hFx"></div>
@@ -354,7 +364,7 @@ function speedAt(m){ return m<=1200 ? 220 + m*0.2 : 460 + (m-1200)*0.06; }
 function reset(){
   dist=0; speed=speedAt(0); t=0; vy=0; jy=0; air=false; landT=0; joyT=0; hitT=0; hitOb=null;
   obs=[]; lastKs=[]; nextWX=NX+W*1.4; buffered=0; fade={from:0,to:0,a:1}; curArea=0; dust=[];
-  letters=[]; buf=""; odai=null; odaiN=0; recent=[]; doneWord=null; doneT=0; nextT=0; jumpK=1; reading=0; $("wpop").classList.remove("on"); $("stage").classList.remove("reading");
+  letters=[]; buf=""; odai=null; odaiN=0; recent=[]; doneWord=null; doneT=0; nextT=0; jumpK=1; reading=0; $("wpop").classList.remove("on"); $("wrong").classList.remove("on"); $("stage").classList.remove("reading");
   fxT={}; flakes=[]; drops=[]; sparks=[]; parade=[]; made={}; gapStart=null; lastLetter="";
   if(mode==="eigo") newOdai();
   $("result").classList.remove("on"); $("hArea").textContent=AREAS[0]; paintHud(); paintWord(); paintFx();
@@ -691,8 +701,15 @@ function grab(L){
     if(buf===odai.w) wordDone();
   }else{
     tone(300,180,.18,"sawtooth",.07);
+    const had=buf.length;
     buf= L.ch===odai.w[0] ? L.ch : "";
     const sl=$("wSlots"); sl.classList.remove("ng"); void sl.offsetWidth; sl.classList.add("ng");
+    const nx=`「<em>${need()}</em>」`;
+    $("wrB").textContent=`「${L.ch}」は ちがうよ！`;
+    $("wrS").innerHTML= buf ? `「${buf}」から やりなおし。つぎは ${nx} だよ`
+                      : had ? `あつめた もじが きえちゃった… また ${nx} を とってね`
+                            : `つぎは ${nx} だよ`;
+    const wr=$("wrong"); wr.classList.remove("on"); void wr.offsetWidth; wr.classList.add("on");
   }
   paintWord();
 }
@@ -730,7 +747,7 @@ function paintWord(){
   $("wOdai").innerHTML=`<span class="e">${odai.e}</span>${odai.ja}${odai.sp?'<span class="sp">とくべつ</span>':""}`;
   if(doneWord){ sl.className="sl done"; sl.innerHTML=[...doneWord].map(c=>`<i>${c}</i>`).join(""); $("wHint").hidden=true; return; }
   sl.className="sl";
-  sl.innerHTML=[...odai.w].map((c,i)=>buf[i]?`<i${i===buf.length-1?' class="pop"':''}>${buf[i]}</i>`:`<i class="g">${hint?c:""}</i>`).join("");
+  sl.innerHTML=[...odai.w].map((c,i)=>buf[i]?`<i class="got${i===buf.length-1?' pop':''}">${buf[i]}</i>`:`<i class="g">${hint?c:""}</i>`).join("");
   $("wHint").textContent= hint ? `つぎは「${need()}」を ひろおう！` : "";
   $("wHint").hidden=!hint;
 }
