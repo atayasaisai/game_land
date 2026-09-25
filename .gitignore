@@ -20,3 +20,7 @@ atayasaisai-gameland_v2_2026-09-24.html
 
 # ── 外から受け取った素材の置き場（元ファイル。サイトには出さない）──
 00_incoming/
+
+
+# ── Claude の手もと設定（サイトには要らない）──
+.claude/
