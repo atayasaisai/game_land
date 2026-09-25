@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>月のみちかけ｜月を動かして形のひみつを知る無料の理科教材ゲーム｜あたやさいさいゲームランド</title>
+<meta name="description" content="月は どうして 形が かわるの？ 宇宙から見た図で 月を 地球のまわりに 動かすと、地球から見た 月の形と、夕方・真夜中・明け方の 空の どこに見えるかが わかる。小学4年・6年の理科「月の形と動き」「月と太陽」に合わせた、子ども向けの無料の理科教材ゲーム。">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://atayasaisai.github.io/game_land/25_tsuki_no_michikake/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="あたやさいさいゲームランド">
+<meta property="og:title" content="月のみちかけ｜月を動かして形のひみつを知る">
+<meta property="og:url" content="https://atayasaisai.github.io/game_land/25_tsuki_no_michikake/">
+<meta property="og:image" content="https://atayasaisai.github.io/game_land/ogp.png">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap">
+<style>
+:root{
+  --bg0:#05070F;
+  --ink:#EAF0FF; --sub:#9AA6C4; --faint:#5C6B8A;
+  --line:rgba(255,255,255,.12);
+  --panel:rgba(255,255,255,.055);
+  --moon:#FFE7A0; --see:#6FE3FF; --ok:#4CD9A0; --ng:#FF7A6B;
+  color-scheme:dark;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  margin:0;font-family:"Zen Kaku Gothic New",-apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif;
+  color:var(--ink);background:var(--bg0);line-height:1.8;overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+#sky{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(1200px 800px at 50% -10%, #1E2A57 0%, transparent 60%),
+    radial-gradient(900px 700px at 85% 100%, #2A1840 0%, transparent 62%),
+    radial-gradient(800px 600px at 8% 80%, #0C2B41 0%, transparent 60%),
+    linear-gradient(180deg,#070B18 0%,#05070F 100%);
+}
+#stars{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.7}
+.wrap{position:relative;z-index:1;max-width:560px;margin:0 auto;padding:0 16px calc(24px + env(safe-area-inset-bottom))}
+svg{display:block}
+button{font-family:inherit;color:inherit;cursor:pointer}
+
+/* ---------- buttons ---------- */
+.btn{
+  border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.07);
+  color:var(--ink);font-weight:700;font-size:1rem;padding:13px 26px;border-radius:14px;
+  letter-spacing:.04em;white-space:nowrap;transition:transform .12s ease, background .2s, border-color .2s, box-shadow .2s;
+}
+.btn:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.3)}
+.btn:active{transform:scale(.96)}
+.btn:disabled{opacity:.35;cursor:default;transform:none}
+.btn.pri{
+  background:linear-gradient(140deg,#4D7BFF,#8A5BFF 60%,#C24BFF);
+  border-color:rgba(255,255,255,.34);color:#fff;
+  box-shadow:0 8px 30px -8px rgba(110,90,255,.85), inset 0 1px 0 rgba(255,255,255,.4);
+}
+.btn.go{
+  font-size:1.06rem;font-weight:900;padding:15px 10px;width:100%;
+  background:linear-gradient(140deg,#00C2A8,#00A4E0 55%,#3D7BFF);
+  border-color:rgba(255,255,255,.34);
+  box-shadow:0 10px 32px -10px rgba(0,180,220,.95), inset 0 1px 0 rgba(255,255,255,.45);
+}
+.btn.sm{font-size:.82rem;padding:8px 14px;border-radius:11px;font-weight:500}
+.btn.on{background:rgba(111,227,255,.18);border-color:rgba(111,227,255,.6)}
+
+/* ---------- title（トップと同じ空の絵＋木の看板のロゴ。中身は夜空の板にのせる） ---------- */
+#title{position:relative;z-index:1;min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;padding:24px 16px 40px;
+  background:#bfe3f5 url(bg.jpg) center 30%/cover no-repeat}
+.tlead{display:inline-block;font-size:.72rem;letter-spacing:.2em;border:2.5px solid #33312A;border-radius:999px;padding:3px 15px;
+  background:#fff;color:#33312A;box-shadow:3px 3px 0 #33312A;text-decoration:none;font-weight:700}
+.logo{position:relative;display:flex;align-items:center;justify-content:center;gap:4px;margin:26px auto 0;max-width:640px}
+.logo .side{width:clamp(56px,16vw,110px);height:auto;flex:none;filter:drop-shadow(0 4px 4px rgba(0,0,0,.25));animation:hop 1.6s ease-in-out infinite}
+.logo .side.r{animation-delay:-.8s}
+@keyframes hop{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-10px) rotate(3deg)}}
+.sign{position:relative;padding:20px clamp(12px,4vw,30px) 18px;border-radius:26px;line-height:1.1;
+  background:linear-gradient(#c98a4b,#a86a33 55%,#8d5528);border:4px solid #5b3417;
+  box-shadow:inset 0 3px 0 rgba(255,255,255,.35),inset 0 -5px 0 rgba(0,0,0,.18),0 8px 0 #5b3417,0 14px 22px rgba(40,30,10,.35);
+  animation:swing 3.2s ease-in-out infinite;transform-origin:50% 0}
+@keyframes swing{0%,100%{transform:rotate(-1.2deg)}50%{transform:rotate(1.2deg)}}
+.sign .crown{position:absolute;left:50%;top:-32px;width:58px;transform:translateX(-50%) rotate(-4deg);filter:drop-shadow(0 3px 0 #5b3417)}
+.sign .star{position:absolute;font-size:1.3rem;color:#ffd43b;text-shadow:0 2px 0 #7a4a12;animation:twk 1.4s ease-in-out infinite}
+.sign .star.a{left:8px;top:6px}.sign .star.b{right:10px;bottom:4px;animation-delay:-.7s}
+@keyframes twk{0%,100%{transform:scale(1)}50%{transform:scale(1.35) rotate(15deg)}}
+.logo h1{font-family:"Mochiy Pop One",sans-serif;font-weight:400;line-height:1.1;letter-spacing:0;margin:0;font-size:1rem}
+.logo h1 .sm{display:block;font-size:clamp(.9rem,3.6vw,1.3rem);color:#fff;letter-spacing:.3em;
+  text-shadow:0 2px 0 #5b3417,2px 0 0 #5b3417,-2px 0 0 #5b3417,0 -2px 0 #5b3417;margin-bottom:4px}
+.logo h1 .bg{display:block;white-space:nowrap}
+.logo h1 .lt{display:inline-block;font-size:min(4.4rem,11vw,calc(46vw / var(--n,2)),calc(17rem / var(--n,2)));color:var(--k);
+  text-shadow:3px 0 0 #fff,-3px 0 0 #fff,0 3px 0 #fff,0 -3px 0 #fff,2px 2px 0 #fff,-2px -2px 0 #fff,2px -2px 0 #fff,-2px 2px 0 #fff,
+    0 7px 0 #5b3417,4px 5px 0 #5b3417,-4px 5px 0 #5b3417;
+  transform:rotate(var(--r,0deg));animation:jump 2.4s ease-in-out infinite;animation-delay:calc(var(--i) * .12s)}
+@keyframes jump{0%,78%,100%{transform:translateY(0) rotate(var(--r,0deg))}86%{transform:translateY(-9px) rotate(var(--r,0deg))}}
+.tpanel{margin-top:22px;width:100%;max-width:520px;display:flex;flex-direction:column;align-items:center;gap:6px;
+  background:linear-gradient(165deg,rgba(20,28,58,.93),rgba(8,11,26,.95));border:3px solid #2a3560;border-radius:28px;
+  padding:18px 16px 22px;box-shadow:0 10px 30px rgba(10,20,50,.45)}
+.kicker{font-size:.7rem;letter-spacing:.42em;color:var(--sub);text-transform:uppercase;margin:0 0 0 .42em}
+.tpanel p{max-width:26em;color:var(--sub);font-size:.9rem;margin:10px 0 4px;text-wrap:balance}
+.tpanel p b{color:var(--ink);font-weight:700}
+.tbtns{display:flex;flex-direction:column;gap:9px;margin-top:16px;width:100%;max-width:340px}
+.stg{display:flex;align-items:center;gap:12px;text-align:left;width:100%;
+  border:1px solid var(--line);border-radius:14px;padding:10px 14px;background:rgba(255,255,255,.04);transition:.15s}
+.stg:hover{border-color:rgba(120,180,255,.5);background:rgba(80,140,255,.1)}
+.stg .n{font-family:"Mochiy Pop One",sans-serif;font-size:1.2rem;color:#8FC5FF;min-width:1.4em;text-align:center}
+.stg b{display:block;font-size:.95rem}
+.stg small{display:block;font-size:.72rem;color:var(--sub);line-height:1.5}
+.stg .rec{margin-left:auto;color:#ffd43b;font-size:.9rem;letter-spacing:.05em;white-space:nowrap}
+.stg .rec i{color:#3a4668;font-style:normal}
+.backlink{display:inline-block;margin-top:22px;font-size:.82rem;letter-spacing:.06em;color:var(--sub);
+  text-decoration:none;border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:6px 18px;transition:.15s}
+.backlink:hover{color:#fff;border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.06)}
+.grade{font-size:.72rem;color:var(--faint);margin-top:10px}
+
+/* ---------- 共通の画面 ---------- */
+.scr{display:none;padding-top:14px}
+.hud{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.hud h2{font-size:1rem;margin:0;font-weight:900;letter-spacing:.06em}
+.hudR{display:flex;align-items:baseline;gap:10px;font-variant-numeric:tabular-nums}
+.prog{font-size:.78rem;color:var(--sub);letter-spacing:.08em}
+.score{font-size:1.3rem;font-weight:900}
+.score small{font-size:.6rem;color:var(--sub);font-weight:500;letter-spacing:.15em;margin-left:2px}
+.bar{height:5px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden;margin-bottom:12px}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#00C2A8,#3D7BFF);transition:width .3s}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:12px;margin-bottom:12px}
+.card h3{font-size:.8rem;letter-spacing:.14em;color:var(--sub);margin:0 0 6px;font-weight:700}
+.card h3 b{color:var(--ink)}
+.top{width:100%;max-width:400px;margin:0 auto;touch-action:none;user-select:none;-webkit-user-select:none}
+.top.drag{cursor:grab}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;justify-content:center;font-size:.72rem;color:var(--sub);margin-top:4px}
+.legend span::before{content:"";display:inline-block;width:14px;height:0;border-top:3px solid var(--c);vertical-align:middle;margin-right:5px}
+.legend span.d::before{border-top-style:dashed}
+.look{display:flex;align-items:center;gap:14px}
+.look .face{flex:none;width:112px}
+.look .face svg{width:112px;height:112px}
+.look .nm{font-size:1.35rem;font-weight:900;line-height:1.3}
+.look .nm small{display:block;font-size:.72rem;color:var(--sub);font-weight:500;letter-spacing:.1em}
+.look .age{font-size:.8rem;color:var(--sub)}
+.look p{margin:4px 0 0;font-size:.84rem;color:var(--ink)}
+.row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:8px}
+.skybox svg{width:100%;height:auto;border-radius:12px}
+.tlab{text-align:center;font-weight:700;font-size:.95rem;margin:2px 0 6px}
+.tlab small{font-size:.72rem;color:var(--sub);font-weight:500}
+input[type=range]{width:100%;accent-color:#6FE3FF}
+.note{font-size:.76rem;color:var(--sub);text-align:center;margin:6px 0 0}
+.hintbox{font-size:.84rem;background:rgba(111,227,255,.07);border:1px solid rgba(111,227,255,.25);border-radius:12px;padding:8px 12px;margin-top:8px}
+
+/* ---------- クイズ ---------- */
+.qtext{font-size:1.02rem;font-weight:700;text-align:center;margin:4px 0 10px;text-wrap:balance}
+.target{display:flex;align-items:center;justify-content:center;gap:12px}
+.target svg{width:84px;height:84px}
+.chs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.ch{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 4px 8px;border-radius:14px;
+  border:2px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);transition:.15s}
+.ch:hover{border-color:rgba(255,255,255,.4)}
+.ch svg{width:min(17vw,70px);height:min(17vw,70px)}
+.ch span{font-size:.7rem;color:var(--sub);min-height:1.5em;line-height:1.3}
+.ch.ok{border-color:var(--ok);background:rgba(76,217,160,.16)}
+.ch.ng{border-color:var(--ng);background:rgba(255,122,107,.14)}
+.ch:disabled{cursor:default}
+.fb{display:none;margin-top:12px;border-radius:16px;padding:12px 14px;border:1px solid var(--line);background:rgba(255,255,255,.06)}
+.fb.on{display:block;animation:pop .25s ease}
+@keyframes pop{from{transform:scale(.96);opacity:0}to{transform:none;opacity:1}}
+.fb .mk{font-size:1.2rem;font-weight:900}
+.fb.ok .mk{color:var(--ok)} .fb.ng .mk{color:var(--ng)}
+.fb p{margin:4px 0 0;font-size:.88rem}
+.fb .cmp{display:flex;gap:16px;justify-content:center;margin:6px 0}
+.fb .cmp div{text-align:center;font-size:.72rem;color:var(--sub)}
+.fb .cmp svg{width:64px;height:64px;margin:0 auto}
+.fb .btn{margin-top:10px;width:100%}
+.decide{width:100%;margin-top:10px}
+
+/* ---------- 結果 ---------- */
+.ov{position:fixed;inset:0;z-index:10;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(3,5,14,.72)}
+.ov.on{display:flex}
+.ovc{width:100%;max-width:380px;text-align:center;background:linear-gradient(165deg,#18204a,#0a0e22);border:2px solid #2a3560;border-radius:24px;padding:24px 20px}
+.ovc .big{font-size:2.4rem;color:#ffd43b;letter-spacing:.1em}
+.ovc .big i{color:#34405e;font-style:normal}
+.ovc h3{margin:6px 0;font-size:1.2rem}
+.ovc p{color:var(--sub);font-size:.9rem;margin:4px 0 16px}
+.ovc .row .btn{flex:1}
+
+@keyframes pulse{0%,100%{opacity:.25}50%{opacity:.8}}
+.pulse{animation:pulse 1.4s ease-in-out infinite}
+@media (max-width:360px){.chs{grid-template-columns:repeat(2,1fr)}.ch svg{width:64px;height:64px}}
+</style>
+
+<!-- ▼ 訪問者カウント（GoatCounter）。Cookieも個人情報も使わない集計。
+     goatcounter.com で決めたコードを MYCODE に入れて、この行のコメントを外すと動きます -->
+<!-- <script data-goatcounter="https://MYCODE.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script> -->
+</head>
+<body>
+
+<div id="sky"></div>
+<canvas id="stars"></canvas>
+
+<!-- 絵で使いまわす印 -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <radialGradient id="gSun" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#FFF6C8"/><stop offset=".45" stop-color="#FFD34D"/><stop offset=".7" stop-color="#FF9F2E" stop-opacity=".55"/><stop offset="1" stop-color="#FF9F2E" stop-opacity="0"/></radialGradient>
+  <marker id="arw" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="#FFD86B"/></marker>
+  <marker id="arwW" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 Z" fill="rgba(255,255,255,.6)"/></marker>
+</defs></svg>
+
+<!-- ================= TITLE ================= -->
+<section id="title">
+  <a class="tlead" href="../">◀ あたやさいさいゲームランド</a>
+  <div class="logo">
+    <img class="side l" src="moon.svg" alt="" width="110" height="110">
+    <div class="sign"><svg class="crown" viewBox="0 0 60 40" aria-hidden="true"><path d="M4 34 L8 10 L20 22 L30 4 L40 22 L52 10 L56 34 Z" fill="#ffd43b" stroke="#5b3417" stroke-width="3" stroke-linejoin="round"/><circle cx="30" cy="25" r="4" fill="#F0603F" stroke="#5b3417" stroke-width="2"/></svg><span class="star a">★</span><span class="star b">★</span>
+      <h1 aria-label="月のみちかけ"><span class="sm">おつきさまの</span><span class="bg" style="--n:4"><span class="lt" style="--k:#F0A93F;--i:0;--r:-6deg">み</span><span class="lt" style="--k:#4A6BC0;--i:1;--r:4deg">ち</span><span class="lt" style="--k:#8A5BD6;--i:2;--r:-3deg">か</span><span class="lt" style="--k:#4CB86B;--i:3;--r:5deg">け</span></span></h1>
+    </div>
+    <img class="side r" src="moon.svg" alt="" width="110" height="110">
+  </div>
+
+  <div class="tpanel">
+  <p class="kicker">Phases of the Moon</p>
+  <p>月は、いつも <b>太陽の がわが 光って</b> いる。<br>
+     それなのに、見える形は 毎日 かわる。<br>
+     月を 地球の まわりで <b>うごかして</b>、<br>
+     形が かわる ひみつを 見つけよう。</p>
+
+  <div class="tbtns">
+    <button class="btn go" id="labBtn">じっけんしつ（じゆうに うごかす）</button>
+    <button class="stg" data-st="0"><span class="n">1</span><span><b>形を あてよう</b><small>この 場所の 月は、地球から どう見える？</small></span><span class="rec" id="rec0"></span></button>
+    <button class="stg" data-st="1"><span class="n">2</span><span><b>月を うごかそう</b><small>この 形に 見えるのは、月が どこに いるとき？</small></span><span class="rec" id="rec1"></span></button>
+    <button class="stg" data-st="2"><span class="n">3</span><span><b>空の 月を 見よう</b><small>ゆうがた・まよなか・あけがた。空の ？は どの月？</small></span><span class="rec" id="rec2"></span></button>
+  </div>
+  <p class="grade">小学4年「月の形と動き」・6年「月と太陽」</p>
+
+  <a class="backlink" href="../">◀ あたやさいさいゲームランドへ もどる</a>
+  </div>
+</section>
+
+<!-- ================= じっけんしつ ================= -->
+<section class="scr" id="lab"><div class="wrap">
+  <div class="hud">
+    <button class="btn sm" data-back>◀ もどる</button>
+    <h2>じっけんしつ</h2>
+    <span style="width:70px"></span>
+  </div>
+
+  <div class="card">
+    <h3>宇宙から 見ると <b>（月を ゆびで うごかそう）</b></h3>
+    <svg class="top drag" id="labTop" viewBox="0 0 340 320"></svg>
+    <div class="legend"><span style="--c:var(--see)">地球から 見える がわ</span><span class="d" style="--c:#FF9E7A">地球の 人が 見ている むき</span></div>
+    <div class="row">
+      <button class="btn sm" id="dayBack">◀ 1日 もどす</button>
+      <button class="btn sm" id="playBtn">▶ じどうで すすめる</button>
+      <button class="btn sm" id="dayFwd">1日 すすめる ▶</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>地球から 見ると</h3>
+    <div class="look">
+      <div class="face" id="labFace"></div>
+      <div>
+        <div class="nm" id="labName"></div>
+        <div class="age" id="labAge"></div>
+        <p id="labSay"></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card skybox">
+    <h3>空で 見ると <b>（みなみを 向いて 見た 空）</b></h3>
+    <div class="tlab" id="labTime"></div>
+    <svg id="labSky" viewBox="0 0 340 200"></svg>
+    <input type="range" id="tSlider" min="0" max="24" step="0.5" value="18" aria-label="時こく">
+    <div class="row">
+      <button class="btn sm" data-t="18">ゆうがた</button>
+      <button class="btn sm" data-t="0">まよなか</button>
+      <button class="btn sm" data-t="6">あけがた</button>
+    </div>
+    <div class="hintbox" id="labSkySay"></div>
+  </div>
+</div></section>
+
+<!-- ================= クイズ ================= -->
+<section class="scr" id="quiz"><div class="wrap">
+  <div class="hud">
+    <button class="btn sm" id="quizBack">◀ もどる</button>
+    <h2 id="qStage"></h2>
+    <div class="hudR"><span class="prog" id="qProg"></span><span class="score" id="qScore">0<small>てん</small></span></div>
+  </div>
+  <div class="bar"><i id="qBar"></i></div>
+  <div class="card">
+    <div class="qtext" id="qText"></div>
+    <div id="qTarget" class="target"></div>
+    <div id="qFig"></div>
+    <div id="qLegend" class="legend"></div>
+    <div id="qTime" class="tlab"></div>
+  </div>
+  <div id="qChoices" class="chs"></div>
+  <button class="btn pri decide" id="decideBtn">ここで けってい</button>
+  <div class="fb" id="fb"><div class="mk" id="fbMk"></div><div id="fbBody"></div><button class="btn pri" id="nextBtn">つぎへ ▶</button></div>
+</div></section>
+
+<div class="ov" id="resultOv"><div class="ovc">
+  <div class="big" id="rStars"></div>
+  <h3 id="rTitle"></h3>
+  <p id="rText"></p>
+  <div class="row"><button class="btn" id="rAgain">もういちど</button><button class="btn pri" id="rTitleBtn">タイトルへ</button></div>
+</div></div>
+
+<script>
+(function(){
+"use strict";
+var $=function(s){return document.querySelector(s);};
+var $$=function(s){return Array.prototype.slice.call(document.querySelectorAll(s));};
+var RAD=Math.PI/180;
+function mod(a,n){return ((a%n)+n)%n;}
+function f1(v){return Math.round(v*10)/10;}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function load(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+
+/* ---------- 月の形 ----------
+   E ＝ 地球から見て、太陽と月が はなれている角度（0＝新月、90＝上弦、180＝満月、270＝下弦）。
+   ここから 形・名前・空での場所を すべて 計算する。 */
+var PH=[
+ {e:0,  nm:"新月",yomi:"しんげつ",
+  say:"月が 地球と 太陽の あいだに いる。光っている がわが むこうを 向いているので、地球からは 見えない。",
+  sky:"新月は 太陽と いっしょに のぼって、いっしょに しずむ。太陽が まぶしくて 見えない。"},
+ {e:45, nm:"三日月",yomi:"みかづき",
+  say:"光っている がわが、右の はしだけ すこし 見える。",
+  sky:"三日月は ゆうがた 西の空に 見えて、夜の はじめに しずむ。"},
+ {e:90, nm:"上弦の月",yomi:"じょうげんのつき",
+  say:"光っている がわの ちょうど 半分が 見える。右半分が 光る。",
+  sky:"上弦の月は ゆうがた 南の空に 見える。まよなかに 西へ しずむ。"},
+ {e:135,nm:"ふくらんでいく月",yomi:"",
+  say:"光っている がわの ほとんどが 見える。左が すこし かけている。",
+  sky:"この月は ゆうがた 南東の空に 見える。まよなかには 南西へ うごく。"},
+ {e:180,nm:"満月",yomi:"まんげつ",
+  say:"地球を はさんで、太陽の はんたいがわ。光っている がわが ぜんぶ 見える。",
+  sky:"満月は 太陽の はんたいがわ。ゆうがた 東から のぼり、まよなか 南、あけがた 西へ しずむ。"},
+ {e:225,nm:"かけていく月",yomi:"",
+  say:"こんどは 右がわから かけていく。",
+  sky:"満月の あとの 月は、のぼるのが 毎日 おそくなる。まよなかに 南東、あけがたに 南西に 見える。"},
+ {e:270,nm:"下弦の月",yomi:"かげんのつき",
+  say:"また 半分。こんどは 左半分が 光る。",
+  sky:"下弦の月は まよなかに 東から のぼり、あけがたに 南の空に 見える。"},
+ {e:315,nm:"あけがたの ほそい月",yomi:"",
+  say:"左の はしだけ 光る。もうすぐ 新月に もどる。",
+  sky:"この ほそい月は、あけがたに 東の空に 見える。"}
+];
+var WHY="月は いつも 太陽の がわが 光っている。そのうち 地球から 見える がわ（水色の線）に 入っている ところが、月の 形に なる。";
+function phaseOf(E){
+  E=mod(E,360);
+  if(E<12||E>=348)return PH[0];
+  if(E<70)return PH[1];
+  if(E<110)return PH[2];
+  if(E<168)return PH[3];
+  if(E<=192)return PH[4];
+  if(E<250)return PH[5];
+  if(E<290)return PH[6];
+  return PH[7];
+}
+function angDiff(a,b){return Math.abs(mod(a-b+180,360)-180);}
+
+/* 光っている形。Ep は 0〜180。光る がわを ＋x に向けて かく */
+function phasePath(Ep,r){
+  var rx=r*Math.abs(Math.cos(Ep*RAD)), sw=Ep<=90?0:1;
+  return "M0,"+(-r)+" A"+r+","+r+" 0 0 1 0,"+r+" A"+f1(rx)+","+r+" 0 0 "+sw+" 0,"+(-r)+" Z";
+}
+/* 月の顔。rot を はぶくと 教科書と同じ向き（ふえるときは右、へるときは左が光る） */
+function moonG(E,r,rot,dim){
+  E=mod(E,360);
+  var Ep=E<=180?E:360-E;
+  if(rot==null)rot=E<=180?0:180;
+  var s='<circle r="'+r+'" fill="#2c3552" stroke="rgba(255,255,255,.28)" stroke-width="'+(r/30+.4)+'"'+(dim?' opacity=".55"':'')+'/>';
+  if(Ep>=6)s+='<path d="'+phasePath(Ep,r)+'" fill="#FFE7A0" transform="rotate('+f1(rot)+')"'+(dim?' opacity=".6"':'')+'/>';
+  return s;
+}
+function faceSVG(E){return '<svg viewBox="-50 -50 100 100" aria-hidden="true">'+moonG(E,46)+'</svg>';}
+
+/* ---------- 宇宙から見た図（北の上から見おろす。太陽は左） ---------- */
+var CX=190,CY=160,OR=108,ER=24,MR=16;
+function moonXY(E){var p=(E+180)*RAD;return [CX+OR*Math.cos(p),CY-OR*Math.sin(p)];}
+function topInner(E,o){
+  o=o||{};
+  var phi=(E+180)*RAD, m=moonXY(E), mx=m[0], my=m[1], s="";
+  // 太陽と光
+  s+='<circle cx="-30" cy="'+CY+'" r="92" fill="url(#gSun)"/>';
+  s+='<text x="8" y="'+(CY+5)+'" font-size="15" font-weight="900" fill="#7a3f12">太陽</text>';
+  [26,294].forEach(function(y){s+='<line x1="52" y1="'+y+'" x2="318" y2="'+y+'" stroke="#FFD86B" stroke-width="2" stroke-opacity=".7" marker-end="url(#arw)"/>';});
+  s+='<text x="60" y="18" font-size="11" fill="#FFD86B">太陽の 光</text>';
+  // 月の通り道とまわる向き
+  s+='<circle cx="'+CX+'" cy="'+CY+'" r="'+OR+'" fill="none" stroke="rgba(255,255,255,.28)" stroke-dasharray="4 6"/>';
+  var ar=OR+26, a1=-32*RAD, a2=-13*RAD;
+  s+='<path d="M'+f1(CX+ar*Math.cos(a1))+','+f1(CY-ar*Math.sin(a1))+' A'+ar+','+ar+' 0 0 0 '+f1(CX+ar*Math.cos(a2))+','+f1(CY-ar*Math.sin(a2))+'" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="2" marker-end="url(#arwW)"/>';
+  s+='<text x="'+(CX+OR+2)+'" y="'+(CY+100)+'" font-size="10" fill="rgba(255,255,255,.65)" text-anchor="middle">月の まわる むき</text>';
+  if(o.marks){for(var i=0;i<8;i++){var q=moonXY(i*45);s+='<circle cx="'+f1(q[0])+'" cy="'+f1(q[1])+'" r="2.5" fill="rgba(255,255,255,.35)"/>';}}
+  // 地球（左が昼、右が夜）
+  s+='<circle cx="'+CX+'" cy="'+CY+'" r="'+ER+'" fill="#2E6FD8"/>';
+  s+='<ellipse cx="'+(CX-8)+'" cy="'+(CY-6)+'" rx="8" ry="6" fill="#4CB86B"/><ellipse cx="'+(CX+6)+'" cy="'+(CY+9)+'" rx="7" ry="5" fill="#4CB86B"/>';
+  s+='<path d="M'+CX+','+(CY-ER)+' A'+ER+','+ER+' 0 0 1 '+CX+','+(CY+ER)+' Z" fill="rgba(4,6,20,.62)"/>';
+  s+='<text x="'+CX+'" y="'+(CY+ER+16)+'" font-size="12" font-weight="700" fill="#cfe3ff" text-anchor="middle">地球</text>';
+  // 答えの場所
+  if(o.ghostE!=null){var g=moonXY(o.ghostE);
+    s+='<circle cx="'+f1(g[0])+'" cy="'+f1(g[1])+'" r="'+(MR+4)+'" fill="rgba(76,217,160,.15)" stroke="#4CD9A0" stroke-width="2.5" stroke-dasharray="5 4"/>';}
+  if(!o.noMoon){
+    // 見ている人と、見ている向き
+    var ox=CX+ER*Math.cos(phi), oy=CY-ER*Math.sin(phi);
+    if(o.sight)s+='<line x1="'+f1(ox)+'" y1="'+f1(oy)+'" x2="'+f1(mx)+'" y2="'+f1(my)+'" stroke="#FF9E7A" stroke-width="2" stroke-dasharray="4 4"/>';
+    s+='<circle cx="'+f1(ox)+'" cy="'+f1(oy)+'" r="4.5" fill="#FF6B4A" stroke="#fff" stroke-width="1.5"/>';
+    // 月（いつも太陽のある左がわが光る）
+    if(o.drag)s+='<circle class="pulse" cx="'+f1(mx)+'" cy="'+f1(my)+'" r="'+(MR+9)+'" fill="none" stroke="#fff" stroke-width="2"/>';
+    s+='<circle cx="'+f1(mx)+'" cy="'+f1(my)+'" r="'+MR+'" fill="#2c3552" stroke="rgba(255,255,255,.35)"/>';
+    s+='<path d="M'+f1(mx)+','+f1(my-MR)+' A'+MR+','+MR+' 0 0 0 '+f1(mx)+','+f1(my+MR)+' Z" fill="#FFE7A0"/>';
+    if(o.hint){var hr=MR+5,b1=phi+Math.PI/2,b2=phi+Math.PI*1.5;
+      s+='<path d="M'+f1(mx+hr*Math.cos(b1))+','+f1(my-hr*Math.sin(b1))+' A'+hr+','+hr+' 0 0 0 '+f1(mx+hr*Math.cos(b2))+','+f1(my-hr*Math.sin(b2))+'" fill="none" stroke="#6FE3FF" stroke-width="3.5" stroke-linecap="round"/>';}
+  }
+  return s;
+}
+function bindDrag(svg,onE){
+  var down=false;
+  function e(ev){var r=svg.getBoundingClientRect(),x=(ev.clientX-r.left)/r.width*340,y=(ev.clientY-r.top)/r.height*320;
+    return mod(Math.atan2(-(y-CY),x-CX)/RAD-180,360);}
+  svg.addEventListener("pointerdown",function(ev){if(!svg.classList.contains("drag"))return;down=true;
+    try{svg.setPointerCapture(ev.pointerId);}catch(_){}onE(e(ev));ev.preventDefault();});
+  svg.addEventListener("pointermove",function(ev){if(down)onE(e(ev));});
+  ["pointerup","pointercancel","lostpointercapture"].forEach(function(t){svg.addEventListener(t,function(){down=false;});});
+}
+
+/* ---------- 空の図（みなみを 向いて 見る。左が東、右が西） ----------
+   時こく T の空。太陽も月も 東から のぼって 西へ しずむ。
+   月は 太陽より E/15 時間 おくれて 同じ道を 通る。 */
+var HZ=158,ACX=170,ARX=150,ARY=126;
+var SKYSTARS=[];for(var si=0;si<34;si++)SKYSTARS.push([Math.random()*340,Math.random()*140,Math.random()*1.2+.4]);
+function arcPos(L){var a=(L-6)/12*Math.PI;return [ACX-ARX*Math.cos(a),HZ-ARY*Math.sin(a)];}
+function dirName(L){return L<7.5?"東":L<10.5?"南東":L<13.5?"南":L<16.5?"南西":"西";}
+function mix(c1,c2,t){var a=parseInt(c1.slice(1),16),b=parseInt(c2.slice(1),16),r="#";
+  [16,8,0].forEach(function(sh){var x=Math.round(((a>>sh)&255)*(1-t)+((b>>sh)&255)*t);r+=("0"+x.toString(16)).slice(-2);});return r;}
+function skyCols(s){
+  var N=["#070C22","#1B2856"],D=["#2B3A78","#F2A25E"],Y=["#3C92D6","#BFE6FF"];
+  if(s<=-0.25)return N; if(s>=0.3)return Y;
+  if(s<0){var t=(s+0.25)/0.25;return [mix(N[0],D[0],t),mix(N[1],D[1],t)];}
+  var u=s/0.3;return [mix(D[0],Y[0],u),mix(D[1],Y[1],u)];
+}
+function skyInner(T,E,o){
+  o=o||{};
+  var id=o.id||"s", sa=Math.sin((T-6)/12*Math.PI), c=skyCols(sa), s="";
+  s+='<defs><linearGradient id="sk'+id+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+c[0]+'"/><stop offset="1" stop-color="'+c[1]+'"/></linearGradient>'+
+     '<clipPath id="cl'+id+'"><rect x="0" y="0" width="340" height="'+HZ+'"/></clipPath></defs>';
+  s+='<rect width="340" height="200" fill="url(#sk'+id+')"/>';
+  if(sa<0.05){var op=Math.min(1,(0.05-sa)*3);SKYSTARS.forEach(function(p){s+='<circle cx="'+f1(p[0])+'" cy="'+f1(p[1])+'" r="'+f1(p[2])+'" fill="#fff" opacity="'+f1(op*0.8)+'"/>';});}
+  s+='<path d="M'+(ACX-ARX)+','+HZ+' A'+ARX+','+ARY+' 0 0 1 '+(ACX+ARX)+','+HZ+'" fill="none" stroke="rgba(255,255,255,.25)" stroke-dasharray="3 6"/>';
+  var sp=arcPos(T);
+  s+='<g clip-path="url(#cl'+id+')"><circle cx="'+f1(sp[0])+'" cy="'+f1(sp[1])+'" r="34" fill="url(#gSun)"/><circle cx="'+f1(sp[0])+'" cy="'+f1(sp[1])+'" r="12" fill="#FFE070"/></g>';
+  var Lm=mod(T-E/15,24), vis=Lm>=5.9&&Lm<=18.1, mp=arcPos(Lm), mx=mp[0], my=Math.min(mp[1],HZ-14);
+  if(vis){
+    if(o.mark){
+      s+='<circle class="pulse" cx="'+f1(mx)+'" cy="'+f1(my)+'" r="19" fill="none" stroke="#fff" stroke-width="2"/>';
+      s+='<circle cx="'+f1(mx)+'" cy="'+f1(my)+'" r="14" fill="rgba(255,255,255,.14)" stroke="#fff" stroke-width="2" stroke-dasharray="4 3"/>';
+      s+='<text x="'+f1(mx)+'" y="'+f1(my+6)+'" font-size="17" font-weight="900" fill="#fff" text-anchor="middle">？</text>';
+    }else if(phaseOf(E)===PH[0]){
+      s+='<circle cx="'+f1(mx)+'" cy="'+f1(my)+'" r="13" fill="none" stroke="rgba(255,255,255,.5)" stroke-dasharray="3 3"/>';
+      s+='<text x="'+f1(mx)+'" y="'+f1(my-20)+'" font-size="10" fill="#fff" text-anchor="middle">新月（見えない）</text>';
+    }else{
+      // 光るがわを、空の道にそって 太陽の いるほうへ向ける（太陽が 地面の下でも）
+      var d=mod(T-Lm,24), tp=arcPos(Lm+(d<12?1:-1)*Math.min(d<12?d:24-d,2));
+      var rot=Math.atan2(tp[1]-mp[1],tp[0]-mp[0])/RAD, Ep=mod(E,360); Ep=Ep<=180?Ep:360-Ep;
+      s+='<g transform="translate('+f1(mx)+','+f1(my)+')">'+
+         '<circle r="13" fill="#2c3552" opacity="'+(sa>0.1?.35:.8)+'"/>'+
+         '<path d="'+phasePath(Ep,13)+'" fill="#FFF3C4" transform="rotate('+f1(rot)+')" opacity="'+(sa>0.1?.8:1)+'"/></g>';
+    }
+  }else if(!o.mark){
+    s+='<text x="170" y="24" font-size="12" fill="rgba(255,255,255,.85)" text-anchor="middle">月は いま 地面の下（見えない）</text>';
+  }
+  s+='<path d="M0,'+HZ+' Q60,'+(HZ-9)+' 120,'+(HZ-2)+' T240,'+(HZ-3)+' T340,'+HZ+' L340,200 L0,200 Z" fill="#17311f"/>';
+  [["東",14],["南東",90],["南",170],["南西",250],["西",326]].forEach(function(d){
+    s+='<text x="'+d[1]+'" y="'+(HZ+27)+'" font-size="'+(d[0].length>1?11:14)+'" font-weight="700" fill="'+(d[0].length>1?"#8fb59a":"#d8f5e0")+'" text-anchor="middle">'+d[0]+'</text>';});
+  return s;
+}
+function timeLabel(T){
+  T=mod(T,24);var h=Math.floor(T),half=T-h>0?"30分":"";
+  var w=T<4?"まよなか":T<7?"あけがた":T<10?"あさ":T<14?"ひる":T<17?"ごご":T<19.5?"ゆうがた":T<22?"よる":"まよなか";
+  var hh=h===0?"よる12時":h<12?"ごぜん"+h+"時":h===12?"ひる12時":"ごご"+(h-12)+"時";
+  return w+' <small>（'+hh+half+'）</small>';
+}
+
+/* ---------- 画面の切りかえ ---------- */
+function show(id){
+  ["#title","#lab","#quiz"].forEach(function(s){$(s).style.display=(s==="#"+id)?(id==="title"?"":"block"):"none";});
+  window.scrollTo(0,0);
+}
+$$("[data-back]").forEach(function(b){b.addEventListener("click",function(){stopPlay();show("title");paintRec();});});
+
+/* ---------- じっけんしつ ---------- */
+var lab={E:40,T:18}, playing=0, lastTs=0;
+function drawLab(){
+  $("#labTop").innerHTML=topInner(lab.E,{hint:true,sight:true,drag:true,marks:true});
+  var p=phaseOf(lab.E);
+  $("#labFace").innerHTML=faceSVG(lab.E);
+  $("#labName").innerHTML=p.nm+(p.yomi?'<small>'+p.yomi+'</small>':'');
+  $("#labAge").textContent="新月から やく "+Math.round(mod(lab.E,360)/360*29.5)+" 日め";
+  $("#labSay").textContent=p.say;
+  $("#labTime").innerHTML=timeLabel(lab.T);
+  $("#labSky").innerHTML=skyInner(lab.T,lab.E,{id:"L"});
+  var Lm=mod(lab.T-lab.E/15,24);
+  $("#labSkySay").textContent=(Lm>=5.9&&Lm<=18.1&&p!==PH[0]?"いま 月は "+dirName(Lm)+"の 空。":"")+p.sky;
+  $$("[data-t]").forEach(function(b){b.classList.toggle("on",+b.dataset.t===mod(lab.T,24));});
+}
+bindDrag($("#labTop"),function(E){lab.E=E;drawLab();});
+$("#dayFwd").addEventListener("click",function(){lab.E=mod(lab.E+360/29.5,360);drawLab();});
+$("#dayBack").addEventListener("click",function(){lab.E=mod(lab.E-360/29.5,360);drawLab();});
+$("#tSlider").addEventListener("input",function(){lab.T=mod(+this.value,24);drawLab();});
+$$("[data-t]").forEach(function(b){b.addEventListener("click",function(){lab.T=+b.dataset.t;$("#tSlider").value=lab.T;drawLab();});});
+function stopPlay(){if(playing){cancelAnimationFrame(playing);playing=0;}$("#playBtn").textContent="▶ じどうで すすめる";}
+function step(ts){if(lastTs)lab.E=mod(lab.E+(ts-lastTs)/1000*360/29.5*1.5,360);lastTs=ts;drawLab();playing=requestAnimationFrame(step);}
+$("#playBtn").addEventListener("click",function(){if(playing){stopPlay();return;}lastTs=0;playing=requestAnimationFrame(step);this.textContent="■ とめる";});
+$("#labBtn").addEventListener("click",function(){show("lab");drawLab();});
+
+/* ---------- クイズ ---------- */
+var STAGES=[
+  {nm:"形を あてよう", make:function(){return shuffle(PH.slice()).map(function(p){return {E:p.e};});}},
+  {nm:"月を うごかそう", make:function(){return shuffle(PH.slice()).map(function(p){return {E:p.e};});}},
+  {nm:"空の 月を 見よう", make:function(){
+    var all=[];[18,0,6].forEach(function(T){PH.slice(1).forEach(function(p){var L=mod(T-p.e/15,24);if(L>=6&&L<=18)all.push({T:T,E:p.e});});});
+    return shuffle(all).slice(0,8);}}
+];
+var rec=load("tsuki_michikake_rec",[0,0,0]);
+function starStr(n){var s="";for(var i=0;i<3;i++)s+=i<n?"★":"<i>★</i>";return s;}
+function paintRec(){for(var i=0;i<3;i++)$("#rec"+i).innerHTML=starStr(rec[i]||0);}
+var Q={st:0,qs:[],i:0,score:0,done:false,E:0};
+
+function choicesFor(E,pool){
+  var c=[E], mir=mod(360-E,360);
+  if(mir!==E&&pool.indexOf(mir)>=0)c.push(mir);
+  shuffle(pool.slice()).forEach(function(e){if(c.length<4&&c.indexOf(e)<0)c.push(e);});
+  return shuffle(c);
+}
+function startStage(st){
+  Q={st:st,qs:STAGES[st].make(),i:0,score:0,done:false,E:0};
+  $("#qStage").textContent=STAGES[st].nm;
+  show("quiz");ask();
+}
+function ask(){
+  var q=Q.qs[Q.i], st=Q.st;
+  Q.done=false;
+  $("#qProg").textContent=(Q.i+1)+" / "+Q.qs.length;
+  $("#qScore").innerHTML=Q.score+"<small>てん</small>";
+  $("#qBar").style.width=(Q.i/Q.qs.length*100)+"%";
+  $("#fb").className="fb";
+  $("#qTarget").innerHTML="";$("#qTime").innerHTML="";$("#qLegend").innerHTML="";$("#qChoices").innerHTML="";
+  $("#decideBtn").style.display="none";
+  if(st===0){
+    $("#qText").textContent="月が ここに あるとき、地球からは どんな 形に 見える？";
+    $("#qFig").innerHTML='<svg class="top" viewBox="0 0 340 320">'+topInner(q.E,{marks:true})+'</svg>';
+    makeChoices(q.E,PH.map(function(p){return p.e;}));
+  }else if(st===1){
+    var p=phaseOf(q.E);
+    $("#qText").innerHTML="地球から <b>"+p.nm+"</b> に 見えるのは、月が どこに いるとき？<br><small style='color:var(--sub);font-weight:500'>月を ゆびで うごかして、「けってい」を おそう</small>";
+    $("#qTarget").innerHTML=faceSVG(q.E)+'<div style="font-weight:900">'+p.nm+(p.yomi?'<br><small style="color:var(--sub);font-weight:500">'+p.yomi+'</small>':'')+'</div>';
+    Q.E=mod(q.E+120+Math.random()*120,360);
+    $("#qFig").innerHTML='<svg class="top drag" id="qTop" viewBox="0 0 340 320"></svg>';
+    var svg=$("#qTop");
+    var draw=function(){svg.innerHTML=topInner(Q.E,{drag:!Q.done,marks:true});};
+    draw();
+    bindDrag(svg,function(E){if(Q.done)return;Q.E=E;draw();});
+    $("#decideBtn").style.display="";
+  }else{
+    var tw=q.T===18?"ゆうがた":q.T===0?"まよなか":"あけがた";
+    $("#qText").textContent=tw+"。空の ？の ところに 見える 月は どれ？";
+    $("#qTime").innerHTML=timeLabel(q.T)+'<br><small>みなみを 向いて 見た 空</small>';
+    $("#qFig").innerHTML='<div class="skybox"><svg viewBox="0 0 340 200">'+skyInner(q.T,q.E,{id:"Q",mark:true})+'</svg></div>';
+    makeChoices(q.E,PH.slice(1).map(function(p){return p.e;}));
+  }
+}
+function makeChoices(E,pool){
+  $("#qChoices").innerHTML=choicesFor(E,pool).map(function(e){return '<button class="ch" data-e="'+e+'">'+faceSVG(e)+'<span></span></button>';}).join("");
+  $$("#qChoices .ch").forEach(function(b){b.addEventListener("click",function(){answer(+b.dataset.e);});});
+}
+function answer(pick){
+  if(Q.done)return;Q.done=true;
+  var q=Q.qs[Q.i], st=Q.st, ok, p=phaseOf(q.E), body="";
+  if(st===1){
+    ok=angDiff(Q.E,q.E)<=23;
+    $("#qTop").classList.remove("drag");
+    $("#qTop").innerHTML=topInner(ok?q.E:Q.E,{hint:true,sight:true,ghostE:ok?null:q.E,marks:true});
+    $("#decideBtn").style.display="none";
+    if(!ok)body+='<div class="cmp"><div>'+faceSVG(Q.E)+'きみの 場所だと<br>'+phaseOf(Q.E).nm+'</div><div>'+faceSVG(q.E)+'みどりの 丸なら<br>'+p.nm+'</div></div>';
+    body+='<p>'+p.say+'</p><p style="color:var(--sub)">'+WHY+'</p>';
+  }else{
+    ok=pick===q.E;
+    $$("#qChoices .ch").forEach(function(b){var e=+b.dataset.e;b.disabled=true;
+      b.querySelector("span").textContent=phaseOf(e).nm;
+      if(e===q.E)b.classList.add("ok");else if(e===pick)b.classList.add("ng");});
+    if(st===0){
+      $("#qFig").innerHTML='<svg class="top" viewBox="0 0 340 320">'+topInner(q.E,{hint:true,sight:true,marks:true})+'</svg>';
+      $("#qLegend").innerHTML='<span style="--c:var(--see)">地球から 見える がわ</span><span class="d" style="--c:#FF9E7A">見ている むき</span>';
+      body+='<p>こたえは <b>'+p.nm+'</b>。'+p.say+'</p><p style="color:var(--sub)">'+WHY+'</p>';
+    }else{
+      $("#qFig").innerHTML='<div class="skybox"><svg viewBox="0 0 340 200">'+skyInner(q.T,q.E,{id:"Q"})+'</svg></div>';
+      body+='<p>こたえは <b>'+p.nm+'</b>。'+p.sky+'</p><p style="color:var(--sub)">空では、月の 光っている がわが いつも 太陽の ほうを 向いている。</p>';
+    }
+  }
+  if(ok)Q.score++;
+  $("#qScore").innerHTML=Q.score+"<small>てん</small>";
+  $("#fbMk").textContent=ok?"◎ せいかい！":"✕ おしい！";
+  $("#fbBody").innerHTML=body;
+  $("#nextBtn").textContent=Q.i+1<Q.qs.length?"つぎへ ▶":"けっかを 見る ▶";
+  $("#fb").className="fb on "+(ok?"ok":"ng");
+  setTimeout(function(){$("#fb").scrollIntoView({behavior:"smooth",block:"nearest"});},60);
+}
+$("#decideBtn").addEventListener("click",function(){answer();});
+$("#nextBtn").addEventListener("click",function(){
+  Q.i++;
+  if(Q.i<Q.qs.length){ask();window.scrollTo({top:0,behavior:"smooth"});return;}
+  $("#qBar").style.width="100%";
+  var n=Q.qs.length, stars=Q.score===n?3:Q.score>=n*0.75?2:Q.score>0?1:0;
+  if(stars>(rec[Q.st]||0)){rec[Q.st]=stars;save("tsuki_michikake_rec",rec);}
+  $("#rStars").innerHTML=starStr(stars);
+  $("#rTitle").textContent=stars===3?"パーフェクト！":stars===2?"よく できました！":"また ちょうせんしよう！";
+  $("#rText").textContent=n+"もん中 "+Q.score+"もん せいかい"+(stars<3?"。じっけんしつで 月を うごかしてから、もういちど やってみよう。":"。");
+  $("#resultOv").classList.add("on");
+});
+$("#rAgain").addEventListener("click",function(){$("#resultOv").classList.remove("on");startStage(Q.st);});
+$("#rTitleBtn").addEventListener("click",function(){$("#resultOv").classList.remove("on");show("title");paintRec();});
+$("#quizBack").addEventListener("click",function(){
+  if(Q.i>0&&!confirm("とちゅうで やめて、タイトルに もどる？"))return;
+  show("title");paintRec();
+});
+$$(".stg").forEach(function(b){b.addEventListener("click",function(){startStage(+b.dataset.st);});});
+
+/* ---------- 背景の星 ---------- */
+(function(){var c=$("#stars"),x=c.getContext("2d");
+  function d(){c.width=innerWidth;c.height=innerHeight;x.clearRect(0,0,c.width,c.height);
+    for(var i=0;i<120;i++){x.fillStyle="rgba(255,255,255,"+(Math.random()*.6+.2)+")";x.beginPath();x.arc(Math.random()*c.width,Math.random()*c.height,Math.random()*1.2+.2,0,7);x.fill();}}
+  d();addEventListener("resize",d);})();
+
+paintRec();
+})();
+</script>
+</body>
+</html>
