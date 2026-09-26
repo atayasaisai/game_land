@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- 分数のイラスト（みてわかる ぶんすう用）。黒板の丸に、ピザと テープ -->
+  <circle cx="100" cy="100" r="96" fill="#1F4637" stroke="#9b6a3c" stroke-width="8"/>
+  <circle cx="100" cy="78" r="46" fill="#3a5f50" stroke="#F4F1E8" stroke-width="4"/>
+  <path d="M100 78 L100 32 A46 46 0 0 1 146 78 Z M100 78 L146 78 A46 46 0 0 1 100 124 Z M100 78 L100 124 A46 46 0 0 1 54 78 Z" fill="#FFB14E" stroke="#173a2d" stroke-width="3" stroke-linejoin="round"/>
+  <rect x="38" y="138" width="124" height="28" rx="3" fill="#3a5f50" stroke="#F4F1E8" stroke-width="4"/>
+  <rect x="38" y="138" width="82.7" height="28" rx="3" fill="#6CC4FF" stroke="#173a2d" stroke-width="3"/>
+  <path d="M79.3 138 V166 M120.7 138 V166" stroke="#173a2d" stroke-width="3"/>
+</svg>
