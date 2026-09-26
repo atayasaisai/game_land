@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>新鮮野菜をお買い物！｜写真の野菜の名前をあてる無料の学習ゲーム｜あたやさいさいゲームランド</title>
+<meta name="description" content="スーパーマーケットを 歩いていると、ザルに 入った 新鮮な やさいの 写真が ながれてくる。この やさいの 名前は？ 4つから えらんで かごに 入れよう。写真は55しゅるい。しゅんと 食べる ところも おぼえられる、子ども向けの無料の学習ゲーム。">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://atayasaisai.github.io/game_land/35_yasai_okaimono/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="あたやさいさいゲームランド">
+<meta property="og:title" content="新鮮野菜をお買い物！｜この やさいの 名前は？">
+<meta property="og:url" content="https://atayasaisai.github.io/game_land/35_yasai_okaimono/">
+<meta property="og:image" content="https://atayasaisai.github.io/game_land/ogp.png">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap">
+<style>
+:root{
+  --ink:#2F2A1E; --sub:#665A45; --faint:#A8997C;
+  --cream:#FFFBEF; --paper:#FFFDF6; --dark:#3B5B1E;
+  --leaf:#3E9A2F; --leaf2:#2C6E20; --orange:#F08A1C; --blue:#2E73C9;
+  --ok:#2FA36B; --ng:#D9493A; --gold:#F2B705;
+  --bamboo:#E3BD7A; --bamboo2:#B8894A;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{margin:0;font-family:"Zen Kaku Gothic New",-apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif;
+  color:var(--ink);background:#F3F8EA;line-height:1.7;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;color:inherit;cursor:pointer}
+img{display:block}
+.wrap{max-width:640px;margin:0 auto;padding:0 16px calc(24px + env(safe-area-inset-bottom))}
+
+.btn{border:3px solid var(--dark);background:#fff;color:var(--ink);font-weight:900;font-size:1rem;padding:11px 22px;border-radius:14px;
+  box-shadow:0 4px 0 var(--dark);transition:transform .1s}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--dark)}
+.btn.sm{font-size:.82rem;padding:6px 12px;border-width:2px;box-shadow:0 3px 0 var(--dark)}
+.btn.pri{background:linear-gradient(#FFB54A,#F08A1C);color:#fff;text-shadow:0 1px 0 rgba(0,0,0,.25)}
+
+/* お店の中（絵は art/。00_incoming/スーパーマーケット.jpg から切り出し） */
+.shop{position:absolute;inset:0;background:url(art/store.jpg) 50% 40%/cover no-repeat;transform-origin:52% 45%}
+
+/* ---------- タイトル ---------- */
+#title{position:relative;min-height:100dvh;display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 0 28px;overflow:hidden}
+#title .shop{filter:blur(2px) saturate(1.05);opacity:.55;transform:scale(1.04)}
+#title::before{content:"";position:absolute;inset:0;background:linear-gradient(rgba(255,255,255,.35),rgba(243,248,234,.95) 70%)}
+.tlead{position:relative;z-index:3;margin:10px 0 4px;display:inline-block;font-size:.72rem;letter-spacing:.1em;border:2.5px solid #33312A;border-radius:999px;padding:3px 13px;
+  background:#fff;color:#33312A;box-shadow:3px 3px 0 #33312A;text-decoration:none;font-weight:700}
+.hero{position:relative;z-index:2;margin:0;line-height:0;width:min(92%,560px)}
+.hero img{width:100%;height:auto;filter:drop-shadow(0 6px 10px rgba(30,60,10,.25));animation:heroIn .7s cubic-bezier(.3,1.5,.5,1) both}
+@keyframes heroIn{from{transform:scale(.85);opacity:0}}
+.tzaru{position:relative;z-index:2;width:min(40%,210px);height:auto;margin:-6px 0 -10px;animation:bob 2.6s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg) translateY(-4px)}}
+.tpanel{position:relative;z-index:2;margin:6px 16px 0;width:calc(100% - 32px);max-width:540px;display:flex;flex-direction:column;align-items:center;gap:6px;
+  background:var(--paper);border:4px solid var(--dark);border-radius:28px;padding:16px 16px 22px;box-shadow:0 8px 0 var(--dark),0 14px 26px rgba(30,50,10,.25)}
+.greet{display:flex;align-items:flex-end;gap:8px;width:100%}
+.face{flex:none;border-radius:50%;border:3px solid var(--dark);background:#fff;object-fit:contain;padding:6px;box-shadow:0 3px 0 var(--dark)}
+.greet .face{width:clamp(66px,18vw,86px);height:clamp(66px,18vw,86px);animation:bob 2.4s ease-in-out infinite}
+.bubble{position:relative;flex:1;text-align:left;background:#fff;border:3px solid var(--dark);border-radius:18px;padding:8px 12px;font-size:.9rem;line-height:1.65;color:var(--sub)}
+.bubble::before{content:"";position:absolute;left:-13px;bottom:16px;border:7px solid transparent;border-right:10px solid var(--dark)}
+.bubble::after{content:"";position:absolute;left:-7px;bottom:18px;border:5px solid transparent;border-right:7px solid #fff}
+.greet .bubble{margin-bottom:10px}
+.bubble b{color:var(--ink)}
+.bubble .hi{display:block;white-space:nowrap;font-family:"Mochiy Pop One",sans-serif;font-size:clamp(.95rem,4.4vw,1.15rem);color:var(--orange);letter-spacing:.04em}
+.tbtns{display:flex;flex-direction:column;gap:12px;margin-top:12px;width:100%;max-width:400px}
+.stg{position:relative;display:flex;align-items:center;gap:12px;text-align:left;width:100%;border:3px solid var(--dark);border-radius:18px;padding:10px 14px;
+  background:#fff;box-shadow:0 5px 0 var(--dark);transition:transform .1s}
+.stg:active{transform:translateY(4px);box-shadow:0 1px 0 var(--dark)}
+.stg.c1{background:linear-gradient(#fff,#FFF0DA)} .stg.c2{background:linear-gradient(#fff,#E4F5DA)} .stg.c3{background:linear-gradient(#fff,#F1E6FA)} .stg.c4{background:linear-gradient(#fff,#E3EEFB)}
+.stg .ic{flex:none;width:52px;height:52px;border-radius:50%;display:grid;place-items:center;background:#fff;border:2.5px solid var(--dark);overflow:hidden}
+.stg .ic img{width:40px;height:40px;object-fit:contain}
+.stg b{display:block;font-size:1.05rem;font-family:"Mochiy Pop One",sans-serif;font-weight:400}
+.stg small{display:block;font-size:.72rem;color:var(--sub);line-height:1.5}
+.stg .rec{margin-left:auto;font-size:.8rem;color:var(--sub);white-space:nowrap;text-align:right;line-height:1.3}
+.stg .rec b{font-size:1.05rem;color:var(--leaf);display:inline;font-family:inherit;font-weight:900}
+.backlink{display:inline-block;margin-top:18px;font-size:.82rem;color:var(--sub);text-decoration:none;border:2px solid var(--faint);border-radius:999px;padding:5px 16px;background:#fff}
+.grade{font-size:.72rem;color:var(--faint);margin-top:8px}
+
+/* ---------- お買い物 ---------- */
+.scr{display:none}
+#game{min-height:100dvh}
+.top{background:linear-gradient(#58AD48,#3E9A2F);border-bottom:4px solid var(--leaf2);box-shadow:0 3px 0 rgba(0,0,0,.12)}
+.bar{height:58px;display:flex;align-items:center;justify-content:space-between;gap:8px;color:#fff;max-width:640px;margin:0 auto;padding:0 12px}
+.bar .mid{font-family:"Mochiy Pop One",sans-serif;font-size:1.02rem;letter-spacing:.08em;text-shadow:0 2px 0 var(--leaf2);text-align:center;line-height:1.3}
+.bar .mid small{display:block;font-family:"Zen Kaku Gothic New",sans-serif;font-size:.68rem;letter-spacing:.1em;opacity:.85;text-shadow:none}
+.bar .btn.sm{background:rgba(255,255,255,.14);color:#fff;border-color:#fff;box-shadow:none}
+.found{text-align:right;font-size:.7rem;line-height:1.2;background:#FFFBE6;color:var(--dark);border:2.5px solid #C99A3A;border-radius:10px;padding:3px 9px}
+.found b{display:block;font-size:1.05rem;font-variant-numeric:tabular-nums;color:var(--orange)}
+
+/* 売り場：写真が 台の 上を 右から すべってきて、まんなかで 止まる（写真は 大きく 見やすく） */
+.scene{--W:min(94vw,560px,64dvh);position:relative;height:calc(var(--W) * .75 + 70px);margin:0 calc(50% - 50vw);overflow:hidden;background:#EFE6D0}
+.scene .shop{filter:saturate(1.05) blur(1.5px) brightness(1.08)}
+.scene .fade{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:1}
+.scene .fade.on{animation:aisle .6s ease-out}
+@keyframes aisle{from{opacity:.9}}
+.stand{position:absolute;z-index:2;left:0;right:0;bottom:0;height:40px;
+  background:linear-gradient(#C98A48 0 8px,#8E5A2B 8px 11px,#B77A3D 11px),#B77A3D;
+  box-shadow:0 -4px 10px rgba(0,0,0,.18)}
+.stand::after{content:"";position:absolute;left:0;right:0;top:11px;bottom:0;opacity:.35;
+  background:repeating-linear-gradient(90deg,transparent 0 58px,rgba(80,40,10,.5) 58px 60px)}
+.kago{position:absolute;z-index:5;left:max(6px,calc(50% - 360px));bottom:4px;width:clamp(56px,14vw,84px)}
+.kago img{width:100%;height:auto;filter:drop-shadow(0 3px 2px rgba(0,0,0,.3))}
+.kago.go img{animation:hop .5s ease-in-out infinite}
+.kago.got img{animation:gotit .45s ease-out}
+.kago .n{position:absolute;right:-6px;top:-8px;min-width:26px;height:26px;border-radius:13px;padding:0 6px;display:grid;place-items:center;
+  background:var(--orange);color:#fff;font-weight:900;font-size:.9rem;border:2.5px solid #fff;box-shadow:0 2px 0 rgba(0,0,0,.25)}
+@keyframes hop{50%{transform:translateY(-6px) rotate(3deg)}}
+@keyframes gotit{40%{transform:scale(1.18,.86)}70%{transform:scale(.95,1.06)}}
+.card{position:absolute;z-index:4;bottom:18px;left:0;width:var(--W);will-change:transform}
+/* 写真：白い ふちと、下に 竹の ザルの おび */
+.zaru{position:relative;border-radius:14px;padding:6px 6px 16px;background:#fff;
+  box-shadow:0 0 0 3px #6B4518,0 12px 18px rgba(40,25,5,.35)}
+.zaru::after{content:"";position:absolute;left:6px;right:6px;bottom:4px;height:8px;border-radius:4px;
+  background:repeating-linear-gradient(90deg,#E3BD7A 0 6px,#C79A55 6px 8px)}
+.zaru img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:9px;background:#eee}
+.zaru .tag0{position:absolute;left:14px;top:14px;transform:rotate(-6deg);white-space:nowrap;
+  background:#FFF6D8;border:2.5px solid #6B4518;border-radius:8px;padding:0 10px;font-family:"Mochiy Pop One",sans-serif;font-size:.85rem;color:var(--ng);box-shadow:0 2px 0 #6B4518}
+.stamp{position:absolute;z-index:2;left:50%;top:44%;transform:translate(-50%,-50%) rotate(-12deg);font-family:"Mochiy Pop One",sans-serif;
+  font-size:4.6rem;line-height:1;text-shadow:3px 3px 0 #fff,-3px -3px 0 #fff,3px -3px 0 #fff,-3px 3px 0 #fff;pointer-events:none;animation:stampIn .25s ease-out}
+.stamp.ok{color:var(--ok)} .stamp.ng{color:var(--ng)}
+@keyframes stampIn{from{transform:translate(-50%,-50%) rotate(-12deg) scale(2.2);opacity:0}}
+.timer{position:absolute;z-index:3;right:6px;top:6px;width:56px;height:56px;border-radius:50%;display:grid;place-items:center;
+  background:conic-gradient(var(--ok) var(--p,100%),#E4D6BF 0);border:3px solid var(--dark);box-shadow:0 3px 0 var(--dark);transition:opacity .3s}
+.timer b{width:40px;height:40px;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:1.3rem;font-weight:900;font-variant-numeric:tabular-nums}
+.timer.hurry{background:conic-gradient(var(--ng) var(--p,100%),#E4D6BF 0);animation:beat .5s ease-in-out infinite}
+.timer.hurry b{color:var(--ng)}
+.timer.off{opacity:0}
+@keyframes beat{50%{transform:scale(1.12)}}
+.flying{position:fixed;z-index:30;pointer-events:none;transition:transform .7s cubic-bezier(.5,-0.4,.6,1),opacity .7s}
+
+.talk{display:flex;align-items:flex-end;gap:8px;margin:10px 0 0}
+.talk .face{width:54px;height:54px;padding:5px}
+.talk .face.pop{animation:facePop .35s ease-out}
+@keyframes facePop{60%{transform:scale(1.12)}}
+.talk .bubble{font-weight:700;font-size:.98rem;color:var(--ink);padding:6px 12px;margin-bottom:4px}
+.talk .bubble::before{bottom:10px} .talk .bubble::after{bottom:12px}
+
+/* かごの中（あてた やさいが たまる） */
+.note{display:flex;align-items:center;gap:8px;margin:10px 0;min-height:52px;padding:6px 10px;border-radius:14px;
+  background:#EAF2FC;border:3px solid var(--blue);box-shadow:0 3px 0 #1F4F8E}
+.note .lb{font-size:.72rem;font-weight:700;color:#1F4F8E;line-height:1.3;flex:none}
+.shots{display:flex;flex-wrap:wrap;gap:4px;flex:1;min-width:0}
+.shots img{width:32px;height:32px;object-fit:cover;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 2px var(--bamboo2);animation:plDrop .3s ease-out}
+@keyframes plDrop{from{translate:0 -16px;opacity:0}}
+.dots{display:flex;flex-wrap:wrap;gap:4px;max-width:100px;justify-content:flex-end;flex:none}
+.dots i{width:13px;height:13px;border-radius:50%;border:2px solid var(--dark);background:#FFF6E6;font-style:normal}
+.dots i.ok{background:var(--ok)} .dots i.ng{background:var(--ng)} .dots i.now{background:var(--gold);animation:beat .9s ease-in-out infinite}
+
+.q{text-align:center;font-family:"Mochiy Pop One",sans-serif;font-size:1.05rem;margin:4px 0 8px;color:var(--leaf2)}
+.chs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ch{font-size:clamp(.95rem,4.4vw,1.25rem);font-weight:900;padding:14px 4px;border-radius:16px;border:3px solid var(--dark);background:#fff;
+  box-shadow:0 5px 0 var(--dark);transition:transform .1s,background .15s;line-height:1.3;word-break:keep-all;overflow-wrap:anywhere}
+.ch.long{font-size:clamp(.82rem,3.8vw,1.1rem);letter-spacing:-.02em}
+.ch:active{transform:translateY(4px);box-shadow:0 1px 0 var(--dark)}
+.ch:disabled{cursor:default;transform:none}
+.ch.ok{background:#D6F5E3;border-color:var(--ok);box-shadow:0 5px 0 var(--ok)}
+.ch.ng{background:#FBDAD5;border-color:var(--ng);box-shadow:0 5px 0 var(--ng)}
+.ch.dim{opacity:.45}
+
+.fb{display:none;position:relative;overflow:hidden;margin-top:0;background:var(--paper);border:3px solid var(--dark);border-radius:18px;padding:12px 14px;box-shadow:0 5px 0 var(--dark)}
+.fb.on{display:block;animation:pop .25s ease}
+@keyframes pop{from{transform:scale(.96);opacity:0}to{transform:none;opacity:1}}
+.fb .mk{font-weight:900;font-size:1.05rem}
+.fb.ok .mk{color:var(--ok)} .fb.ng .mk{color:var(--ng)}
+.fb .nm{font-size:1.5rem;font-weight:900;line-height:1.25}
+.fb .nm small{font-size:.8rem;color:var(--sub);font-weight:500;margin-left:6px}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.tag{font-size:.72rem;font-weight:700;border-radius:999px;padding:1px 10px;border:2px solid currentColor}
+.tag.h{color:var(--leaf2);background:#E9F6E2} .tag.m{color:#C0402B;background:#FDEBE6} .tag.n{color:#8A5A1E;background:#F8EEDD} .tag.s{color:#3A6FB0;background:#E8F1FB}
+.fb p{margin:8px 0 0;font-size:.95rem}
+.fb .mk{font-size:1.25rem;font-family:"Mochiy Pop One",sans-serif;font-weight:400}
+.fb.ok{background:#F0FBF4;border-color:var(--ok);box-shadow:0 5px 0 var(--ok)}
+.fb .go{margin-top:10px;display:flex;align-items:center;gap:8px;font-size:.72rem;color:var(--sub)}
+.fb .go i{flex:1;height:8px;border-radius:4px;background:#E6DDC8;overflow:hidden}
+.fb .go i::before{content:"";display:block;height:100%;width:100%;background:var(--orange);transform-origin:left;animation:goBar var(--ms) linear forwards}
+@keyframes goBar{from{transform:scaleX(0)}}
+.fb.held .go i::before{animation-play-state:paused;background:var(--faint)}
+.fb .go .btn{flex:none;font-size:.85rem;padding:6px 12px}
+.fb.held .go .btn{background:linear-gradient(#FFB54A,#F08A1C);color:#fff;border-color:var(--dark)}
+.chs.hide{display:none}
+/* せいかい！ の 大きな 文字（売り場の 上に） */
+.banner{position:absolute;z-index:7;left:50%;top:44%;pointer-events:none;white-space:nowrap;font-family:"Mochiy Pop One",sans-serif;
+  font-size:clamp(3rem,15vw,5.6rem);line-height:1;letter-spacing:.04em;color:#fff;
+  -webkit-text-stroke:6px var(--ok);paint-order:stroke fill;text-shadow:0 6px 0 #1C6B43,0 10px 24px rgba(0,0,0,.35);
+  animation:banner 2.3s cubic-bezier(.3,1.6,.5,1) forwards}
+.banner.ng{-webkit-text-stroke-color:var(--ng);text-shadow:0 6px 0 #8E2A20,0 10px 24px rgba(0,0,0,.35);font-size:clamp(2.4rem,11vw,4.2rem)}
+.banner small{display:block;text-align:center;font-size:.36em;margin-top:.3em;-webkit-text-stroke-width:4px}
+@keyframes banner{0%{transform:translate(-50%,-50%) scale(.2) rotate(-10deg);opacity:0}25%{transform:translate(-50%,-50%) scale(1.08) rotate(-4deg);opacity:1}
+  80%{transform:translate(-50%,-50%) scale(1) rotate(-4deg);opacity:1}100%{transform:translate(-50%,-62%) scale(1) rotate(-4deg);opacity:0}}
+.sparkle{position:absolute;z-index:6;left:50%;top:44%;width:10px;height:10px;pointer-events:none}
+.sparkle i{position:absolute;left:0;top:0;font-style:normal;font-size:26px;animation:spark 1s ease-out forwards}
+@keyframes spark{from{transform:translate(-50%,-50%) scale(.3);opacity:1}to{transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(1);opacity:0}}
+
+/* ---------- ずかん ---------- */
+.zhead{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 0 8px}
+.zhead h2{margin:0;font-family:"Mochiy Pop One",sans-serif;font-weight:400;font-size:1.2rem}
+.zhead .cnt{font-size:.85rem;color:var(--sub)}
+.zsec{margin:16px 0 8px;font-family:"Mochiy Pop One",sans-serif;font-weight:400;font-size:1rem;color:var(--leaf2)}
+.zgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+.zc{border:3px solid var(--dark);border-radius:14px;background:#fff;overflow:hidden;padding:0;text-align:left;box-shadow:0 4px 0 var(--dark)}
+.zc>img{width:100%;aspect-ratio:4/3;object-fit:cover}
+.zc .t{display:flex;align-items:center;justify-content:space-between;gap:4px;padding:4px 8px;font-weight:900;font-size:.92rem}
+.zc .t small{font-weight:500;color:var(--sub);font-size:.72rem;white-space:nowrap}
+.zc .unk{display:grid;place-items:center;aspect-ratio:4/3;background:repeating-linear-gradient(45deg,#F3EEDF 0 10px,#EAE3CF 10px 20px)}
+.zc .unk img{width:44%;opacity:.35;filter:grayscale(1)}
+.zc.no .t{color:var(--faint)}
+details.credit{margin-top:22px;font-size:.74rem;color:var(--sub);line-height:1.7}
+details.credit summary{cursor:pointer;font-weight:700;text-align:center}
+details.credit ul{padding-left:1.2em;margin:8px 0}
+details.credit a{color:var(--sub);word-break:break-all}
+
+/* ---------- まど（レジ・ずかんの くわしく） ---------- */
+.ov{position:fixed;inset:0;z-index:40;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(20,40,10,.55)}
+.ov.on{display:flex}
+.ovc{width:100%;max-width:400px;max-height:92dvh;overflow:auto;text-align:center;background:var(--cream);border:4px solid var(--dark);border-radius:24px;padding:20px 18px;box-shadow:0 8px 0 var(--dark)}
+.ovc h3{margin:4px 0;font-family:"Mochiy Pop One",sans-serif;font-weight:400;font-size:1.35rem}
+.ovc .row{display:flex;gap:10px}
+.ovc .row .btn{flex:1;padding:11px 6px}
+.ovc img.big{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:12px;border:3px solid var(--dark);margin-bottom:8px}
+.ovc .dt{text-align:left}
+.ovc .dt p{margin:6px 0 0;font-size:.92rem}
+.ovc .src{font-size:.7rem;color:var(--sub);margin:10px 0 12px;text-align:left;word-break:break-all}
+.ovc .src a{color:var(--sub)}
+.ovc .face{width:70px;height:70px;margin:0 auto 6px}
+.ovc .new{display:inline-block;background:var(--gold);color:var(--dark);font-weight:900;font-size:.8rem;border-radius:999px;padding:1px 10px;margin-bottom:4px}
+.reji{width:150px;margin:-6px auto 0;animation:heroIn .5s cubic-bezier(.3,1.5,.5,1) both}
+/* レシート */
+.receipt{position:relative;margin:6px auto 14px;max-width:290px;background:#fff;padding:12px 16px 18px;text-align:left;font-size:.86rem;
+  box-shadow:0 3px 8px rgba(0,0,0,.18);font-variant-numeric:tabular-nums;animation:print .6s ease-out both .2s}
+@keyframes print{from{clip-path:inset(0 0 100% 0)}to{clip-path:inset(0 0 0 0)}}
+.receipt::after{content:"";position:absolute;left:0;right:0;bottom:-8px;height:8px;
+  background:linear-gradient(-45deg,transparent 6px,#fff 0) 0 0/12px 8px,linear-gradient(45deg,transparent 6px,#fff 0) 0 0/12px 8px}
+.receipt .shop-n{text-align:center;font-weight:900;letter-spacing:.1em;border-bottom:2px dashed #bbb;padding-bottom:4px;margin-bottom:6px}
+.receipt .ln{display:flex;justify-content:space-between;gap:8px;line-height:1.55}
+.receipt .ln.ng{color:#aaa;text-decoration:line-through}
+.receipt .tot{border-top:2px dashed #bbb;margin-top:6px;padding-top:6px;font-weight:900;font-size:1.05rem;display:flex;justify-content:space-between}
+.receipt .ttl{text-align:center;font-weight:900;color:var(--orange);margin-top:6px}
+</style>
+
+<!-- ▼ 訪問者カウント（GoatCounter）。Cookieも個人情報も使わない集計。
+     goatcounter.com で決めたコードを MYCODE に入れて、この行のコメントを外すと動きます -->
+<!-- <script data-goatcounter="https://MYCODE.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script> -->
+</head>
+<body>
+
+<!-- ================= タイトル ================= -->
+<section id="title">
+  <div class="shop" aria-hidden="true"></div>
+  <a class="tlead" href="../">◀ ゲームランド</a>
+  <h1 class="hero"><img src="art/title.png" alt="新鮮野菜をお買い物！" width="560" height="340"></h1>
+  <img class="tzaru" src="art/zaru.png" alt="" width="460" height="331">
+
+  <div class="tpanel">
+    <div class="greet"><img class="face" src="art/i_tomato.png" alt="トマトくん">
+      <p class="bubble"><span class="hi">いらっしゃいませ！</span>スーパーを 歩いていると、<b>ザルに 入った やさいの 写真</b>が ながれてくるよ。
+       止まったら「この やさいの 名前は？」。<b>4つから えらんで</b>、かごに 入れてね。</p></div>
+    <div class="tbtns">
+      <button class="stg c1" data-course="all"><span class="ic"><img src="art/kago.png" alt=""></span><span><b>お買い物に 行く</b><small>1回 10こ。よく 見る やさいから めずらしい やさいまで 出てくる</small></span><span class="rec" id="rec_all"></span></button>
+      <button class="stg c2" id="zukanBtn"><span class="ic"><img src="art/i_kyabetsu.png" alt=""></span><span><b>やさい ずかん</b><small>かごに 入れた やさいが あつまる</small></span><span class="rec" id="recZukan"></span></button>
+    </div>
+    <p class="grade" id="kinds"></p>
+    <a class="backlink" href="../">◀ あたやさいさいゲームランドへ もどる</a>
+  </div>
+</section>
+
+<!-- ================= お買い物 ================= -->
+<section class="scr" id="game">
+  <div class="top"><div class="bar">
+    <button class="btn sm" id="quitBtn">◀ やめる</button>
+    <div class="mid" id="courseName">いつもの やさい<small>新鮮野菜をお買い物！</small></div>
+    <div class="found">かごの中<b id="foundN">0</b></div>
+  </div></div>
+  <div class="scene" id="scene">
+    <div class="shop" id="shop"></div>
+    <div class="fade" id="fade"></div>
+    <div class="stand"></div>
+    <div class="kago" id="kago"><img src="art/kago.png" alt="かご"><span class="n" id="kagoN">0</span></div>
+    <div class="card" id="card"></div>
+  </div>
+  <div class="wrap">
+    <div class="talk"><img class="face" id="talkFace" src="art/i_tomato.png" alt=""><span class="bubble" id="bub">さあ、お買い物に 出発！</span></div>
+    <div class="note">
+      <span class="lb">かごの<br>中</span>
+      <div class="shots" id="shots"></div>
+      <div class="dots" id="dots"></div>
+    </div>
+    <p class="q">この やさいの 名前は？</p>
+    <div class="chs" id="chs"></div>
+    <div class="fb" id="fb"></div>
+  </div>
+</section>
+
+<!-- ================= ずかん ================= -->
+<section class="scr" id="zukan" style="background:#F3F8EA"><div class="wrap">
+  <div class="zhead"><button class="btn sm" data-home>◀ もどる</button><h2>やさい ずかん</h2><span class="cnt" id="zcnt"></span></div>
+  <h3 class="zsec">🥬 はっぱ・くき・つぼみを 食べる</h3><div class="zgrid" id="zgrid_h"></div>
+  <h3 class="zsec">🍅 実や 豆を 食べる</h3><div class="zgrid" id="zgrid_m"></div>
+  <h3 class="zsec">🥕 土の中の ところを 食べる</h3><div class="zgrid" id="zgrid_n"></div>
+  <details class="credit">
+    <summary>写真に ついて（クレジット）</summary>
+    <p>写真は、自由に つかって よい 写真を <a href="https://commons.wikimedia.org/" target="_blank" rel="noopener">ウィキメディア・コモンズ</a> から かりて、大きさを そろえた ものです。とった人・ライセンス・もとの ページは つぎの とおりです。ひとことの 文は この ゲームで 書いた ものです。</p>
+    <ul id="credits"></ul>
+  </details>
+</div></section>
+
+<div class="ov" id="ov"><div class="ovc" id="ovc"></div></div>
+
+<script src="yasai.js?v=2"></script>
+<script>
+'use strict';
+const $=s=>document.querySelector(s);
+const COURSE={
+  all:{name:'お買い物ちゅう',pool:()=>true},   // コースは 1つだけ（2026-09-26 先方の指示）
+};
+const N=10,WAIT=10;
+const BY={};YASAI.forEach(p=>BY[p.k]=p);
+const PV='?v=2';   // 写真を さしかえたら 上げる
+
+/* ---------- きろく（この端末だけ） ---------- */
+const RK='yasai_okaimono_rec';
+let rec={best:{},got:{}};
+try{const r=JSON.parse(localStorage.getItem(RK)||'null');if(r)rec=Object.assign(rec,r);}catch(e){}
+function save(){try{localStorage.setItem(RK,JSON.stringify(rec));}catch(e){}}
+
+/* ---------- 音（WebAudio で ならすだけ） ---------- */
+let ac=null;
+function tone(fr,t0,dur,type,vol){
+  if(!ac)return;const o=ac.createOscillator(),g=ac.createGain();
+  o.type=type||'sine';o.frequency.value=fr;o.connect(g);g.connect(ac.destination);
+  const t=ac.currentTime+t0;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol||.18,t+.01);g.gain.exponentialRampToValueAtTime(.001,t+dur);
+  o.start(t);o.stop(t+dur+.05);
+}
+function wake(){try{if(!ac)ac=new (window.AudioContext||window.webkitAudioContext)();if(ac.state!=='running')ac.resume();}catch(e){}}
+const SE={
+  ok(){tone(880,0,.15,'triangle');tone(1320,.1,.3,'triangle');},
+  ng(){tone(200,0,.35,'square',.08);},
+  come(){[523,659,784].forEach((f,i)=>tone(f,i*.08,.2,'triangle',.08));},
+  take(){tone(700,0,.08,'sine',.18);tone(1050,.07,.12,'sine',.18);},
+  tick(){tone(1000,0,.06,'square',.06);},
+  gone(){tone(520,0,.25,'sine',.1);tone(390,.18,.35,'sine',.1);},
+  reji(){tone(1760,0,.12,'square',.07);tone(1760,.16,.12,'square',.07);[523,659,784,1047].forEach((f,i)=>tone(f,.4+i*.1,.3,'triangle',.12));},
+};
+
+/* ---------- 画面きりかえ ---------- */
+function show(id){
+  ['title','game','zukan'].forEach(s=>{$('#'+s).style.display=(s===id)?(s==='title'?'flex':'block'):'none';});
+  window.scrollTo(0,0);
+}
+function closeOv(){$('#ov').classList.remove('on');}
+function home(){stopRun();if(G){G.live=false;clearTimeout(G.auto);}closeOv();drawRecs();show('title');}
+
+function drawRecs(){
+  for(const c in COURSE){
+    const b=rec.best[c];$('#rec_'+c).innerHTML=b!=null?`さいこう<br><b>${b}</b>/${N}`:'';
+  }
+  const n=Object.keys(rec.got).filter(k=>BY[k]).length;
+  $('#recZukan').innerHTML=`<b>${n}</b>/${YASAI.length}`;
+}
+
+/* ---------- もんだいを つくる ---------- */
+const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]];}return a;};
+function makeCourse(c){
+  const pool=YASAI.filter(COURSE[c].pool);
+  // はじめの 3こは よく 見る やさい（g1）から。のこり 7こは ぜんぶの 中から まぜて
+  const g1=shuffle(pool.filter(p=>p.g===1)),first=g1.slice(0,3);
+  const list=first.concat(shuffle(pool.filter(p=>!first.includes(p))).slice(0,N-3));
+  return list.slice(0,N).map(p=>({p,opts:makeOpts(p,pool)}));
+}
+function makeOpts(p,pool){
+  // まちがいの 3つ：なるべく おなじ なかま（食べる ところ）から
+  // （むずかしさが 近い ものを 先に）
+  const near=x=>Math.abs(x.g-p.g)+Math.random()*1.5;
+  const same=pool.filter(x=>x!==p&&x.t===p.t).map(x=>[near(x),x]).sort((a,b)=>a[0]-b[0]).map(v=>v[1]),other=shuffle(pool.filter(x=>x!==p&&x.t!==p.t));
+  return shuffle([p].concat(same.concat(other).slice(0,3)));
+}
+
+/* ---------- ゲーム ---------- */
+let G=null,raf=0;
+function start(c){
+  wake();
+  G={c,qs:makeCourse(c),i:0,res:[],zoom:1};
+  $('#courseName').innerHTML=COURSE[c].name+'<small>新鮮野菜をお買い物！</small>';
+  $('#shots').innerHTML='';$('#kagoN').textContent='0';
+  closeOv();show('game');drawHud();nextCard();
+}
+function drawHud(){
+  const n=G.res.filter(Boolean).length;
+  $('#foundN').textContent=n;
+  $('#dots').innerHTML=G.qs.map((q,i)=>`<i class="${G.res[i]===true?'ok':G.res[i]===false?'ng':i===G.i?'now':''}"></i>`).join('');
+}
+function talk(face,t){
+  const f=$('#talkFace'),src='art/i_'+face+'.png';
+  if(!f.src.endsWith(src)){f.src=src;}
+  f.classList.remove('pop');void f.offsetWidth;f.classList.add('pop');
+  $('#bub').textContent=t;
+}
+function stopRun(){cancelAnimationFrame(raf);raf=0;$('#kago').classList.remove('go');}
+function nextCard(){
+  stopRun();
+  if(G.i>=G.qs.length){finish();return;}
+  const q=G.qs[G.i];
+  $('#card').innerHTML=`<div class="zaru"><img src="photo/${q.p.p}.jpg${PV}" alt="この やさいの 名前は？" draggable="false"><span class="tag0">しんせん！</span><div class="timer" id="timer"><b id="tsec">${WAIT}</b></div></div>`;
+  $('#card').style.opacity='1';
+  talk('tomato',['てくてく… あっ、ザルが ながれてきた！','つぎの 売り場だよ。なにが くるかな？','よーく 見てね。この やさいの 名前は？','しんせんな やさい、はっけん！'][G.i%4]);
+  $('#chs').innerHTML=q.opts.map(o=>`<button class="ch${o.n.length>=6?' long':''}" data-k="${o.k}">${o.n}</button>`).join('');
+  $('#chs').querySelectorAll('.ch').forEach(b=>{b.onclick=()=>answer(b.dataset.k);b.disabled=true;});
+  $('#fb').className='fb';$('#fb').innerHTML='';$('#chs').classList.remove('hide');
+  drawHud();
+  // つぎの 売り場へ：お店の 絵を 少し もどして、白く ふわっと きりかえる
+  G.zoom=1;const fd=$('#fade');fd.classList.remove('on');void fd.offsetWidth;fd.classList.add('on');
+  const sc=$('#scene');
+  G.live=false;G.phase='in';G.left=WAIT;G.t=0;
+  G.x=sc.clientWidth+30;G.op=1;
+  G.walk=.6;                         // すこし 歩いてから ザルが くる
+  run();
+}
+// ザルの うごき。G.phase：'in'＝右から すべってくる → 'stop'＝まんなかで 止まる（G.left 秒）→ 'out'＝左へ ながれていく → 'done'
+function run(){
+  stopRun();
+  const sc=$('#scene'),card=$('#card'),shop=$('#shop'),kago=$('#kago');
+  let last=performance.now();
+  let W=sc.clientWidth,cw=card.offsetWidth,xStop=(W-cw)/2;
+  const drawTimer=()=>{
+    const t=$('#timer');if(!t)return;
+    $('#tsec').textContent=Math.max(0,Math.ceil(G.left));
+    t.style.setProperty('--p',(G.left/WAIT*100).toFixed(1)+'%');
+    t.classList.toggle('hurry',G.phase==='stop'&&G.live&&G.left<=3);
+    t.classList.toggle('off',G.phase!=='stop'||!G.live);
+  };
+  const step=now=>{
+    const dt=Math.min(.05,(now-last)/1000);last=now;G.t+=dt;
+    W=sc.clientWidth;cw=card.offsetWidth;const nx=(W-cw)/2;   // 画面の はばが かわっても まんなかに
+    if(G.phase==='stop'&&nx!==xStop)G.x=nx;
+    xStop=nx;
+    let walking=false,wob=0;
+    if(G.phase==='in'){
+      walking=true;
+      if(G.walk>0){G.walk-=dt;}
+      else{
+        const d=G.x-xStop;
+        G.x-=Math.max(140,d*3)*dt;               // はじめは はやく、だんだん ゆっくり
+        if(G.x<=xStop+1){G.x=xStop;G.phase='stop';G.live=true;
+          $('#chs').querySelectorAll('.ch').forEach(b=>b.disabled=false);}
+        else if(d<W*.5&&!G.come){G.come=1;SE.come();}
+      }
+    }else if(G.phase==='stop'){
+      if(G.live){
+        const before=Math.ceil(G.left);G.left-=dt;const after=Math.ceil(G.left);
+        if(after!==before&&after<=3&&after>0)SE.tick();
+        if(G.left<=0){G.left=0;timeout();}
+      }
+    }else if(G.phase==='out'){
+      G.x-=Math.max(80,(xStop-G.x)*3+80)*dt;
+      if(G.x<-cw-20){G.phase='done';}
+    }
+    if(walking){G.zoom=Math.min(1.22,G.zoom+dt*.12);wob=Math.sin(G.t*9)*1.2;}
+    shop.style.transform=`scale(${G.zoom}) translateY(${wob}px)`;
+    kago.classList.toggle('go',walking);
+    // すべってくる あいだは 少し かたむく
+    const tilt=G.phase==='in'&&G.walk<=0?Math.min(4,(G.x-xStop)/60):G.phase==='out'?-3:0;
+    card.style.transform=`translate(${G.x}px,0) rotate(${-tilt}deg)`;
+    card.style.opacity=G.op;
+    drawTimer();
+    if(G.phase==='done'){raf=0;return;}
+    raf=requestAnimationFrame(step);
+  };
+  G.come=0;raf=requestAnimationFrame(step);
+}
+function lockChoices(k){
+  const ans=G.qs[G.i].p.k;
+  $('#chs').querySelectorAll('.ch').forEach(b=>{
+    b.disabled=true;
+    if(b.dataset.k===ans)b.classList.add('ok');
+    else if(b.dataset.k===k)b.classList.add('ng');
+    else b.classList.add('dim');
+  });
+}
+function answer(k){
+  if(!G||!G.live)return;
+  wake();G.live=false;
+  const q=G.qs[G.i],ok=k===q.p.k;
+  G.res[G.i]=ok;lockChoices(k);
+  if(!ok)$('#card .zaru').insertAdjacentHTML('beforeend',`<span class="stamp ng">×</span>`);   // せいかいは 大きな「せいかい！」だけ
+  if(ok){
+    SE.ok();
+    rec.got[q.p.k]=(rec.got[q.p.k]||0)+1;save();
+    setTimeout(()=>flyToKago(q.p),1100);
+    talk('ninjin',['せいかい！ '+q.p.n+' を かごに 入れよう！','やったね！ '+q.p.n+'！','よく 知ってるね！ '+q.p.n+'！'][G.i%3]);
+  }else{
+    SE.ng();
+    talk('nasu','ざんねん！ これは '+q.p.n+' だよ。');
+  }
+  banner(ok,q.p);
+  showFb(ok?'ok':'ng',q.p);
+  drawHud();
+}
+function timeout(){
+  G.live=false;G.phase='out';            // ザルは 左へ ながれていく
+  const q=G.qs[G.i];G.res[G.i]=false;
+  SE.gone();lockChoices(null);
+  talk('nasu','あっ、ながれていっちゃった… '+q.p.n+' だったよ。');
+  banner(false,q.p);
+  showFb('gone',q.p);drawHud();
+}
+function flyToKago(p){
+  const put=()=>{
+    SE.take();
+    $('#shots').insertAdjacentHTML('beforeend',`<img src="photo/${p.p}.jpg${PV}" alt="${p.n}">`);
+    $('#kagoN').textContent=G.res.filter(Boolean).length;
+    const kg=$('#kago');kg.classList.remove('got');void kg.offsetWidth;kg.classList.add('got');
+  };
+  const card=$('#card');
+  if(!G||G.qs[G.i].p!==p||G.phase!=='stop'){put();return;}   // もう つぎへ すすんでいたら、すぐ 入れる
+  const r=card.getBoundingClientRect(),s=$('#kago').getBoundingClientRect();
+  const cl=card.cloneNode(true);cl.removeAttribute('id');cl.classList.add('flying');cl.querySelector('.timer')?.remove();cl.querySelector('.stamp')?.remove();
+  Object.assign(cl.style,{left:r.left+'px',top:r.top+'px',bottom:'auto',width:r.width+'px',transform:'none',opacity:1});
+  document.body.appendChild(cl);card.style.opacity='0';G.op=0;
+  requestAnimationFrame(()=>{
+    const dx=s.left+s.width/2-(r.left+r.width/2),dy=s.top+s.height*.35-(r.top+r.height/2);
+    cl.style.transform=`translate(${dx}px,${dy}px) scale(.15) rotate(-20deg)`;cl.style.opacity='.4';
+  });
+  setTimeout(()=>{cl.remove();put();},720);
+}
+const TK={h:'はっぱ・くき・つぼみ',m:'実・豆',n:'土の中'};
+function tags(p){return `<div class="tags"><span class="tag ${p.t}">食べる ところ：${TK[p.t]}</span><span class="tag s">しゅん：${p.s}</span></div>`;}
+const STAY={ok:4200,ng:5200,gone:5200};   // かいせつを 見せてから 自動で つぎへ（ミリ秒）
+function showFb(kind,p){
+  const mk={ok:'○ せいかい！ かごに 入れたよ',ng:'× ざんねん！ せいかいは…',gone:'じかん ぎれ！ せいかいは…'}[kind];
+  const last=G.i>=G.qs.length-1,ms=STAY[kind];
+  $('#chs').classList.add('hide');           // えらぶ ボタンの 場所に かいせつを 出す
+  $('#fb').className='fb on '+(kind==='ok'?'ok':'ng');
+  $('#fb').style.setProperty('--ms',ms+'ms');
+  $('#fb').innerHTML=`<div class="mk">${mk}</div><div class="nm">${p.n}${p.kj?`<small>漢字で「${p.kj}」</small>`:''}</div>${tags(p)}
+    <p>${p.f}</p><div class="go"><span>${last?'レジへ':'つぎの 売り場へ'}</span><i></i><button class="btn sm" id="holdBtn">⏸ とめて 見る</button></div>`;
+  $('#holdBtn').onclick=hold;
+  clearTimeout(G.auto);G.auto=setTimeout(goNext,ms);
+  setTimeout(()=>{const b=$('#fb');if(b&&b.getBoundingClientRect().bottom>innerHeight)b.scrollIntoView({behavior:'smooth',block:'end'});},60);
+}
+// 「とめて 見る」：自動で すすむのを とめて、ゆっくり 読めるように。もう いちど おすと つぎへ
+function hold(){
+  const f=$('#fb');
+  if(f.classList.contains('held')){goNext();return;}
+  clearTimeout(G.auto);f.classList.add('held');
+  $('#holdBtn').textContent=G.i>=G.qs.length-1?'レジへ ▶':'つぎへ ▶';
+}
+function goNext(){
+  if(!G||$('#game').style.display!=='block')return;
+  clearTimeout(G.auto);wake();stopRun();G.i++;window.scrollTo({top:0,behavior:'smooth'});nextCard();
+}
+function banner(ok,p){
+  const sc=$('#scene');sc.querySelectorAll('.banner,.sparkle').forEach(e=>e.remove());
+  sc.insertAdjacentHTML('beforeend',ok?`<div class="banner">せいかい！</div>`:`<div class="banner ng">ざんねん…<small>${p.n} だよ</small></div>`);
+  if(ok){
+    const sp=document.createElement('div');sp.className='sparkle';
+    sp.innerHTML=Array.from({length:12},(_,i)=>{const a=i/12*Math.PI*2,r=110+Math.random()*60;
+      return `<i style="--dx:${Math.cos(a)*r}px;--dy:${Math.sin(a)*r*.7}px">${['✨','⭐','🎉'][i%3]}</i>`;}).join('');
+    sc.appendChild(sp);
+  }
+  setTimeout(()=>sc.querySelectorAll('.banner,.sparkle').forEach(e=>e.remove()),2400);
+}
+
+function finish(){
+  stopRun();clearTimeout(G.auto);
+  const n=G.res.filter(Boolean).length;
+  const b=rec.best[G.c],isNew=b==null||n>b;
+  if(isNew){rec.best[G.c]=n;save();}
+  SE.reji();
+  const title=n===10?'やさいの はかせ！':n>=8?'お買い物 名人！':n>=5?'やおやさん 見ならい':'ずかんで おぼえて また 来てね';
+  $('#ovc').innerHTML=`<h3>おかいけい です！</h3>${isNew&&n>0?'<span class="new">じこ ベスト！</span>':''}
+    <img class="reji" src="art/reji.png" alt="レジ">
+    <div class="receipt"><div class="shop-n">あたやさいさい マーケット</div>
+      ${G.qs.map((q,i)=>`<div class="ln${G.res[i]?'':' ng'}"><span>${q.p.n}</span><span>${G.res[i]?'1こ':'―'}</span></div>`).join('')}
+      <div class="tot"><span>かごの中</span><span>${n} こ / ${N}</span></div>
+      <div class="ttl">${title}</div></div>
+    <div class="row"><button class="btn" data-home>おしまい</button><button class="btn pri" id="againBtn">もういちど</button></div>`;
+  $('#ov').classList.add('on');
+  $('#againBtn').onclick=()=>start(G.c);
+}
+
+/* ---------- ずかん ---------- */
+const ICON={h:'kyabetsu',m:'tomato',n:'ninjin'};
+function openZukan(){
+  const got=k=>!!rec.got[k];
+  $('#zcnt').textContent=`${YASAI.filter(p=>got(p.k)).length} / ${YASAI.length}`;
+  const card=p=>got(p.k)
+    ?`<button class="zc" data-k="${p.k}"><img src="photo/${p.p}.jpg${PV}" alt="${p.n}" loading="lazy"><span class="t">${p.n}<small>${p.s}</small></span></button>`
+    :`<button class="zc no" data-k="${p.k}"><span class="unk"><img src="art/i_${ICON[p.t]}.png" alt=""></span><span class="t">？？？</span></button>`;
+  for(const t of ['h','m','n'])$('#zgrid_'+t).innerHTML=YASAI.filter(p=>p.t===t).sort((a,b)=>a.g-b.g).map(card).join('');
+  document.querySelectorAll('#zukan .zc').forEach(b=>b.onclick=()=>zDetail(b.dataset.k));
+  if(!$('#credits').children.length){
+    $('#credits').innerHTML=YASAI.map(p=>`<li>${p.n}：${esc(p.a||'（なまえの 書かれて いない 投稿者）')}（${esc(p.l)}） <a href="${p.u}" target="_blank" rel="noopener">もとの ページ</a></li>`).join('');
+  }
+  show('zukan');
+}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function zDetail(k){
+  const p=BY[k];
+  if(!rec.got[k]){
+    $('#ovc').innerHTML=`<img class="face" src="art/i_tomato.png" alt=""><h3>まだ ひみつ</h3><p>お買い物で この やさいを あてると、ずかんに のるよ。</p><div class="row"><button class="btn" id="ovClose">とじる</button></div>`;
+  }else{
+    $('#ovc').innerHTML=`<img class="big" src="photo/${p.p}.jpg${PV}" alt="${p.n}">
+      <div class="dt"><h3 style="margin:0">${p.n}${p.kj?` <small style="font-size:.8rem;color:var(--sub)">${p.kj}</small>`:''}</h3>${tags(p)}<p>${p.f}</p></div>
+      <p class="src">写真：${esc(p.a||'（なまえの 書かれて いない 投稿者）')}（${esc(p.l)}） <a href="${p.u}" target="_blank" rel="noopener">もとの ページ</a><br>かごに 入れた かず：${rec.got[k]}かい</p>
+      <div class="row"><button class="btn" id="ovClose">とじる</button></div>`;
+  }
+  $('#ov').classList.add('on');$('#ovClose').onclick=closeOv;
+}
+
+/* ---------- ボタン ---------- */
+document.querySelectorAll('[data-course]').forEach(b=>b.onclick=()=>start(b.dataset.course));
+$('#zukanBtn').onclick=openZukan;
+$('#quitBtn').onclick=home;
+document.addEventListener('click',e=>{if(e.target.closest('[data-home]'))home();});
+$('#ov').addEventListener('click',e=>{if(e.target.id==='ov'&&$('#zukan').style.display==='block')closeOv();});
+document.addEventListener('keydown',e=>{
+  if(!G||$('#game').style.display!=='block')return;
+  if(G.live&&/^[1-4]$/.test(e.key)){const b=$('#chs').children[+e.key-1];if(b)answer(b.dataset.k);}
+  else if(!G.live&&(e.key==='Enter'||e.key===' ')&&$('#fb').classList.contains('on')){e.preventDefault();goNext();}
+});
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&G&&raf){/* 見ていない あいだは とめる */stopRun();G.paused=true;}
+  else if(!document.hidden&&G&&G.paused){G.paused=false;run();}});
+$('#kinds').textContent=`写真は ${YASAI.length}しゅるい`;
+drawRecs();
+</script>
+</body>
+</html>
