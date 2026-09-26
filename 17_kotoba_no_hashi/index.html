@@ -114,8 +114,6 @@ button{font-family:inherit;font-weight:700;cursor:pointer;color:inherit}
 .stage{position:absolute;left:0;right:0;bottom:0;height:66%;transition:opacity .35s,transform .45s}
 .stage.out{opacity:0;transform:translateX(-30px)}
 .stage.in{opacity:0;transform:translateX(30px)}
-.castle{position:absolute;right:1%;bottom:30%;width:15%;max-width:120px;z-index:1;display:none}
-.castle.on{display:block;animation:pop .6s cubic-bezier(.2,1.7,.5,1) both}
 @keyframes pop{from{transform:scale(.2);opacity:0}to{transform:scale(1);opacity:1}}
 
 /* 橋：英文そのものが橋。穴のところは板がぬけている */
@@ -267,7 +265,6 @@ button{font-family:inherit;font-weight:700;cursor:pointer;color:inherit}
   <div class="scene" id="scene">
     <div class="jp" id="jp"></div>
     <div class="stage" id="stage">
-      <svg class="castle" id="castle" viewBox="0 0 120 120" aria-hidden="true"><use href="#castleG"/></svg>
       <div class="bridge" id="bridge"></div>
     </div>
     <div class="walker idle" id="walker"><span class="say" id="say">Yes!</span><div class="spr" id="spr"></div></div>
@@ -284,22 +281,6 @@ button{font-family:inherit;font-weight:700;cursor:pointer;color:inherit}
 </div></section>
 
 </div>
-
-<!-- 絵の部品（島・お城・たびびと）。<use> で使いまわす -->
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <defs>
-    <g id="castleG" stroke="#4a4a5a" stroke-width="3" stroke-linejoin="round">
-      <rect x="22" y="50" width="76" height="62" fill="#f1eee6"/>
-      <rect x="10" y="36" width="22" height="76" fill="#e6e2d8"/>
-      <rect x="88" y="36" width="22" height="76" fill="#e6e2d8"/>
-      <rect x="46" y="26" width="28" height="40" fill="#f1eee6"/>
-      <path d="M6 38 L21 8 L36 38 Z M84 38 L99 8 L114 38 Z M42 28 L60 -4 L78 28 Z" fill="#e05a4a"/>
-      <path d="M50 112 V88 Q60 76 70 88 V112 Z" fill="#b8793e"/>
-      <path d="M60 -4 V-18 L74 -13 L60 -8" fill="#ffd43b"/>
-      <circle cx="21" cy="56" r="4" fill="#7ec8e3"/><circle cx="99" cy="56" r="4" fill="#7ec8e3"/><circle cx="60" cy="44" r="5" fill="#7ec8e3"/>
-    </g>
-  </defs>
-</svg>
 
 <script>
 (function(){
@@ -554,7 +535,6 @@ function setQ(first){
     + planks(pre)
     + '<span class="gap">'+slots+(glue?'<span class="plank p en">'+esc(glue)+'</span>':'')+'</span>'
     + planks(post) + '<span class="fill-r"></span></div>';
-  $("castle").classList.toggle("on", G.n===G.items.length-1);
   fitBridge();
   placeWalker(false);
   paintInput();
@@ -575,7 +555,6 @@ function fitBridge(){
   deck.querySelector(".fill-l").style.minWidth = Math.round(ww*.6) + "px";
   while(deck.scrollWidth > br.clientWidth + 1 && fs > 11){ fs -= 1; deck.style.fontSize = fs+"px"; }
   var top = $("stage").offsetHeight - parseFloat(getComputedStyle(br).bottom) - deck.offsetHeight;
-  $("castle").style.bottom = ($("stage").offsetHeight - top - 6) + "px";
   // 日本語の札は、橋と たびびとの すこし上に
   var ground = $("stage").offsetHeight - top;
   var jb = ground + ($("walker").offsetHeight||90) + 14;
@@ -596,10 +575,7 @@ function placeWalker(across){
   var w = $("walker"), sc = $("scene"), ww = w.offsetWidth || 110;
   w.style.bottom = groundY() + "px";
   if(across){
-    // 最後の橋は、お城の手前で止まる
-    // お城は SVG なので offsetWidth が無い。getBoundingClientRect で はかる
-    var cs = $("castle").classList.contains("on") ? $("castle").getBoundingClientRect().width*.85 : 0;
-    w.style.left = (sc.clientWidth - ww*.96 - cs) + "px";
+    w.style.left = (sc.clientWidth - ww*.96) + "px";
   } else {
     w.style.transition = "none";
     w.style.left = (-ww*.14) + "px";
@@ -738,7 +714,7 @@ function cross(){
 
 function finish(){
   var w = $("walker"); G.n++;
-  var tt = document.createElement("div"); tt.className = "toast"; tt.textContent = "お城に ついた！";
+  var tt = document.createElement("div"); tt.className = "toast"; tt.textContent = "ゴール！";
   $("scene").appendChild(tt);
   paintDots(); frame(7);
   w.className = "walker"; void w.offsetWidth; w.className = "walker jump";
