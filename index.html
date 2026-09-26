@@ -51,14 +51,15 @@
   {"@type":"ListItem","position":23,"item":{"@type":"VideoGame","name":"なんどく漢字 よめるかな？","url":"https://atayasaisai.github.io/game_land/29_nandoku_kanji/","inLanguage":"ja","genre":["教育ゲーム","国語","漢字"],"gamePlatform":"ウェブブラウザ","applicationCategory":"EducationalApplication","isFamilyFriendly":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"JPY"}}},
   {"@type":"ListItem","position":24,"item":{"@type":"VideoGame","name":"ぶしゅクイズ この漢字の部首は？","url":"https://atayasaisai.github.io/game_land/30_bushu_quiz/","inLanguage":"ja","genre":["教育ゲーム","国語","部首"],"gamePlatform":"ウェブブラウザ","applicationCategory":"EducationalApplication","isFamilyFriendly":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"JPY"}}},
   {"@type":"ListItem","position":25,"item":{"@type":"VideoGame","name":"写真でわかるかな？ 回転寿司クイズ","url":"https://atayasaisai.github.io/game_land/31_kaiten_sushi/","inLanguage":"ja","genre":["教育ゲーム","生活","魚"],"gamePlatform":"ウェブブラウザ","applicationCategory":"EducationalApplication","isFamilyFriendly":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"JPY"}}},
-  {"@type":"ListItem","position":26,"item":{"@type":"VideoGame","name":"実験探偵まりか","url":"https://atayasaisai.github.io/game_land/32_jikken_tantei_marika/","inLanguage":"ja","genre":["教育ゲーム","理科","推理"],"gamePlatform":"ウェブブラウザ","applicationCategory":"EducationalApplication","isFamilyFriendly":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"JPY"}}}
+  {"@type":"ListItem","position":26,"item":{"@type":"VideoGame","name":"実験探偵まりか","url":"https://atayasaisai.github.io/game_land/32_jikken_tantei_marika/","inLanguage":"ja","genre":["教育ゲーム","理科","推理"],"gamePlatform":"ウェブブラウザ","applicationCategory":"EducationalApplication","isFamilyFriendly":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"JPY"}}},
+  {"@type":"ListItem","position":27,"item":{"@type":"VideoGame","name":"借金退治クエストβ版","url":"https://atayasaisai.github.io/game_land/33_shakkin_quest/","inLanguage":"ja","genre":["家計管理","借金返済","大人向け"],"gamePlatform":"ウェブブラウザ","applicationCategory":"FinanceApplication","offers":{"@type":"Offer","price":"0","priceCurrency":"JPY"}}}
  ]}]}
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@700;900&family=Noto+Sans+JP:wght@400;700&display=swap">
 <style>
 :root{
-  --pnk:#E8559A; --red:#E8503A; --ora:#F39A21; --yel:#F5C53A; --grn:#4FB05A; --blu:#3A86D8; --pur:#8A5BD6; --tea:#1FA5A0; --liv:#7E9A2B;
+  --pnk:#E8559A; --red:#E8503A; --ora:#F39A21; --yel:#F5C53A; --grn:#4FB05A; --blu:#3A86D8; --pur:#8A5BD6; --tea:#1FA5A0; --liv:#7E9A2B; --adl:#6B4A2B;
   --ink:#3B2E1E; --sub:#6E5B44; --card:#FFFBF2; --line:#D9B98A; --plate:rgba(255,252,240,.86);
   color-scheme:light;
 }
@@ -109,6 +110,7 @@ img{display:block}
 .sec h2 small{font-size:.78rem;color:var(--sub);font-weight:700;margin-left:auto}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
 @media(min-width:600px){.grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}}
+.sec .lead{margin:-4px 0 12px;font-size:.88rem;font-weight:700;line-height:1.8;color:var(--sub)}
 .tile{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 10px;border-radius:22px;background:var(--card);border:3px solid var(--c);box-shadow:0 6px 0 var(--c);transition:transform .12s,box-shadow .12s;text-align:center;min-height:190px}
 .tile:hover{transform:translateY(-3px);box-shadow:0 9px 0 var(--c)}
 .tile:active{transform:translateY(4px);box-shadow:0 2px 0 var(--c)}
@@ -271,6 +273,15 @@ document.addEventListener('click', e => {
   </div>
 </div></section>
 
+
+<!-- 大人の学び（企画中）。おうちのかたへ のすぐ上 -->
+<section class="sec" style="--c:var(--adl)"><div class="wrap" id="otona">
+  <h2><span class="pin">大</span>おとなの学び<small>企画中・1つ</small></h2>
+  <p class="lead">現在あたやさいさいでは、大人の学びのためのゲームランドも企画中です。ひと足先に、1本を β版 として公開します。</p>
+  <div class="grid">
+    <a class="tile" href="33_shakkin_quest/"><span class="tag" style="--t:var(--adl)">β版</span><img src="img/shakkin.png" alt="" width="84" height="84"><span class="nm">借金退治<br>クエスト</span><span class="hint">借金をモンスターに見立てて、返済を管理する</span><span class="go">ひらく ▶</span></a>
+  </div>
+</div></section>
 
 <!-- おうちのかたへ（いちばん下） -->
 <section class="parents" id="parents"><div class="wrap">

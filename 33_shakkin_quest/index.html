@@ -1,0 +1,1761 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>借金退治クエストβ版｜借金をモンスターに見立てて返済を管理する無料ゲーム｜あたやさいさいゲームランド</title>
+<meta name="description" content="借金をモンスター、返済日を日付の道に見立てて、返済の予定・口座残高・完済の見通しをゲーム画面で管理する大人向けの無料ツール（β版）。記録はこの端末のブラウザにだけ保存され、どこにも送られません。">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://atayasaisai.github.io/game_land/33_shakkin_quest/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="あたやさいさいゲームランド">
+<meta property="og:title" content="借金退治クエストβ版｜モンスターから王国を守れ">
+<meta property="og:url" content="https://atayasaisai.github.io/game_land/33_shakkin_quest/">
+<meta property="og:image" content="https://atayasaisai.github.io/game_land/33_shakkin_quest/logo.jpg">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap">
+<style>img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style>
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:0 0 46px;background:#16202b;color:#f4e9d2;font-family:"Zen Maru Gothic","Hiragino Maru Gothic ProN",sans-serif}
+.wrap{max-width:1210px;margin:0 auto;padding:16px 10px 0;display:flex;flex-direction:column;gap:16px}
+.ttl{font-family:"Mochiy Pop One",sans-serif;font-size:clamp(1.05rem,3vw,1.5rem);margin:0;color:#ffd978;
+  text-shadow:0 2px 0 #7a4a11,0 4px 0 #3a2113,0 7px 14px rgba(0,0,0,.6)}
+.note{margin:0;font-size:.8rem;font-weight:700;color:#9fb1c2;line-height:1.7}
+.screen{border:6px solid #3a2113;border-radius:16px;overflow:hidden;box-shadow:0 18px 40px -12px rgba(0,0,0,.8),inset 0 0 0 3px #8a5a33}
+.screen svg{display:block;width:100%;height:auto}
+
+.hint{margin:2px 0 -4px;font-size:.78rem;font-weight:900;color:#ffd978;text-align:center}
+.win{background:linear-gradient(180deg,#7a4d2b,#5d3920);border:5px solid #2f1b0d;border-radius:14px;padding:0 0 14px;
+  box-shadow:0 20px 44px -14px rgba(0,0,0,.85),inset 0 2px 0 #9a6a42;position:relative}
+.wt{display:flex;align-items:center;gap:10px;font-family:"Mochiy Pop One",sans-serif;font-size:.94rem;color:#ffe6ae;
+  background:linear-gradient(180deg,#3f2613,#2a1608);border-bottom:4px solid #2f1b0d;border-radius:9px 9px 0 0;
+  padding:10px 14px;margin:0 0 14px;text-shadow:0 2px 0 #000}
+.wt .wo{font-family:"Zen Maru Gothic";font-size:.7rem;font-weight:900;background:#e0a21c;color:#3a2113;
+  border:2px solid #2f1b0d;border-radius:99px;padding:3px 10px;text-shadow:none;white-space:nowrap}
+.wt .wx{margin-left:auto;font-style:normal;font-size:.9rem;color:#e2c79a;border:2px solid #8a5a33;border-radius:7px;padding:0 7px}
+.win>.parch,.win>.legend,.win>.qlog,.win>.bosses,.win>.dur{margin-left:14px;margin-right:14px}
+.dur{background:#22303e;border:3px solid #0d1620;border-radius:10px;padding:11px 13px;margin-bottom:12px}
+.durhead{display:flex;justify-content:space-between;align-items:baseline;font-size:.84rem;font-weight:900;color:#f4e9d2}
+.durhead span{font-family:"Mochiy Pop One";color:#7fd0ff;font-size:.82rem}
+.durbar{height:16px;border-radius:99px;background:#0d1620;border:2px solid #000;margin:7px 0 6px;overflow:hidden}
+.durbar i{display:block;height:100%;border-radius:99px;background:linear-gradient(180deg,#7fd0ff,#2f7fd8 55%,#17529a)}
+.durbar.wal{display:flex;border-radius:8px}
+.durbar.wal i{border-radius:0}
+.durbar.wal i:first-child{border-radius:6px 0 0 6px}
+.durbar.wal i:last-child{border-radius:0 6px 6px 0}
+.walleg{display:flex;gap:16px;flex-wrap:wrap;margin:8px 0 8px}
+.walleg span{font-size:.76rem;font-weight:900;color:#f4e9d2;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.walleg span i{width:12px;height:12px;border-radius:3px;border:2px solid #0d1620}
+.walleg b{font-family:"Mochiy Pop One";font-size:.84rem;color:#ffd978}
+.walleg small{width:100%;font-size:.66rem;font-weight:700;color:#9fb1c2;padding-left:18px}
+.durnote{margin:0;font-size:.72rem;font-weight:700;color:#9fb1c2;line-height:1.7}
+.bosses{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.boss{display:flex;align-items:center;gap:11px;background:linear-gradient(180deg,#22303e,#1a2632);border:3px solid #0d1620;
+  border-radius:10px;padding:10px 12px;box-shadow:inset 0 1px 0 #3c5266}
+.boss.pri{border-color:#e0a21c;box-shadow:0 0 0 2px rgba(224,162,28,.3),inset 0 1px 0 #3c5266}
+.bic{width:42px;height:42px;flex:none;border-radius:11px;border:3px solid #0d1620;display:flex;align-items:center;justify-content:center;font-size:21px}
+.bmain{flex:1;min-width:0}
+.bmain b{font-size:.88rem;color:#f4e9d2;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.bmain .pt{font-style:normal;font-size:.62rem;background:#e0a21c;color:#3a2113;border-radius:99px;padding:2px 8px}
+.bmain small{display:block;font-size:.7rem;font-weight:700;color:#9fb1c2;margin-top:2px}
+.bmain .bsub{color:#c8d6e2}
+.bbar{display:block;height:9px;border-radius:99px;background:#0d1620;border:2px solid #000;margin:6px 0 5px;overflow:hidden}
+.bbar i{display:block;height:100%;border-radius:99px}
+.bhp{font-family:"Mochiy Pop One",sans-serif;font-size:.92rem;color:#ff8b7a;text-align:right;line-height:1.3;white-space:nowrap}
+.bhp b{display:block;font-family:"Zen Maru Gothic";font-size:.62rem;font-weight:900;color:#9fb1c2}
+/* 木枠パネル */
+.board{background:linear-gradient(180deg,#7a4d2b,#5d3920);border:5px solid #2f1b0d;border-radius:16px;padding:14px;
+  box-shadow:0 14px 30px -12px rgba(0,0,0,.7),inset 0 2px 0 #9a6a42}
+.board>h2{font-family:"Mochiy Pop One",sans-serif;font-size:.98rem;margin:0 0 12px;color:#ffe6ae;
+  text-shadow:0 2px 0 #3a2113;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.board>h2 .sub{font-family:"Zen Maru Gothic";font-size:.72rem;font-weight:700;color:#e2c79a;text-shadow:none}
+.parch{background:linear-gradient(180deg,#f6e7c3,#e9d4a6);border:3px solid #3a2113;border-radius:10px;padding:12px;color:#3b2a14;
+  box-shadow:inset 0 0 26px rgba(122,77,43,.35)}
+
+.cals{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:880px){.cals{grid-template-columns:1fr}}
+.cal h3{font-family:"Mochiy Pop One",sans-serif;font-size:.88rem;margin:0 0 8px;color:#7a3b12;text-align:center}
+.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.dow{text-align:center;font-size:.68rem;font-weight:900;color:#7a5227;padding:2px 0}
+.dow.sa{color:#1f6fa8}.dow.su{color:#b8302b}
+.cell{min-height:62px;border:2px solid #c8ab74;border-radius:7px;padding:3px;background:#fdf6e4;display:flex;flex-direction:column;gap:2px;position:relative}
+.cell.off{background:#f6e3d2}
+.cell.blank{border:0;background:transparent}
+.cell .dn{font-size:.66rem;font-weight:900;color:#6b4e28;line-height:1}
+.cell.sa .dn{color:#1f6fa8}.cell.su .dn{color:#b8302b}
+.cell.today{border-color:#e0a21c;box-shadow:0 0 0 3px rgba(224,162,28,.45)}
+.cell.today .dn::after{content:"今日";margin-left:3px;background:#e0a21c;color:#3a2113;border-radius:99px;padding:0 4px;font-size:.56rem}
+.ev{display:flex;align-items:center;gap:2px;font-size:.59rem;font-weight:900;line-height:1.3;border-radius:5px;padding:1px 3px;
+  font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;color:#fff;text-shadow:0 1px 0 rgba(0,0,0,.35)}
+.ev.debt{background:#c0392b}.ev.fixed{background:#8a5a33}.ev.whim{background:#c99310}.ev.income{background:#2e8b57}
+.cell .shift{position:absolute;right:2px;top:2px;font-size:.54rem;background:#1f6fa8;color:#fff;border-radius:99px;padding:0 4px;font-weight:900}
+
+.qlog{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.qlog li{display:flex;align-items:center;gap:10px;background:linear-gradient(180deg,#22303e,#1a2632);border:3px solid #0d1620;
+  border-radius:10px;padding:9px 11px;box-shadow:inset 0 1px 0 #3c5266}
+.qlog li.warn{border-color:#c0392b;background:linear-gradient(180deg,#3a2229,#2a1820)}
+.qlog .d{font-family:"Mochiy Pop One",sans-serif;font-size:.76rem;min-width:96px;color:#ffd978;font-variant-numeric:tabular-nums;line-height:1.5}
+.qlog .d b{display:block;color:#9fb1c2;font-size:.66rem;font-family:"Zen Maru Gothic";font-weight:900}
+.qlog .nm{flex:1;min-width:0;font-size:.86rem;font-weight:900;color:#f4e9d2}
+.qlog .nm small{display:block;font-weight:700;font-size:.68rem;color:#9fb1c2}
+.qlog .am{font-family:"Mochiy Pop One",sans-serif;font-size:.88rem;font-variant-numeric:tabular-nums}
+.qlog .badge{font-size:.6rem;font-weight:900;border-radius:99px;padding:3px 8px;background:#1f6fa8;color:#fff;white-space:nowrap}
+.qlog .badge.r{background:#c0392b}
+.hpsplit{display:flex;align-items:center;gap:4px;margin-top:4px}
+.hpsplit i{height:8px;border-radius:99px;display:block}
+.hpsplit .si{background:#e8453c}.hpsplit .sp{background:#3fbf6e}
+.hpsplit small{font-size:.62rem;font-weight:900;color:#c8d6e2;margin-left:4px}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:.72rem;font-weight:900;color:#e2c79a;margin-top:10px}
+.legend span{display:flex;align-items:center;gap:5px}
+.sw{width:12px;height:12px;border-radius:3px;border:2px solid #2f1b0d;display:inline-block}
+
+dialog.gdlg{border:0;padding:0;background:transparent;max-width:min(1180px,96vw);width:100%;}
+dialog.gdlg.sm{max-width:min(560px,96vw);}
+dialog.gdlg::backdrop{background:rgba(8,14,20,.72);backdrop-filter:blur(3px);}
+.gwin{background:linear-gradient(180deg,#7a4d2b,#5d3920);border:5px solid #2f1b0d;border-radius:14px;
+  box-shadow:0 24px 60px -16px rgba(0,0,0,.9),inset 0 2px 0 #9a6a42;overflow:hidden;color:#f4e9d2;}
+.gwt{display:flex;align-items:center;gap:10px;font-family:"Mochiy Pop One",sans-serif;font-size:.96rem;color:#ffe6ae;
+  background:linear-gradient(180deg,#3f2613,#2a1608);border-bottom:4px solid #2f1b0d;padding:11px 14px;text-shadow:0 2px 0 #000;}
+.gwt .wo{font-family:"Zen Maru Gothic";font-size:.72rem;font-weight:900;background:#e0a21c;color:#3a2113;
+  border:2px solid #2f1b0d;border-radius:99px;padding:2px 9px;text-shadow:none;}
+.gx{margin-left:auto;font:inherit;font-size:.9rem;color:#e2c79a;background:#5d3920;border:2px solid #8a5a33;border-radius:8px;padding:2px 9px;cursor:pointer;}
+.gx:hover{background:#7a4d2b;color:#fff;}
+.gbody{padding:14px;max-height:78vh;overflow-y:auto;}
+.gsub{font-family:"Mochiy Pop One",sans-serif;font-size:.9rem;color:#ffe6ae;margin:16px 0 8px;text-shadow:0 2px 0 #3a2113;}
+.dlgnote{margin:0 0 10px;font-size:.78rem;font-weight:700;color:#e2c79a;line-height:1.75;}
+.dlgnote.small{font-size:.7rem;color:#c8ab80;}
+.dlgnote b{color:#ffd978;}
+.empty{font-size:.82rem;font-weight:700;color:#c8ab80;padding:14px;text-align:center;}
+.gform{display:flex;flex-direction:column;gap:10px;background:#22303e;border:3px solid #0d1620;border-radius:10px;padding:12px;margin-bottom:12px;}
+.gform h4{margin:0;font-family:"Mochiy Pop One",sans-serif;font-size:.88rem;color:#ffd978;}
+.gdlg label{display:flex;flex-direction:column;gap:5px;font-size:.78rem;font-weight:900;color:#c8d6e2;}
+.gdlg input,.gdlg select{font:inherit;font-size:.95rem;font-weight:700;color:#f4e9d2;background:#16212c;
+  border:2px solid #3c5266;border-radius:9px;padding:9px 11px;}
+.gdlg input:focus-visible,.gdlg select:focus-visible{outline:3px solid #e0a21c;outline-offset:1px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:480px){.g2{grid-template-columns:1fr;}}
+.gbtn{font-family:"Zen Maru Gothic",sans-serif;font-weight:900;font-size:.9rem;border-radius:11px;padding:11px 16px;
+  border:3px solid #2f1b0d;cursor:pointer;background:#e0a21c;color:#3a2113;box-shadow:0 4px 0 #8a5a12;}
+.gbtn:active{transform:translateY(3px);box-shadow:none;}
+.gbtn.red{background:#c0392b;color:#fff;box-shadow:0 4px 0 #7a1d12;width:100%;}
+.gbtn.ghost{background:#3f2613;color:#e2c79a;box-shadow:0 4px 0 #2a1608;}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin:-2px 0 4px;}
+.gchip{font:inherit;font-size:.74rem;font-weight:900;color:#e2c79a;background:#3f2613;border:2px solid #8a5a33;border-radius:99px;padding:6px 12px;cursor:pointer;}
+.gchip:hover{background:#5d3920;color:#fff;}
+.atkinfo{background:#16212c;border:2px solid #3c5266;border-radius:10px;padding:10px 12px;margin:2px 0 4px;}
+.ai-row{display:flex;justify-content:space-between;gap:10px;font-size:.78rem;font-weight:700;color:#9fb1c2;padding:3px 0;}
+.ai-row b{font-family:"Mochiy Pop One";color:#f4e9d2;font-size:.82rem;}
+.ai-hit{margin-top:7px;font-size:.78rem;font-weight:700;line-height:1.7;color:#ffe6ae;background:rgba(224,162,28,.16);border:2px solid #e0a21c;border-radius:9px;padding:8px 10px;}
+.ai-hit b{color:#ffd978;font-family:"Mochiy Pop One";}
+.ai-warn{margin-top:7px;font-size:.76rem;font-weight:900;color:#ffb3a8;background:rgba(192,57,43,.2);border:2px solid #c0392b;border-radius:9px;padding:8px 10px;}
+.reslist,.ilist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;}
+.reslist li,.ilist li{display:flex;align-items:center;gap:10px;background:linear-gradient(180deg,#22303e,#1a2632);
+  border:3px solid #0d1620;border-radius:10px;padding:9px 11px;}
+.reslist li.on{border-color:#e0a21c;background:linear-gradient(180deg,#3a2f1a,#261f10);}
+.reslist .rd{font-family:"Mochiy Pop One";font-size:.74rem;color:#ffd978;min-width:88px;line-height:1.5;}
+.reslist .rd b{display:block;font-family:"Zen Maru Gothic";font-size:.64rem;color:#9fb1c2;}
+.reslist .rn{flex:1;font-size:.84rem;font-weight:900;min-width:0;}
+.reslist .rn small{display:block;font-size:.66rem;font-weight:700;color:#9fb1c2;}
+.reslist .ra{font-family:"Mochiy Pop One";font-size:.82rem;color:#ff8b7a;}
+.ilist .it{flex:1;min-width:0;}
+.ilist .it b{display:block;font-size:.85rem;}
+.ilist .it small{font-size:.68rem;font-weight:700;color:#9fb1c2;}
+.ilist .iv{font-family:"Mochiy Pop One";font-size:.84rem;color:#ffd978;}
+.ix{font:inherit;font-weight:900;color:#ffb3a8;background:#3a1f1a;border:2px solid #7a2a1e;border-radius:8px;padding:2px 8px;cursor:pointer;}
+.gtabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.gtab{font:inherit;font-size:.78rem;font-weight:900;color:#e2c79a;background:#3f2613;border:2px solid #8a5a33;
+  border-radius:9px;padding:7px 13px;cursor:pointer;}
+.gtab.on{background:#e0a21c;color:#3a2113;border-color:#2f1b0d;}
+.danger{margin-top:14px;text-align:center;}
+.simin{flex-direction:row!important;align-items:center;gap:8px!important;margin-bottom:12px;font-size:.84rem;}
+.simin input{max-width:160px;}
+.simcard{background:linear-gradient(180deg,#22303e,#1a2632);border:3px solid #0d1620;border-radius:10px;padding:11px 13px;margin-bottom:9px;}
+.simcard.hl{border-color:#e0a21c;box-shadow:0 0 0 2px rgba(224,162,28,.3);}
+.sct{margin:0;font-size:.76rem;font-weight:900;color:#9fb1c2;}
+.scv{margin:3px 0 0;font-family:"Mochiy Pop One";font-size:1.24rem;color:#ffd978;}
+.scs{margin:2px 0 0;font-size:.76rem;font-weight:700;color:#c8d6e2;}
+.scx{margin:5px 0 0;font-size:.78rem;font-weight:900;color:#6fe0a0;}
+.toast-layer{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;gap:8px;z-index:90;pointer-events:none;}
+.toast{background:#e0a21c;color:#3a2113;padding:13px 22px;border-radius:14px;border:3px solid #2f1b0d;
+  font-family:"Mochiy Pop One",sans-serif;font-size:.9rem;box-shadow:0 14px 30px -10px rgba(0,0,0,.6);
+  opacity:0;transform:translateY(10px) scale(.8);transition:opacity .35s cubic-bezier(.34,1.56,.64,1),transform .35s cubic-bezier(.34,1.56,.64,1);}
+.toast.big{background:#c0392b;color:#fff;font-size:1rem;}
+.toast.show{opacity:1;transform:none;}
+[data-cmd]{cursor:pointer;}
+.hdr{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.logo{width:min(272px,52vw);height:auto;display:block;border-radius:11px;border:3px solid #3a2113;
+  box-shadow:0 10px 22px -10px rgba(0,0,0,.85),0 0 0 2px #8a5a33;}
+.hdr .note{flex:1;min-width:170px;margin:0;font-size:.74rem;}
+@media(max-width:620px){.hdr{gap:10px;}.logo{width:min(210px,46vw);}.hdr .note{font-size:.68rem;min-width:130px;}}
+
+/* 討伐したときの帯 */
+.winb{position:fixed;left:0;right:0;top:50%;transform:translateY(-50%) scale(.92);z-index:120;
+  background:rgba(0,0,0,.5);padding:26px 16px;text-align:center;pointer-events:none;
+  opacity:0;transition:opacity .35s ease,transform .35s cubic-bezier(.34,1.56,.64,1);}
+.winb.show{opacity:1;transform:translateY(-50%) scale(1);}
+.winb span{font-family:"Mochiy Pop One",sans-serif;font-size:clamp(1.5rem,5.2vw,3rem);color:#ffe27a;
+  line-height:1.4;display:inline-block;
+  text-shadow:0 0 14px rgba(255,180,40,.8),3px 3px 0 #7a1d12,-2px -2px 0 #7a1d12,2px -2px 0 #7a1d12,-2px 2px 0 #7a1d12;}
+@media (prefers-reduced-motion: reduce){.winb{transition:none}}
+
+/* 討伐の爆発 */
+.boomfx{position:fixed;z-index:115;pointer-events:none;transform:translate(-50%,-50%);}
+.boomfx img{width:100%;height:auto;display:block;filter:drop-shadow(0 0 16px rgba(255,150,30,.55));}
+
+/* 討伐のお祝い演出 */
+.congrats{position:fixed;left:50%;bottom:calc(50% + 74px);z-index:122;pointer-events:none;
+  width:min(560px,88vw);height:auto;display:block;border-radius:12px;
+  box-shadow:0 18px 40px -12px rgba(0,0,0,.8),0 0 0 3px #e0a21c;
+  transform:translateX(-50%) scale(.03);opacity:0;
+  transition:transform .6s cubic-bezier(.16,1.42,.36,1),opacity .28s ease;}
+.congrats.show{transform:translateX(-50%) scale(1);opacity:1;}
+.confetti{position:fixed;inset:0;z-index:118;pointer-events:none;overflow:hidden;}
+.confetti i{position:absolute;top:-30px;display:block;border-radius:2px;opacity:.95;
+  animation-name:cfall;animation-timing-function:linear;animation-fill-mode:forwards;}
+@keyframes cfall{0%{transform:translateY(-12vh) rotate(0deg)}100%{transform:translateY(112vh) rotate(var(--rot,360deg))}}
+@media (prefers-reduced-motion: reduce){
+  .congrats{transition:none;transform:translateX(-50%) scale(1);opacity:1}
+  .confetti{display:none}
+}
+.ix.ie{color:#ffd978;background:#3f2613;border-color:#8a5a33;}
+.ilist li.on{border-color:#e0a21c;background:linear-gradient(180deg,#3a2f1a,#261f10);}
+.frow{display:flex;gap:8px;align-items:center;}
+.frow .gbtn{flex:1;}
+.frow .gbtn.ghost{flex:0 0 auto;}
+
+/* 子分の内訳ポップアップ */
+.tipbox{position:fixed;z-index:130;pointer-events:none;max-width:300px;
+  background:rgba(12,18,24,.96);color:#f4e9d2;border:2px solid #e0a21c;border-radius:10px;
+  padding:9px 12px;font-size:.76rem;font-weight:700;line-height:1.7;white-space:pre-line;
+  box-shadow:0 12px 28px -10px rgba(0,0,0,.9);}
+
+.cmpwrap{background:#16212c;border:3px solid #0d1620;border-radius:12px;padding:10px;margin-bottom:12px;overflow-x:auto;}
+.cmpwrap svg{width:100%;min-width:680px;height:auto;display:block;}
+.bkarea{font:inherit;font-size:.72rem;font-weight:700;color:#cfe0ee;background:#0f1922;
+  border:2px solid #3c5266;border-radius:9px;padding:9px 11px;width:100%;resize:vertical;
+  word-break:break-all;line-height:1.5;}
+.gdlg input[type=file]{font-size:.8rem;padding:7px 9px;}
+.frow2{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+.frow2 .gbtn{width:100%;font-size:.88rem;padding:13px 8px;}
+@media(max-width:420px){.frow2{grid-template-columns:1fr;}}
+
+/* ゲームランドへのもどり道とβ版の札 */
+.back{display:inline-block;align-self:flex-start;font-size:.8rem;font-weight:900;color:#ffd978;text-decoration:none;
+  background:#3f2613;border:2px solid #8a5a33;border-radius:99px;padding:5px 14px}
+.back:hover{background:#5d3920;color:#fff}
+.beta{display:inline-block;font-family:"Mochiy Pop One",sans-serif;font-size:.78rem;color:#3a2113;background:#ffd978;
+  border:2px solid #2f1b0d;border-radius:99px;padding:2px 10px;margin-right:6px;vertical-align:middle}
+.foot{margin:0;font-size:.74rem;font-weight:700;color:#9fb1c2;line-height:1.8;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../">◀ あたやさいさいゲームランドへ</a>
+  <header class="hdr">
+    <img class="logo" src="logo.jpg" alt="借金退治クエスト ― モンスターから王国を守れ">
+    <p class="note"><span class="beta">β版</span>道は「日付」そのもの。返済日に向かって子分が毎日ちかづいてきます。まず右下の「借金モンスター 登録／設定」から、借金・固定費・収入・口座残高を入れてください。下のコマンドで、こうげき（返済）・カレンダー・戦況・予言が使えます。</p>
+  </header>
+  <div class="screen"><svg id="game" viewBox="0 0 1200 808" role="img" aria-label="返済予定が日付の道を進んで城に迫る戦場画面"></svg></div>
+  <p class="foot">記録はこの端末のブラウザにだけ保存され、どこにも送られません。利息や完済時期は概算です。<br>β版のため、表示や計算を今後変えることがあります。ときどき「保存・呼出」からファイルに保存しておいてください。</p>
+</div>
+<dialog id="dlgLane" class="gdlg"><div class="gwin"><div class="gwt"><span class="wo">4</span>接近レーン（45日ぶん）<button class="gx" data-close>✕</button></div>
+  <div class="gbody"><div class="parch"><svg id="lane45" viewBox="0 0 1160 330" role="img" aria-label="今後45日の予定を日付軸に並べた接近レーン"></svg></div>
+  <div class="legend"><span>メイン画面は3週間ぶん。この画面で45日先まで見渡せます</span><span>赤い帯＝土日祝</span></div></div></div></dialog>
+
+<dialog id="dlgCal" class="gdlg"><div class="gwin"><div class="gwt"><span class="wo">5</span>作戦カレンダー<button class="gx" data-close>✕</button></div>
+  <div class="gbody"><div class="parch"><div class="cals" id="cals"></div></div>
+  <div class="legend"><span><i class="sw" style="background:#c0392b"></i>借金の引き落とし</span><span><i class="sw" style="background:#8a5a33"></i>固定費の荷車</span><span><i class="sw" style="background:#c99310"></i>臨時出費の荷車</span><span><i class="sw" style="background:#2e8b57"></i>収入</span><span>🔁＝休日で翌営業日に順延</span></div></div></div></dialog>
+
+<dialog id="dlgWar" class="gdlg"><div class="gwin"><div class="gwt"><span class="wo">6</span>戦況 ― 攻撃力と親玉の状況<button class="gx" data-close>✕</button></div>
+  <div class="gbody"><div class="cmpwrap"><svg id="compare" viewBox="0 0 1160 480" role="img" aria-label="これから来る支払いと口座残高の比較"></svg></div>
+  <p class="dlgnote">左が今後30日に出ていくお金、右がいまの残高と入ってくるお金です。<b>右の柱が赤い点線より高ければ足ります。</b>棒の高さは金額に比例しています。</p>
+  <h4 class="gsub">🐉 残っているボス（元金）</h4><ul class="bosses" id="bosses"></ul>
+  <h4 class="gsub">📜 これから来る敵（詳細スケジュール）</h4><ul class="qlog" id="up"></ul><div id="trophies"></div><h4 class="gsub">📖 冒険のきろく</h4><ul class="qlog" id="log"></ul></div></div></dialog>
+
+<dialog id="dlgSim" class="gdlg"><div class="gwin"><div class="gwt"><span class="wo">7</span>予言の水晶 ― 完済の試算<button class="gx" data-close>✕</button></div>
+  <div class="gbody"><label class="simin">毎月このくらい上乗せできる <input id="simExtra" type="number" min="0" step="1000" inputmode="numeric" placeholder="0"> 円</label>
+  <div id="simBody"></div>
+  <h4 class="gsub">🍞 兵糧のゆくえ（口座残高の予測）</h4>
+  <div class="parch"><svg id="food" viewBox="0 0 1160 210" role="img" aria-label="口座残高の推移予測グラフ"></svg></div></div></div></dialog>
+
+<dialog id="dlgAttack" class="gdlg sm"><form class="gwin" id="fAtk"><div class="gwt"><span id="atkTitle">こうげき</span><button class="gx" type="button" data-close>✕</button></div>
+  <div class="gbody"><p class="dlgnote" id="atkHint"></p>
+  <label>ねらう敵<select id="atkTarget"></select></label>
+  <div id="atkInfo" class="atkinfo"></div>
+  <button class="gbtn red" type="button" id="atkMonthly">⚔ 月々の返済</button>
+  <div id="atkExtra" hidden>
+    <label>繰り上げで返す金額<input id="atkAmount" type="number" min="1" inputmode="numeric"></label>
+    <div class="chips"><button class="gchip" type="button" id="atkAll">残り全部を返して完済させる</button></div>
+  </div>
+  <button class="gbtn gold" type="button" id="atkCannon">💣 繰り上げ返済</button></div></form></dialog>
+
+
+<dialog id="dlgReg" class="gdlg sm"><div class="gwin"><div class="gwt">＋ 登録・設定<button class="gx" data-close>✕</button></div>
+  <div class="gbody"><div class="gtabs" id="regTabs"></div><div id="regBody"></div>
+  <p class="dlgnote small">記録はこの端末のブラウザにだけ保存されます。同じリンクを人に送っても、相手の記録はあなたとは別々に保存されます。ブラウザのデータを消すと記録も消えるのでご注意ください。</p></div></div></dialog>
+
+<dialog id="dlgBackup" class="gdlg sm"><div class="gwin"><div class="gwt"><span class="wo">7</span>保存・呼び出し<button class="gx" data-close>✕</button></div>
+  <div class="gbody" id="backupBody"></div></div></dialog>
+
+<div id="tip" class="tipbox" hidden></div>
+<div id="boom" class="boomfx" hidden><img alt=""></div>
+<div id="confetti" class="confetti" hidden></div>
+<img id="congrats" class="congrats" src="congrats.jpg" alt="CONGRATULATIONS!" hidden>
+<div id="winBanner" class="winb" aria-live="assertive"><span></span></div>
+<div id="toastLayer" class="toast-layer" aria-live="polite"></div>
+
+<style>
+#game text{font-family:"Mochiy Pop One","Zen Maru Gothic",sans-serif}
+#game .lanenm{fill:#ffe6ae;font-family:"Zen Maru Gothic";font-weight:900;paint-order:stroke;stroke:#17100a;stroke-width:3;stroke-linejoin:round}
+#game .hit{cursor:help}
+#game .amt{fill:#fff;font-weight:900;font-variant-numeric:tabular-nums}
+#game .sign{fill:#3b2a14;font-family:"Zen Maru Gothic";font-weight:900}
+#game .gate,#game .cap{fill:#fff;paint-order:stroke;stroke:#2f1b0d;stroke-width:5;stroke-linejoin:round}
+#game .cap{stroke-width:6}
+#game .hudl{fill:#ffe6ae;paint-order:stroke;stroke:#17100a;stroke-width:4;stroke-linejoin:round;font-family:"Zen Maru Gothic";font-weight:900}
+#game .hudv{fill:#fff;paint-order:stroke;stroke:#17100a;stroke-width:4.5;stroke-linejoin:round;font-variant-numeric:tabular-nums}
+#game .gold{fill:#7a5008}
+#game .alert{fill:#ff3b30;paint-order:stroke;stroke:#fff;stroke-width:6;stroke-linejoin:round}
+#game .cardl{fill:#ffe6ae}
+#game .cards{fill:#6b4326;font-family:"Zen Maru Gothic";font-weight:900}
+#game .tap{fill:#ffe6ae;font-family:"Zen Maru Gothic";font-weight:900;paint-order:stroke;stroke:#17100a;stroke-width:3.5;stroke-linejoin:round}
+#game .leg{fill:#f4e9d2;font-family:"Zen Maru Gothic";font-weight:900;paint-order:stroke;stroke:#17100a;stroke-width:3.4;stroke-linejoin:round}
+#game .bossnm{fill:#ffe6ae;font-family:"Zen Maru Gothic";font-weight:900;paint-order:stroke;stroke:#17100a;stroke-width:4;stroke-linejoin:round}
+#game .bossamt{fill:#fff;font-family:"Mochiy Pop One";paint-order:stroke;stroke:#17100a;stroke-width:4.5;stroke-linejoin:round;font-variant-numeric:tabular-nums}
+#game .hA{animation:heroA 1.1s steps(1,end) infinite}
+#game .hB{opacity:0;animation:heroB 1.1s steps(1,end) infinite}
+@keyframes heroA{0%,49%{opacity:1}50%,100%{opacity:0}}
+@keyframes heroB{0%,49%{opacity:0}50%,100%{opacity:1}}
+@media (prefers-reduced-motion: reduce){#game .hA,#game .hB{animation:none!important}#game .hA{opacity:1}#game .hB{opacity:0}}
+#game .cost{fill:#fff;paint-order:stroke;stroke:#2f1b0d;stroke-width:3.5;stroke-linejoin:round}
+#compare text{font-family:"Zen Maru Gothic",sans-serif}
+#compare .cl{font-size:13px;font-weight:900;fill:#f4e9d2}
+#compare .ct{font-family:"Mochiy Pop One";fill:#ffe6ae}
+#compare .cs{font-family:"Mochiy Pop One";fill:#ffd978}
+#compare .cm{font-weight:900;fill:#ff9a8a}
+#compare .cok{font-family:"Mochiy Pop One";fill:#6fe0a0}
+#compare .cng{font-family:"Mochiy Pop One";fill:#ff8b7a}
+#lane45 .lx{font-family:"Zen Maru Gothic";font-weight:900;font-size:11px;fill:#5b4426}
+#lane45 .lw{font-family:"Zen Maru Gothic";font-weight:900;font-size:10px;fill:#7a6a52}
+#lane45 .lw.su{fill:#c0392b}
+#lane45 .lw.sa{fill:#1f6fa8}
+#lane45 .lt{font-family:"Mochiy Pop One";font-size:11px;fill:#fff;font-variant-numeric:tabular-nums}
+#lane45 .lg,#lane45 .lg2{font-family:"Mochiy Pop One";font-size:13px;fill:#fff}
+#lane45 .lg2{fill:#3a2113}
+#food .gx,#food .gy{font-family:"Zen Maru Gothic";font-weight:900;font-size:11px;fill:#6b4e28}
+</style>
+<script>
+(function(){
+"use strict";
+var DEBTS=[],FIXED=[],WHIM=[],INCOME=[],START_BALANCE=0,SAFETY=50000;
+var events=[],series=[],worst={bal:0,d:0},debtTotal=0,nextE=null,nextDays=99,nextIncome=null,committed=0,freePower=0,heroPose="",BOSSPOS={},MINIONPOS={};
+/* ===== 出費・収入の絵 ===== */
+var ITEM={bill:{w:311,h:234,ja:"請求書"},elec:{w:275,h:254,ja:"電気"},sales:{w:344,h:236,ja:"セールスマン"},plane:{w:314,h:170,ja:"飛行機"},cake:{w:326,h:210,ja:"ショートケーキ"},dinner:{w:351,h:225,ja:"ディナー"},present:{w:314,h:243,ja:"プレゼント"},car:{w:348,h:213,ja:"車"},house:{w:324,h:264,ja:"家"}};
+var WHIMKEYS=["plane","car","cake","dinner"];
+function itemKey(kind,ic){
+  if(kind==="income")return "present";
+  if(kind==="whim")return (ITEM[ic]?ic:"plane");
+  return "bill";
+}
+function itemSrc(kind,ic){return "item/"+itemKey(kind,ic)+".png";}
+function itemTag(kind,ic,h){return '<img src="'+itemSrc(kind,ic)+'" alt="" style="height:'+h+'px;width:auto;vertical-align:middle">';}
+function itemArt(kind,ic,x,y,box){
+  var k=itemKey(kind,ic), m=ITEM[k], s=box/Math.max(m.w,m.h), w=m.w*s, h=m.h*s;
+  return '<ellipse cx="'+x+'" cy="'+(y+2)+'" rx="'+(w*0.3)+'" ry="'+Math.max(4,w*0.07)+'" fill="rgba(0,0,0,.22)"/>'
+   +'<image href="item/'+k+'.png" x="'+(x-w/2)+'" y="'+(y-h)+'" width="'+w+'" height="'+h+'"/>';
+}
+
+/* ===== モンスターの絵（20種類・親分は大きく、子分は小さく） ===== */
+var MON={dragon:{w:290,h:239,ja:"ドラゴン"},bat:{w:256,h:147,ja:"コウモリ"},slime:{w:177,h:136,ja:"スライム"},goblin:{w:221,h:240,ja:"ゴブリン"},wizard:{w:278,h:226,ja:"魔法使い"},tree:{w:245,h:252,ja:"悪魔の木"},skeleton:{w:224,h:214,ja:"ガイコツ"},zombie:{w:202,h:209,ja:"ゾンビ"},chimera:{w:275,h:228,ja:"キメラ"},golem:{w:261,h:233,ja:"ゴーレム"},dragon2:{w:301,h:230,ja:"ドラゴン（色違い）"},bat2:{w:218,h:142,ja:"コウモリ（色違い）"},slime2:{w:192,h:135,ja:"スライム（色違い）"},goblin2:{w:220,h:231,ja:"ゴブリン（色違い）"},wizard2:{w:274,h:224,ja:"魔法使い（色違い）"},tree2:{w:247,h:235,ja:"悪魔の木（色違い）"},skeleton2:{w:223,h:209,ja:"ガイコツ（色違い）"},zombie2:{w:201,h:203,ja:"ゾンビ（色違い）"},chimera2:{w:268,h:217,ja:"キメラ（色違い）"},golem2:{w:257,h:226,ja:"ゴーレム（色違い）"}};
+var MONKEYS=["dragon","bat","slime","goblin","wizard","tree","skeleton","zombie","chimera","golem","dragon2","bat2","slime2","goblin2","wizard2","tree2","skeleton2","zombie2","chimera2","golem2"];
+function monSrc(sp){return "mon/"+(MON[sp]?sp:"goblin")+".png";}
+/* 子分＝1倍、親分＝1.6倍。種類ごとの倍率は MONSCALE（ドラゴンだけ2倍） */
+var MINION_BOX=70, BOSS_BOX=Math.round(MINION_BOX*1.6);
+var MONSCALE={dragon:2};
+function monScale(sp){var b=(sp&&sp.slice(-1)==="2")?sp.slice(0,-1):sp;return MONSCALE[b]||1;}
+function monTag(sp,h){return '<img src="'+monSrc(sp)+'" alt="" style="height:'+h+'px;width:auto;vertical-align:middle">';}
+function monBox(sp,box){
+  var m=MON[sp]||MON.goblin, bx=box*monScale(sp), k=bx/Math.max(m.w,m.h);
+  return {w:m.w*k,h:m.h*k,bx:bx};
+}
+function creature(sp,tier,x,y,box,flip){
+  var m=MON[sp]||MON.goblin, bx=box*monScale(sp);
+  var k=bx/Math.max(m.w,m.h), w=m.w*k, targetH=m.h*k;
+  var sh='<ellipse cx="'+x+'" cy="'+(y+2)+'" rx="'+(w*0.33)+'" ry="'+(Math.max(4,w*0.075))+'" fill="rgba(0,0,0,.26)"/>';
+  var t=flip?' transform="translate('+(2*x)+',0) scale(-1,1)"':'';
+  return sh+'<image href="'+monSrc(sp)+'" x="'+(x-w/2)+'" y="'+(y-targetH)+'" width="'+w+'" height="'+targetH+'"'+t+'/>';
+}
+
+/* ===== 勇者（9ポーズ・状況で切り替え） ===== */
+var HERO={sword:{w:387,h:320,t:124},bow:{w:337,h:317,t:118},cannon:{w:401,h:289,t:112},magic:{w:370,h:317,t:122},powerup:{w:304,h:443,t:138},damage:{w:263,h:360,t:114},lowhp:{w:259,h:251,t:98},cheer:{w:257,h:387,t:126},guts:{w:315,h:363,t:120},stance:{w:308,h:341,t:120},stance2:{w:346,h:322,t:120},bowafter:{w:391,h:324,t:118},cannonfly:{w:442,h:320,t:112},powerup2:{w:389,h:448,t:138},cheer2:{w:372,h:391,t:126},guts2:{w:351,h:322,t:120}};
+var HPAIR={stance:"stance2",sword:"stance2",bow:"bowafter",cannon:"cannonfly",guts:"guts2",cheer:"cheer2",powerup:"powerup2"};
+function heroOne(pose,x,y,scale,cls){
+  var m=HERO[pose]||HERO.stance, h=(m.t||120)*(scale||1), w=h*m.w/m.h;
+  return '<image'+(cls?' class="'+cls+'"':'')+' href="hero/'+pose+'.png" x="'+(x-w/2)+'" y="'+(y-h)+'" width="'+w+'" height="'+h+'"/>';
+}
+function heroImg(pose,x,y,scale,anim){
+  var m=HERO[pose]||HERO.stance, h=(m.t||120)*(scale||1), w=h*m.w/m.h;
+  var sh='<ellipse cx="'+x+'" cy="'+(y+2)+'" rx="'+(w*0.26)+'" ry="'+Math.max(4,w*0.06)+'" fill="rgba(0,0,0,.26)"/>';
+  var pr=HPAIR[pose];
+  if(!anim||!pr||!HERO[pr])return sh+heroOne(pose,x,y,scale,"");
+  return sh+heroOne(pose,x,y,scale,"hA")+heroOne(pr,x,y,scale,"hB");
+}
+function overdueList(){
+  if(typeof DB==="undefined"||!DB.debts)return [];
+  var out=[];
+  DB.debts.forEach(function(d){
+    if(d.defeatedAt||d.balance<=0)return;
+    if(d.mode==="lump"){
+      var fp=String(d.finalDate||"").split("-");
+      if(fp.length!==3)return;
+      var fd=shiftBiz(new Date(+fp[0],+fp[1]-1,+fp[2]));
+      if(fd>today)return;
+      var paidL=DB.tx.some(function(t){return t.type==="payment"&&t.debtId===d.id&&t.createdAt>=fd.getTime();});
+      if(!paidL)out.push({name:d.name,days:diffD(today,fd)});
+      return;
+    }
+    var y=today.getFullYear(),m=today.getMonth(),last=null;
+    for(var i=0;i<2;i++){
+      var dim=new Date(y,m-i+1,0).getDate();
+      var act=shiftBiz(new Date(y,m-i,Math.min(d.dueDay||25,dim)));
+      if(act<=today){last=act;break;}
+    }
+    if(!last||diffD(today,last)>35)return;
+    if(d.createdAt&&d.createdAt>=last.getTime())return;
+    var paid=DB.tx.some(function(t){return t.type==="payment"&&t.debtId===d.id&&t.createdAt>=last.getTime();});
+    if(!paid)out.push({name:d.name,days:diffD(today,last)});
+  });
+  out.sort(function(a,b){return b.days-a.days;});
+  return out;
+}
+function autoPose(){
+  if(heroPose)return heroPose;
+  if(typeof DB!=="undefined"&&DB.debts&&DB.debts.length&&!DEBTS.length)return "cheer";
+  if(overdueList().length)return "damage";
+  if(nextE&&START_BALANCE<nextE.amount)return "lowhp";
+  return "stance";
+}
+
+
+/* ===== 借金退治クエスト ===== */
+/* 日本の祝日を年ごとに計算（固定日・ハッピーマンデー・春分秋分・振替休日・国民の休日） */
+var HOLI={};
+function holidaysOf(y){
+  if(HOLI[y])return HOLI[y];
+  var h={};
+  function key(m,d){return y+"-"+String(m).padStart(2,"0")+"-"+String(d).padStart(2,"0");}
+  function nthMon(m,n){var d=new Date(y,m-1,1),first=(8-d.getDay())%7+1;return first+(n-1)*7;}
+  [[1,1],[2,11],[2,23],[4,29],[5,3],[5,4],[5,5],[8,11],[11,3],[11,23]].forEach(function(a){h[key(a[0],a[1])]=1;});
+  h[key(1,nthMon(1,2))]=1; h[key(7,nthMon(7,3))]=1; h[key(9,nthMon(9,3))]=1; h[key(10,nthMon(10,2))]=1;
+  var q=Math.floor((y-1980)/4);
+  h[key(3,Math.floor(20.8431+0.242194*(y-1980)-q))]=1;
+  h[key(9,Math.floor(23.2488+0.242194*(y-1980)-q))]=1;
+  function k2(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
+  var base=Object.keys(h);
+  base.forEach(function(k){var p=k.split("-"),d=new Date(+p[0],+p[1]-1,+p[2]);
+    if(d.getDay()!==0)return;
+    var n=new Date(d);do{n.setDate(n.getDate()+1);}while(h[k2(n)]);h[k2(n)]=1;});
+  base.forEach(function(k){var p=k.split("-"),d=new Date(+p[0],+p[1]-1,+p[2]+2);
+    var mid=new Date(+p[0],+p[1]-1,+p[2]+1);
+    if(h[k2(d)]&&!h[k2(mid)]&&mid.getDay()!==0)h[k2(mid)]=1;});
+  HOLI[y]=h; return h;
+}
+var DAYS=45;
+/* ===== 日付 ===== */
+function ymd(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
+function isOff(d){return d.getDay()===0||d.getDay()===6||!!holidaysOf(d.getFullYear())[ymd(d)];}
+function shiftBiz(d){var x=new Date(d),n=0;while(isOff(x)&&n<12){x.setDate(x.getDate()+1);n++;}return x;}
+function addD(d,n){var x=new Date(d);x.setDate(x.getDate()+n);return x;}
+function diffD(a,b){return Math.round((a-b)/86400000);}
+var WD=["日","月","火","水","木","金","土"];
+var today=new Date();today.setHours(0,0,0,0);var last=addD(today,DAYS-1);
+function yen(n){return "¥"+Math.round(n).toLocaleString("ja-JP");}
+function man(n){return n>=10000?(Math.round(n/1000)/10)+"万":Math.round(n).toLocaleString("ja-JP");}
+function manEn(n){return n>=10000?((Math.round(n/1000)/10)+"万円"):(Math.round(n).toLocaleString("ja-JP")+"円");}
+function esc(s){return String(s).replace(/[&<>]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c];});}
+function occur(dd){var o=[],y=today.getFullYear(),m=today.getMonth();
+  for(var i=0;i<3;i++){var dim=new Date(y,m+i+1,0).getDate();var raw=new Date(y,m+i,Math.min(dd,dim));var act=shiftBiz(raw);
+    if(act>=today&&act<=last)o.push({raw:raw,date:act,shifted:ymd(raw)!==ymd(act)});}
+  return o;}
+function tierOf(a){return a>=10?"dragon":a>=3?"orc":"slime";}
+
+function renderCore(){
+syncAliases();
+/* ===== イベント ===== */
+events=[];
+function dateOf(str){if(!str)return null;var p=String(str).split("-");
+  if(p.length!==3)return null;var d=new Date(+p[0],+p[1]-1,+p[2]);return isNaN(d)?null:d;}
+DEBTS.forEach(function(d){
+  var it=Math.round(d.balance*(d.apr/100)/12);
+  if(d.mode==="lump"){
+    var raw=dateOf(d.finalDate); if(!raw)return;
+    var act=shiftBiz(raw);
+    if(act<today||act>last)return;
+    events.push({kind:"debt",tier:tierOf(d.apr),sp:d.sp,id:d.id,name:d.name,amount:d.balance,
+      interest:Math.min(it,d.balance),principal:Math.max(0,d.balance-it),lump:true,
+      apr:d.apr,date:act,raw:raw,shifted:ymd(raw)!==ymd(act)});
+    return;
+  }
+  occur(d.dueDay).forEach(function(o){
+    var pay=Math.min(d.min,d.balance);
+    events.push({kind:"debt",tier:tierOf(d.apr),sp:d.sp,id:d.id,name:d.name,amount:pay,interest:Math.min(it,pay),
+      principal:Math.max(0,pay-it),apr:d.apr,date:o.date,raw:o.raw,shifted:o.shifted});});});
+FIXED.forEach(function(f){occur(f.dueDay).forEach(function(o){
+  events.push({kind:"fixed",name:f.name,amount:f.amount,date:o.date,raw:o.raw,shifted:o.shifted});});});
+WHIM.forEach(function(w){var p=w.date.split("-"),dt=new Date(+p[0],+p[1]-1,+p[2]);
+  if(dt>=today&&dt<=last)events.push({kind:"whim",name:w.name,amount:w.amount,ic:w.ic,date:dt,raw:dt,shifted:false});});
+INCOME.forEach(function(v){occur(v.dueDay).forEach(function(o){
+  events.push({kind:"income",name:v.name,amount:v.amount,date:o.date,raw:o.raw,shifted:o.shifted});});});
+events.sort(function(a,b){return a.date-b.date||(a.kind==="income"?-1:1);});
+
+series=[];var bal=START_BALANCE;worst={bal:START_BALANCE,d:0};
+for(var i=0;i<DAYS;i++){(function(i){events.forEach(function(e){if(diffD(e.date,today)===i)bal+=(e.kind==="income"?e.amount:-e.amount);});})(i);
+  series.push(bal);if(bal<worst.bal)worst={bal:bal,d:i};}
+debtTotal=DEBTS.reduce(function(s,d){return s+d.balance;},0);
+nextE=events.filter(function(e){return e.kind!=="income";})[0];
+nextDays=nextE?diffD(nextE.date,today):99;
+
+/* ===== 描画ヘルパ ===== */
+var seed=20260916;function rnd(){seed=(seed*1103515245+12345)&0x7fffffff;return seed/0x7fffffff;}
+function T(x,y,txt,cls,anchor,size){return '<text class="'+cls+'" x="'+x+'" y="'+y+'" text-anchor="'+(anchor||"middle")+'"'+(size?' font-size="'+size+'"':'')+'>'+txt+'</text>';}
+var heroPose="";
+var LANE=22,X0=252,X1=846,SPAN=X1-X0;
+function X(d){return X0+d*(SPAN/(LANE-1));}
+function roadY(x){return 474+17*Math.sin(x/1200*Math.PI*2.3+0.7);}
+var RW=40;
+
+/* ===== 城（足元中央が原点） ===== */
+function castle(x,y,sc,half){
+  var ST="#eceae4",ST2="#d3d0c8",ST3="#bdb9b0",RF="#3a5474",RF2="#2b4059",RF3="#52709a",
+      GD="#dcbb7c",GD2="#b3914f",WD="#8a5a33",WD2="#6b4326",GL="#79b2de",
+      L='stroke="#4a4740" stroke-width="4" stroke-linejoin="round"',
+      LR='stroke="#22303f" stroke-width="4" stroke-linejoin="round"';
+  var g='<g transform="translate('+x+','+y+') scale('+sc+')">';
+  function win(cx,cy,w,h){return '<path d="M'+(cx-w/2)+' '+cy+' L'+(cx-w/2)+' '+(cy-h+w/2)+' Q'+cx+' '+(cy-h-w/4)+' '+(cx+w/2)+' '+(cy-h+w/2)+' L'+(cx+w/2)+' '+cy+' Z" fill="'+GL+'" stroke="#4a4740" stroke-width="3.4" stroke-linejoin="round"/>'
+    +'<path d="M'+cx+' '+cy+' L'+cx+' '+(cy-h)+'" stroke="#4a4740" stroke-width="2.4"/>';}
+  function flag(cx,topY,dir){return '<rect x="'+(cx-2)+'" y="'+(topY-40)+'" width="4" height="40" fill="'+GD2+'"/>'
+    +'<circle cx="'+cx+'" cy="'+(topY-44)+'" r="6" fill="'+GD+'" '+L+'/>'
+    +'<path d="M'+(cx+2)+' '+(topY-40)+' l'+(30*dir)+' 7 l'+(-30*dir)+' 7 Z" fill="#4f7fb8" stroke="#22303f" stroke-width="3" stroke-linejoin="round"/>';}
+  function tower(cx,w,topY,roofH,bal,dir){
+    var o='<rect x="'+(cx-w/2)+'" y="'+topY+'" width="'+w+'" height="'+(-topY)+'" fill="'+ST+'" '+L+'/>'
+     +'<path d="M'+(cx-w/2)+' '+(topY+w*0.9)+' h'+w+' M'+(cx-w/2)+' '+(topY+w*1.7)+' h'+w+'" stroke="'+ST3+'" stroke-width="3"/>'
+     +'<path d="M'+(cx+w/2-7)+' '+topY+' v'+(-topY)+'" stroke="'+ST2+'" stroke-width="7"/>';
+    if(bal)o+='<rect x="'+(cx-w/2-9)+'" y="'+(topY+4)+'" width="'+(w+18)+'" height="15" rx="3" fill="'+WD+'" '+L+'/>'
+      +'<path d="M'+(cx-w/2-5)+' '+(topY+8)+' v7 M'+(cx-w/2+5)+' '+(topY+8)+' v7 M'+cx+' '+(topY+8)+' v7 M'+(cx+w/2-5)+' '+(topY+8)+' v7 M'+(cx+w/2+5)+' '+(topY+8)+' v7" stroke="'+WD2+'" stroke-width="3"/>';
+    o+='<path d="M'+(cx-w/2-11)+' '+topY+' L'+cx+' '+(topY-roofH)+' L'+(cx+w/2+11)+' '+topY+' Z" fill="'+RF+'" '+LR+'/>'
+     +'<path d="M'+cx+' '+(topY-roofH)+' L'+(cx+w/2+11)+' '+topY+' L'+(cx+w*0.16)+' '+topY+' Z" fill="'+RF2+'"/>'
+     +'<path d="M'+(cx-w*0.22)+' '+(topY-6)+' L'+(cx-w*0.04)+' '+(topY-roofH*0.72)+'" stroke="'+RF3+'" stroke-width="5" stroke-linecap="round"/>'
+     +flag(cx,topY-roofH,dir)+win(cx,topY+w*1.65,w*0.36,w*0.6);
+    return o;}
+  g+='<ellipse cx="0" cy="6" rx="176" ry="26" fill="#2f6f34" opacity=".35"/>';
+  g+=tower(-126,52,-206,86,true,-1)+tower(-62,36,-238,70,false,-1);
+  if(!half)g+=tower(124,50,-196,82,true,1)+tower(66,38,-230,72,false,1);
+  g+='<rect x="-44" y="-286" width="88" height="286" fill="'+ST+'" '+L+'/>'
+   +'<path d="M-44-214 h88 M-44-150 h88" stroke="'+ST3+'" stroke-width="3"/>'
+   +'<rect x="34" y="-286" width="10" height="286" fill="'+ST2+'"/>'
+   +'<rect x="-54" y="-292" width="108" height="16" rx="3" fill="'+GD+'" '+L+'/>'
+   +'<path d="M-58-292 L0-400 L58-292 Z" fill="'+RF+'" '+LR+'/>'
+   +'<path d="M0-400 L58-292 L14-292 Z" fill="'+RF2+'"/>'
+   +'<path d="M-24-300 L-4-372" stroke="'+RF3+'" stroke-width="6" stroke-linecap="round"/>'
+   +'<path d="M-30-330 L0-366 L30-330 L0-344 Z" fill="'+GD+'" '+L+'/>'
+   +flag(0,-400,1)+win(-22,-224,20,34)+win(22,-224,20,34)+win(0,-160,24,40);
+  var WW=half?172:224;
+  g+='<rect x="-112" y="-140" width="'+WW+'" height="140" fill="'+ST+'" '+L+'/>'
+   +'<path d="M-112-96 h'+WW+'" stroke="'+ST3+'" stroke-width="3"/>';
+  for(var i=0;i<(half?7:9);i++)g+='<rect x="'+(-110+i*26)+'" y="-158" width="17" height="20" fill="'+ST+'" '+L+'/>';
+  g+=win(-84,-58,20,34);
+  if(!half)g+=win(84,-58,20,34);
+  g+='<path d="M-42 0 L-42-70 Q0-118 42-70 L42 0 Z" fill="'+GD+'" '+L+'/>'
+   +'<path d="M-32 0 L-32-68 Q0-108 32-68 L32 0 Z" fill="'+WD+'" '+L+'/>'
+   +'<path d="M0 0 L0-96" stroke="'+WD2+'" stroke-width="4"/>'
+   +'<path d="M-24 0 v-70 M-12 0 v-80 M12 0 v-80 M24 0 v-70" stroke="'+WD2+'" stroke-width="3"/>'
+   +'<circle cx="-10" cy="-38" r="5" fill="'+GD+'" stroke="#4a4740" stroke-width="2.6"/>'
+   +'<circle cx="10" cy="-38" r="5" fill="'+GD+'" stroke="#4a4740" stroke-width="2.6"/>'
+   +'<path d="M-46-72 Q0-124 46-72" fill="none" stroke="'+GD2+'" stroke-width="4"/>';
+  for(var i=0;i<4;i++)g+='<rect x="'+(-46-i*9)+'" y="'+(i*8)+'" width="'+(92+i*18)+'" height="9" rx="2" fill="'+(i%2?ST2:ST)+'" '+L+'/>';
+  return g+'</g>';}
+
+/* ===== UIアイコン（すべて手描きSVG） ===== */
+function icon(k,cx,cy,sc){
+  var O='stroke="#2a1608" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"';
+  var g='<g transform="translate('+cx+','+cy+') scale('+sc+')">';
+  if(k==="sword"){
+    g+='<path d="M-32 18 Q-20 2 -6-8" fill="none" stroke="#ff5b4d" stroke-width="6" stroke-linecap="round" opacity=".8"/>'
+     +'<path d="M-26 26 Q-14 10 0 0" fill="none" stroke="#ff8b6e" stroke-width="4" stroke-linecap="round" opacity=".6"/>'
+     +'<g transform="rotate(38)">'
+     +'<path d="M-7-32 L7-32 L7 2 L0 12 L-7 2 Z" fill="#e6edf3" '+O+'/>'
+     +'<path d="M0-30 L0 8" stroke="#9fb1c2" stroke-width="2.4"/>'
+     +'<rect x="-17" y="2" width="34" height="8" rx="4" fill="#e0a21c" '+O+'/>'
+     +'<rect x="-5" y="10" width="10" height="15" rx="4" fill="#7a4a24" '+O+'/>'
+     +'<circle cx="0" cy="28" r="6" fill="#e0a21c" '+O+'/></g>';}
+  else if(k==="quiver"){
+    g+='<g transform="rotate(12)">';
+    [-9,0,9].forEach(function(dx,i){
+      g+='<line x1="'+dx+'" y1="6" x2="'+dx+'" y2="'+(-30-i%2*4)+'" stroke="#a86a34" stroke-width="3.4" stroke-linecap="round"/>'
+       +'<path d="M'+(dx-5)+' '+(-26-i%2*4)+' L'+dx+' '+(-36-i%2*4)+' L'+(dx+5)+' '+(-26-i%2*4)+' Z" fill="#dfe6ec" '+O+'/>'
+       +'<path d="M'+(dx-5)+' -6 L'+dx+' -12 L'+(dx+5)+' -6 Z" fill="#c0392b" stroke="#2a1608" stroke-width="2"/>';});
+    g+='</g><path d="M-17-4 L17-4 L14 26 Q0 31 -14 26 Z" fill="#8a5a33" '+O+'/>'
+     +'<path d="M-16 6 L16 6 M-15 16 L15 16" stroke="#5d3920" stroke-width="3.4"/>';}
+  else if(k==="cannon"){
+    g+='<g transform="rotate(-26)">'
+     +'<rect x="-20" y="-11" width="42" height="22" rx="10" fill="#465360" '+O+'/>'
+     +'<rect x="18" y="-13" width="11" height="26" rx="4" fill="#62707d" '+O+'/>'
+     +'<rect x="-22" y="-9" width="8" height="18" rx="4" fill="#62707d" '+O+'/></g>'
+     +'<path d="M-24 26 L18 26" stroke="#6b4326" stroke-width="6" stroke-linecap="round"/>'
+     +'<circle cx="-8" cy="20" r="12" fill="#7a4a24" '+O+'/><circle cx="-8" cy="20" r="3.6" fill="#d8b47a"/>'
+     +'<circle cx="26" cy="-22" r="9" fill="#ffd54a" stroke="#2a1608" stroke-width="2.6"/>'
+     +'<path d="M34-30 l6-7 M36-18 l9 2 M20-32 l-2-9" stroke="#ff8b1e" stroke-width="3.4" stroke-linecap="round"/>';}
+  else if(k==="calendar"){
+    g+='<rect x="-24" y="-20" width="48" height="44" rx="7" fill="#f7ecd2" '+O+'/>'
+     +'<path d="M-24-13 h48" stroke="#2a1608" stroke-width="3"/>'
+     +'<path d="M-24-20 h48 v7 h-48 Z" fill="#c0392b" '+O+'/>'
+     +'<rect x="-15" y="-27" width="6" height="12" rx="3" fill="#7a4a24" '+O+'/>'
+     +'<rect x="9" y="-27" width="6" height="12" rx="3" fill="#7a4a24" '+O+'/>';
+    for(var a=0;a<3;a++)for(var b=0;b<3;b++){var dx=-14+b*14,dy=-4+a*11;
+      g+='<rect x="'+dx+'" y="'+dy+'" width="8" height="7" rx="2" fill="'+((a===1&&b===2)?"#c0392b":"#c3ab7e")+'"/>';}}
+  else if(k==="scroll"){
+    g+='<rect x="-18" y="-19" width="36" height="38" fill="#f7ecd2" stroke="#2a1608" stroke-width="3"/>'
+     +'<path d="M-12 12 Q-4-2 4 4 Q12 10 14-10" fill="none" stroke="#2f6fb5" stroke-width="3" stroke-dasharray="5 4" stroke-linecap="round"/>'
+     +'<path d="M10-14 l8 8 M18-14 l-8 8" stroke="#c0392b" stroke-width="3.4" stroke-linecap="round"/>'
+     +'<circle cx="-12" cy="12" r="3.4" fill="#2f6fb5"/>'
+     +'<rect x="-26" y="-24" width="10" height="48" rx="5" fill="#a86a34" '+O+'/>'
+     +'<rect x="16" y="-24" width="10" height="48" rx="5" fill="#a86a34" '+O+'/>';}
+  else if(k==="orb"){
+    g+='<path d="M-17 26 L17 26 L11 13 L-11 13 Z" fill="#e0a21c" '+O+'/>'
+     +'<circle cx="0" cy="-4" r="19" fill="#8a52d6" '+O+'/>'
+     +'<circle cx="0" cy="-4" r="19" fill="none" stroke="#c9a2ff" stroke-width="2" opacity=".6" transform="scale(.78)"/>'
+     +'<ellipse cx="-7" cy="-12" rx="7" ry="4.6" fill="#fff" opacity=".7" transform="rotate(-28 -7 -12)"/>'
+     +'<path d="M22-24 l2.4 5 5.4.6 -4 3.8 1 5.4 -4.8-2.6 -4.8 2.6 1-5.4 -4-3.8 5.4-.6 Z" fill="#ffe27a" stroke="#2a1608" stroke-width="1.8" stroke-linejoin="round"/>'
+     +'<path d="M-24-18 l1.6 3.4 3.6.4 -2.7 2.6.7 3.6 -3.2-1.8 -3.2 1.8.7-3.6 -2.7-2.6 3.6-.4 Z" fill="#ffe27a" stroke="#2a1608" stroke-width="1.4" stroke-linejoin="round"/>';}
+  else if(k==="lane"){
+    g+='<path d="M-28 16 Q-6 8 4 0 Q16-10 28-12 L28-2 Q18 0 8 8 Q-4 18 -28 26 Z" fill="#d9b47f" '+O+'/>'
+     +'<path d="M-22 26 v10 M-4 17 v10 M13 7 v9" stroke="#7a5227" stroke-width="4" stroke-linecap="round"/>'
+     +'<rect x="-28" y="30" width="12" height="9" rx="2" fill="#ddba82" stroke="#2a1608" stroke-width="2.4"/>'
+     +'<rect x="-10" y="21" width="12" height="9" rx="2" fill="#ddba82" stroke="#2a1608" stroke-width="2.4"/>'
+     +'<rect x="7" y="11" width="12" height="9" rx="2" fill="#ddba82" stroke="#2a1608" stroke-width="2.4"/>'
+     +'<path d="M22-28 L-6-28 L-6-34 L-20-24 L-6-14 L-6-20 L22-20 Z" fill="#c0392b" '+O+'/>';}
+  else if(k==="save"){
+    g+='<path d="M-26 5 L-26 -5 Q-26 -23 0 -23 Q26 -23 26 -5 L26 5 Z" fill="#8a5a33" '+O+'/>'
+     +'<rect x="-26" y="3" width="52" height="23" rx="4" fill="#a86a34" '+O+'/>'
+     +'<rect x="-30" y="-1" width="60" height="10" rx="3" fill="#e0a21c" '+O+'/>'
+     +'<rect x="-8" y="1" width="16" height="16" rx="4" fill="#e0a21c" '+O+'/>'
+     +'<circle cx="0" cy="9" r="2.8" fill="#3a2113"/>'
+     +'<path d="M-18 -14 q18 -6 36 0" fill="none" stroke="#6b4326" stroke-width="3" stroke-linecap="round"/>';}
+  else if(k==="plus"){
+    g+='<circle cx="0" cy="0" r="25" fill="#e0a21c" '+O+'/>'
+     +'<path d="M0-13 V13 M-13 0 H13" stroke="#3a2113" stroke-width="8" stroke-linecap="round"/>';}
+  else if(k==="crest-castle"){
+    g+='<path d="M-18 14 L-18-6 L-12-6 L-12-12 L-6-12 L-6-6 L6-6 L6-12 L12-12 L12-6 L18-6 L18 14 Z" fill="#f2ead7" stroke="#1d4270" stroke-width="2.6" stroke-linejoin="round"/>'
+     +'<path d="M-4 14 L-4 2 Q0-2 4 2 L4 14 Z" fill="#2f6fb5"/>'
+     +'<rect x="-13" y="0" width="5" height="7" rx="2.5" fill="#2f6fb5"/><rect x="8" y="0" width="5" height="7" rx="2.5" fill="#2f6fb5"/>';}
+  else if(k==="crest-fort"){
+    g+='<path d="M-18 14 L-18-4 L-11-12 L-4-4 L4-4 L11-12 L18-4 L18 14 Z" fill="#2b1a3a" stroke="#ffb3c8" stroke-width="2.4" stroke-linejoin="round"/>'
+     +'<path d="M-6 14 L-6 3 L6 3 L6 14 Z" fill="#8c1638"/>'
+     +'<circle cx="-11" cy="0" r="2.6" fill="#ff9a3c"/><circle cx="11" cy="0" r="2.6" fill="#ff9a3c"/>';}
+  return g+'</g>';}
+
+function attrEsc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+  .replace(/"/g,"&quot;").replace(/\n/g,"&#10;");}
+function plate2(x,y,nm,amt,col){
+  var n=String(nm); if(n.length>9)n=n.slice(0,8)+"…";
+  var w=Math.max(76,n.length*12.5+22,String(amt).length*9.6+22);
+  return '<g>'
+   +'<rect x="'+(x-w/2)+'" y="'+(y-36)+'" width="'+w+'" height="38" rx="10" fill="#17100a" opacity=".9"/>'
+   +'<rect x="'+(x-w/2)+'" y="'+(y-36)+'" width="6" height="38" rx="3" fill="'+col+'"/>'
+   +'<path d="M'+(x-6)+' '+(y+2)+' L'+x+' '+(y+10)+' L'+(x+6)+' '+(y+2)+' Z" fill="#17100a" opacity=".9"/>'
+   +T(x+3,y-22,n,"lanenm","middle",11)
+   +T(x+3,y-7,amt,"amt","middle",13)
+   +'</g>';
+}
+function plate(x,y,txt,col,stem){
+  var w=Math.max(50,txt.length*10+18);
+  return '<g>'+(stem?'<line x1="'+x+'" y1="'+y+'" x2="'+x+'" y2="'+(y+stem)+'" stroke="#17100a" stroke-width="2.4" opacity=".6"/>':'')
+   +'<rect x="'+(x-w/2)+'" y="'+(y-21)+'" width="'+w+'" height="22" rx="10" fill="#17100a" opacity=".88"/>'
+   +'<rect x="'+(x-w/2)+'" y="'+(y-21)+'" width="6" height="22" rx="3" fill="'+col+'"/>'
+   +'<path d="M'+(x-6)+' '+(y+1)+' L'+x+' '+(y+8)+' L'+(x+6)+' '+(y+1)+' Z" fill="#17100a" opacity=".88"/>'
+   +T(x+3,y-5,txt,"amt","middle",13)+'</g>';}
+
+/* ===== 戦場 ===== */
+var s='';
+s+='<defs>'
+ +'<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3fa9e0"/><stop offset=".55" stop-color="#8fd8f5"/><stop offset="1" stop-color="#d6f2ff"/></linearGradient>'
+ +'<linearGradient id="grass" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6cc355"/><stop offset=".45" stop-color="#57ae48"/><stop offset="1" stop-color="#3f8f3a"/></linearGradient>'
+ +'<linearGradient id="road" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d9b47f"/><stop offset="1" stop-color="#b98f55"/></linearGradient>'
+ +'<linearGradient id="hpR" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff8b6e"/><stop offset=".5" stop-color="#e8342f"/><stop offset="1" stop-color="#a4160f"/></linearGradient>'
+ +'<linearGradient id="hpG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8ee8ae"/><stop offset=".5" stop-color="#3fbf6e"/><stop offset="1" stop-color="#1d8a4a"/></linearGradient>'
+ +'<linearGradient id="hpB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7fd0ff"/><stop offset=".5" stop-color="#2f7fd8"/><stop offset="1" stop-color="#17529a"/></linearGradient>'
+ +'<linearGradient id="dock" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a5a33"/><stop offset=".12" stop-color="#6b4326"/><stop offset="1" stop-color="#492c17"/></linearGradient>'
+ +'<linearGradient id="card" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fbeec9"/><stop offset="1" stop-color="#e3c68f"/></linearGradient>'
+ +'</defs>';
+// 空
+s+='<rect x="0" y="0" width="1200" height="330" fill="url(#sky)"/>';
+s+='<circle cx="1020" cy="72" r="54" fill="#fff6bd" opacity=".45"/><circle cx="1020" cy="72" r="32" fill="#fffce8" opacity=".9"/>';
+[[150,96,1],[420,66,.82],[720,110,1.1],[960,150,.7],[300,160,.6]].forEach(function(c){
+  s+='<g transform="translate('+c[0]+','+c[1]+') scale('+c[2]+')" fill="#fff" opacity=".93">'
+   +'<ellipse cx="0" cy="0" rx="46" ry="21"/><ellipse cx="-30" cy="6" rx="28" ry="15"/><ellipse cx="28" cy="7" rx="30" ry="14"/><ellipse cx="-4" cy="-13" rx="26" ry="16"/></g>';});
+// 遠景の山
+s+='<path d="M0 300 L90 228 L150 268 L240 200 L330 272 L420 236 L520 292 L600 250 L700 288 L790 244 L880 286 L980 250 L1080 290 L1200 252 L1200 330 L0 330 Z" fill="#8fbf8a" opacity=".85"/>';
+s+='<path d="M0 316 L110 262 L200 300 L300 258 L400 302 L500 270 L620 308 L720 268 L840 306 L940 272 L1060 310 L1200 274 L1200 340 L0 340 Z" fill="#5f9e63"/>';
+// 遠い森
+var tl='';for(var i=0;i<=40;i++){var tx=i*31,th=20+rnd()*16;tl+='<path d="M'+(tx-15)+' 344 L'+tx+' '+(344-th)+' L'+(tx+15)+' 344 Z" fill="#2f7a4d"/>';}
+s+=tl+'<rect x="0" y="338" width="1200" height="22" fill="#2f7a4d"/>';
+// 手前の木
+for(var i=0;i<10;i++){var tx=250+i*70+rnd()*16,ts=.7+rnd()*.38;
+  s+='<g transform="translate('+tx+',372) scale('+ts+')">'
+   +'<rect x="-5" y="-14" width="10" height="20" fill="#6b4326" stroke="#2f1b0d" stroke-width="2.4"/>'
+   +'<path d="M-22-14 L0-56 L22-14 Z" fill="#3f9e5c" stroke="#1f5c36" stroke-width="2.6" stroke-linejoin="round"/>'
+   +'<path d="M-17-28 L0-62 L17-28 Z" fill="#4bb36a" stroke="#1f5c36" stroke-width="2.6" stroke-linejoin="round"/></g>';}
+// 草原
+s+='<rect x="0" y="360" width="1200" height="310" fill="url(#grass)"/>';
+for(var i=0;i<150;i++){var gx=rnd()*1200,gy=376+rnd()*330;
+  s+='<path d="M'+gx+' '+gy+' l-4 -8 M'+gx+' '+gy+' l0 -10 M'+gx+' '+gy+' l4 -8" stroke="#7ed06a" stroke-width="2" stroke-linecap="round" opacity=".7"/>';}
+// 道
+var tp='',bp='';
+for(var x=-20;x<=1220;x+=20){tp+=(x===-20?"M":"L")+x+" "+(roadY(x)-RW)+" ";}
+for(var x=1220;x>=-20;x-=20){bp+="L"+x+" "+(roadY(x)+RW)+" ";}
+s+='<path d="'+tp+bp+'Z" fill="url(#road)" stroke="#8a6534" stroke-width="4"/>';
+for(var i=0;i<60;i++){var px=rnd()*1200,py=roadY(px)+(rnd()*60-30);
+  s+='<ellipse cx="'+px+'" cy="'+py+'" rx="'+(2+rnd()*3)+'" ry="'+(1.4+rnd()*1.6)+'" fill="#9c7440" opacity=".55"/>';}
+
+// 日付の道標（毎日 1本）
+for(var i=0;i<LANE;i++){
+  var dd=addD(today,i),xx=X(i),ry=roadY(xx),off=isOff(dd),by=ry+RW+4;
+  s+='<rect x="'+(xx-2.5)+'" y="'+by+'" width="5" height="16" fill="#7a5227" stroke="#2f1b0d" stroke-width="2"/>'
+   +'<rect x="'+(xx-14)+'" y="'+(by+12)+'" width="28" height="32" rx="5" fill="'+(off?"#e5a596":"#ddba82")+'" stroke="#2f1b0d" stroke-width="2.4"/>'
+   +T(xx,by+29,String(dd.getDate()),"sign","middle",14)
+   +T(xx,by+41,WD[dd.getDay()],"signw","middle",10);
+  if(dd.getDate()===1||i===0)s+='<rect x="'+(xx-14)+'" y="'+(by+12)+'" width="28" height="32" rx="5" fill="none" stroke="#e0a21c" stroke-width="3"/>';
+}
+// 月の境界（のぼり旗）
+for(var i=1;i<LANE;i++){var dd=addD(today,i);if(dd.getDate()!==1)continue;var xx=X(i),ry=roadY(xx);
+  s+='<line x1="'+xx+'" y1="'+(ry-214)+'" x2="'+xx+'" y2="'+(ry+96)+'" stroke="#fff" stroke-width="2" stroke-dasharray="7 7" opacity=".5"/>'
+   +'<rect x="'+(xx-3)+'" y="'+(ry-218)+'" width="6" height="270" fill="#7a5227" stroke="#2f1b0d" stroke-width="2"/>'
+   +'<path d="M'+(xx+3)+' '+(ry-214)+' h132 l-14 19 l14 19 h-132 Z" fill="#c0392b" stroke="#2f1b0d" stroke-width="3" stroke-linejoin="round"/>'
+   +T(xx+70,(ry-189),"ここから "+(dd.getMonth()+1)+"月","gate","middle",16);}
+
+// 城（左）と勇者（城の右どなり・重ならない）
+s+=castle(88,606,.92,true);
+s+='<path d="M0 666 h224 l-14 -22 h-196 Z" fill="#17100a" opacity=".82"/>'+T(106,662,"あなたの城","cap","middle",16);
+
+var occL=[];
+function freeLabelY(x,w,base){
+  var y=base,n=0;
+  while(n<26){
+    var ok=true;
+    for(var k=0;k<occL.length;k++){var o=occL[k];
+      if(Math.abs(o.x-x)<(o.w+w)/2+10&&Math.abs(o.y-y)<44){ok=false;break;}}
+    if(ok)break; y-=44; n++;
+  }
+  occL.push({x:x,y:y,w:w}); return y;
+}
+/* 親玉のラベルは縦一列（同じ幅・同じx）に揃えて出す。引き出し線は無し */
+function bossLabel(cx,w,by,name,amount,tip){
+  var nm=String(name); if(nm.length>10)nm=nm.slice(0,9)+"…";
+  var ty=freeLabelY(cx,w,by);
+  return '<g>'
+   +'<rect class="hit" x="'+(cx-w/2)+'" y="'+(ty-21)+'" width="'+w+'" height="42" rx="11" fill="#17100a" opacity=".92" stroke="#e0a21c" stroke-width="2.4"'+(tip?(' data-tip="'+tip+'"'):"")+'/>'
+   +T(cx,ty-4,nm,"bossnm","middle",13)
+   +T(cx,ty+14,amount,"bossamt","middle",15)
+   +'</g>';
+}
+/* 親玉は1匹目＝手前の草地、2匹目＝道の上、3匹目＝道の向こうの平原、以降さらに奥（上）へ縦に並べる */
+function bossSlots(list){
+  var out=[],col=0,y=660,prevTop=null;
+  for(var i=0;i<list.length;i++){
+    var h=monBox(list[i].sp,BOSS_BOX).h;
+    if(prevTop===null){y=660;}
+    else{
+      y=prevTop+h-48;                 // 前の敵の頭より48px上に頭が出るように足を置く
+      if(y-h<246){col++;y=660;prevTop=null;}
+    }
+    out.push({x:1096+col*134+((i%2)?42:-22),y:y,h:BOSS_BOX,o:1});
+    prevTop=y-h;
+  }
+  return out;
+}
+// 親玉たち（城と同じくらいの大きさ・重なってよい）
+(function(){
+  // 日付の道標（カレンダー）を隠さない位置に置く：
+  // 道標より下に立つ親分は x>=1010、それ以外は道標より上（y<=500）に配置。右へ1/3はみ出してよい。
+  var list=DEBTS.slice().sort(function(a,b){return b.apr-a.apr;});
+  var SLOT=bossSlots(list);
+  occL=[];var labs=[];BOSSPOS={};
+  list.map(function(d,i){return {d:d,sl:SLOT[i]};})
+      .sort(function(a,b){return a.sl.y-b.sl.y;})
+      .forEach(function(it){
+        var mb=monBox(it.d.sp,it.sl.h);
+        it.sl.x=Math.max(it.sl.x,884+mb.w/2);
+        s+='<g opacity="'+it.sl.o+'">'+creature(it.d.sp,tierOf(it.d.apr),it.sl.x,it.sl.y,it.sl.h,false)+'</g>';
+        var bxs=monBox(it.d.sp,it.sl.h);
+        BOSSPOS[it.d.id]={x:it.sl.x,y:it.sl.y,box:BOSS_BOX};
+        var nx=null;
+        for(var q=0;q<events.length;q++){if(events[q].id===it.d.id){nx=events[q];break;}}
+        var tt=tierOf(it.d.apr);
+        var tipB=[it.d.name,
+          "残り "+yen(it.d.balance)+((it.d.principal&&it.d.principal>it.d.balance)?("（当初 "+yen(it.d.principal)+"）"):""),
+          "年利 "+it.d.apr+"％　危険度"+(tt==="dragon"?"★★★":tt==="orc"?"★★":"★"),
+          (it.d.mode==="lump")?("期限 "+(it.d.finalDate||"未設定")+" に一括で返す"):("毎月の最低返済 "+yen(it.d.min||0)+"／返済日 "+(it.d.dueDay||"?")+"日"),
+          "毎月の利息（回復力） "+yen(Math.round(it.d.balance*(it.d.apr/100)/12)),
+          nx?("次の襲来 "+(nx.date.getMonth()+1)+"/"+nx.date.getDate()+"("+WD[nx.date.getDay()]+")　"+yen(nx.amount)+(nx.shifted?"　※休日で順延":"")):"この3週間に襲来の予定なし",
+          "すがた "+(((MON[it.d.sp]||{}).ja)||"ゴブリン")].join("\n");
+        var bb2=monBox(it.d.sp,it.sl.h);
+        s+='<rect class="hit" x="'+(it.sl.x-bb2.w/2)+'" y="'+(it.sl.y-bb2.h)+'" width="'+bb2.w+'" height="'+bb2.h+'" fill="rgba(0,0,0,0)" data-tip="'+attrEsc(tipB)+'"/>';
+        var ly=Math.min(628,it.sl.y-6); if(ly>504&&ly<608)ly=498;
+        labs.push({y:ly,n:it.d.name,a:yen(it.d.balance),tip:attrEsc(tipB)});});
+  var LW=150;
+  labs.forEach(function(L){
+    var nm=L.n.length>10?10:L.n.length;
+    LW=Math.max(LW,Math.min(176,nm*13.5+24),Math.min(176,L.a.length*10+24));});
+  var LCX=1040-LW/2;
+  labs.sort(function(a,b){return b.y-a.y;}).forEach(function(L){s+=bossLabel(LCX,LW,L.y,L.n,L.a,L.tip);});
+})();
+
+
+// 今日の旗
+var tx0=X(0),ty0=roadY(tx0);
+s+='<rect x="'+(tx0-3)+'" y="'+(ty0-202)+'" width="6" height="202" fill="#7a5227" stroke="#2f1b0d" stroke-width="2"/>'
+ +'<path d="M'+(tx0+3)+' '+(ty0-202)+' h122 l-14 19 l14 19 h-122 Z" fill="#e0a21c" stroke="#2f1b0d" stroke-width="3" stroke-linejoin="round"/>'
+ +T(tx0+65,(ty0-177),"今日 "+(today.getMonth()+1)+"/"+today.getDate()+"("+WD[today.getDay()]+")","gate","middle",14);
+var hx=X(0)-46,hy=roadY(hx)+18;
+s+=heroImg(autoPose(),hx,hy,1,true);
+// 続きの矢印
+
+
+// ユニット配置（同じ日は縦に積む／看板は重なり回避）
+var byDay={};events.forEach(function(e){var i=diffD(e.date,today);if(i<LANE)(byDay[i]=byDay[i]||[]).push(e);});
+var COL={dragon:"#e23a63",orc:"#f0952e",slime:"#3fc46f",fixed:"#a86a34",whim:"#e8ad14",income:"#3fbf6e"};
+var occupied=[];
+function freeY(x,w,base){var y=base,n=0;
+  while(n<14){var ok=true;
+    for(var k=0;k<occupied.length;k++){var o=occupied[k];
+      if(Math.abs(o.x-x)<(o.w+w)/2+8&&Math.abs(o.y-y)<42){ok=false;break;}}
+    if(ok)break;y-=42;n++;}
+  occupied.push({x:x,y:y,w:w});return y;}
+MINIONPOS={};
+var LANEOFF=[{dx:0,dy:26},{dx:24,dy:-14},{dx:-24,dy:6},{dx:12,dy:34},{dx:-12,dy:-28},{dx:34,dy:16},{dx:-34,dy:-4}];
+var DMAP={};DEBTS.forEach(function(d){DMAP[d.id]=d;});
+var draws=[],stems='',plates='';
+Object.keys(byDay).map(Number).sort(function(a,b){return a-b;}).forEach(function(i){
+  var list=byDay[i].slice().sort(function(a,b){return b.amount-a.amount;});
+  var bx=X(i),ry=roadY(bx);
+  list.forEach(function(e,j){
+    var L=LANEOFF[j%LANEOFF.length];
+    var sway=(i%2?-9:9);
+    var x=bx+L.dx+(i%2?7:-7), fy=ry+Math.max(-30,Math.min(34,L.dy+sway));
+    var g='';
+    if(e.kind==="debt"){g+=creature(e.sp,e.tier,x,fy,MINION_BOX,false);
+      if(e.id&&!MINIONPOS[e.id])MINIONPOS[e.id]={x:x,y:fy,box:MINION_BOX};}
+    else g+=itemArt(e.kind,e.ic,x,fy,74);
+    if(e.kind!=="income"&&i<=2){
+      g+='<circle cx="'+x+'" cy="'+(fy-30)+'" r="40" fill="none" stroke="#ff3b30" stroke-width="4" opacity=".85"/>'
+       +'<circle cx="'+x+'" cy="'+(fy-30)+'" r="50" fill="none" stroke="#ff3b30" stroke-width="2.5" opacity=".4"/>'
+       +T(x+50,fy-70,"!","alert","middle",32);}
+    var tip;
+    if(e.kind==="debt"){
+      var dd=DMAP[e.id]||{};
+      var lines=[e.name,
+        "この日の引き落とし "+yen(e.amount),
+        "　うち利息 "+yen(e.interest||0)+"／元金 "+yen(e.principal||0),
+        "残り "+yen(dd.balance||0)+((dd.principal&&dd.principal>dd.balance)?("（当初 "+yen(dd.principal)+"）"):""),
+        "年利 "+(dd.apr||0)+"％",
+        (dd.mode==="lump")?("期限 "+(dd.finalDate||"未設定")+" に一括"):("毎月の最低返済 "+yen(dd.min||0)+"／返済日 "+(dd.dueDay||"?")+"日"),
+        (e.date.getMonth()+1)+"/"+e.date.getDate()+"("+WD[e.date.getDay()]+")"+(e.shifted?("　※"+(e.raw.getMonth()+1)+"/"+e.raw.getDate()+"が休日のため順延"):"")];
+      tip=lines.join("\n");
+    }else{
+      tip=[e.name,(e.kind==="income"?"収入 ":"")+yen(e.amount),
+        (e.kind==="fixed"?"毎月の固定費":e.kind==="whim"?"臨時の出費":"収入の予定"),
+        (e.date.getMonth()+1)+"/"+e.date.getDate()+"("+WD[e.date.getDay()]+")"+(e.shifted?("　※"+(e.raw.getMonth()+1)+"/"+e.raw.getDate()+"が休日のため順延"):"")].join("\n");
+    }
+    g+='<rect class="hit" x="'+(x-32)+'" y="'+(fy-96)+'" width="64" height="104" fill="rgba(0,0,0,0)" data-tip="'+attrEsc(tip)+'"/>';
+    draws.push({y:fy,html:g});
+    var amtTxt=(e.kind==="income"?"+":"")+yen(e.amount);
+    var nmTxt=e.name;
+    var w=Math.max(76,Math.min(9,String(nmTxt).length)*12.5+22,amtTxt.length*9.6+22);
+    var py=freeY(bx,w,ry-132-j*42);
+    stems+='<line x1="'+bx+'" y1="'+py+'" x2="'+bx+'" y2="'+(ry-14)+'" stroke="#17100a" stroke-width="2" opacity=".35"/>';
+    plates+=plate2(bx,py,nmTxt,amtTxt,COL[e.kind==="debt"?e.tier:e.kind]);
+  });
+});
+s+=stems;
+draws.sort(function(a,b){return a.y-b.y;}).forEach(function(d){s+=d.html;});
+s+=plates;
+
+// 草原の飾り
+for(var i=0;i<8;i++){var bx2=266+i*78+rnd()*24,by2=614+rnd()*26;
+  s+='<g transform="translate('+bx2+','+by2+')"><ellipse cx="0" cy="0" rx="20" ry="9" fill="rgba(0,0,0,.18)"/>'
+   +'<circle cx="-9" cy="-8" r="11" fill="#2f8f4a" stroke="#1c5c30" stroke-width="2.6"/>'
+   +'<circle cx="8" cy="-10" r="13" fill="#37a356" stroke="#1c5c30" stroke-width="2.6"/>'
+   +'<circle cx="0" cy="-16" r="10" fill="#43b863" stroke="#1c5c30" stroke-width="2.6"/></g>';}
+for(var i=0;i<15;i++){var fx=262+rnd()*600,fy2=608+rnd()*40;
+  s+='<g transform="translate('+fx+','+fy2+')"><circle cx="0" cy="0" r="3.6" fill="'+(["#ffe27a","#ff9ec7","#fff"][i%3])+'" stroke="#2f1b0d" stroke-width="1.4"/><circle cx="0" cy="0" r="1.2" fill="#e0a21c"/></g>';}
+
+/* ===== HUD ===== */
+// 口座残高の内訳：生活防衛ライン／次の収入までに確定で出ていく額／自由に撃てる額
+var nextIncome=events.filter(function(e){return e.kind==="income";})[0];
+committed=0;
+freePower=START_BALANCE;
+var MAXB=Math.max(START_BALANCE,260000);
+
+function bar(x,y,w,h,pct,grad,label,val,rev){
+  var g='<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="'+(h/2)+'" fill="#17100a" stroke="#000" stroke-width="2"/>';
+  var iw=(w-8)*pct;
+  g+='<rect x="'+(rev?x+4+(w-8-iw):x+4)+'" y="'+(y+4)+'" width="'+iw+'" height="'+(h-8)+'" rx="'+((h-8)/2)+'" fill="url(#'+grad+')"/>';
+  g+='<rect x="'+(rev?x+4+(w-8-iw):x+4)+'" y="'+(y+5)+'" width="'+iw+'" height="'+((h-8)/2.6)+'" rx="'+((h-8)/5)+'" fill="#fff" opacity=".28"/>';
+  g+=T(rev?x+w-12:x+12,y+h/2+5,label,"hudl",rev?"end":"start",12);
+  g+=T(rev?x+12:x+w-12,y+h/2+5,val,"hudv",rev?"start":"end",14);
+  return g;}
+
+s+='<g data-cmd="war">'
+ +'<circle cx="40" cy="44" r="28" fill="#1a2530" stroke="#000" stroke-width="3"/><circle cx="40" cy="44" r="22" fill="#2f6fb5" stroke="#0e2b4a" stroke-width="2"/>'
+ +icon("crest-castle",40,42,.92)
+ +bar(74,22,432,44,Math.min(1,START_BALANCE/MAXB),"hpG","城の攻撃力（口座残高）",yen(START_BALANCE))
+ +T(74,85,"口座残高はすべて返済に使えます　▸ タップで戦況をひらく","tap","start",11)
+ +'<g><path d="M562 96 h150 l-11 28 h-128 Z" fill="#17100a" opacity=".86"/>'
+ +T(637,117,"つぎの襲来 あと"+nextDays+"日","hudv","middle",15)+'</g>'
+ +(function(){var od=overdueList();if(!od.length)return "";
+   var t="\u26a0 \u300c"+od[0].name+"\u300d\u306e\u8fd4\u6e08\u304c "+od[0].days+"\u65e5 \u304a\u304f\u308c\u3066\u3044\u307e\u3059"+(od.length>1?" \u4ed6"+(od.length-1)+"\u4ef6":"");
+   return '<g data-cmd="attack"><rect x="300" y="132" width="600" height="42" rx="13" fill="#c0392b" stroke="#17100a" stroke-width="3"/>'
+    +T(600,160,t,"hudv","middle",16)+'</g>';})()
+ +bar(766,22,360,44,1,"hpB","敵 総HP（借金残高）",yen(debtTotal),true)
+ +'<circle cx="1160" cy="44" r="28" fill="#1a2530" stroke="#000" stroke-width="3"/><circle cx="1160" cy="44" r="22" fill="#8c1638" stroke="#3a0716" stroke-width="2"/>'
+ +icon("crest-fort",1160,42,.92)
+ +'</g>';
+
+/* ===== 下部コマンドドック ===== */
+var DY=664;
+s+='<rect x="0" y="'+DY+'" width="1200" height="144" fill="url(#dock)"/>';
+s+='<rect x="0" y="'+DY+'" width="1200" height="5" fill="#a9763f"/>';
+for(var i=0;i<24;i++){s+='<circle cx="'+(28+i*50)+'" cy="'+(DY+16)+'" r="3.4" fill="#3a2113" opacity=".8"/>';}
+var CARDS=[["sword","こうげき","#c0392b","attack"],
+ ["lane","接近レーン","#b5479a","lane"],["calendar","カレンダー","#2e8b57","cal"],
+ ["scroll","戦　況","#1f6fa8","war"],["magic","予　言","#7f4bc4","orb"],["dragonimg","借金モンスター|登録／設定","#5d3920","reg"],
+ ["save","保存・呼出","#8a5a33","backup"]];
+var cw=146,gp=13,sx=(1200-(cw*7+gp*6))/2;
+CARDS.forEach(function(c,i){var x=sx+i*(cw+gp),y=DY+30;
+  var lab=String(c[1]).split("|"), two=lab.length>1;
+  var art;
+  if(c[0]==="dragonimg"){
+    var dm=MON.dragon, dk=(two?50:56)/Math.max(dm.w,dm.h);
+    art='<image href="mon/dragon.png" x="'+(x+cw/2-dm.w*dk/2)+'" y="'+(y+(two?30:36)-dm.h*dk/2)+'" width="'+(dm.w*dk)+'" height="'+(dm.h*dk)+'"/>';
+  }else art=(HERO[c[0]]?heroImg(c[0],x+cw/2,y+(two?56:60),two?.38:.42):icon(c[0],x+cw/2,y+(two?32:36),two?.72:.8));
+  s+='<g data-cmd="'+c[3]+'"><rect x="'+x+'" y="'+y+'" width="'+cw+'" height="96" rx="14" fill="url(#card)" stroke="#2f1b0d" stroke-width="4"/>'
+   +'<rect x="'+(x+6)+'" y="'+(y+6)+'" width="'+(cw-12)+'" height="26" rx="8" fill="#fff" opacity=".45"/>'
+   +art
+   +(two
+     ?('<rect x="'+(x+8)+'" y="'+(y+54)+'" width="'+(cw-16)+'" height="38" rx="9" fill="#3a2113"/>'
+       +T(x+cw/2,y+70,lab[0],"cardl","middle",13)
+       +T(x+cw/2,y+87,lab[1],"cardl","middle",13))
+     :('<rect x="'+(x+8)+'" y="'+(y+60)+'" width="'+(cw-16)+'" height="28" rx="8" fill="#3a2113"/>'
+       +T(x+cw/2,y+80,c[1],"cardl","middle",15)))
+   +'<circle cx="'+(x+8)+'" cy="'+(y+8)+'" r="12" fill="'+c[2]+'" stroke="#2f1b0d" stroke-width="3"/>'
+   +T(x+8,y+13,String(i+1),"cost","middle",12)+'</g>';});
+if(!DEBTS.length&&!FIXED.length&&!WHIM.length&&!INCOME.length){
+  s+='<g><rect x="300" y="300" width="600" height="150" rx="18" fill="#17100a" opacity=".88"/>'
+   +T(600,352,"まだ敵がいません","gate","middle",26)
+   +T(600,392,"下の「借金モンスター 登録／設定」から、いまの借金と","cap","middle",16)
+   +T(600,420,"毎月の固定費・収入を入れてください","cap","middle",16)+'</g>';}
+document.getElementById("game").innerHTML=s;
+
+/* ===== 接近レーン（45日） ===== */
+(function(){
+  var W=1160,H=330,L=72,R=112,GY=214,gw=W-L-R;
+  function LX(i){return L+i*(gw/(DAYS-1));}
+  var g='<rect x="0" y="0" width="'+W+'" height="'+GY+'" fill="#bfe6f7"/>'
+   +'<rect x="0" y="'+GY+'" width="'+W+'" height="'+(H-GY)+'" fill="#7cc65d"/>'
+   +'<rect x="0" y="'+(GY-4)+'" width="'+W+'" height="10" fill="#c99a5c"/>';
+  for(var i=0;i<DAYS;i++){var dd=addD(today,i);if(!isOff(dd))continue;
+    g+='<rect x="'+(LX(i)-gw/(DAYS-1)/2)+'" y="0" width="'+(gw/(DAYS-1))+'" height="'+GY+'" fill="#ff6b8a" opacity=".13"/>';}
+  for(var i=0;i<DAYS;i++){var dd=addD(today,i),big=(dd.getDate()%5===0)||dd.getDate()===1||i===0;
+    g+='<line x1="'+LX(i)+'" y1="'+(GY-(big?14:7))+'" x2="'+LX(i)+'" y2="'+GY+'" stroke="#8a6534" stroke-width="'+(big?2.4:1.2)+'"/>';
+    if(big){g+='<text class="lx" x="'+LX(i)+'" y="'+(GY+26)+'" text-anchor="middle">'+(dd.getMonth()+1)+'/'+dd.getDate()+'</text>'
+      +'<text class="lw'+(dd.getDay()===0?" su":dd.getDay()===6?" sa":"")+'" x="'+LX(i)+'" y="'+(GY+40)+'" text-anchor="middle">'+WD[dd.getDay()]+'</text>';}}
+  for(var i=1;i<DAYS;i++){var dd=addD(today,i);if(dd.getDate()!==1)continue;
+    g+='<line x1="'+LX(i)+'" y1="10" x2="'+LX(i)+'" y2="'+(GY+46)+'" stroke="#7a5227" stroke-width="2.4" stroke-dasharray="6 5"/>'
+     +'<rect x="'+(LX(i)-1)+'" y="10" width="78" height="22" rx="5" fill="#c0392b"/>'
+     +'<text class="lg" x="'+(LX(i)+38)+'" y="25" text-anchor="middle">'+(dd.getMonth()+1)+'月</text>';}
+  g+='<line x1="'+LX(0)+'" y1="10" x2="'+LX(0)+'" y2="'+(GY+46)+'" stroke="#e0a21c" stroke-width="3" stroke-dasharray="6 5"/>'
+   +'<rect x="'+(LX(0)-34)+'" y="10" width="68" height="22" rx="5" fill="#e0a21c"/>'
+   +'<text class="lg2" x="'+LX(0)+'" y="25" text-anchor="middle">今日</text>';
+  g+=icon("crest-castle",30,GY-24,1.35)+'<text class="lx" x="30" y="'+(GY+26)+'" text-anchor="middle">城</text>';
+  g+=creature((DEBTS[0]&&DEBTS[0].sp)||"goblin","dragon",W-60,GY+6,84,false);
+  var CL={dragon:"#e23a63",orc:"#f0952e",slime:"#3fc46f",fixed:"#a86a34",whim:"#e8ad14",income:"#3fbf6e"};
+  var occ=[];
+  function fy2(x,w,base){var y=base,n=0;
+    while(n<16){var ok=true;
+      for(var k=0;k<occ.length;k++){var o=occ[k];
+        if(Math.abs(o.x-x)<(o.w+w)/2+4&&Math.abs(o.y-y)<20){ok=false;break;}}
+      if(ok)break;y-=20;n++;}
+    occ.push({x:x,y:y,w:w});return y;}
+  var byD={};events.forEach(function(e){var i=diffD(e.date,today);(byD[i]=byD[i]||[]).push(e);});
+  Object.keys(byD).map(Number).sort(function(a,b){return a-b;}).forEach(function(i){
+    byD[i].slice().sort(function(a,b){return b.amount-a.amount;}).forEach(function(e,j){
+      var col=CL[e.kind==="debt"?e.tier:e.kind], txt=(e.kind==="income"?"+":"")+man(e.amount);
+      var w=Math.max(42,txt.length*8+14), yy=fy2(LX(i),w,GY-26-j*20);
+      g+='<line x1="'+LX(i)+'" y1="'+yy+'" x2="'+LX(i)+'" y2="'+(GY-2)+'" stroke="#2f1b0d" stroke-width="1.6" opacity=".4"/>'
+       +'<circle cx="'+LX(i)+'" cy="'+(GY-6)+'" r="5.5" fill="'+col+'" stroke="#2f1b0d" stroke-width="2"/>'
+       +'<rect x="'+(LX(i)-w/2)+'" y="'+(yy-15)+'" width="'+w+'" height="17" rx="8" fill="#17100a" opacity=".88"/>'
+       +'<rect x="'+(LX(i)-w/2)+'" y="'+(yy-15)+'" width="5" height="17" rx="2.5" fill="'+col+'"/>'
+       +'<text class="lt" x="'+(LX(i)+2)+'" y="'+(yy-3)+'" text-anchor="middle">'+txt+'</text>';});});
+  document.getElementById("lane45").innerHTML=g;
+})();
+
+/* ===== カレンダー ===== */
+
+function buildCal(y,m){
+  var first=new Date(y,m,1),dim=new Date(y,m+1,0).getDate(),lead=first.getDay();
+  var h='<div class="cal"><h3>'+y+'年 '+(m+1)+'月</h3><div class="grid">';
+  for(var i=0;i<7;i++)h+='<div class="dow '+(i===0?"su":i===6?"sa":"")+'">'+WD[i]+'</div>';
+  for(var b=0;b<lead;b++)h+='<div class="cell blank"></div>';
+  for(var d=1;d<=dim;d++){
+    var cur=new Date(y,m,d),k=ymd(cur);
+    var mine=events.filter(function(e){return ymd(e.date)===k;});
+    h+='<div class="cell'+(cur.getDay()===0?" su":cur.getDay()===6?" sa":"")+(isOff(cur)?" off":"")+(k===ymd(today)?" today":"")+'">'
+      +'<div class="dn">'+d+'</div>';
+    if(mine.some(function(e){return e.shifted;}))h+='<span class="shift">🔁</span>';
+    mine.slice(0,4).forEach(function(e){h+='<div class="ev '+e.kind+'">'+(e.kind==="debt"?monTag(e.sp,13):itemTag(e.kind,e.ic,13))+man(e.amount)+'</div>';});
+    h+='</div>';}
+  return h+'</div></div>';}
+var nm=new Date(today.getFullYear(),today.getMonth()+1,1);
+document.getElementById("cals").innerHTML=buildCal(today.getFullYear(),today.getMonth())+buildCal(nm.getFullYear(),nm.getMonth());
+
+/* ===== 兵糧グラフ ===== */
+(function(){
+  var W=1160,H=210,L=56,R=24,TP=24,BT=44,gw=W-L-R,gh=H-TP-BT;
+  var mx=Math.max.apply(null,series),mn=Math.min.apply(null,series.concat([0]));
+  function GX(i){return L+i*(gw/(DAYS-1));}
+  function GY(v){return TP+gh-(v-mn)/(mx-mn||1)*gh;}
+  var g='';
+  g+='<rect x="'+L+'" y="'+TP+'" width="'+gw+'" height="'+gh+'" fill="#fdf6e4" stroke="#c8ab74" stroke-width="2"/>';
+  g+='<rect x="'+L+'" y="'+GY(SAFETY)+'" width="'+gw+'" height="'+(TP+gh-GY(SAFETY))+'" fill="#e8453c" opacity=".14"/>';
+  for(var i=0;i<DAYS;i++){var dd=addD(today,i);if(dd.getDate()%5!==0&&dd.getDate()!==1)continue;
+    g+='<line x1="'+GX(i)+'" y1="'+TP+'" x2="'+GX(i)+'" y2="'+(TP+gh)+'" stroke="#dcc79a" stroke-width="1"/>'
+     +'<text class="gx" x="'+GX(i)+'" y="'+(TP+gh+18)+'" text-anchor="middle">'+(dd.getMonth()+1)+'/'+dd.getDate()+'</text>';}
+  var pts=series.map(function(v,i){return GX(i)+","+GY(v);}).join(" ");
+  g+='<polygon points="'+GX(0)+','+(TP+gh)+' '+pts+' '+GX(DAYS-1)+','+(TP+gh)+'" fill="#3f8f3a" opacity=".2"/>';
+  g+='<line x1="'+L+'" y1="'+GY(SAFETY)+'" x2="'+(L+gw)+'" y2="'+GY(SAFETY)+'" stroke="#c0392b" stroke-width="2" stroke-dasharray="7 5"/>';
+  g+='<text class="gy" x="'+(L+gw-4)+'" y="'+(GY(SAFETY)-6)+'" text-anchor="end">生活防衛ライン '+yen(SAFETY)+'</text>';
+  g+='<polyline points="'+pts+'" fill="none" stroke="#2f6f34" stroke-width="3.5" stroke-linejoin="round"/>';
+  events.forEach(function(e){var i=diffD(e.date,today);
+    g+='<circle cx="'+GX(i)+'" cy="'+GY(series[i])+'" r="4" fill="'+(e.kind==="income"?"#2e8b57":"#c0392b")+'" stroke="#fdf6e4" stroke-width="1.6"/>';});
+  var wd=addD(today,worst.d);
+  g+='<circle cx="'+GX(worst.d)+'" cy="'+GY(worst.bal)+'" r="7" fill="none" stroke="#c0392b" stroke-width="3"/>';
+  g+='<text class="gy" x="'+GX(worst.d)+'" y="'+(GY(worst.bal)-14)+'" text-anchor="middle" fill="#a4160f">最少 '+(wd.getMonth()+1)+'/'+wd.getDate()+' '+yen(worst.bal)+'</text>';
+  g+='<text class="gy" x="'+(L-8)+'" y="'+(GY(mx)+4)+'" text-anchor="end">'+man(mx)+'</text>';
+  g+='<text class="gy" x="'+(L-8)+'" y="'+(TP+gh)+'" text-anchor="end">'+man(mn)+'</text>';
+  document.getElementById("food").innerHTML=g;
+})();
+
+/* ===== 戦況の比較表：左＝これから来る支払い／右＝口座残高＋収入 ===== */
+(function(){
+  var W=1160,BASE=404,TOP=78,CH=BASE-TOP,LX=300,RX=690,CW=170,DAYSW=30;
+  var outs=events.filter(function(e){return e.kind!=="income"&&diffD(e.date,today)<DAYSW;})
+    .slice().sort(function(a,b){return a.date-b.date;});
+  var ins=events.filter(function(e){return e.kind==="income"&&diffD(e.date,today)<DAYSW;})
+    .slice().sort(function(a,b){return a.date-b.date;});
+  var leftTotal=outs.reduce(function(a,e){return a+e.amount;},0);
+  var inTotal=ins.reduce(function(a,e){return a+e.amount;},0);
+  var rightTotal=START_BALANCE+inTotal;
+  var maxT=Math.max(leftTotal,rightTotal,1), k=CH/maxT;
+  var CC={dragon:"#e23a63",orc:"#f0952e",slime:"#3fc46f",fixed:"#a86a34",whim:"#e8ad14"};
+  function md(e){return (e.date.getMonth()+1)+"/"+e.date.getDate();}
+  function stack(items,x0,side){
+    var y=BASE,out="",used=[];
+    items.forEach(function(it){
+      var h=Math.max(2.5,it.amount*k), yTop=y-h;
+      out+='<rect x="'+x0+'" y="'+yTop.toFixed(1)+'" width="'+CW+'" height="'+h.toFixed(1)+'" fill="'+it.col+'" stroke="#0d1620" stroke-width="1.6"/>';
+      var anchor=yTop+h/2, ly=Math.min(anchor,BASE-14);
+      for(var n=0;n<60;n++){
+        var ok=true;
+        for(var q=0;q<used.length;q++){if(Math.abs(used[q]-ly)<18){ok=false;break;}}
+        if(ok)break; ly-=18;
+      }
+      used.push(ly);
+      var ex=(side==="L")?x0:(x0+CW), tx=(side==="L")?(x0-14):(x0+CW+14);
+      out+='<path d="M'+ex+' '+anchor.toFixed(1)+' L'+((side==="L")?(ex-9):(ex+9))+' '+ly.toFixed(1)+'" stroke="#9b8760" stroke-width="1.5" fill="none"/>'
+       +'<text class="cl" x="'+tx+'" y="'+(ly+4).toFixed(1)+'" text-anchor="'+((side==="L")?"end":"start")+'">'+it.label+'</text>';
+      y=yTop;
+    });
+    return out;
+  }
+  var L=outs.map(function(e){
+    return {amount:e.amount,col:CC[e.kind==="debt"?e.tier:e.kind]||"#888",
+      label:md(e)+"　"+esc(e.name)+"　"+yen(e.amount)};});
+  var R=[];
+  if(START_BALANCE>0)R.push({amount:START_BALANCE,col:"#3fbf6e",label:"いまの口座残高　"+yen(START_BALANCE)});
+  ins.forEach(function(e){R.push({amount:e.amount,col:"#a9f0c4",label:md(e)+"　"+esc(e.name)+"　+"+yen(e.amount)});});
+  var g='';
+  g+='<line x1="30" y1="'+BASE+'" x2="'+(W-30)+'" y2="'+BASE+'" stroke="#c8ab74" stroke-width="2.4"/>';
+  g+=T(LX+CW/2,46,"これから来る敵（30日以内の支払い）","ct","middle",17)
+   +T(RX+CW/2,46,"城の攻撃力（口座残高＋30日以内の収入）","ct","middle",17);
+  g+=stack(L,LX,"L")+stack(R,RX,"R");
+  var lineY=BASE-leftTotal*k;
+  g+='<line x1="'+(LX-4)+'" y1="'+lineY.toFixed(1)+'" x2="'+(RX+CW+4)+'" y2="'+lineY.toFixed(1)+'" stroke="#c0392b" stroke-width="2.4" stroke-dasharray="8 6"/>'
+   +T((LX+RX+CW)/2,lineY-8,"支払い合計 "+yen(leftTotal),"cm","middle",14);
+  g+=T(LX+CW/2,BASE+24,yen(leftTotal),"cs","middle",16)
+   +T(RX+CW/2,BASE+24,yen(rightTotal),"cs","middle",16);
+  var diff=rightTotal-leftTotal;
+  g+=T(W/2,BASE+56,(diff>=0
+      ?("✔ 30日以内の支払いに対して "+yen(diff)+" 足ります")
+      :("⚠ 30日以内の支払いに "+yen(-diff)+" 足りません")),(diff>=0?"cok":"cng"),"middle",20);
+  document.getElementById("compare").innerHTML=g;
+})();
+
+/* ===== 親玉一覧（戦況） ===== */
+(function(){
+  
+  var TL={dragon:"危険度★★★",orc:"危険度★★",slime:"危険度★"};
+  var TC={dragon:"#e23a63",orc:"#f0952e",slime:"#43c97a"};
+  var maxB=Math.max.apply(null,DEBTS.map(function(d){return d.balance;}));
+  var h=DEBTS.slice().sort(function(a,b){return b.apr-a.apr;}).map(function(d,idx){
+    var t=tierOf(d.apr),it=Math.round(d.balance*(d.apr/100)/12);
+    var nx=occur(d.dueDay)[0];
+    return '<li class="boss'+(idx===0?" pri":"")+'">'
+      +'<span class="bic" style="background:'+TC[t]+'">'+monTag(d.sp,30)+'</span>'
+      +'<span class="bmain"><b>'+esc(d.name)+(idx===0?'<i class="pt">★最優先ターゲット</i>':'')+'</b>'
+      +'<small>'+((MON[d.sp]&&MON[d.sp].ja)||"ゴブリン")+' ／ '+TL[t]+' ／ 年利 '+d.apr+'% ／ '+(d.mode==="lump"?('期限 '+(d.finalDate||"未設定")+' に一括'):('毎月の最低返済 '+yen(d.min)))+'</small>'
+      +'<span class="bbar"><i style="width:'+Math.round(d.balance/maxB*100)+'%;background:'+TC[t]+'"></i></span>'
+      +'<small class="bsub">毎月の利息（回復力） '+yen(it)+' ／ 次の襲来 '
+      +(nx?(nx.date.getMonth()+1)+"/"+nx.date.getDate()+"("+WD[nx.date.getDay()]+")"+(nx.shifted?" ※順延":""):"—")+'</small></span>'
+      +'<span class="bhp">'+yen(d.balance)+'<b>残りHP</b></span></li>';}).join("");
+  document.getElementById("bosses").innerHTML=h;
+})();
+
+/* ===== 敵リスト ===== */
+
+document.getElementById("up").innerHTML=events.slice(0,8).map(function(e){
+  var i=diffD(e.date,today),warn=e.kind!=="income"&&i<=2;
+  var sub=e.kind==="debt"?("年利"+e.apr+"% ／ "+((MON[e.sp]&&MON[e.sp].ja)||"ゴブリン")+"の子分（"+(e.tier==="dragon"?"危険度★★★":e.tier==="orc"?"危険度★★":"危険度★")+"）"):
+    e.kind==="fixed"?"毎月の固定費":e.kind==="whim"?"臨時の出費":"収入（プレゼント）";
+  var h='<li class="'+(warn?"warn":"")+'"><span class="d">'+(e.date.getMonth()+1)+'/'+e.date.getDate()+'('+WD[e.date.getDay()]+')<b>'+(i===0?"今日!":"あと"+i+"日")+'</b></span>'
+   +'<span style="font-size:22px">'+(e.kind==="debt"?monTag(e.sp,26):itemTag(e.kind,e.ic,26))+'</span>'
+   +'<span class="nm">'+esc(e.name)+'<small>'+sub+'</small>';
+  if(e.kind==="debt"){var ip=e.interest/e.amount*100;
+    h+='<span class="hpsplit"><i class="si" style="width:'+Math.max(7,ip*1.15)+'px"></i><i class="sp" style="width:'+Math.max(7,(100-ip)*1.15)+'px"></i>'
+     +'<small>利息 '+yen(e.interest)+'／元金 '+yen(e.principal)+' → 親玉に届くのは '+yen(e.principal)+'</small></span>';}
+  h+='</span>';
+  if(e.shifted)h+='<span class="badge">🔁 '+(e.raw.getMonth()+1)+'/'+e.raw.getDate()+'('+WD[e.raw.getDay()]+')が休日</span>';
+  if(warn)h+='<span class="badge r">⚠ 警戒</span>';
+  h+='<span class="am" style="color:'+(e.kind==="income"?"#6fe0a0":"#ff8b7a")+'">'+(e.kind==="income"?"+":"−")+yen(e.amount)+'</span></li>';
+  return h;}).join("");
+
+}
+/* ===== ストア（この端末のブラウザにだけ保存） ===== */
+var LS={debts:"dq_debts",tx:"dq_tx",fixed:"dq_fixed",one:"dq_one",inc:"dq_inc",set:"dq_set",res:"dq_res"};
+function genId(){if(window.crypto&&crypto.randomUUID)return crypto.randomUUID();return "id-"+Date.now()+"-"+Math.random().toString(16).slice(2);}
+function lget(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
+function lset(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+var DB={debts:[],tx:[],fixed:[],one:[],inc:[],res:[],set:{balance:0,safety:50000}};
+var SPS=MONKEYS.slice();
+function monthKey(d){return d.getFullYear()*12+d.getMonth();}
+function saveDB(){lset(LS.debts,DB.debts);lset(LS.tx,DB.tx);lset(LS.fixed,DB.fixed);lset(LS.one,DB.one);lset(LS.inc,DB.inc);lset(LS.res,DB.res);lset(LS.set,DB.set);}
+function loadDB(){
+  DB.debts=lget(LS.debts,[]);DB.tx=lget(LS.tx,[]);DB.fixed=lget(LS.fixed,[]);
+  DB.one=lget(LS.one,[]);DB.inc=lget(LS.inc,[]);DB.res=lget(LS.res,[]);
+  var st=lget(LS.set,null);
+  if(!st){ // 旧バージョン（攻撃力ゲージ方式）からの移行
+    var inc=DB.tx.filter(function(t){return t.type==="income";}).reduce(function(a,t){return a+t.amount;},0);
+    var pay=DB.tx.filter(function(t){return t.type==="payment";}).reduce(function(a,t){return a+t.amount;},0);
+    st={balance:Math.max(0,inc-pay),safety:50000};
+  }
+  DB.set={balance:Math.max(0,Math.round(st.balance||0)),safety:Math.max(0,Math.round(st.safety==null?50000:st.safety))};
+  var cur=monthKey(new Date());
+  DB.debts.forEach(function(d,i){
+    if(!d.id)d.id=genId();
+    if(!d.sp)d.sp=SPS[i%SPS.length];
+    if(d.principal==null)d.principal=d.balance;
+    if(d.lastAccrual==null)d.lastAccrual=cur;
+    if(!d.createdAt)d.createdAt=Date.now();
+    if(d.defeatedAt===undefined)d.defeatedAt=null;});
+  saveDB();
+}
+/* 月が変わったら利息を計上（＝モンスターのHPが回復する） */
+function accrue(){
+  var cur=monthKey(today),changed=false;
+  DB.debts.forEach(function(d){
+    if(d.defeatedAt||d.balance<=0)return;
+    var n=Math.max(0,Math.min(36,cur-(d.lastAccrual==null?cur:d.lastAccrual)));
+    for(var i=0;i<n;i++){
+      var it=Math.round(d.balance*((d.aprPercent||0)/100)/12);
+      if(it>0){d.balance+=it;DB.tx.push({id:genId(),type:"interest",debtId:d.id,amount:it,createdAt:Date.now()});}
+    }
+    if(n>0){d.lastAccrual=cur;changed=true;}});
+  if(changed)saveDB();
+}
+function activeDebts(){return DB.debts.filter(function(d){return !d.defeatedAt&&d.balance>0;});}
+function debtById(id){var r=null;DB.debts.forEach(function(d){if(d.id===id)r=d;});return r;}
+function syncAliases(){
+  DEBTS=activeDebts().map(function(d){return {id:d.id,name:d.name,apr:d.aprPercent||0,balance:d.balance,min:d.minPayment||0,dueDay:d.dueDay||25,sp:d.sp||"goblin",mode:d.mode||"monthly",finalDate:d.finalDate||"",principal:d.principal||d.balance};});
+  FIXED=DB.fixed.slice();WHIM=DB.one.slice();INCOME=DB.inc.slice();
+  START_BALANCE=DB.set.balance;SAFETY=DB.set.safety;
+}
+/* ===== 完済シミュレーション ===== */
+function monthsUntil(str){
+  var p=String(str||"").split("-"); if(p.length!==3)return null;
+  var d=new Date(+p[0],+p[1]-1,+p[2]); if(isNaN(d))return null;
+  return Math.max(0,(d.getFullYear()-today.getFullYear())*12+(d.getMonth()-today.getMonth()));
+}
+function simulate(list,extra,strategy){
+  var ds=list.map(function(d){return {apr:d.apr,bal:d.balance,min:d.min,name:d.name,
+    lumpM:(d.mode==="lump")?(monthsUntil(d.finalDate)||0):null};});
+  var months=0,totalInt=0,LIMIT=600;
+  while(months<LIMIT&&ds.some(function(d){return d.bal>0.5;})){
+    months++;
+    ds.forEach(function(d){if(d.bal<=0)return;var it=d.bal*(d.apr/100)/12;d.bal+=it;totalInt+=it;});
+    ds.forEach(function(d){
+      if(d.bal<=0)return;
+      if(d.lumpM!=null){if(months>=d.lumpM)d.bal=0;return;}
+      var p=Math.min(d.min,d.bal);d.bal-=p;});
+    var pool=extra;
+    var order=ds.filter(function(d){return d.bal>0;}).slice().sort(strategy==="snowball"
+      ?function(a,b){return a.bal-b.bal;}:function(a,b){return b.apr-a.apr;});
+    for(var i=0;i<order.length&&pool>0.5;i++){var p=Math.min(pool,order[i].bal);order[i].bal-=p;pool-=p;}
+  }
+  return {months:months,interest:Math.round(totalInt),over:months>=LIMIT};
+}
+function payoffMonths(bal,apr,min){
+  var m=0;while(m<600&&bal>0.5){m++;bal+=bal*(apr/100)/12;var p=Math.min(min,bal);if(p<=0)return 600;bal-=p;}return m;
+}
+function payoffLabel(r){
+  if(r.over)return "このペースでは完済できません";
+  var d=addD(today,0);var y=d.getFullYear(),m=d.getMonth()+r.months;
+  return (y+Math.floor(m/12))+"年"+(m%12+1)+"月";
+}
+/* ===== 討伐ずみ・冒険のきろく（旧バージョンから引き継ぎ） ===== */
+function renderAll(){renderCore();renderExtras();}
+function renderExtras(){
+  var won=DB.debts.filter(function(d){return d.defeatedAt;}).sort(function(a,b){return b.defeatedAt-a.defeatedAt;});
+  document.getElementById("trophies").innerHTML=won.length
+    ?'<h4 class="gsub">🏆 討伐ずみの敵</h4><ul class="qlog">'+won.map(function(d){
+       var dt=new Date(d.defeatedAt);
+       return '<li><span style="filter:grayscale(1);opacity:.75">'+monTag(d.sp,26)+'</span>'
+        +'<span class="nm">'+esc(d.name)+'<small>'+(dt.getFullYear())+"/"+(dt.getMonth()+1)+'/'+dt.getDate()+' 討伐ずみ</small></span>'
+        +'<span class="am" style="color:#6fe0a0">完済！</span></li>';}).join("")+'</ul>'
+    :"";
+  var items=DB.tx.slice().sort(function(a,b){return b.createdAt-a.createdAt;}).slice(0,30);
+  document.getElementById("log").innerHTML=items.length?items.map(function(t){
+    var d=debtById(t.debtId),nm=d?d.name:"（消えた敵）",dt=new Date(t.createdAt);
+    var dl='<span class="d">'+(dt.getMonth()+1)+'/'+dt.getDate()+'</span>';
+    if(t.type==="interest")return '<li>'+dl+'<span class="nm">「'+esc(nm)+'」が利息で回復した<small>月がかわり '+yen(t.amount)+' ぶんHPが戻りました</small></span><span class="am" style="color:#ff8b7a">+'+yen(t.amount)+'</span></li>';
+    if(t.type==="income")return '<li>'+dl+'<span class="nm">収入をゲット<small>'+esc(t.note||"")+'</small></span><span class="am" style="color:#6fe0a0">+'+yen(t.amount)+'</span></li>';
+    return '<li>'+dl+'<span class="nm">'+(t.cannon?"💥 特大砲弾！":"⚔ こうげき")+'「'+esc(nm)+'」<small>'+yen(t.amount)+' のダメージ</small></span><span class="am" style="color:#ffd978">-'+yen(t.amount)+'</span></li>';
+  }).join(""):'<li><span class="nm">まだ記録がありません<small>こうげき（返済）すると、ここに残ります</small></span></li>';
+}
+/* ===== 画面ユーティリティ ===== */
+function el(id){return document.getElementById(id);}
+function openDlg(id){var d=el(id);if(d&&!d.open)d.showModal();}
+function toast(msg,big){
+  var layer=el("toastLayer"),t=document.createElement("div");
+  t.className="toast"+(big?" big":"");t.textContent=msg;layer.appendChild(t);
+  requestAnimationFrame(function(){t.classList.add("show");});
+  setTimeout(function(){t.classList.remove("show");setTimeout(function(){t.remove();},400);},big?4200:2600);
+}
+var winTimer=null,boomTimer=null;
+function preloadBoom(){for(var i=1;i<=9;i++){var im=new Image();im.src="boom/"+i+".png";}}
+function playBoom(p){
+  var svg=el("game"),box=el("boom");
+  if(!svg||!box||!p)return;
+  var rc=svg.getBoundingClientRect(),k=rc.width/1200;
+  var size=Math.max(110,p.box*2.7*k);
+  box.style.width=size+"px";
+  box.style.left=(rc.left+p.x*k)+"px";
+  box.style.top=(rc.top+(p.y-p.box*0.42)*k)+"px";
+  var img=box.firstElementChild,i=1;
+  img.src="boom/1.png"; box.hidden=false;
+  clearInterval(boomTimer);
+  boomTimer=setInterval(function(){
+    i++;
+    if(i>9){clearInterval(boomTimer);box.hidden=true;return;}
+    img.src="boom/"+i+".png";
+  },333);
+}
+function confettiBurst(){
+  var c=el("confetti"); if(!c)return;
+  var cols=["#ff4757","#ffd54a","#4fc3f7","#66d36e","#c46fe0","#ff8f2a","#ffffff"];
+  var h="";
+  for(var i=0;i<100;i++){
+    h+='<i style="left:'+(Math.random()*100).toFixed(2)+'vw;background:'+cols[i%cols.length]
+     +';width:'+(6+Math.random()*8).toFixed(1)+'px;height:'+(9+Math.random()*13).toFixed(1)+'px'
+     +';animation-duration:'+(2.1+Math.random()*2.3).toFixed(2)+'s'
+     +';animation-delay:'+(Math.random()*1.4).toFixed(2)+'s'
+     +';--rot:'+Math.round(Math.random()*900-450)+'deg"></i>';
+  }
+  c.innerHTML=h; c.hidden=false;
+}
+function showBanner(text,celebrate){
+  var b=el("winBanner"); if(!b)return;
+  var g=el("congrats"), cf=el("confetti");
+  if(celebrate){
+    if(g){g.hidden=false;g.classList.remove("show");
+      void g.offsetWidth;
+      setTimeout(function(){g.classList.add("show");},30);}
+    confettiBurst();
+  }
+  b.firstElementChild.textContent=text;
+  b.classList.add("show");
+  clearTimeout(winTimer);
+  winTimer=setTimeout(function(){
+    b.classList.remove("show");
+    if(g){g.classList.remove("show");setTimeout(function(){g.hidden=true;},600);}
+    if(cf){cf.hidden=true;cf.innerHTML="";}
+  },5000);
+}
+/* ===== こうげき／繰上げ砲 ===== */
+var atkMode="normal";
+function fillAttack(mode){
+  atkMode=mode;
+  el("atkTitle").textContent="⚔ こうげき ― 返済する";
+  el("atkHint").innerHTML="ねらう敵をえらんでください。<b>月々の返済</b>は金額を入れる必要はありません。<b>繰り上げ返済</b>を押すと金額の入力がひらきます。";
+  var sel=el("atkTarget");
+  var list=activeDebts().slice().sort(function(a,b){return (b.aprPercent||0)-(a.aprPercent||0);});
+  if(!list.length){sel.innerHTML='<option value="">登録された借金がありません</option>';el("atkInfo").innerHTML="";return;}
+  sel.innerHTML=list.map(function(d,i){
+    return '<option value="'+d.id+'">'+esc(d.name)+'（年利'+(d.aprPercent||0)+'% ／ 残り'+yen(d.balance)+'）'+(i===0?" ★最優先":"")+'</option>';}).join("");
+  el("atkAmount").value="";
+  closeExtra();
+  updateAtkInfo();
+}
+function closeExtra(){
+  var ex=el("atkExtra"); if(ex)ex.hidden=true;
+  var b=el("atkCannon"); if(b)b.textContent="💣 繰り上げ返済";
+  var a=el("atkAmount"); if(a)a.value="";
+}
+function updateAtkInfo(){
+  var d=debtById(el("atkTarget").value);
+  var mb=el("atkMonthly");
+  if(!d){el("atkInfo").innerHTML="";if(mb)mb.textContent="⚔ 月々の返済";return;}
+  var due=(d.mode==="lump")?d.balance:Math.min(d.minPayment||0,d.balance);
+  if(mb)mb.textContent=(d.mode==="lump"?"⚔ 期日に一括で返す ":"⚔ 月々の返済 ")+yen(due);
+  var amt=Math.max(0,Math.round(Number(el("atkAmount").value)||0));
+  var it=Math.round(d.balance*((d.aprPercent||0)/100)/12);
+  var h='<div class="ai-row"><span>'+(d.mode==="lump"?("期限 "+(d.finalDate||"未設定")+" に一括で返す敵"):"この敵の毎月の利息（回復力）")+'</span><b>'+((d.mode==="lump")?yen(d.balance):yen(it))+'</b></div>'
+   +'<div class="ai-row"><span>いまの口座残高</span><b>'+yen(DB.set.balance)+'</b></div>';
+  if(amt>0){
+    var over=Math.max(0,amt-((d.mode==="lump")?0:(d.minPayment||0)));
+    h+='<div class="ai-row"><span>残りHP</span><b>'+yen(d.balance)+' → '+yen(Math.max(0,d.balance-amt))+'</b></div>';
+    if(over>0){
+      var base=simulate(DEBTS,0,"avalanche");
+      var after=DEBTS.map(function(x){return x.id===d.id?{apr:x.apr,balance:Math.max(0,x.balance-over),min:x.min,name:x.name}:x;});
+      var r2=simulate(after,0,"avalanche");
+      var di=Math.max(0,base.interest-r2.interest),dall=Math.max(0,base.months-r2.months);
+      var solo="";
+      if(d.mode!=="lump"){
+        var s1=payoffMonths(d.balance,d.aprPercent||0,d.minPayment||0);
+        var s2=payoffMonths(Math.max(0,d.balance-over),d.aprPercent||0,d.minPayment||0);
+        solo="この敵を <b>"+Math.max(0,s1-s2)+"ヶ月</b> 早く倒せます。";
+      }
+      h+='<div class="ai-hit">✨ '+(d.mode==="lump"?("期日より前に <b>"+yen(over)+"</b> を先に返す一撃！"):("最低返済を <b>"+yen(over)+"</b> 超える一撃！"))+'<br>'
+       +solo+'支払う利息は <b>'+yen(di)+'</b> 減ります。'
+       +(dall>0?'<br>借金ぜんぶの完済も <b>'+dall+'ヶ月</b> 早まります。':'')+'</div>';
+    }
+    if(amt>DB.set.balance)
+      h+='<div class="ai-warn">⚠ 口座残高（'+yen(DB.set.balance)+'）を超えています。</div>';
+  }
+  el("atkInfo").innerHTML=h;
+}
+function doAttack(mode){
+  var d=debtById(el("atkTarget").value);if(!d)return;
+  atkMode=(mode==="cannon")?"cannon":"normal";
+  var amt=Math.round(Number(el("atkAmount").value)||0);
+  if(amt<=0&&mode!=="cannon"){
+    amt=(d.mode==="lump")?d.balance:(d.minPayment||0);
+  }
+  amt=Math.min(amt,d.balance,DB.set.balance);
+  if(amt<=0){toast(mode==="cannon"?"繰り上げで返す金額を入れてください":"金額を入れてください");return;}
+
+  var wasActive=!d.defeatedAt;
+  var bpos=BOSSPOS[d.id];
+  d.balance=Math.max(0,d.balance-amt);
+  DB.set.balance=Math.max(0,DB.set.balance-amt);
+  DB.tx.push({id:genId(),type:"payment",debtId:d.id,amount:amt,createdAt:Date.now(),cannon:atkMode==="cannon"});
+  var defeated=false;
+  if(d.balance<=0&&wasActive){d.defeatedAt=Date.now();defeated=true;}
+  // 攻撃の種類：繰上げは大砲、返済日まで5日以上なら弓、4日以内なら剣
+  var dleft=99;
+  if(d.mode==="lump"){var fp=String(d.finalDate||"").split("-");
+    if(fp.length===3)dleft=diffD(shiftBiz(new Date(+fp[0],+fp[1]-1,+fp[2])),today);}
+  else{var dueE=occur(d.dueDay)[0]; dleft=dueE?diffD(dueE.date,today):99;}
+  heroPose=(atkMode==="cannon")?"cannon":(dleft>=5?"bow":"sword");
+  saveDB();renderAll();
+  el("dlgAttack").close();
+  closeExtra();
+  setTimeout(function(){heroPose=defeated?"cheer":"guts";renderAll();
+    setTimeout(function(){heroPose="";renderAll();},2000);},1500);
+  if(defeated){
+    var total=(d.principal&&d.principal>0)?d.principal:amt;
+    playBoom(bpos);
+    showBanner("「"+d.name+"」（"+manEn(total)+"）を倒した！",true);
+  }else if(atkMode==="cannon"){
+    playBoom(bpos||MINIONPOS[d.id]);
+    showBanner("「"+d.name+"」に繰り上げ返済 "+manEn(amt)+"！",false);
+  }else{
+    playBoom(MINIONPOS[d.id]||bpos);
+    showBanner("「"+d.name+"」の子分（"+manEn(amt)+"）を倒した！",false);
+  }
+}
+/* ===== 登録・設定 ===== */
+var regTab="debt", editing=null;
+function recOf(cat,id){
+  var a={debt:DB.debts,fixed:DB.fixed,one:DB.one,inc:DB.inc}[cat]||[];
+  for(var i=0;i<a.length;i++)if(a[i].id===id)return a[i];
+  return null;
+}
+function editTarget(cat){return (editing&&editing.cat===cat)?recOf(cat,editing.id):null;}
+function vv(v){return (v===undefined||v===null)?"":v;}
+function formHead(t,isEdit){
+  return '<h4>'+(isEdit?"✎ "+t+"を編集":t)+'</h4>';
+}
+function formFoot(isEdit){
+  return '<div class="frow"><button class="gbtn gold" type="submit">'+(isEdit?"更新する":"登録する")+'</button>'
+   +(isEdit?'<button class="gbtn ghost" type="button" id="editCancel">やめる</button>':'')+'</div>';
+}
+function fillRegister(){
+  var tabs=[["debt","借金"],["fixed","固定費"],["one","臨時出費"],["inc","収入"],["set","口座"]];
+  el("regTabs").innerHTML=tabs.map(function(t){
+    return '<button class="gtab'+(regTab===t[0]?" on":"")+'" data-tab="'+t[0]+'">'+t[1]+'</button>';}).join("");
+  var h="", e;
+  if(regTab==="debt"){
+    e=editTarget("debt");
+    h='<form class="gform" id="fDebt">'+formHead("借金モンスター",!!e)
+     +'<label>名前（借入先）<input id="dName" required maxlength="40" placeholder="例：○○カードローン" value="'+(e?esc(e.name):"")+'"></label>'
+     +'<div class="g2"><label>いまの残高<input id="dBal" type="number" min="0" inputmode="numeric" required value="'+(e?e.balance:"")+'"></label>'
+     +'<label>借りた当初の金額（任意）<input id="dPrin" type="number" min="0" inputmode="numeric" placeholder="空欄なら残高と同じ" value="'+(e&&e.principal>e.balance?e.principal:"")+'"></label></div>'
+     +'<label>年利（％）<input id="dApr" type="number" min="0" step="0.1" inputmode="decimal" required value="'+(e?vv(e.aprPercent):"")+'"></label>'
+     +'<label>返済のしかた<select id="dMode">'
+       +'<option value="monthly"'+((!e||e.mode!=="lump")?" selected":"")+'>毎月すこしずつ返す</option>'
+       +'<option value="lump"'+((e&&e.mode==="lump")?" selected":"")+'>期日に一括で返す（友人・親からの借金など）</option>'
+     +'</select></label>'
+     +'<div class="g2 mOnly"><label>毎月の最低返済額<input id="dMin" type="number" min="0" inputmode="numeric" value="'+(e?vv(e.minPayment):"")+'"></label>'
+     +'<label>返済日（毎月何日）<input id="dDay" type="number" min="1" max="31" value="'+(e?vv(e.dueDay):27)+'"></label></div>'
+     +'<label><span id="dFinalLabel">最終支払日（任意）</span><input id="dFinal" type="date" value="'+(e?vv(e.finalDate):"")+'"></label>'
+     +'<label>すがた（20種類から選べます）<select id="dSp">'+MONKEYS.map(function(k){
+        return '<option value="'+k+'"'+((e&&e.sp===k)?" selected":"")+'>'+MON[k].ja+'</option>';}).join("")+'</select></label>'
+     +'<p class="dlgnote">年利が高いほど危険度の高い敵として扱われます。親や友人から借りたお金など利息がないものは年利0で登録してください。当初の金額を入れると、HPバーがどこまで減ったかが正しく出ます。<br><b>「期日に一括で返す」</b>を選ぶと、毎月の返済はなくなり、指定した支払期限日に敵が1体だけ現れます。</p>'
+     +formFoot(!!e)+'</form>'
+     +itemList(DB.debts.map(function(d){
+        return {id:d.id,t:d.name,s:(d.defeatedAt?"討伐ずみ／":"")+"年利"+vv(d.aprPercent)+"％ ／ "
+          +((d.mode==="lump")?("期限 "+vv(d.finalDate)+" に一括"):("毎月"+yen(d.minPayment||0)+" ／ "+vv(d.dueDay)+"日"))
+          +(d.principal>d.balance?"／当初 "+yen(d.principal):""),v:yen(d.balance)};}),"debt");
+  }else if(regTab==="fixed"){
+    e=editTarget("fixed");
+    h='<form class="gform" id="fFixed">'+formHead("毎月の固定費（請求書）",!!e)
+     +'<label>名前<input id="xName" required maxlength="40" placeholder="例：家賃" value="'+(e?esc(e.name):"")+'"></label>'
+     +'<div class="g2"><label>金額<input id="xAmt" type="number" min="1" inputmode="numeric" required value="'+(e?e.amount:"")+'"></label>'
+     +'<label>毎月何日<input id="xDay" type="number" min="1" max="31" required value="'+(e?vv(e.dueDay):27)+'"></label></div>'
+     +formFoot(!!e)+'</form>'
+     +itemList(DB.fixed.map(function(f){return {id:f.id,t:f.name,s:"毎月"+f.dueDay+"日",v:yen(f.amount)};}),"fixed");
+  }else if(regTab==="one"){
+    e=editTarget("one");
+    h='<form class="gform" id="fOne">'+formHead("臨時の出費",!!e)
+     +'<label>名前<input id="oName" required maxlength="40" placeholder="例：友人の結婚式" value="'+(e?esc(e.name):"")+'"></label>'
+     +'<div class="g2"><label>金額<input id="oAmt" type="number" min="1" inputmode="numeric" required value="'+(e?e.amount:"")+'"></label>'
+     +'<label>日付<input id="oDate" type="date" required value="'+(e?vv(e.date):"")+'"></label></div>'
+     +'<label>すがた<select id="oIc">'+WHIMKEYS.map(function(k){
+        return '<option value="'+k+'"'+((e&&e.ic===k)?" selected":"")+'>'+ITEM[k].ja+'</option>';}).join("")+'</select></label>'
+     +formFoot(!!e)+'</form>'
+     +itemList(DB.one.map(function(o){return {id:o.id,t:o.name,s:o.date+" ／ "+((ITEM[o.ic]||ITEM.plane).ja),v:yen(o.amount)};}),"one");
+  }else if(regTab==="inc"){
+    e=editTarget("inc");
+    h='<form class="gform" id="fInc">'+formHead("毎月の収入（プレゼント）",!!e)
+     +'<label>名前<input id="iName" required maxlength="40" placeholder="例：お給料" value="'+(e?esc(e.name):"")+'"></label>'
+     +'<div class="g2"><label>金額<input id="iAmt" type="number" min="1" inputmode="numeric" required value="'+(e?e.amount:"")+'"></label>'
+     +'<label>毎月何日<input id="iDay" type="number" min="1" max="31" required value="'+(e?vv(e.dueDay):25)+'"></label></div>'
+     +'<p class="dlgnote">収入が入ったら「口座」タブで実際の残高を更新してください。ここは予定を道に出すためのものです。</p>'
+     +formFoot(!!e)+'</form>'
+     +itemList(DB.inc.map(function(v){return {id:v.id,t:v.name,s:"毎月"+v.dueDay+"日",v:yen(v.amount)};}),"inc");
+  }else{
+    h='<form class="gform" id="fSet"><h4>いまの口座残高</h4>'
+     +'<label>口座残高（＝城の攻撃力）<input id="sBal" type="number" min="0" inputmode="numeric" value="'+DB.set.balance+'" required></label>'
+     +'<p class="dlgnote">月に一度、通帳やアプリの実際の残高とここを合わせてください。ズレたままだと画面の数字が意味を持たなくなります。<br>口座残高はすべて返済に使えます。制限はかけていません。</p>'
+     +'<button class="gbtn gold" type="submit">更新する</button></form>'
+     +'<div class="danger"><button class="gbtn ghost" id="wipe">すべてのデータを消す</button></div>';
+  }
+  el("regBody").innerHTML=h;
+  applyMode();
+}
+function applyMode(){
+  var sel=el("dMode"); if(!sel)return;
+  var lump=(sel.value==="lump");
+  var nodes=document.querySelectorAll("#regBody .mOnly");
+  for(var i=0;i<nodes.length;i++)nodes[i].style.display=lump?"none":"";
+  var lab=el("dFinalLabel");
+  if(lab)lab.textContent=lump?"支払期限日（必須）":"最終支払日（任意・契約で決まっていれば）";
+}
+function fillBackup(){
+    var h='<div class="gform"><h4>💾 保存</h4>'
+     +'<p class="dlgnote">記録はこの端末のブラウザにだけ入っています。ブラウザのデータを消したり、端末を変えたりすると消えます。<b>ときどき保存して、ファイルを残しておいてください。</b></p>'
+     +(DL?'<button class="gbtn gold" type="button" id="bkSave">ファイルで保存する</button>':'')
+     +'<p class="dlgnote small">'+(DL?'うまく保存できないときは、下':'下')+'の文字をコピーして、メモ帳などに貼り付けてファイルとして保存してください。それでも読み込めます。</p>'
+     +'<textarea id="bkOut" class="bkarea" readonly rows="4"></textarea>'
+     +'<div class="frow"><button class="gbtn ghost" type="button" id="bkCopy">コピーする</button>'
+     +'<button class="gbtn ghost" type="button" id="bkSelect">全部えらぶ</button></div>'
+     +'<p class="dlgnote small" id="bkInfo"></p></div>'
+     +'<div class="gform"><h4>📂 読み込み</h4>'
+     +'<p class="dlgnote"><b>読み込むと、いまの記録はすべて置きかわります。</b>保存しておいたファイルを選ぶか、コピーしておいた文字を貼り付けてください。</p>'
+     +'<label>ファイルから読み込む<input type="file" id="bkFile" accept=".txt,.json,application/json,text/plain"></label>'
+     +'<label>貼り付けて読み込む<textarea id="bkIn" class="bkarea" rows="4" placeholder="ここに保存しておいた文字を貼り付け"></textarea></label>'
+     +'<button class="gbtn red" type="button" id="bkLoad">この内容で読み込む</button></div>';
+    el("backupBody").innerHTML=h;
+  var ta=el("bkOut");
+  if(ta){ta.value=exportText();
+    el("bkInfo").textContent="いまのデータ：借金 "+DB.debts.length+"件／固定費 "+DB.fixed.length+"件／臨時 "+DB.one.length+"件／収入 "+DB.inc.length+"件／記録 "+DB.tx.length+"件";}
+}
+function itemList(items,cat){
+  if(!items.length)return '<p class="empty">まだ登録がありません。</p>';
+  return '<ul class="ilist">'+items.map(function(x){
+    var on=(editing&&editing.cat===cat&&editing.id===x.id);
+    return '<li'+(on?' class="on"':'')+'><span class="it"><b>'+esc(x.t)+'</b><small>'+esc(x.s)+'</small></span><span class="iv">'+x.v+'</span>'
+     +'<button class="ix ie" data-ed="'+cat+'" data-id="'+x.id+'" title="編集">✎</button>'
+     +'<button class="ix" data-del="'+cat+'" data-id="'+x.id+'" title="削除">✕</button></li>';}).join("")+'</ul>';
+}
+/* ===== データの保存と読み込み ===== */
+var DL=null;
+function initDownloads(){
+  /* ふつうのブラウザのダウンロード。Promise を返す save() の形はそのまま */
+  DL={save:function(o){return new Promise(function(ok,ng){
+    try{
+      var blob=new Blob([o.data],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");
+      a.href=url;a.download=o.filename;document.body.appendChild(a);a.click();
+      setTimeout(function(){URL.revokeObjectURL(url);a.remove();},1500);ok();
+    }catch(e){ng(e);}
+  });}};
+}
+function exportText(){
+  return JSON.stringify({app:"debt-quest",v:1,savedAt:new Date().toISOString(),
+    debts:DB.debts,tx:DB.tx,fixed:DB.fixed,one:DB.one,inc:DB.inc,set:DB.set});
+}
+function importText(txt){
+  var o;
+  try{o=JSON.parse(String(txt).trim());}catch(e){toast("データの形式が読み取れません");return false;}
+  if(!o||typeof o!=="object"||!(o.debts instanceof Array)){toast("このデータは読み込めません");return false;}
+  if(!confirm("いまの記録をすべて置きかえて読み込みます。よろしいですか？"))return false;
+  DB.debts=o.debts||[];DB.tx=o.tx||[];DB.fixed=o.fixed||[];DB.one=o.one||[];DB.inc=o.inc||[];
+  DB.set={balance:Math.max(0,Math.round((o.set&&o.set.balance)||0)),safety:0};
+  DB.res=[];
+  var cur=monthKey(new Date());
+  DB.debts.forEach(function(d,i){
+    if(!d.id)d.id=genId();
+    if(!d.sp)d.sp=SPS[i%SPS.length];
+    if(d.principal==null)d.principal=d.balance;
+    if(d.lastAccrual==null)d.lastAccrual=cur;
+    if(!d.createdAt)d.createdAt=Date.now();
+    if(d.defeatedAt===undefined)d.defeatedAt=null;});
+  saveDB();renderAll();fillBackup();
+  toast("データを読み込みました！");
+  return true;
+}
+
+/* ===== 予言（完済シミュレーション） ===== */
+function fillSim(){
+  if(!DEBTS.length){el("simBody").innerHTML='<p class="empty">借金を登録すると、完済時期と総利息を試算します。</p>';return;}
+  var extra=Math.max(0,Math.round(Number(el("simExtra").value)||0));
+  var base=simulate(DEBTS,0,"avalanche");
+  var av=simulate(DEBTS,extra,"avalanche");
+  var sn=simulate(DEBTS,extra,"snowball");
+  function card(t,r,sub,hl){
+    return '<div class="simcard'+(hl?" hl":"")+'"><p class="sct">'+t+'</p>'
+     +'<p class="scv">'+(r.over?"—":payoffLabel(r))+'</p>'
+     +'<p class="scs">'+(r.over?"最低返済が利息に追いついていません":"あと"+r.months+"ヶ月 ／ 支払う利息の合計 "+yen(r.interest))+'</p>'
+     +(sub?'<p class="scx">'+sub+'</p>':"")+'</div>';}
+  var h=card("いまのペース（最低返済だけ）",base,"",false);
+  if(extra>0){
+    var dm=Math.max(0,base.months-av.months),di=Math.max(0,base.interest-av.interest);
+    h+=card("毎月 +"+yen(extra)+"（高金利から攻める＝雪崩式）",av,"▲ "+dm+"ヶ月 早まり、利息を "+yen(di)+" 節約",true);
+    var dm2=Math.max(0,base.months-sn.months),di2=Math.max(0,base.interest-sn.interest);
+    h+=card("毎月 +"+yen(extra)+"（少額から片づける＝雪だるま式）",sn,"▲ "+dm2+"ヶ月 早まり、利息を "+yen(di2)+" 節約",false);
+    h+='<p class="dlgnote">'+(av.interest<=sn.interest
+      ?"お金の得は<b>雪崩式</b>（高金利から）。差は "+yen(Math.max(0,sn.interest-av.interest))+" です。ただし1体目を早く倒せる達成感は雪だるま式のほうが上です。"
+      :"この条件では<b>雪だるま式</b>のほうが利息も少なくなります。")+'</p>';
+  }else{
+    h+='<p class="dlgnote">毎月いくら上乗せできるか入れてみてください。完済がどれだけ早まり、利息がいくら減るかを出します。</p>';
+  }
+  h+='<p class="dlgnote small">※ 概算です。実際の利息計算方法（日割り・残高スライドなど）や手数料は借入先ごとに異なります。返済が苦しいときは、自治体や法テラスなどの無料相談窓口に相談する方法もあります。</p>';
+  el("simBody").innerHTML=h;
+}
+/* ===== イベント配線 ===== */
+function wire(){
+  el("game").addEventListener("click",function(ev){
+    var g=ev.target.closest?ev.target.closest("[data-cmd]"):null;
+    if(!g)return;
+    var c=g.getAttribute("data-cmd");
+    if(c==="attack"){fillAttack("normal");openDlg("dlgAttack");}
+    else if(c==="lane"){openDlg("dlgLane");}
+    else if(c==="cal"){openDlg("dlgCal");}
+    else if(c==="war"){openDlg("dlgWar");}
+    else if(c==="orb"){fillSim();openDlg("dlgSim");}
+    else if(c==="reg"){editing=null;regTab="debt";fillRegister();openDlg("dlgReg");}
+    else if(c==="backup"){fillBackup();openDlg("dlgBackup");}
+  });
+  document.addEventListener("click",function(ev){
+    var t=ev.target;
+    if(t.hasAttribute&&t.hasAttribute("data-close")){t.closest("dialog").close();return;}
+    if(t.hasAttribute&&t.hasAttribute("data-tab")){regTab=t.getAttribute("data-tab");editing=null;fillRegister();return;}
+    if(t.hasAttribute&&t.hasAttribute("data-ed")){
+      editing={cat:t.getAttribute("data-ed"),id:t.getAttribute("data-id")};
+      regTab=editing.cat; fillRegister();
+      var bd=el("regBody"); if(bd)bd.scrollIntoView({block:"nearest"});
+      return;}
+    if(t.id==="editCancel"){editing=null;fillRegister();return;}
+    if(t.hasAttribute&&t.hasAttribute("data-del")){
+      var cat=t.getAttribute("data-del"),id=t.getAttribute("data-id");
+      if(!confirm("削除しますか？"))return;
+      if(cat==="debt")DB.debts=DB.debts.filter(function(x){return x.id!==id;});
+      if(cat==="fixed")DB.fixed=DB.fixed.filter(function(x){return x.id!==id;});
+      if(cat==="one")DB.one=DB.one.filter(function(x){return x.id!==id;});
+      if(cat==="inc")DB.inc=DB.inc.filter(function(x){return x.id!==id;});
+      if(editing&&editing.id===id)editing=null;
+      saveDB();renderAll();fillRegister();return;}
+    if(t.id==="bkSave"){
+      if(!DL){toast("この画面ではファイル保存が使えません。下の文字をコピーして保存してください");return;}
+      DL.save({filename:"debt-quest-"+ymd(new Date())+".json",data:exportText()}).then(
+        function(){toast("ファイルを保存しました");},
+        function(err){
+          var c=err&&err.code;
+          if(c==="declined")return;
+          if(c==="rate_limited"){toast("少し待ってから、もう一度お試しください");return;}
+          toast("保存できませんでした。下の文字をコピーして保存してください");
+        });
+      return;}
+    if(t.id==="bkCopy"||t.id==="bkSelect"){
+      var ta=el("bkOut"); if(!ta)return;
+      ta.focus(); ta.select(); ta.setSelectionRange(0,ta.value.length);
+      if(t.id==="bkCopy"){
+        var done=false;
+        try{done=document.execCommand("copy");}catch(e){}
+        if(done)toast("コピーしました。メモ帳などに貼り付けて保存してください");
+        else if(navigator.clipboard&&navigator.clipboard.writeText){
+          navigator.clipboard.writeText(ta.value).then(function(){toast("コピーしました");},
+            function(){toast("コピーできませんでした。手で選んでコピーしてください");});
+        }else toast("選択しました。⌘C / Ctrl+C でコピーしてください");
+      }
+      return;}
+    if(t.id==="bkLoad"){
+      var v=el("bkIn")?el("bkIn").value:"";
+      if(!v.trim()){toast("貼り付けるか、ファイルを選んでください");return;}
+      importText(v);return;}
+    if(t.id==="wipe"){
+      if(!confirm("この端末に保存された記録をすべて消します。元に戻せません。よろしいですか？"))return;
+      Object.keys(LS).forEach(function(k){try{localStorage.removeItem(LS[k]);}catch(e){}});
+      location.reload();return;}
+  });
+  document.addEventListener("submit",function(ev){
+    var f=ev.target;ev.preventDefault();
+    if(f.id==="fAtk"){doAttack("monthly");return;}
+    if(f.id==="fDebt"){
+      var bal=Math.max(0,Math.round(Number(el("dBal").value)||0));
+      var prin=Math.max(0,Math.round(Number(el("dPrin").value)||0));
+      var mode=el("dMode")?el("dMode").value:"monthly";
+      var fin=el("dFinal")?el("dFinal").value:"";
+      if(mode==="lump"&&!fin){toast("支払期限日を入れてください");return;}
+      if(mode==="monthly"&&!(Number(el("dMin").value)>0)){toast("毎月の最低返済額を入れてください");return;}
+      var data={name:(el("dName").value||"").trim().slice(0,40)||"名もなき敵",
+        balance:bal,aprPercent:Math.max(0,Number(el("dApr").value)||0),
+        minPayment:(mode==="lump")?0:Math.max(0,Math.round(Number(el("dMin").value)||0)),
+        dueDay:(mode==="lump")?27:Math.min(31,Math.max(1,Math.round(Number(el("dDay").value)||1))),
+        mode:mode,finalDate:fin,sp:el("dSp").value};
+      var rec=editTarget("debt");
+      if(rec){
+        var was=!rec.defeatedAt;
+        data.principal=prin>0?Math.max(prin,bal):Math.max(rec.principal||0,bal);
+        for(var k in data)rec[k]=data[k];
+        if(bal<=0&&was)rec.defeatedAt=Date.now();
+        else if(bal>0)rec.defeatedAt=null;
+        editing=null;saveDB();renderAll();fillRegister();
+        if(bal<=0&&was)showBanner("「"+rec.name+"」（"+manEn(rec.principal||0)+"）を倒した！",true);
+        else toast("「"+rec.name+"」を更新しました");
+        return;}
+      data.id=genId(); data.principal=prin>0?Math.max(prin,bal):bal;
+      data.lastAccrual=monthKey(today); data.defeatedAt=null; data.createdAt=Date.now();
+      DB.debts.push(data);
+      saveDB();renderAll();fillRegister();toast("新たな敵が現れた！");return;}
+    if(f.id==="fFixed"){
+      var fd={name:(el("xName").value||"").trim().slice(0,40)||"固定費",
+        amount:Math.max(1,Math.round(Number(el("xAmt").value)||0)),
+        dueDay:Math.min(31,Math.max(1,Math.round(Number(el("xDay").value)||1)))};
+      var fr=editTarget("fixed");
+      if(fr){for(var k2 in fd)fr[k2]=fd[k2];editing=null;saveDB();renderAll();fillRegister();toast("更新しました");return;}
+      fd.id=genId();DB.fixed.push(fd);
+      saveDB();renderAll();fillRegister();toast("固定費を登録しました");return;}
+    if(f.id==="fOne"){
+      var od={name:(el("oName").value||"").trim().slice(0,40)||"臨時出費",
+        amount:Math.max(1,Math.round(Number(el("oAmt").value)||0)),date:el("oDate").value,ic:el("oIc").value};
+      var or_=editTarget("one");
+      if(or_){for(var k3 in od)or_[k3]=od[k3];editing=null;saveDB();renderAll();fillRegister();toast("更新しました");return;}
+      od.id=genId();DB.one.push(od);
+      saveDB();renderAll();fillRegister();toast("臨時の出費を登録しました");return;}
+    if(f.id==="fInc"){
+      var id2={name:(el("iName").value||"").trim().slice(0,40)||"収入",
+        amount:Math.max(1,Math.round(Number(el("iAmt").value)||0)),
+        dueDay:Math.min(31,Math.max(1,Math.round(Number(el("iDay").value)||1)))};
+      var ir=editTarget("inc");
+      if(ir){for(var k4 in id2)ir[k4]=id2[k4];editing=null;saveDB();renderAll();fillRegister();toast("更新しました");return;}
+      id2.id=genId();DB.inc.push(id2);
+      saveDB();renderAll();fillRegister();toast("補給の予定を登録しました");return;}
+    if(f.id==="fSet"){
+      var before=DB.set.balance;
+      DB.set.balance=Math.max(0,Math.round(Number(el("sBal").value)||0));
+      DB.set.safety=0;
+      saveDB();
+      if(DB.set.balance>before){heroPose="powerup";renderAll();
+        setTimeout(function(){heroPose="";renderAll();},2600);toast("⚡ 軍資金が増えた！パワーアップ！");}
+      else{renderAll();toast("口座の情報を更新しました");}
+      fillRegister();return;}
+  });
+  el("atkTarget").addEventListener("change",function(){closeExtra();updateAtkInfo();});
+  el("atkAmount").addEventListener("input",updateAtkInfo);
+  var tipEl=el("tip");
+  function showTip(txt,x,y){
+    if(!tipEl)return;
+    tipEl.textContent=txt; tipEl.hidden=false;
+    var w=tipEl.offsetWidth,h=tipEl.offsetHeight;
+    var left=Math.min(window.innerWidth-w-10,Math.max(10,x+16));
+    var top=(y-h-14<10)?(y+20):(y-h-14);
+    tipEl.style.left=left+"px"; tipEl.style.top=top+"px";
+  }
+  function hideTip(){if(tipEl)tipEl.hidden=true;}
+  var gm=el("game");
+  gm.addEventListener("mousemove",function(ev){
+    var t=ev.target&&ev.target.closest?ev.target.closest("[data-tip]"):null;
+    if(t)showTip(t.getAttribute("data-tip"),ev.clientX,ev.clientY); else hideTip();
+  });
+  gm.addEventListener("mouseleave",hideTip);
+  gm.addEventListener("click",function(ev){
+    var t=ev.target&&ev.target.closest?ev.target.closest("[data-tip]"):null;
+    if(t)showTip(t.getAttribute("data-tip"),ev.clientX,ev.clientY);
+  });
+  document.addEventListener("click",function(ev){
+    if(!ev.target||!ev.target.closest||!ev.target.closest("[data-tip]"))hideTip();
+  });
+  window.addEventListener("scroll",hideTip,{passive:true});
+  el("simExtra").addEventListener("input",fillSim);
+  document.addEventListener("change",function(ev){
+    if(ev.target&&ev.target.id==="dMode")applyMode();
+    if(ev.target&&ev.target.id==="bkFile"&&ev.target.files&&ev.target.files[0]){
+      var fr=new FileReader();
+      fr.onload=function(){importText(fr.result);};
+      fr.onerror=function(){toast("ファイルを読めませんでした");};
+      fr.readAsText(ev.target.files[0]);
+    }
+  });
+  preloadBoom();
+  initDownloads();
+  el("atkAll").addEventListener("click",function(){var d=debtById(el("atkTarget").value);if(!d)return;
+    el("atkAmount").value=Math.min(d.balance,DB.set.balance);updateAtkInfo();});
+  el("atkMonthly").addEventListener("click",function(){doAttack("monthly");});
+  el("atkCannon").addEventListener("click",function(){
+    var ex=el("atkExtra");
+    if(ex.hidden){
+      ex.hidden=false;
+      el("atkCannon").textContent="💣 この金額で繰り上げ返済する";
+      el("atkAmount").focus();
+      updateAtkInfo();
+    }else doAttack("cannon");
+  });
+}
+
+loadDB();accrue();renderAll();wire();
+})();
+</script>
+</body></html>
