@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>実験探偵まりか｜理科の実験で なぞを とく 推理ゲーム｜あたやさいさいゲームランド</title>
+<meta name="description" content="探偵まりかの 手もとには 実験の 道具と 薬品。ヨウ素液・リトマス紙・石灰水・豆電球・じしゃく…　お題に 合う 実験を えらんで しらべ、「これが答えだ！」で 推理を たしかめよう。小学3年〜6年の 理科の 実験を 使った、子ども向けの 無料の 推理ゲーム。">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://atayasaisai.github.io/game_land/32_jikken_tantei_marika/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="あたやさいさいゲームランド">
+<meta property="og:title" content="実験探偵まりか｜理科の実験で なぞを とく">
+<meta property="og:url" content="https://atayasaisai.github.io/game_land/32_jikken_tantei_marika/">
+<meta property="og:image" content="https://atayasaisai.github.io/game_land/ogp.png">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap">
+<style>
+:root{
+  --bg0:#0E1020;
+  --ink:#F3EEE4; --sub:#B4AC9C; --faint:#6E685E;
+  --line:rgba(255,240,210,.14);
+  --panel:rgba(255,240,210,.06);
+  --gold:#F2C14E; --ok:#4CD9A0; --ng:#FF7A6B; --pick:#FF8FB1;
+  color-scheme:dark;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  margin:0;font-family:"Zen Kaku Gothic New",-apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif;
+  color:var(--ink);background:var(--bg0);line-height:1.75;overflow-x:hidden;-webkit-font-smoothing:antialiased;
+}
+#room{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(900px 600px at 50% -10%, #3A2A4E 0%, transparent 60%),
+    radial-gradient(800px 600px at 90% 100%, #2B1E14 0%, transparent 60%),
+    linear-gradient(180deg,#141628 0%,#0E1020 100%);}
+#room::after{content:"";position:absolute;inset:0;opacity:.07;
+  background-image:linear-gradient(rgba(255,255,255,.6) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.6) 1px,transparent 1px);background-size:28px 28px}
+.wrap{position:relative;z-index:1;max-width:640px;margin:0 auto;padding:0 16px calc(120px + env(safe-area-inset-bottom))}
+svg{display:block}
+button{font-family:inherit;color:inherit;cursor:pointer}
+
+.btn{border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.07);color:var(--ink);font-weight:700;font-size:1rem;
+  padding:12px 22px;border-radius:14px;letter-spacing:.04em;white-space:nowrap;transition:transform .12s,background .2s,border-color .2s}
+.btn:hover{background:rgba(255,255,255,.12)}
+.btn:active{transform:scale(.96)}
+.btn.sm{font-size:.8rem;padding:6px 12px;border-radius:10px;font-weight:500}
+.btn.go{font-weight:900;color:#3A2208;border-color:#FFE7A6;
+  background:linear-gradient(160deg,#FFE08A,#F2B33D 60%,#E08A1E);box-shadow:0 6px 0 #8A4E0E,0 12px 24px -8px rgba(240,160,40,.7)}
+.btn.go:active{transform:translateY(4px);box-shadow:0 2px 0 #8A4E0E}
+
+/* ---------- title ---------- */
+#title{position:relative;z-index:1;min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;padding:24px 16px 40px;
+  background:#bfe3f5 url(bg.jpg) center 30%/cover no-repeat}
+.tlead{display:inline-block;font-size:.72rem;letter-spacing:.2em;border:2.5px solid #33312A;border-radius:999px;padding:3px 15px;
+  background:#fff;color:#33312A;box-shadow:3px 3px 0 #33312A;text-decoration:none;font-weight:700}
+.tlogo{margin:18px 0 0;line-height:0}
+@keyframes hop{0%,100%{transform:translateY(0) rotate(-1.5deg)}50%{transform:translateY(-6px) rotate(1.5deg)}}
+.tlogo img{width:min(86vw,400px);height:auto;filter:drop-shadow(0 6px 10px rgba(30,20,10,.35));animation:hop 2.4s ease-in-out infinite}
+.tpanel{margin-top:22px;width:100%;max-width:540px;display:flex;flex-direction:column;align-items:center;gap:6px;
+  background:linear-gradient(165deg,rgba(40,30,52,.94),rgba(16,14,28,.96));border:3px solid #4A3A5E;border-radius:28px;
+  padding:18px 16px 22px;box-shadow:0 10px 30px rgba(10,20,50,.45)}
+.kicker{font-size:.7rem;letter-spacing:.42em;color:var(--sub);text-transform:uppercase;margin:0 0 0 .42em}
+.tpanel p{max-width:26em;color:var(--sub);font-size:.9rem;margin:10px 0 4px;text-wrap:balance}
+.tpanel p b{color:var(--ink)}
+.files{display:flex;flex-direction:column;gap:8px;margin-top:14px;width:100%;max-width:400px}
+.file{display:flex;align-items:center;gap:12px;text-align:left;width:100%;border:1px solid var(--line);border-radius:14px;
+  padding:9px 12px;background:rgba(255,255,255,.04);transition:.15s}
+.file:hover{border-color:rgba(242,193,78,.55);background:rgba(242,193,78,.08)}
+.file .n{font-family:"Mochiy Pop One",sans-serif;font-size:1.1rem;color:var(--gold);min-width:1.6em;text-align:center}
+.file b{display:block;font-size:.92rem;line-height:1.4}
+.file small{display:block;font-size:.7rem;color:var(--sub);line-height:1.45}
+.file .rec{margin-left:auto;color:#ffd43b;font-size:.85rem;white-space:nowrap}
+.file .rec i{color:#4a4458;font-style:normal}
+.backlink{display:inline-block;margin-top:20px;font-size:.82rem;color:var(--sub);text-decoration:none;border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:6px 18px}
+.backlink:hover{color:#fff;border-color:rgba(255,255,255,.5)}
+
+/* ---------- じけん ---------- */
+#play{display:none;padding-top:12px}
+.hud{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.hud h2{font-size:.95rem;margin:0;font-weight:900;letter-spacing:.06em;flex:1;line-height:1.4}
+.hud h2 small{display:block;font-size:.66rem;color:var(--sub);font-weight:500;letter-spacing:.1em}
+.mission{display:flex;gap:10px;align-items:flex-start;margin-bottom:12px}
+.mission .face{flex:none;width:84px}
+.mission .face img,.ovc .face img{width:100%;height:auto;display:block}
+.bubble{position:relative;flex:1;background:#FFF8EA;color:#3A2A18;border-radius:16px;padding:10px 14px;font-size:.88rem;border:3px solid #5b3417}
+.bubble::before{content:"";position:absolute;left:-12px;top:20px;border:8px solid transparent;border-right-color:#5b3417}
+.bubble .who{font-size:.68rem;font-weight:900;color:#8d5528;letter-spacing:.1em}
+.bubble .q{display:block;margin-top:6px;font-weight:900;font-size:1.02rem;color:#B0341E;line-height:1.5}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:12px;margin-bottom:12px}
+.card h3{font-size:.76rem;letter-spacing:.14em;color:var(--sub);margin:0 0 8px;font-weight:700}
+.stage{display:grid;grid-template-columns:minmax(0,1fr);gap:6px}
+.stage svg{width:100%;max-width:360px;margin:0 auto;border-radius:14px;background:linear-gradient(#1c2036,#262338)}
+.res{min-height:3.2em;font-size:.92rem;text-align:center;text-wrap:balance}
+.res b{color:var(--gold)}
+.res .na{color:var(--sub)}
+.tools{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px}
+.tool{display:flex;flex-direction:column;align-items:center;gap:0;padding:8px 4px 6px;border-radius:14px;border:2px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.05);font-size:.74rem;font-weight:700;line-height:1.35;transition:.15s}
+.tool img{height:48px;width:auto;max-width:64px;object-fit:contain;margin-bottom:2px}
+.tool:hover{border-color:rgba(255,255,255,.35)}
+.tool.on{border-color:var(--gold);background:rgba(242,193,78,.16);box-shadow:0 0 0 3px rgba(242,193,78,.2)}
+.sus{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+.s{position:relative;display:flex;flex-direction:column;border-radius:16px;border:2px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);overflow:hidden;transition:.15s}
+.s.picked{border-color:var(--pick);box-shadow:0 0 0 3px rgba(255,143,177,.25)}
+.s .look{display:flex;flex-direction:column;align-items:center;padding:8px 6px 4px;background:none;border:0;width:100%}
+.s .look svg{width:78px;height:78px}
+.s .look b{font-size:.84rem;line-height:1.35;text-align:center;min-height:2.7em;display:flex;align-items:center}
+.s .evs{display:flex;flex-wrap:wrap;gap:3px;justify-content:center;padding:0 6px 6px;min-height:8px}
+.ev{font-size:.64rem;line-height:1.5;padding:0 6px;border-radius:999px;background:rgba(255,255,255,.1);color:var(--sub)}
+.ev.hit{background:rgba(242,193,78,.2);color:#FFE3A0}
+.s .pk{border:0;border-top:1px solid var(--line);background:rgba(0,0,0,.18);font-size:.78rem;font-weight:900;padding:7px 0;color:var(--sub)}
+.s.picked .pk{background:var(--pick);color:#4A0F22}
+.flash{animation:fl .5s ease}
+@keyframes fl{0%{transform:scale(.97)}50%{transform:scale(1.03)}100%{transform:none}}
+.help{font-size:.76rem;color:var(--sub);margin:4px 0 0;text-align:center}
+
+.board{position:fixed;left:0;right:0;bottom:0;z-index:5;background:linear-gradient(180deg,rgba(14,16,32,0),rgba(14,16,32,.96) 22%);padding:22px 16px calc(12px + env(safe-area-inset-bottom))}
+.board .in{max-width:640px;margin:0 auto;display:flex;align-items:center;gap:10px}
+.board .sum{flex:1;font-size:.76rem;line-height:1.5;color:var(--sub);min-width:0}
+.board .sum b{color:var(--ink)}
+.board .btn.go{font-size:1.05rem;padding:13px 16px}
+
+/* ---------- はんてい ---------- */
+.ov{position:fixed;inset:0;z-index:10;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(5,4,12,.74)}
+.ov.on{display:flex}
+.ovc{width:100%;max-width:420px;max-height:92dvh;overflow:auto;text-align:center;background:linear-gradient(165deg,#2A2140,#120F1E);border:2px solid #4A3A5E;border-radius:24px;padding:20px 18px;animation:pop .25s ease}
+@keyframes pop{from{transform:scale(.94);opacity:0}to{transform:none;opacity:1}}
+.ovc .face{width:130px;margin:0 auto}
+.ovc h3{margin:4px 0;font-size:1.3rem;font-family:"Mochiy Pop One",sans-serif;font-weight:400}
+.ovc h3.ok{color:var(--ok)} .ovc h3.ng{color:var(--ng)}
+.ovc .big{font-size:2rem;color:#ffd43b;letter-spacing:.1em}
+.ovc .big i{color:#4a4458;font-style:normal}
+.ovc p{font-size:.9rem;margin:6px 0;text-align:left}
+.ovc .exp{background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin:10px 0;text-align:left;font-size:.86rem}
+.ovc .exp b{color:var(--gold)}
+.ovc .grade{font-size:.7rem;color:var(--sub);margin-top:4px}
+.ovc .row{display:flex;gap:8px;margin-top:12px}
+.ovc .row .btn{flex:1}
+</style>
+
+<!-- ▼ 訪問者カウント（GoatCounter）。Cookieも個人情報も使わない集計。
+     goatcounter.com で決めたコードを MYCODE に入れて、この行のコメントを外すと動きます -->
+<!-- <script data-goatcounter="https://MYCODE.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script> -->
+</head>
+<body>
+<div id="room"></div>
+
+<!-- ================= TITLE ================= -->
+<section id="title">
+  <a class="tlead" href="../">◀ あたやさいさいゲームランド</a>
+  <h1 class="tlogo"><img src="art/title.png" alt="実験探偵まりか" width="362" height="300"></h1>
+
+  <div class="tpanel">
+  <p class="kicker">Science Detective</p>
+  <p>わたしは <b>探偵まりか</b>。<br>
+     なぞを とく 決め手は <b>理科の 実験</b>！<br>
+     道具と 薬品を えらんで しらべ、<br>
+     わかったら「<b>これが答えだ！</b>」を おしてね。</p>
+  <div class="files" id="files"></div>
+  <p style="font-size:.72rem;color:var(--faint);margin-top:12px">小学3年〜6年の 理科の 実験から</p>
+  <a class="backlink" href="../">◀ あたやさいさいゲームランドへ もどる</a>
+  </div>
+</section>
+
+<!-- ================= じけん ================= -->
+<section id="play"><div class="wrap">
+  <div class="hud">
+    <button class="btn sm" id="backBtn">◀ ファイル</button>
+    <h2 id="cTitle"></h2>
+  </div>
+
+  <div class="mission">
+    <div class="face" id="mFace"></div>
+    <div class="bubble"><span class="who">探偵まりか</span><div id="mStory"></div><span class="q" id="mQ"></span></div>
+  </div>
+
+  <div class="card">
+    <h3>じっけんだい</h3>
+    <div class="stage"><div id="scene"></div><div class="res" id="res"></div></div>
+  </div>
+
+  <div class="card">
+    <h3>① てもとの 道具・薬品を えらぶ</h3>
+    <div class="tools" id="tools"></div>
+  </div>
+
+  <div class="card">
+    <h3>② しらべる ものを タップ ／ 犯人には「これだ？」</h3>
+    <div class="sus" id="sus"></div>
+    <p class="help">上の 絵を タップすると、えらんだ 道具で しらべるよ。</p>
+  </div>
+</div></section>
+
+<div class="board" id="board" style="display:none"><div class="in">
+  <div class="sum" id="sum"></div>
+  <button class="btn go" id="answerBtn">これが答えだ！</button>
+</div></div>
+
+<div class="ov" id="ov"><div class="ovc" id="ovc"></div></div>
+
+<script>
+(function(){
+"use strict";
+
+/* ================= 道具・薬品 =================
+   what = その道具で わかること（まちがえた決め手を えらんだときに まりかが 教える） */
+var TOOLS={
+  loupe :{n:"虫めがね",em:"🔍",im:"loupe",what:"見た目を くわしく 見る 道具。見た目だけでは 決め手に ならないことが 多いよ"},
+  iodine:{n:"ヨウ素液",em:"🟤",im:"bottle_brown",what:"でんぷんが あると 青むらさき色に かわる 薬品"},
+  litmus:{n:"リトマス紙",em:"📄",im:"litmus",what:"酸性だと 青→赤、アルカリ性だと 赤→青に かわる 紙"},
+  lime  :{n:"石灰水",em:"🥛",im:"bottle_clear",what:"二酸化炭素に ふれると 白く にごる 水よう液"},
+  heat  :{n:"蒸発皿と 火",em:"🔥",im:"lamp",what:"水を 蒸発させて、とけていた ものが 残るかを 見る 実験"},
+  circuit:{n:"豆電球と かん電池",em:"💡",im:"bulb",what:"電気を 通す ものを つなぐと 明かりが つく 回路"},
+  magnet:{n:"じしゃく",em:"🧲",im:"magnet",what:"鉄を 引きつける。電気を 通すかどうかは わからない"},
+  candle:{n:"火のついた ろうそく",em:"🕯️",im:"candle_mid",what:"気体に ものを もやす はたらきが あるかを 見る"},
+  smell :{n:"手で あおいで におう",em:"👃",im:"smell",what:"においで 見分ける。においが あっても 酸性か アルカリ性かは わからない"}
+};
+
+/* ================= しらべる もの =================
+   k: food 食べ物 / solid もの / liq 水よう液 / gas 気体 / leaf 葉 / tube 試験管
+   starch でんぷん・cond 電気を通す・mag じしゃくにつく・ph a酸性 n中性 b アルカリ性
+   solute 固体がとけている・co2 二酸化炭素が多い・o2 もやすはたらき（hi/n/lo/out） */
+var OBJ={
+  potato:{n:"じゃがいも",k:"food",ic:"potato",starch:1,look:"切り口は うすい 黄色。さわると 少し ぬるっと する。"},
+  rice:{n:"ごはん",k:"food",ic:"rice",starch:1,look:"白い つぶが ぎっしり。"},
+  bread:{n:"食パン",k:"food",ic:"bread",starch:1,look:"小さな あなが たくさん あいている。"},
+  cucumber:{n:"きゅうり",k:"food",ic:"cucumber",look:"切り口は うすい みどり色で、みずみずしい。"},
+  egg:{n:"ゆでたまごの 白身",k:"food",ic:"egg",look:"白くて つるんと している。"},
+  sugar:{n:"さとう",k:"food",ic:"sugar",look:"白い 小さな つぶ。あまい においが する…　でも、なめるのは がまん！"},
+
+  nail:{n:"鉄の くぎ",k:"solid",ic:"nail",cond:1,mag:1,look:"はい色で、先が とがっている。"},
+  foil:{n:"アルミはく",k:"solid",ic:"foil",cond:1,look:"ぎん色で、うすくて かるい。"},
+  coin10:{n:"10円玉",k:"solid",ic:"coin10",cond:1,look:"赤っぽい 茶色の 金ぞく。"},
+  coin1:{n:"1円玉",k:"solid",ic:"coin1",cond:1,look:"とても かるい ぎん色の 金ぞく。"},
+  hashi:{n:"わりばし",k:"solid",ic:"hashi",look:"木で できている。"},
+  marble:{n:"ガラスの ビー玉",k:"solid",ic:"marble",look:"とうめいで、つるつる 光っている。"},
+  eraser:{n:"消しゴム",k:"solid",ic:"eraser",look:"白くて やわらかい。"},
+  clip:{n:"鉄の クリップ",k:"solid",ic:"clip",cond:1,mag:1,look:"ぎん色に 光っている。"},
+  steel:{n:"スチールかん",k:"solid",ic:"steel",cond:1,mag:1,paint:1,look:"まわりに 色が ぬってある かん。"},
+  alcan:{n:"アルミかん",k:"solid",ic:"alcan",cond:1,paint:1,look:"まわりに 色が ぬってある かん。見た目は スチールかんと そっくり。"},
+  ruler:{n:"プラスチックの じょうぎ",k:"solid",ic:"ruler",look:"とうめいで かるい。"},
+
+  salt:{n:"食塩水",k:"liq",ph:"n",solute:1,look:"とうめい。見た目では 水と 見分けが つかない。"},
+  soda:{n:"炭酸水",k:"liq",ph:"a",co2:1,look:"とうめい。小さな あわが 出ている。"},
+  hcl:{n:"うすい 塩酸",k:"liq",ph:"a",smell:"つんと する におい",look:"とうめい。"},
+  limew:{n:"石灰水",k:"liq",ph:"b",solute:1,look:"とうめい。"},
+  ammo:{n:"うすい アンモニア水",k:"liq",ph:"b",smell:"つんと する におい",look:"とうめい。"},
+
+  air:{n:"まわりの 空気",k:"gas",o2:"n",look:"とうめいで、何も 見えない。"},
+  breath:{n:"はいた 息",k:"gas",o2:"lo",co2:1,look:"とうめい。びんの 内がわが 少し くもっている（水じょう気）。"},
+  burnt:{n:"ろうそくを もやした あとの 空気",k:"gas",o2:"out",co2:1,look:"とうめい。びんの 内がわが 少し くもっている。"},
+  oxy:{n:"酸素",k:"gas",o2:"hi",look:"とうめいで、何も 見えない。"},
+  n2:{n:"ちっ素",k:"gas",o2:"out",look:"とうめいで、何も 見えない。"},
+  co2g:{n:"二酸化炭素",k:"gas",o2:"out",co2:1,look:"とうめいで、何も 見えない。"},
+
+  leafA:{n:"ア　朝すぐ つみとった 葉",k:"leaf",ic:"leaf",mark:"ア",look:"みどり色の 葉。"},
+  leafB:{n:"イ　日光に 当てた 葉",k:"leaf",ic:"leaf",mark:"イ",starch:1,look:"みどり色の 葉。"},
+  leafC:{n:"ウ　おおった ままの 葉",k:"leaf",ic:"leaf",mark:"ウ",look:"みどり色の 葉。"},
+
+  tubeW:{n:"A　でんぷん液＋水",k:"tube",mark:"A",starch:1,ph:"n",solute:1,look:"うすく 白っぽい 液。Bと 見た目は かわらない。"},
+  tubeS:{n:"B　でんぷん液＋だ液",k:"tube",mark:"B",ph:"n",solute:1,look:"うすく 白っぽい 液。Aと 見た目は かわらない。"}
+};
+
+/* ================= じけんファイル =================
+   key = 決め手の 道具、ans = 犯人（答え） */
+var CASES=[
+ {t:"でんぷんを かくした 食べ物",g:"小5「植物の発芽」・小6「人の体のつくりと働き」",
+  story:"給食室から なぞの 手紙。「この 中に、でんぷんを かくしている 食べ物が いる」だって。",
+  q:"でんぷんが ふくまれている 食べ物を ぜんぶ 見つけよ！",
+  tools:["loupe","magnet","litmus","iodine","lime"],sus:["potato","rice","sugar","cucumber","bread","egg"],
+  key:"iodine",ans:["potato","rice","bread"],
+  exp:"<b>ヨウ素液</b>は、でんぷんに ふれると <b>青むらさき色</b>に かわる。じゃがいも・ごはん・パンが かわったね。<br>さとうは あまいけれど、でんぷんでは ないので かわらない。"},
+ {t:"じしゃくに すいよせられる もの",g:"小3「磁石の性質」",
+  story:"理科室の 引き出しで、じしゃくが 何かに くっついて はなれない！",
+  q:"じしゃくに 引きつけられる ものを ぜんぶ 見つけよ！",
+  tools:["loupe","circuit","magnet"],sus:["clip","coin10","alcan","steel","coin1","ruler"],
+  key:"magnet",ans:["clip","steel"],
+  exp:"じしゃくに つくのは <b>鉄</b>で できた もの。スチールかんは 鉄で できている。<br>アルミかん・1円玉（アルミニウム）・10円玉（どう）は 金ぞくだけど、じしゃくには <b>つかない</b>。<br>豆電球では「金ぞくかどうか」しか わからないので、決め手に ならないよ。"},
+ {t:"電気の 通り道",g:"小3「電気の通り道」",
+  story:"かい中電灯の 線が 切れた！ つなぎに 使える ものを さがしている。",
+  q:"電気を 通す ものを ぜんぶ 見つけよ！",
+  tools:["loupe","magnet","iodine","circuit"],sus:["nail","hashi","foil","marble","coin10","eraser"],
+  key:"circuit",ans:["nail","foil","coin10"],
+  exp:"<b>金ぞく</b>は 電気を 通すので、回路に つなぐと 豆電球が つく。鉄・アルミニウム・どう（10円玉）は どれも 金ぞく。<br>じしゃくに つくのは 鉄だけなので、じしゃくでは アルミはくや 10円玉を 見のがして しまうよ。"},
+ {t:"アルカリ性の 水よう液",g:"小6「水溶液の性質」",
+  story:"ラベルの ついた 5本の びん。どれも とうめいで、見た目では わからない…",
+  q:"アルカリ性の 水よう液を ぜんぶ 見つけよ！",
+  tools:["loupe","smell","heat","iodine","litmus"],sus:["salt","soda","hcl","limew","ammo"],
+  key:"litmus",ans:["limew","ammo"],
+  exp:"<b>赤い リトマス紙が 青</b>に かわれば アルカリ性。石灰水と アンモニア水だね。<br>塩酸と 炭酸水は 青が 赤に かわる <b>酸性</b>、食塩水は どちらも かわらない <b>中性</b>。<br>においは 塩酸にも アンモニア水にも あるので、決め手に ならないよ。"},
+ {t:"とけている 固体",g:"小6「水溶液の性質」",
+  story:"「この 中には、水に 固体を とかした ものが ある」と、なぞの メモ。",
+  q:"水を 蒸発させると、固体が 出てくる 水よう液を ぜんぶ 見つけよ！",
+  tools:["loupe","litmus","smell","heat"],sus:["salt","soda","hcl","limew","ammo"],
+  key:"heat",ans:["salt","limew"],
+  exp:"水を <b>蒸発</b>させると、食塩水と 石灰水からは <b>白い つぶ</b>が 出てきた。とけていたのは 固体だ。<br>炭酸水（二酸化炭素）・塩酸（塩化水素）・アンモニア水（アンモニア）に とけているのは <b>気体</b>なので、何も 残らない。"},
+ {t:"二酸化炭素の ゆくえ",g:"小6「燃焼の仕組み」「人の体のつくりと働き」",
+  story:"4本の びんに 空気が 入っている。二酸化炭素が ふえている びんが ある らしい。",
+  q:"まわりの 空気より 二酸化炭素が 多い びんを ぜんぶ 見つけよ！",
+  tools:["loupe","candle","iodine","lime"],sus:["air","breath","burnt","oxy"],
+  key:"lime",ans:["breath","burnt"],
+  exp:"<b>石灰水</b>は 二酸化炭素に ふれると <b>白く にごる</b>。<br>人が はいた 息と、ものが もえた あとの 空気には、二酸化炭素が 多く ふくまれている。<br>ろうそくで わかるのは「もやす はたらき（酸素）」の ほうだよ。"},
+ {t:"ものを もやす 気体",g:"小6「燃焼の仕組み」",
+  story:"4本の びんに、ちがう 気体が 1つずつ 入っている。",
+  q:"ものを はげしく もやす はたらきの ある 気体を 見つけよ！",
+  tools:["loupe","smell","lime","candle"],sus:["n2","oxy","air","co2g"],
+  key:"candle",ans:["oxy"],
+  exp:"<b>酸素</b>の 中では、ろうそくが <b>明るく はげしく もえる</b>。<br>ちっ素と 二酸化炭素の 中では すぐに 消える。空気の 中では しばらく もえる（空気には 酸素が 約21% ある）。<br>石灰水で わかるのは 二酸化炭素だけだよ。"},
+ {t:"日光と 葉の ひみつ",g:"小6「植物の養分と水の通り道」",
+  story:"前の日の 午後から、3まいの 葉を アルミはくで おおっておいた。つぎの 朝、アは すぐに つみとり、イは はくを はずして 日光に 当て、ウは おおった まま。数時間後に イと ウも つみとった。",
+  q:"でんぷんが できている 葉を 見つけよ！",
+  tools:["loupe","litmus","lime","iodine"],sus:["leafA","leafB","leafC"],
+  key:"iodine",ans:["leafB"],
+  exp:"<b>日光に 当てた 葉</b>（イ）だけが、ヨウ素液で <b>青むらさき色</b>に なった。<br>葉に 日光が 当たると、でんぷんが できる。夜の あいだに でんぷんは 葉から 運ばれていくので、朝の 葉（ア）と おおった 葉（ウ）には ないんだ。"},
+ {t:"消えた でんぷん",g:"小6「人の体のつくりと働き」",
+  story:"2本の 試験管に でんぷん液を 入れ、Aには 水、Bには だ液を まぜて、40℃くらいの 湯で 10分 あたためた。",
+  q:"でんぷんが なくなって しまったのは どっち？",
+  tools:["loupe","litmus","lime","iodine"],sus:["tubeW","tubeS"],
+  key:"iodine",ans:["tubeS"],
+  exp:"ヨウ素液で <b>青むらさき色に ならなかった</b> Bは、でんぷんが なくなっている。<br><b>だ液</b>には、でんぷんを 別の ものに かえる はたらきが ある。これが「<b>消化</b>」の はじまりだよ。<br>色が かわらない ことも、りっぱな 証拠！"}
+];
+
+/* ================= 実験の 結果 =================
+   {txt 文, short 札に のせる ことば, hit めだつ 変化, na 使えない, fx 絵の ための 印} */
+function na(t){return {txt:t,short:"×",na:1};}
+function result(tl,o){
+  var k=o.k, liq=(k==="liq"||k==="tube");
+  switch(tl){
+  case "loupe": return {txt:o.look,short:"見た",fx:"look"};
+  case "iodine":
+    if(k==="gas") return na("気体に ヨウ素液は 使えないよ。");
+    if(k==="leaf") return o.starch?{txt:"湯で やわらかくして、あたためた エタノールで 緑色を ぬいてから ヨウ素液に つけると… <b>青むらさき色に かわった！</b>",short:"青むらさき",hit:1,fx:"purple"}
+                                   :{txt:"湯で やわらかくして、あたためた エタノールで 緑色を ぬいてから ヨウ素液に つけると… 色は かわらなかった。",short:"かわらない",fx:"brown"};
+    if(k==="solid") return {txt:"ヨウ素液を たらしても、色は かわらない。",short:"かわらない",fx:"brown"};
+    return o.starch?{txt:"ヨウ素液を たらすと… <b>青むらさき色に かわった！</b>",short:"青むらさき",hit:1,fx:"purple"}
+                   :{txt:"ヨウ素液を たらしても、茶色の まま。色は かわらない。",short:"かわらない",fx:"brown"};
+  case "litmus":
+    if(liq){
+      if(o.ph==="a") return {txt:"<b>青い リトマス紙が 赤</b>に かわった！（赤い 紙は そのまま）",short:"青→赤",hit:1,fx:"acid"};
+      if(o.ph==="b") return {txt:"<b>赤い リトマス紙が 青</b>に かわった！（青い 紙は そのまま）",short:"赤→青",hit:1,fx:"base"};
+      return {txt:"赤い 紙も 青い 紙も、色は かわらない。",short:"かわらない",fx:"neutral"};
+    }
+    if(k==="food") return {txt:"水で しめらせて つけてみたけれど、色は はっきり かわらない。",short:"かわらない",fx:"neutral"};
+    return na("リトマス紙は 水よう液を しらべる ときに 使うよ。");
+  case "lime":
+    if(k==="gas") return o.co2?{txt:"石灰水を 入れて ふると… <b>白く にごった！</b>",short:"白くにごる",hit:1,fx:"milky"}
+                              :{txt:"石灰水を 入れて ふっても、とうめいの まま。",short:"とうめい",fx:"clear"};
+    if(k==="liq") return o.co2?{txt:"石灰水を まぜると… <b>白く にごった！</b>",short:"白くにごる",hit:1,fx:"milky"}
+                              :{txt:"石灰水を まぜても、見た目は かわらない。",short:"かわらない",fx:"clear"};
+    if(k==="leaf") return na("石灰水は、気体や 水よう液を しらべる ときに 使うよ。");
+    return {txt:"石灰水を かけても、何も おこらない。",short:"かわらない",fx:"clear"};
+  case "heat":
+    if(liq) return o.solute?{txt:"水が 蒸発すると… <b>白い つぶが 残った！</b>",short:"白いつぶ",hit:1,fx:"residue"}
+                           :{txt:"水が 蒸発すると、何も 残らなかった。"+(o.smell?"（とちゅうで つんと する においが したので、まどを あけた）":""),short:"何も残らない",fx:"none"};
+    if(k==="food") return {txt:"こげて、黒く なった。",short:"こげた",fx:"burn"};
+    return na("蒸発皿は、水よう液を 蒸発させる ときに 使うよ。");
+  case "circuit":
+    if(k==="solid"||k==="food"){
+      var pre=o.paint?"ぬってある 色を 紙やすりで けずってから つなぐと… ":"回路に つなぐと… ";
+      return o.cond?{txt:pre+"<b>豆電球の 明かりが ついた！</b>",short:"つく",hit:1,fx:"on"}:{txt:pre+"明かりは つかない。",short:"つかない",fx:"off"};
+    }
+    return na("この ものは、豆電球の 回路では しらべられないよ。");
+  case "magnet":
+    if(k==="solid"||k==="food") return o.mag?{txt:"じしゃくを 近づけると… <b>ピタッと ついた！</b>",short:"つく",hit:1,fx:"stick"}:{txt:"じしゃくを 近づけても、つかない。",short:"つかない",fx:"nostick"};
+    return {txt:"じしゃくを 近づけても、何も おこらない。",short:"かわらない",fx:"nostick"};
+  case "candle":
+    if(k!=="gas") return na("火のついた ろうそくは、びんの 中の 気体を しらべる ときに 使うよ。");
+    if(o.o2==="hi") return {txt:"ろうそくを 入れると… <b>ほのおが 大きく なり、明るく はげしく もえた！</b>",short:"はげしく",hit:1,fx:"big"};
+    if(o.o2==="n") return {txt:"ろうそくを 入れると、しばらく もえてから 消えた。",short:"しばらく",fx:"mid"};
+    if(o.o2==="lo") return {txt:"ろうそくを 入れると、もえたけれど、まわりの 空気の ときより はやく 消えた。",short:"はやく消える",fx:"short"};
+    return {txt:"ろうそくを 入れると… すぐに 火が 消えた。",short:"すぐ消える",fx:"out"};
+  case "smell":
+    if(o.smell) return {txt:"手で あおいで かぐと、<b>"+o.smell+"</b>が した。",short:"つんと",hit:1,fx:"smell"};
+    if(k==="food") return {txt:"食べ物の においが する。",short:"ふつう",fx:"soft"};
+    return {txt:"手で あおいで かいでも、においは しない。",short:"しない",fx:"soft"};
+  }
+}
+
+/* ================= 絵 =================
+   絵は 先方の 素材シート2まい（00_incoming/実験探偵まりか.png・実験探偵まりか２.png）から 切り出した art/*.png。
+   もの 1つは 100×100 の 箱に おさめ、結果の 色（ヨウ素液・石灰水 など）だけ 上に かさねる */
+var S='stroke="#1B1A26" stroke-width="3" stroke-linejoin="round"';
+function img(n,x,y,w,h,al){return '<image href="art/'+n+'.png" x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" preserveAspectRatio="'+(al||"xMidYMid")+' meet"/>';}
+/* 試験管だけは 絵が まだ ないので 自作の まま */
+function tube(liq,mark){
+  return '<path d="M40 10 V78 Q40 92 50 92 Q60 92 60 78 V10" fill="rgba(220,240,255,.3)" '+S+'/>'+
+    '<path d="M42 44 H58 V78 Q58 90 50 90 Q42 90 42 78 Z" fill="'+liq+'"/><path d="M36 10 H64" '+S+' stroke-linecap="round"/>';
+}
+function badge(m){return m?'<circle cx="86" cy="84" r="12" fill="#FFF8EA" '+S+'/><text x="86" y="89.5" text-anchor="middle" font-size="15" font-weight="900" fill="#3A2A18">'+m+'</text>':"";}
+var PURPLE="#3B2468", BROWN="#C9893B";
+/* spot = ヨウ素液を たらす 場所（100×100 の 中） */
+var SPOT={potato:[72,58],rice:[50,38],bread:[46,46],cucumber:[50,50],egg:[30,62],sugar:[50,36]};
+
+function drawObj(o,fx){
+  var k=o.k, g;
+  if(k==="liq"){
+    g=img("beaker",0,0,100,100);
+    var ov={purple:[PURPLE,.9],brown:[BROWN,.8],milky:["#F4F4EE",.93]}[fx];
+    if(ov) g+='<rect x="18" y="48" width="68" height="44" rx="7" fill="'+ov[0]+'" opacity="'+ov[1]+'"/>';
+    if(o===OBJ.soda) g+='<g fill="#fff" opacity=".9"><circle cx="30" cy="80" r="2.5"/><circle cx="46" cy="66" r="2"/><circle cx="58" cy="84" r="2.5"/><circle cx="66" cy="60" r="1.8"/><circle cx="38" cy="58" r="1.6"/></g>';
+    return g;
+  }
+  if(k==="tube"){
+    var c2="rgba(235,240,245,.75)";
+    if(fx==="purple") c2=PURPLE; else if(fx==="brown") c2="rgba(201,137,59,.85)";
+    return tube(c2)+badge(o.mark);
+  }
+  if(k==="gas"){
+    g=img("jar",22,26,56,74)+img("lid",24,3,52,35);
+    if(fx==="milky") g+='<rect x="29" y="82" width="42" height="13" rx="5" fill="#F4F4EE" opacity=".95"/>';
+    if(fx==="clear") g+='<rect x="29" y="82" width="42" height="13" rx="5" fill="rgba(170,215,255,.55)"/>';
+    return g;
+  }
+  if(k==="leaf"){
+    var n=fx==="purple"?"leaf_purple":fx==="brown"?"leaf_pale":"leaf";
+    return img(n,2,2,96,96)+badge(o.mark);
+  }
+  g=img(o.ic,0,0,100,100);
+  if(fx==="purple"||fx==="brown"){var p=SPOT[o.ic]||[50,50];g+='<ellipse cx="'+p[0]+'" cy="'+p[1]+'" rx="13" ry="8" fill="'+(fx==="purple"?PURPLE:BROWN)+'" opacity=".92"/><ellipse cx="'+(p[0]-4)+'" cy="'+(p[1]-3)+'" rx="3.5" ry="1.8" fill="#fff" opacity=".45"/>';}
+  return g;
+}
+function iconSVG(o){return '<svg viewBox="0 0 100 100" aria-hidden="true">'+drawObj(o,"")+'</svg>';}
+
+/* じっけんだいの 絵（300×170） */
+function scene(tl,o,r){
+  var fx=r?r.fx:"";
+  var at=function(x,y,s,inner){return '<g transform="translate('+x+' '+y+') scale('+s+')">'+inner+'</g>';};
+  var body="", obj=drawObj(o,(tl==="heat")?"":fx);
+  if(!tl){body=at(100,35,1,drawObj(o,""));}
+  else if(r&&r.na){body=at(60,40,.95,drawObj(o,""))+'<text x="210" y="112" text-anchor="middle" font-size="64" fill="#6E685E" font-weight="900">？</text>';}
+  else switch(tl){
+  case "loupe":
+    body=at(70,35,1,obj)+img("loupe",135,22,84,126);break;
+  case "iodine":
+    body=at(95,55,1,obj)+img("dropper",150,0,46,70);break;
+  case "litmus":
+    var L=fx==="base"?"litmus_b":"litmus_r", Rn=fx==="acid"?"litmus_r":"litmus_b";
+    body=at(25,45,1,obj)+'<path d="M128 60 L100 120" stroke="rgba(220,240,255,.8)" stroke-width="5" stroke-linecap="round"/>'+
+      img(L,165,30,34,82)+img(Rn,220,30,34,82)+
+      '<text x="182" y="132" text-anchor="middle" font-size="13" font-weight="700" fill="'+(fx==="base"?"#F2C14E":"#B4AC9C")+'">'+(fx==="base"?"赤→青":"赤い紙")+'</text>'+
+      '<text x="237" y="132" text-anchor="middle" font-size="13" font-weight="700" fill="'+(fx==="acid"?"#F2C14E":"#B4AC9C")+'">'+(fx==="acid"?"青→赤":"青い紙")+'</text>';break;
+  case "lime":
+    body=img("bottle_clear",25,40,56,80)+at(110,45,1,obj)+'<text x="53" y="138" text-anchor="middle" font-size="12" fill="#B4AC9C">石灰水</text>';break;
+  case "heat":
+    var dn=fx==="residue"?"dish_salt":"dish_empty";
+    body=at(4,74,.55,drawObj(o,""))+img("tripod",100,46,110,118)+img("lamp",134,98,42,62)+img(dn,112,10,86,62)+
+      (fx==="burn"?'<ellipse cx="155" cy="44" rx="16" ry="6" fill="#1B1410"/><path d="M155 30 q-8 -10 0 -20 q8 -10 0 -18" stroke="#8C95A0" stroke-width="3" fill="none" opacity=".7"/>':"");break;
+  case "circuit":
+    var lit=fx==="on";
+    body='<path d="M48 64 V28 H104 V82" stroke="#E4473B" stroke-width="3.5" fill="none"/><path d="M196 82 H250 V96" stroke="#E4473B" stroke-width="3.5" fill="none"/>'+
+      '<path d="M250 100 V156 H48 V132" stroke="#3B3B3B" stroke-width="3.5" fill="none"/>'+
+      img("battery",26,60,44,74)+at(110,38,.86,obj)+
+      '<circle cx="104" cy="82" r="4" fill="#D9A635"/><circle cx="196" cy="82" r="4" fill="#D9A635"/>'+
+      img(lit?"bulb_on":"bulb_off",214,24,72,76,"xMidYMax");break;
+  case "magnet":
+    var up=fx==="stick";
+    body=img("magnet",118,0,64,60)+at(105,up?52:74,.9,obj)+
+      (up?'<path d="M104 58 l-10 -6 M196 58 l10 -6" stroke="#F2C14E" stroke-width="3" stroke-linecap="round"/>':"");break;
+  case "candle":
+    var cn={big:"candle_big",mid:"candle_mid",short:"candle_mid",out:"candle_out"}[fx]||"candle_mid";
+    body='<path d="M150 0 V140" stroke="#8C95A0" stroke-width="3.5"/>'+img("jar",95,10,110,150)+
+      '<g'+(fx==="short"?' opacity=".75"':'')+'>'+img(cn,126,60,48,82,"xMidYMax")+'</g>'+
+      (fx==="big"?'<circle cx="150" cy="80" r="42" fill="#FFE08A" opacity=".18"/>':"");break;
+  case "smell":
+    var sm=fx==="smell";
+    body=at(40,50,1,obj)+img("smell",160,34,130,120)+
+      '<path d="M148 70 q8 -6 16 0 M148 86 q8 -6 16 0 M148 102 q8 -6 16 0" stroke="#B4AC9C" stroke-width="2.5" fill="none"/>'+
+      (sm?'<text x="225" y="28" text-anchor="middle" font-size="20" font-weight="900" fill="#F2C14E">つーん！</text>':'');break;
+  }
+  return '<svg viewBox="0 0 300 170" role="img" aria-label="じっけんの ようす">'+body+'</svg>';
+}
+
+/* ================= まりかの 顔 ================= */
+function marika(mood){
+  var n={ok:"marika_ok",ng:"marika_why"}[mood]||"marika_look";
+  return '<img src="art/'+n+'.png" alt="">';
+}
+
+/* ================= 音 ================= */
+var AC=null;
+function tone(fs,dur,type){
+  try{
+    if(!AC) AC=new (window.AudioContext||window.webkitAudioContext)();
+    if(AC.state!=="running") AC.resume();
+    var t=AC.currentTime;
+    fs.forEach(function(f,i){
+      var o=AC.createOscillator(),g=AC.createGain();o.type=type||"triangle";o.frequency.value=f;
+      g.gain.setValueAtTime(0,t+i*dur);g.gain.linearRampToValueAtTime(.16,t+i*dur+.02);g.gain.exponentialRampToValueAtTime(.001,t+i*dur+dur*1.6);
+      o.connect(g);g.connect(AC.destination);o.start(t+i*dur);o.stop(t+i*dur+dur*1.8);
+    });
+  }catch(e){}
+}
+
+/* ================= 記録 ================= */
+var RKEY="jikken_tantei_rec";
+function load(){try{var v=localStorage.getItem(RKEY);return v?JSON.parse(v):{};}catch(e){return {};}}
+function save(v){try{localStorage.setItem(RKEY,JSON.stringify(v));}catch(e){}}
+var REC=load();
+
+/* ================= 画面 ================= */
+var $=function(id){return document.getElementById(id);};
+var st=null;
+
+function paintFiles(){
+  $("files").innerHTML=CASES.map(function(c,i){
+    var s=REC[i]||0;
+    return '<button class="file" data-i="'+i+'"><span class="n">'+(i+1)+'</span><span><b>'+c.t+'</b><small>'+c.g+'</small></span><span class="rec">'+
+      (s?"★".repeat(s)+"<i>"+"★".repeat(3-s)+"</i>":"<i>★★★</i>")+'</span></button>';
+  }).join("");
+}
+$("files").addEventListener("click",function(e){var b=e.target.closest(".file");if(b) start(+b.dataset.i);});
+
+function start(i){
+  var c=CASES[i];
+  st={i:i,c:c,tool:null,ev:{},pick:[],miss:0,last:null};
+  $("title").style.display="none";$("play").style.display="block";$("board").style.display="block";
+  $("cTitle").innerHTML='<small>じけんファイル '+(i+1)+' ／ '+CASES.length+'</small>'+c.t;
+  $("mFace").innerHTML=marika("");
+  $("mStory").textContent=c.story;$("mQ").textContent=c.q;
+  $("tools").innerHTML=c.tools.map(function(t){var T=TOOLS[t];return '<button class="tool" data-t="'+t+'"><img src="art/'+T.im+'.png" alt="">'+T.n+'</button>';}).join("");
+  $("scene").innerHTML='<svg viewBox="0 0 300 170" aria-hidden="true"><text x="150" y="92" text-anchor="middle" font-size="44">🧪🔍</text></svg>';
+  $("res").innerHTML='<span class="na">まず ①で 道具を えらんで、②で しらべる ものを タップしよう。</span>';
+  paintSus();paintSum();window.scrollTo(0,0);
+}
+function paintSus(){
+  var c=st.c;
+  $("sus").innerHTML=c.sus.map(function(id){
+    var o=OBJ[id], ev=st.ev[id]||{}, chips="";
+    c.tools.forEach(function(t){var r=ev[t];if(r&&t!=="loupe") chips+='<span class="ev'+(r.hit?" hit":"")+'">'+TOOLS[t].em+' '+r.short+'</span>';});
+    var pk=st.pick.indexOf(id)>=0;
+    return '<div class="s'+(pk?" picked":"")+'" data-id="'+id+'"><button class="look" data-act="test">'+iconSVG(o)+'<b>'+o.n+'</b></button><div class="evs">'+chips+'</div>'+
+      '<button class="pk" data-act="pick">'+(pk?"🔍 これだ！":"これだ？")+'</button></div>';
+  }).join("");
+}
+function paintSum(){
+  var c=st.c;
+  var t=st.tool?TOOLS[st.tool].em+" "+TOOLS[st.tool].n:"（①で えらぶ）";
+  var p=st.pick.length?st.pick.map(function(id){return OBJ[id].n.replace(/^[アイウAB]　/,function(m){return m.trim();});}).join("・"):"（「これだ？」を おす）";
+  $("sum").innerHTML='決め手：<b>'+t+'</b><br>答え：<b>'+p+'</b>';
+}
+$("tools").addEventListener("click",function(e){
+  var b=e.target.closest(".tool");if(!b) return;
+  st.tool=b.dataset.t;
+  [].forEach.call($("tools").children,function(x){x.classList.toggle("on",x===b);});
+  tone([660],.06);paintSum();
+});
+$("sus").addEventListener("click",function(e){
+  var b=e.target.closest("button");if(!b) return;
+  var card=b.closest(".s"), id=card.dataset.id, o=OBJ[id];
+  if(b.dataset.act==="pick"){
+    var k=st.pick.indexOf(id);
+    if(k>=0) st.pick.splice(k,1); else st.pick.push(id);
+    tone([k>=0?440:880],.07);paintSus();paintSum();return;
+  }
+  if(!st.tool){
+    $("scene").innerHTML=scene(null,o,null);
+    $("res").innerHTML='<b>'+o.n+'</b><br><span class="na">まず ①で 道具を えらんでね。</span>';
+    flashStage();return;
+  }
+  var r=result(st.tool,o);
+  (st.ev[id]=st.ev[id]||{})[st.tool]=r;
+  $("scene").innerHTML=scene(st.tool,o,r);
+  $("res").innerHTML='<b>'+o.n+'</b> × '+TOOLS[st.tool].em+' '+TOOLS[st.tool].n+'<br>'+(r.na?'<span class="na">'+r.txt+'</span>':r.txt);
+  tone(r.na?[300]:(r.hit?[523,784]:[523]),.08);
+  paintSus();flashStage();
+});
+function flashStage(){
+  var s=$("scene").parentNode.parentNode;s.classList.remove("flash");void s.offsetWidth;s.classList.add("flash");
+  if(s.getBoundingClientRect().top<0) s.scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+$("answerBtn").addEventListener("click",function(){
+  var c=st.c;
+  if(!st.tool){ov("ng","まだ だよ！","<p>① で <b>決め手の 実験</b>（道具・薬品）を えらんでね。</p>",false);return;}
+  if(!st.pick.length){ov("ng","まだ だよ！","<p>犯人だと 思う ものに「<b>これだ？</b>」を おしてね。</p>",false);return;}
+  var used=c.sus.some(function(id){return st.ev[id]&&st.ev[id][st.tool];});
+  if(!used){ov("ng","証拠が ない！","<p>"+TOOLS[st.tool].em+" <b>"+TOOLS[st.tool].n+"</b>で、まだ 1つも しらべて いないよ。<br>決め手の 実験を、じっさいに ためしてみよう。</p>",false);return;}
+  if(st.tool!==c.key){
+    st.miss++;tone([392,330],.14,"sawtooth");
+    ov("ng","うーん、ちがうかも…","<p>"+TOOLS[st.tool].em+" <b>"+TOOLS[st.tool].n+"</b>は「"+TOOLS[st.tool].what+"」。<br>この なぞの 決め手には ならないよ。<br>ほかの 道具も ためしてみよう！</p>",false);return;
+  }
+  var miss=c.ans.filter(function(id){return st.pick.indexOf(id)<0;}).length;
+  var extra=st.pick.filter(function(id){return c.ans.indexOf(id)<0;}).length;
+  if(miss||extra){
+    st.miss++;tone([392,330],.14,"sawtooth");
+    var m=[];
+    if(extra) m.push("犯人では ない ものが <b>まざっている</b>");
+    if(miss) m.push("まだ <b>見のがしている</b> ものが ある");
+    var untested=c.sus.filter(function(id){return !(st.ev[id]&&st.ev[id][c.key]);}).length;
+    ov("ng","おしい！","<p>決め手の 実験は ばっちり！<br>でも、"+m.join("し、")+"みたい。</p>"+
+      (untested?"<p>"+TOOLS[c.key].em+" "+TOOLS[c.key].n+"で まだ しらべていない ものが "+untested+"こ あるよ。</p>":"<p>しらべた 結果を もう一度 見くらべてみよう。</p>"),false);return;
+  }
+  var stars=st.miss===0?3:st.miss===1?2:1;
+  if((REC[st.i]||0)<stars){REC[st.i]=stars;save(REC);}
+  tone([523,659,784,1047],.11);
+  ov("ok","じけん かいけつ！",'<div class="big">'+"★".repeat(stars)+"<i>"+"★".repeat(3-stars)+"</i></div>"+
+    '<div class="exp">'+c.exp+'</div><p class="grade">'+c.g+'</p>',true);
+});
+
+function ov(mood,h,html,done){
+  var btns=done?
+    '<div class="row"><button class="btn" data-a="files">ファイルへ</button>'+(st.i<CASES.length-1?'<button class="btn go" data-a="next">つぎの じけん ▶</button>':'<button class="btn go" data-a="files">ぜんぶ かいけつ！</button>')+'</div>':
+    '<div class="row"><button class="btn go" data-a="close">もういちど しらべる</button></div>';
+  $("ovc").innerHTML='<div class="face">'+marika(mood)+'</div><h3 class="'+mood+'">'+h+'</h3>'+html+btns;
+  $("ov").classList.add("on");
+}
+$("ovc").addEventListener("click",function(e){
+  var b=e.target.closest("button");if(!b) return;
+  var a=b.dataset.a;$("ov").classList.remove("on");
+  if(a==="next") start(st.i+1);
+  else if(a==="files") toTitle();
+});
+function toTitle(){
+  $("play").style.display="none";$("board").style.display="none";$("title").style.display="flex";
+  paintFiles();window.scrollTo(0,0);
+}
+$("backBtn").addEventListener("click",toTitle);
+
+paintFiles();
+})();
+</script>
+</body>
+</html>
