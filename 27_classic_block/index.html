@@ -311,9 +311,11 @@ function audio(){
     musG=AC.createGain();musG.gain.value=.55;musG.connect(master);
     seG=AC.createGain();seG.gain.value=.3;seG.connect(master);
   }
-  if(AC.state==="suspended")AC.resume();
+  if(AC.state!=="running")AC.resume();   // iPhone・iPad は 画面を とじたり ほかのアプリへ いくと "interrupted" に なるので、running 以外は ぜんぶ おこす
   return AC;
 }
+/* Safari は 音が とまったまま（suspended／interrupted）に なることが あるので、画面に さわるたびに おこしなおす */
+document.addEventListener("pointerdown",function(){if(AC&&AC.state!=="running")AC.resume();},true);
 function hz(n){return 440*Math.pow(2,(n-69)/12);}
 /* オルゴール・チェレスタのような音 */
 function noteBox(n,t,d,vel){
