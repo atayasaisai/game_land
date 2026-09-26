@@ -195,13 +195,27 @@ input[type=range]{width:100%;accent-color:#6FE3FF}
 .fb{display:none;margin-top:12px;border-radius:16px;padding:12px 14px;border:1px solid var(--line);background:rgba(255,255,255,.06)}
 .fb.on{display:block;animation:pop .25s ease}
 @keyframes pop{from{transform:scale(.96);opacity:0}to{transform:none;opacity:1}}
-.fb .mk{font-size:1.2rem;font-weight:900}
-.fb.ok .mk{color:var(--ok)} .fb.ng .mk{color:var(--ng)}
+.fb .mk{display:flex;align-items:center;justify-content:center;gap:10px;margin:-12px -14px 10px;padding:12px 10px;border-radius:15px 15px 0 0;
+  font-family:"Mochiy Pop One",sans-serif;font-weight:400;font-size:clamp(1.9rem,9vw,2.6rem);line-height:1.1;letter-spacing:.06em;color:#fff;
+  text-shadow:0 3px 0 rgba(0,0,0,.25)}
+.fb .mk i{font-style:normal;font-size:1.25em;animation:mkpop .55s cubic-bezier(.2,1.8,.4,1)}
+@keyframes mkpop{0%{transform:scale(0) rotate(-30deg)}100%{transform:none}}
+.fb.ok{border:3px solid #2FBF86;background:rgba(47,191,134,.12)}
+.fb.ok .mk{background:linear-gradient(160deg,#3FD89A,#1FA874)}
+.fb.ng{border:3px solid #FF7A6B;background:rgba(255,122,107,.1)}
+.fb.ng .mk{background:linear-gradient(160deg,#FF8F6B,#E0564A);font-size:clamp(1.5rem,7vw,2rem)}
+/* 画面のまんなかに大きく出る ◯・✕ */
+#judge{position:fixed;left:50%;top:42%;z-index:20;pointer-events:none;transform:translate(-50%,-50%);opacity:0;
+  font-family:"Mochiy Pop One",sans-serif;font-size:min(56vw,260px);line-height:1}
+#judge.ok{color:#FF4E5B;text-shadow:0 0 30px rgba(255,255,255,.6);animation:judge 1s ease forwards}
+#judge.ng{color:#6FA8FF;text-shadow:0 0 30px rgba(255,255,255,.5);animation:judge .8s ease forwards}
+@keyframes judge{0%{opacity:0;transform:translate(-50%,-50%) scale(.3)}25%{opacity:1;transform:translate(-50%,-50%) scale(1.08)}40%{transform:translate(-50%,-50%) scale(1)}75%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(1)}}
 .fb p{margin:4px 0 0;font-size:.88rem}
 .fb .cmp{display:flex;gap:16px;justify-content:center;margin:6px 0}
 .fb .cmp div{text-align:center;font-size:.72rem;color:var(--sub)}
 .fb .cmp svg{width:64px;height:64px;margin:0 auto}
 .fb .btn{margin-top:10px;width:100%}
+.fb .btn.pri{background:rgba(255,255,255,.1);box-shadow:none;border:1px solid rgba(255,255,255,.3);font-size:.95rem;padding:11px}
 .decide{width:100%;margin-top:10px}
 
 /* ---------- 結果 ---------- */
@@ -331,6 +345,7 @@ input[type=range]{width:100%;accent-color:#6FE3FF}
   </div>
   <div id="qChoices" class="chs"></div>
   <button class="btn pri decide" id="decideBtn">ここで けってい</button>
+  <div id="judge" aria-hidden="true"></div>
   <div class="fb" id="fb"><div class="mk" id="fbMk"></div><div id="fbBody"></div><button class="btn pri" id="nextBtn">つぎへ ▶</button></div>
 </div></section>
 
@@ -642,11 +657,27 @@ function answer(pick){
   }
   if(ok)Q.score++;
   $("#qScore").innerHTML=Q.score+"<small>てん</small>";
-  $("#fbMk").textContent=ok?"◎ せいかい！":"✕ おしい！";
+  $("#fbMk").innerHTML=ok?"<i>⭕</i>せいかい！":"<i>✕</i>おしい！";
+  var jd=$("#judge");jd.className="";void jd.offsetWidth;jd.textContent=ok?"◯":"✕";jd.className=ok?"ok":"ng";
+  chime(ok);
   $("#fbBody").innerHTML=body;
   $("#nextBtn").textContent=Q.i+1<Q.qs.length?"つぎへ ▶":"けっかを 見る ▶";
   $("#fb").className="fb on "+(ok?"ok":"ng");
   setTimeout(function(){$("#fb").scrollIntoView({behavior:"smooth",block:"nearest"});},60);
+}
+/* ピンポン・ブブー（WebAudio。音の出ない端末では なにもしない） */
+var AC=null;
+function chime(ok){
+  try{
+    AC=AC||new (window.AudioContext||window.webkitAudioContext)();
+    var t=AC.currentTime;
+    (ok?[[1046.5,0,.16],[1318.5,.14,.4]]:[[196,0,.22],[185,.2,.3]]).forEach(function(n){
+      var o=AC.createOscillator(),g=AC.createGain();
+      o.type=ok?"sine":"square";o.frequency.value=n[0];
+      g.gain.setValueAtTime(0,t+n[1]);g.gain.linearRampToValueAtTime(ok?.25:.08,t+n[1]+.01);g.gain.exponentialRampToValueAtTime(.001,t+n[1]+n[2]);
+      o.connect(g);g.connect(AC.destination);o.start(t+n[1]);o.stop(t+n[1]+n[2]+.02);
+    });
+  }catch(e){}
 }
 $("#decideBtn").addEventListener("click",function(){answer();});
 $("#nextBtn").addEventListener("click",function(){
