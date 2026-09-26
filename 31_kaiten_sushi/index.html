@@ -119,6 +119,13 @@ img{display:block}
   font-size:4.2rem;line-height:1;text-shadow:0 0 0 #fff,3px 3px 0 #fff,-3px -3px 0 #fff,3px -3px 0 #fff,-3px 3px 0 #fff;pointer-events:none;animation:stampIn .25s ease-out}
 .stamp.ok{color:var(--ok)} .stamp.ng{color:var(--ng)}
 @keyframes stampIn{from{transform:translate(-50%,-50%) rotate(-12deg) scale(2.2);opacity:0}}
+.timer{position:absolute;z-index:3;right:4px;top:6px;width:58px;height:58px;border-radius:50%;display:grid;place-items:center;
+  background:conic-gradient(var(--ok) var(--p,100%),#E4D6BF 0);border:3px solid var(--dark);box-shadow:0 3px 0 var(--dark);transition:opacity .3s}
+.timer b{width:42px;height:42px;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:1.35rem;font-weight:900;font-variant-numeric:tabular-nums}
+.timer.hurry{background:conic-gradient(var(--ng) var(--p,100%),#E4D6BF 0);animation:beat .5s ease-in-out infinite}
+.timer.hurry b{color:var(--ng)}
+.timer.off{opacity:0}
+@keyframes beat{50%{transform:scale(1.12)}}
 .flying{position:fixed;z-index:30;pointer-events:none;transition:transform .7s cubic-bezier(.5,-0.4,.6,1),opacity .7s}
 
 /* とった おさら */
@@ -217,8 +224,8 @@ details.credit a{color:var(--sub);word-break:break-all}
        あたったら、その おさらは きみの もの！</p>
     <div class="plates"><span><i style="background:#fff;box-shadow:inset 0 -3px 0 var(--p1l)"></i>100円</span><span><i style="background:#fff;box-shadow:inset 0 -3px 0 var(--p2)"></i>200円</span><span><i style="background:#fff;box-shadow:inset 0 -3px 0 var(--p3)"></i>500円</span></div>
     <div class="tbtns">
-      <button class="stg" data-course="nami"><span class="ic">🍣</span><span><b>なみの コース</b><small>10さら。白と 赤の おさら。ゆっくり ながれる</small></span><span class="rec" id="recNami"></span></button>
-      <button class="stg" data-course="toku"><span class="ic">✨</span><span><b>とくじょう コース</b><small>10さら。金の おさらも 出る。はやく ながれる</small></span><span class="rec" id="recToku"></span></button>
+      <button class="stg" data-course="nami"><span class="ic">🍣</span><span><b>なみの コース</b><small>10さら。白と 赤の おさら</small></span><span class="rec" id="recNami"></span></button>
+      <button class="stg" data-course="toku"><span class="ic">✨</span><span><b>とくじょう コース</b><small>10さら。むずかしい 金の おさらも 出る</small></span><span class="rec" id="recToku"></span></button>
       <button class="stg" id="zukanBtn"><span class="ic">📖</span><span><b>さかな ずかん</b><small>あてた さかなが あつまる。漢字と ひとことも</small></span><span class="rec" id="recZukan"></span></button>
     </div>
     <p class="grade">写真は 43しゅるい</p>
@@ -265,8 +272,8 @@ details.credit a{color:var(--sub);word-break:break-all}
 const $=s=>document.querySelector(s);
 const PRICE={1:100,2:200,3:500};
 const COURSE={
-  nami:{name:'なみの コース',pool:f=>f.g<=2,t0:11,t1:8},
-  toku:{name:'とくじょう コース',pool:()=>true,t0:8,t1:5},
+  nami:{name:'なみの コース',pool:f=>f.g<=2,wait:10},
+  toku:{name:'とくじょう コース',pool:()=>true,wait:10},
 };
 const N=10;
 const BY={};FISH.forEach(f=>BY[f.k]=f);
@@ -290,6 +297,7 @@ const SE={
   ok(){tone(880,0,.15,'triangle');tone(1320,.1,.3,'triangle');},
   ng(){tone(200,0,.35,'square',.08);},
   take(){tone(520,0,.08,'sine',.2);tone(390,.07,.12,'sine',.2);},
+  tick(){tone(1000,0,.06,'square',.06);},
   gone(){tone(440,0,.2,'sine',.1);tone(330,.15,.3,'sine',.1);},
 };
 
@@ -357,7 +365,7 @@ function nextPlate(){
   const g=[1,2,3][Math.random()*3|0];
   $('#train').innerHTML=
     `<div class="plate deco g${g}"><span class="food">${f}</span><div class="dish"></div></div>`+
-    `<div class="plate q g${q.f.g}" id="qp"><div class="ph"><img src="photo/${q.f.p}.jpg" alt="この さかな なあに？" draggable="false"></div><div class="dish"></div></div>`+
+    `<div class="plate q g${q.f.g}" id="qp"><div class="ph"><img src="photo/${q.f.p}.jpg" alt="この さかな なあに？" draggable="false"></div><div class="dish"></div><div class="timer" id="timer"><b id="tsec">${COURSE[G.c].wait}</b></div></div>`+
     `<div class="plate deco g${g===3?1:g+1}"><span class="food">${f2}</span><div class="dish"></div></div>`;
   $('#bub').textContent=['へい、らっしゃい！ この さかな なあに？','つぎ、いくよ！ この さかなは？','おっ、きたきた！ なんだと おもう？','よく 見てね！ この さかなは？'][G.i%4];
   $('#chs').innerHTML=q.opts.map((o,i)=>`<button class="ch" data-k="${o.k}">${o.n}</button>`).join('');
@@ -365,23 +373,46 @@ function nextPlate(){
   $('#fb').className='fb';$('#fb').innerHTML='';
   drawHud();
   G.live=true;G.x=$('#lane').clientWidth+8;          // 列車の 左はし（レーンの 右の 外から）
+  G.phase='in';G.left=COURSE[G.c].wait;G.tick=0;
   run();
 }
-// レーンの はしから はしまで T 秒で ながす。G.x から つづける
+// おさらの うごき。G.phase：'in'＝目の前まで くる → 'stop'＝とまって G.left 秒 まつ → 'out'＝ながれて いく
 function run(){
+  stopRun();
   const lane=$('#lane'),train=$('#train'),qp=$('#qp'),belt=$('#belt');
   const W=lane.clientWidth,qx=qp.offsetLeft,qw=qp.offsetWidth;  // 列車の中での 写真の おさらの 位置
-  const T=COURSE[G.c].t0+(COURSE[G.c].t1-COURSE[G.c].t0)*G.i/(N-1);
-  const speed=(W+qw+8+qx)/T;
+  const xStop=W/2-(qx+qw/2);                                    // 写真が レーンの まんなかに くる 位置
+  const speed=Math.max(320,W*.95);                              // 1びょうに すすむ はば
+  const WAIT=COURSE[G.c].wait;
   let last=performance.now();
   const draw=()=>{train.style.transform=`translateX(${G.x}px)`;belt.style.backgroundPosition=`${G.x}px 0`;};
+  const drawTimer=()=>{
+    const t=$('#timer');if(!t)return;
+    const sec=Math.max(0,Math.ceil(G.left));
+    $('#tsec').textContent=sec;
+    t.style.setProperty('--p',(G.left/WAIT*100).toFixed(1)+'%');
+    t.classList.toggle('hurry',G.phase==='stop'&&G.left<=3);
+    t.classList.toggle('off',G.phase==='out');
+  };
   const step=now=>{
     const dt=Math.min(.05,(now-last)/1000);last=now;
-    G.x-=speed*dt;draw();
-    if(G.x+qx+qw<0){timeout();return;}
+    if(G.phase==='in'){
+      G.x-=speed*dt;
+      if(G.x<=xStop){G.x=xStop;G.phase='stop';}
+    }else if(G.phase==='stop'){
+      const before=Math.ceil(G.left);
+      G.left-=dt;
+      const after=Math.ceil(G.left);
+      if(after!==before&&after<=3&&after>0)SE.tick();
+      if(G.left<=0){G.left=0;G.phase='out';if(G.live)timeout();}
+    }else{
+      G.x-=speed*.6*dt;
+      if(G.x+qx+qw<0){draw();raf=0;return;}                  // レーンから 出たら おしまい
+    }
+    draw();drawTimer();
     raf=requestAnimationFrame(step);
   };
-  draw();raf=requestAnimationFrame(step);
+  draw();drawTimer();raf=requestAnimationFrame(step);
 }
 function lockChoices(k,ok){
   const ans=G.qs[G.i].f.k;
@@ -396,6 +427,7 @@ function answer(k){
   if(!G||!G.live)return;
   wake();
   G.live=false;stopRun();
+  const tm=$('#timer');if(tm)tm.classList.add('off');
   const q=G.qs[G.i],ok=k===q.f.k;
   G.res[G.i]=ok;lockChoices(k,ok);
   const qp=$('#qp');
@@ -414,10 +446,10 @@ function answer(k){
   drawHud();
 }
 function timeout(){
-  stopRun();G.live=false;
+  G.live=false;                     // おさらは そのまま ながれて いく（run が うごかしつづける）
   const q=G.qs[G.i];G.res[G.i]=false;
   SE.gone();lockChoices(null,false);
-  $('#bub').textContent='あっ、ながれて いっちゃった… '+q.f.n+' だったよ。';
+  $('#bub').textContent='じかん ぎれ！ ながれて いっちゃう… '+q.f.n+' だったよ。';
   showFb('gone',q.f);drawHud();
 }
 function flyToStack(qp,g){
@@ -437,7 +469,7 @@ function cup(f){
   const s=f.kj||'?';return `<div class="cup ${s.length>=3?'l3':s.length===2?'l2':''}" aria-hidden="true">${f.kj||'魚'}</div>`;
 }
 function showFb(kind,f){
-  const mk={ok:`○ せいかい！ ${PRICE[f.g]}円の おさらを ゲット`,ng:'× ざんねん！ せいかいは…',gone:'ながれて いっちゃった！ せいかいは…'}[kind];
+  const mk={ok:`○ せいかい！ ${PRICE[f.g]}円の おさらを ゲット`,ng:'× ざんねん！ せいかいは…',gone:'じかん ぎれ！ せいかいは…'}[kind];
   const last=G.i>=G.qs.length-1;
   $('#fb').className='fb on '+(kind==='ok'?'ok':'ng');
   $('#fb').innerHTML=`<div class="hd">${cup(f)}<div><div class="mk">${mk}</div><div class="nm">${f.n}${f.kj?`<small>漢字で「${f.kj}」</small>`:''}</div></div></div>
@@ -501,8 +533,8 @@ document.addEventListener('keydown',e=>{
   if(G.live&&/^[1-4]$/.test(e.key)){const b=$('#chs').children[+e.key-1];if(b)answer(b.dataset.k);}
   else if(!G.live&&(e.key==='Enter'||e.key===' ')&&$('#nextBtn')){e.preventDefault();$('#nextBtn').click();}
 });
-document.addEventListener('visibilitychange',()=>{if(document.hidden&&G&&G.live){/* 見ていない あいだは とめる */stopRun();G.paused=true;}
-  else if(!document.hidden&&G&&G.paused){G.paused=false;if(G.live)run();}});
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&G&&raf){/* 見ていない あいだは とめる */stopRun();G.paused=true;}
+  else if(!document.hidden&&G&&G.paused){G.paused=false;run();}});
 drawRecs();
 </script>
 </body>
