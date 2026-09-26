@@ -50,14 +50,15 @@
   {"@type":"ListItem","position":22,"item":{"@type":"VideoGame","name":"クラシックdeブロックくずし","url":"https://atayasaisai.github.io/game_land/27_classic_block/","inLanguage":"ja","genre":["教育ゲーム","音楽","ブロックくずし"],"gamePlatform":"ウェブブラウザ","applicationCategory":"EducationalApplication","isFamilyFriendly":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"JPY"}}},
   {"@type":"ListItem","position":23,"item":{"@type":"VideoGame","name":"みてわかる ぶんすう","url":"https://atayasaisai.github.io/game_land/28_mite_wakaru_bunsu/","inLanguage":"ja","genre":["教育ゲーム","算数"],"gamePlatform":"ウェブブラウザ","applicationCategory":"EducationalApplication","isFamilyFriendly":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"JPY"}}},
   {"@type":"ListItem","position":24,"item":{"@type":"VideoGame","name":"なんどく漢字 よめるかな？","url":"https://atayasaisai.github.io/game_land/29_nandoku_kanji/","inLanguage":"ja","genre":["教育ゲーム","国語","漢字"],"gamePlatform":"ウェブブラウザ","applicationCategory":"EducationalApplication","isFamilyFriendly":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"JPY"}}},
-  {"@type":"ListItem","position":25,"item":{"@type":"VideoGame","name":"ぶしゅクイズ この漢字の部首は？","url":"https://atayasaisai.github.io/game_land/30_bushu_quiz/","inLanguage":"ja","genre":["教育ゲーム","国語","部首"],"gamePlatform":"ウェブブラウザ","applicationCategory":"EducationalApplication","isFamilyFriendly":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"JPY"}}}
+  {"@type":"ListItem","position":25,"item":{"@type":"VideoGame","name":"ぶしゅクイズ この漢字の部首は？","url":"https://atayasaisai.github.io/game_land/30_bushu_quiz/","inLanguage":"ja","genre":["教育ゲーム","国語","部首"],"gamePlatform":"ウェブブラウザ","applicationCategory":"EducationalApplication","isFamilyFriendly":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"JPY"}}},
+  {"@type":"ListItem","position":26,"item":{"@type":"VideoGame","name":"さかなの かいてんずし","url":"https://atayasaisai.github.io/game_land/31_kaiten_sushi/","inLanguage":"ja","genre":["教育ゲーム","生活","魚"],"gamePlatform":"ウェブブラウザ","applicationCategory":"EducationalApplication","isFamilyFriendly":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"JPY"}}}
  ]}]}
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@700;900&family=Noto+Sans+JP:wght@400;700&display=swap">
 <style>
 :root{
-  --pnk:#E8559A; --red:#E8503A; --ora:#F39A21; --yel:#F5C53A; --grn:#4FB05A; --blu:#3A86D8; --pur:#8A5BD6; --tea:#1FA5A0;
+  --pnk:#E8559A; --red:#E8503A; --ora:#F39A21; --yel:#F5C53A; --grn:#4FB05A; --blu:#3A86D8; --pur:#8A5BD6; --tea:#1FA5A0; --liv:#7E9A2B;
   --ink:#3B2E1E; --sub:#6E5B44; --card:#FFFBF2; --line:#D9B98A; --plate:rgba(255,252,240,.86);
   color-scheme:light;
 }
@@ -182,6 +183,7 @@ document.addEventListener('click', e => {
   <a class="sub" style="--c:var(--blu)" href="#rika"><span class="ic">⚛</span>りか</a>
   <a class="sub" style="--c:var(--ora)" href="#shakai"><span class="ic">社</span>しゃかい</a>
   <a class="sub" style="--c:var(--tea)" href="#ongaku"><span class="ic">♫</span>おんがく</a>
+  <a class="sub" style="--c:var(--liv)" href="#seikatsu"><span class="ic">生</span>せいかつ</a>
 </div></div></nav>
 
 <!-- ここから科目ごとの段。ゲームを1本ふやすときは、その科目の .grid に <a class="tile"> を1つ足す -->
@@ -259,6 +261,13 @@ document.addEventListener('click', e => {
   <h2><span class="pin">♫</span>おんがく<small>1つ</small></h2>
   <div class="grid">
     <a class="tile" href="27_classic_block/"><img src="img/classic_block.png" alt="" width="84" height="84"><span class="nm">クラシックde<br>ブロックくずし</span><span class="hint">名曲を 聞いて 音楽家を さがせ</span><span class="go">あそぶ ▶</span></a>
+  </div>
+</div></section>
+
+<section class="sec" style="--c:var(--liv)"><div class="wrap" id="seikatsu">
+  <h2><span class="pin">生</span>せいかつ<small>1つ</small></h2>
+  <div class="grid">
+    <a class="tile" href="31_kaiten_sushi/"><img src="img/kaiten_sushi.svg" alt="" width="84" height="84"><span class="nm">さかなの<br>かいてんずし</span><span class="hint">ながれてくる 魚の 名前を あてよう</span><span class="go">あそぶ ▶</span></a>
   </div>
 </div></section>
 

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- 回転ずしの札の絵（さかなの かいてんずし用）。レーンの上の 赤いおさらと、マグロのにぎり -->
+  <circle cx="100" cy="100" r="96" fill="#22395E" stroke="#8d5528" stroke-width="8"/>
+  <rect x="8" y="128" width="184" height="30" fill="#C9CFD8"/>
+  <path d="M8 128h184M8 158h184" stroke="#8d5528" stroke-width="6"/>
+  <path d="M40 128v30M72 128v30M104 128v30M136 128v30M168 128v30" stroke="#9FA7B3" stroke-width="2"/>
+  <ellipse cx="100" cy="136" rx="62" ry="17" fill="#fff" stroke="#5b3417" stroke-width="4"/>
+  <ellipse cx="100" cy="134" rx="44" ry="10" fill="none" stroke="#E0453A" stroke-width="7"/>
+  <path d="M52 124c0-16 22-24 48-24s48 8 48 24c0 6-20 9-48 9s-48-3-48-9z" fill="#FFFDF5" stroke="#5b3417" stroke-width="4"/>
+  <path d="M46 104c4-26 30-40 58-40 26 0 46 10 52 30 2 8-6 12-18 12H60c-10 0-15-1-14-2z" fill="#E8505B" stroke="#5b3417" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M70 76c10 6 12 18 10 28M96 70c10 8 12 22 10 34M122 72c8 8 10 20 8 32" stroke="#F7A3A8" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <circle cx="40" cy="44" r="5" fill="#ffd43b"/><circle cx="160" cy="52" r="4" fill="#ffd43b"/><circle cx="150" cy="30" r="3" fill="#fff"/>
+</svg>
