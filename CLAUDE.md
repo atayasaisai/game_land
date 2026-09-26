@@ -63,7 +63,7 @@
 | `02_nandemo_learning_quest/` | なんでもラーニングクエスト | 公開中 |
 | `04_sekai_no_recipe/` | せかいのレシピ ／ げんしのへや（118この原子。データは `elements.js`） | 公開中 |
 | `15_kokki_quest/` `16_shuto_quest/` | 国旗クエスト・首都あてクエスト（02と同じエンジン。国連加盟国193か国。旗の絵は flag-icons（MIT）を各フォルダの `flags/` に入れている。`packs/flags.js` を直したら index.html の `?v=` を新しくする） | 公開中 |
-| `17_kotoba_no_hashi/` | ことばの橋 English Typing Game（英文の穴うめタイピング。クエストとは別の仕組み。英文は index.html の `STAGES`） | 公開中 |
+| `17_kotoba_no_hashi/` | ことばの橋 English Typing Game（英文の穴うめタイピング。クエストとは別の仕組み。英文は index.html の `STAGES`。1つの島で10問（`PER`）。島ごとの背景は `STAGES` の `bg`（2026-09-26。`00_incoming/イングリッシュ背景.png`・`２.png` の8場面を切り出した `bg_*.jpg`、てんき と にがての島 は もとの `bg.jpg`）。お城は SVG なので はばは getBoundingClientRect で はかる（offsetWidth だと最後の橋を わたらなかった）） | 公開中 |
 | `18_hyakunin_isshu/` | 百人一首かるた（100首は `poems.js`。本文・読み・作者・決まり字はウィキペディア「小倉百人一首」と照合ずみ。意味の文は自作） | 公開中 |
 | `19_todofuken_quest/` | とどうふけんクエスト（形は Natural Earth から自前変換。北方領土は北海道に入れ、東京は本土だけ・沖縄は本島だけ・長崎は対馬壱岐なし） | 公開中 |
 | `20_bunshi_no_heya/` | せかいのレシピ ぶんしのへや（分子20こ。原子を えらぶだけで 手が自動でつながる（2026-09-25 に「つなぐ」操作をやめた）。分子ごとの できあがりの形は index.html の `SHAPE`（席の場所とつながり）で、えらんだ原子をその席にすわらせ、両はしがそろった つながりを引く。席のない原子は「いらない原子」として下にならび、タップではずす。見た目は 04 のCSSを写したもの） | 公開中 |
