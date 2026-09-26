@@ -23,7 +23,7 @@ def main() -> int:
     for folder in ("mon", "hero", "boom"):
         for f in sorted((HERE / folder).glob("*.png")):
             images["%s/%s" % (folder, f.name)] = data_uri(f)
-    for extra in ("congrats.jpg",):
+    for extra in ("congrats.jpg", "field.jpg"):
         p = HERE / extra
         if p.exists():
             images[extra] = data_uri(p)
