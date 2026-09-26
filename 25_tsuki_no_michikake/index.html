@@ -94,25 +94,57 @@ button{font-family:inherit;color:inherit;cursor:pointer}
     0 7px 0 #5b3417,4px 5px 0 #5b3417,-4px 5px 0 #5b3417;
   transform:rotate(var(--r,0deg));animation:jump 2.4s ease-in-out infinite;animation-delay:calc(var(--i) * .12s)}
 @keyframes jump{0%,78%,100%{transform:translateY(0) rotate(var(--r,0deg))}86%{transform:translateY(-9px) rotate(var(--r,0deg))}}
-.tpanel{margin-top:22px;width:100%;max-width:520px;display:flex;flex-direction:column;align-items:center;gap:6px;
-  background:linear-gradient(165deg,rgba(20,28,58,.93),rgba(8,11,26,.95));border:3px solid #2a3560;border-radius:28px;
-  padding:18px 16px 22px;box-shadow:0 10px 30px rgba(10,20,50,.45)}
-.kicker{font-size:.7rem;letter-spacing:.42em;color:var(--sub);text-transform:uppercase;margin:0 0 0 .42em}
-.tpanel p{max-width:26em;color:var(--sub);font-size:.9rem;margin:10px 0 4px;text-wrap:balance}
-.tpanel p b{color:var(--ink);font-weight:700}
-.tbtns{display:flex;flex-direction:column;gap:9px;margin-top:16px;width:100%;max-width:340px}
-.stg{display:flex;align-items:center;gap:12px;text-align:left;width:100%;
-  border:1px solid var(--line);border-radius:14px;padding:10px 14px;background:rgba(255,255,255,.04);transition:.15s}
-.stg:hover{border-color:rgba(120,180,255,.5);background:rgba(80,140,255,.1)}
-.stg .n{font-family:"Mochiy Pop One",sans-serif;font-size:1.2rem;color:#8FC5FF;min-width:1.4em;text-align:center}
-.stg b{display:block;font-size:.95rem}
-.stg small{display:block;font-size:.72rem;color:var(--sub);line-height:1.5}
-.stg .rec{margin-left:auto;color:#ffd43b;font-size:.9rem;letter-spacing:.05em;white-space:nowrap}
-.stg .rec i{color:#3a4668;font-style:normal}
-.backlink{display:inline-block;margin-top:22px;font-size:.82rem;letter-spacing:.06em;color:var(--sub);
-  text-decoration:none;border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:6px 18px;transition:.15s}
-.backlink:hover{color:#fff;border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.06)}
-.grade{font-size:.72rem;color:var(--faint);margin-top:10px}
+.tpanel{position:relative;margin-top:34px;width:100%;max-width:640px;display:flex;flex-direction:column;align-items:center;gap:6px;
+  background:repeating-linear-gradient(135deg,rgba(255,255,255,.4) 0 12px,transparent 12px 24px),linear-gradient(170deg,#FFF8DC,#FFE9A8);
+  border:4px solid #5b3417;border-radius:26px;padding:34px 14px 20px;box-shadow:0 8px 0 #5b3417,0 16px 30px rgba(60,35,10,.3);color:#3A1E08}
+.tlabel{position:absolute;left:50%;top:-22px;transform:translateX(-50%) rotate(-2deg);white-space:nowrap;
+  background:#4A5BC8;color:#fff;font-family:"Mochiy Pop One",sans-serif;font-size:clamp(1.05rem,4.8vw,1.35rem);letter-spacing:.06em;
+  padding:6px 20px;border-radius:12px;border:3px solid #5b3417;box-shadow:0 4px 0 #5b3417}
+.intro{display:flex;align-items:center;gap:12px;width:100%;max-width:560px;background:#fff;border:3px solid #5b3417;border-radius:18px;padding:10px 14px;text-align:left}
+.intro .mn{flex:none;width:70px;border-radius:50%;background:#1B2250;border:3px solid #5b3417;padding:4px;animation:hop 1.6s ease-in-out infinite}
+.intro .mn svg{width:100%;height:auto}
+.intro p{margin:0;font-size:.88rem;color:#6B4A2A;line-height:1.7}
+.intro .big{display:block;font-family:"Mochiy Pop One",sans-serif;font-size:clamp(1rem,4.2vw,1.22rem);color:#3A1E08;line-height:1.4;margin-bottom:3px;word-break:keep-all}
+.intro b{color:#C0392B}
+.tprog{margin:10px 0 0;font-weight:900;color:#5b3417;font-size:.9rem}
+.tprog b{font-family:"Mochiy Pop One",sans-serif;font-weight:400;font-size:1.3rem;color:#4A5BC8}
+.stages{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px 12px;margin-top:8px;width:100%}
+.stg{position:relative;display:flex;align-items:center;gap:12px;text-align:left;width:100%;padding:16px 12px 14px;margin-top:10px;
+  border:3px solid #5b3417;border-radius:4px 16px 16px 16px;background:linear-gradient(170deg,#FFFDF6,#FFF1CC);color:#3A1E08;
+  box-shadow:0 5px 0 #5b3417;transition:transform .12s,box-shadow .12s}
+.stg::before{content:attr(data-tab);position:absolute;left:-3px;top:-22px;padding:0 12px;height:22px;line-height:19px;border:3px solid #5b3417;border-bottom:0;
+  border-radius:10px 10px 0 0;background:#FFF1CC;font-family:"Mochiy Pop One",sans-serif;font-size:.72rem;color:#8d5528;letter-spacing:.08em}
+.stg:hover{transform:translateY(-3px);box-shadow:0 8px 0 #5b3417}
+.stg:active{transform:translateY(3px);box-shadow:0 2px 0 #5b3417}
+.stg .n{flex:none;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:var(--k);color:#fff;
+  font-family:"Mochiy Pop One",sans-serif;font-size:1.35rem;border:3px solid #5b3417;box-shadow:0 3px 0 #5b3417}
+.stg .tx{flex:1;min-width:0}
+.stg b{display:block;font-family:"Mochiy Pop One",sans-serif;font-weight:400;font-size:1.1rem;line-height:1.35;color:#3A1E08;word-break:keep-all}
+.stg small{display:block;font-size:.7rem;color:#8a6a48;line-height:1.5;margin-top:3px}
+.stg .ic{flex:none;width:50px;height:50px;border-radius:50%;background:#1B2250;border:3px solid #5b3417;padding:3px}
+.stg .ic svg{width:100%;height:100%}
+.stg .rec{position:absolute;right:10px;top:-19px;color:#E8A320;font-size:.95rem;white-space:nowrap;text-shadow:0 1px 0 #5b3417}
+.stg .rec i{color:#E3D6C2;font-style:normal;text-shadow:none}
+.stg .stp{position:absolute;right:2px;bottom:-4px;z-index:1;transform:rotate(-12deg);border:3px solid #D6342A;color:#D6342A;border-radius:8px;
+  font-family:"Mochiy Pop One",sans-serif;font-size:.74rem;padding:0 6px;opacity:.85;background:rgba(255,255,255,.7);display:none}
+.stg.done{background:linear-gradient(170deg,#F4FFF4,#DDF5DD)}
+.stg.done::before{background:#DDF5DD}
+.stg.done .stp{display:block}
+.labbox{position:relative;width:100%;margin-top:22px;border:3px dashed #8d5528;border-radius:20px;padding:14px 14px 16px;background:rgba(255,255,255,.55)}
+.labbox h3{margin:0 0 2px;font-size:.95rem;color:#5b3417;font-weight:900;letter-spacing:.04em}
+.labbox p{margin:0 0 10px;font-size:.8rem;color:#8a6a48;line-height:1.6}
+.labbtn{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:3px solid #5b3417;border-radius:16px;padding:10px 14px;color:#fff;
+  background:radial-gradient(circle at 85% 20%,rgba(255,255,255,.18) 0 2px,transparent 3px),radial-gradient(circle at 70% 70%,rgba(255,255,255,.14) 0 1.5px,transparent 2.5px),linear-gradient(160deg,#27317A,#141A45);
+  box-shadow:0 5px 0 #5b3417;transition:transform .12s,box-shadow .12s}
+.labbtn:hover{transform:translateY(-3px);box-shadow:0 8px 0 #5b3417}
+.labbtn:active{transform:translateY(3px);box-shadow:0 2px 0 #5b3417}
+.labbtn .ic{flex:none;font-size:1.8rem;line-height:1}
+.labbtn b{display:block;font-family:"Mochiy Pop One",sans-serif;font-weight:400;font-size:1.08rem;color:#FFE7A0}
+.labbtn small{display:block;font-size:.72rem;color:#C9D3F5;line-height:1.5}
+.labbtn .go{margin-left:auto;font-size:1.2rem;color:#FFE7A0}
+.backlink{display:inline-block;margin-top:20px;font-size:.84rem;font-weight:700;color:#5b3417;text-decoration:none;border:2px solid #5b3417;border-radius:999px;padding:6px 18px;background:#fff}
+.backlink:hover{background:#FFF1CC}
+.grade{font-size:.72rem;color:#8a6a48;margin-top:12px}
 
 /* ---------- 共通の画面 ---------- */
 .scr{display:none;padding-top:14px}
@@ -215,17 +247,21 @@ input[type=range]{width:100%;accent-color:#6FE3FF}
   </div>
 
   <div class="tpanel">
-  <p class="kicker">Phases of the Moon</p>
-  <p>月は、いつも <b>太陽の がわが 光って</b> いる。<br>
-     それなのに、見える形は 毎日 かわる。<br>
-     月を 地球の まわりで <b>うごかして</b>、<br>
-     形が かわる ひみつを 見つけよう。</p>
+  <div class="tlabel">🌙 つきの ミッション</div>
+  <div class="intro"><span class="mn" id="introMoon"></span>
+    <p><span class="big">月の 形は どうして かわる？</span>
+    月は いつも <b>太陽の がわが 光って</b> いるよ。3つの ミッションに ちょうせんしよう！</p></div>
+  <p class="tprog" id="prog"></p>
+  <div class="stages">
+    <button class="stg" data-st="0" data-tab="MISSION 1" style="--k:#F0A93F"><span class="n">1</span><span class="tx"><b>形を あてよう</b><small>この 場所の 月は、地球から どう見える？</small></span><span class="ic" data-e="60"></span><span class="rec" id="rec0"></span><span class="stp">クリア</span></button>
+    <button class="stg" data-st="1" data-tab="MISSION 2" style="--k:#8A5BD6"><span class="n">2</span><span class="tx"><b>月を うごかそう</b><small>この 形に 見えるのは、月が どこに いるとき？</small></span><span class="ic" data-e="180"></span><span class="rec" id="rec1"></span><span class="stp">クリア</span></button>
+    <button class="stg" data-st="2" data-tab="MISSION 3" style="--k:#4CB86B"><span class="n">3</span><span class="tx"><b>空の 月を 見よう</b><small>ゆうがた・まよなか・あけがた。空の ？は どの月？</small></span><span class="ic" data-e="270"></span><span class="rec" id="rec2"></span><span class="stp">クリア</span></button>
+  </div>
 
-  <div class="tbtns">
-    <button class="btn go" id="labBtn">じっけんしつ（じゆうに うごかす）</button>
-    <button class="stg" data-st="0"><span class="n">1</span><span><b>形を あてよう</b><small>この 場所の 月は、地球から どう見える？</small></span><span class="rec" id="rec0"></span></button>
-    <button class="stg" data-st="1"><span class="n">2</span><span><b>月を うごかそう</b><small>この 形に 見えるのは、月が どこに いるとき？</small></span><span class="rec" id="rec1"></span></button>
-    <button class="stg" data-st="2"><span class="n">3</span><span><b>空の 月を 見よう</b><small>ゆうがた・まよなか・あけがた。空の ？は どの月？</small></span><span class="rec" id="rec2"></span></button>
+  <div class="labbox">
+    <h3>🔭 もっと よく わかりたい 人へ</h3>
+    <p>むずかしかったら、じっけんしつで 月を じゆうに うごかしてみよう。形が かわる ひみつが 目で 見えるよ。</p>
+    <button class="labbtn" id="labBtn"><span class="ic">🌓</span><span><b>じっけんしつ</b><small>月を 地球の まわりで うごかす</small></span><span class="go">▶</span></button>
   </div>
   <p class="grade">小学4年「月の形と動き」・6年「月と太陽」</p>
 
@@ -524,7 +560,13 @@ var STAGES=[
 ];
 var rec=load("tsuki_michikake_rec",[0,0,0]);
 function starStr(n){var s="";for(var i=0;i<3;i++)s+=i<n?"★":"<i>★</i>";return s;}
-function paintRec(){for(var i=0;i<3;i++)$("#rec"+i).innerHTML=starStr(rec[i]||0);}
+function paintRec(){
+  var c=0;
+  for(var i=0;i<3;i++){$("#rec"+i).innerHTML=starStr(rec[i]||0);$('[data-st="'+i+'"]').classList.toggle("done",(rec[i]||0)>0);if(rec[i]>0)c++;}
+  $("#prog").innerHTML="クリア <b>"+c+"</b> / 3";
+  $$(".stg .ic").forEach(function(e){if(!e.innerHTML)e.innerHTML=faceSVG(+e.dataset.e);});
+  if(!$("#introMoon").innerHTML)$("#introMoon").innerHTML=faceSVG(120);
+}
 var Q={st:0,qs:[],i:0,score:0,done:false,E:0};
 
 function choicesFor(E,pool){
