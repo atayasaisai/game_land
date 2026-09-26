@@ -691,34 +691,17 @@ s+='<defs>'
  +'<linearGradient id="dock" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a5a33"/><stop offset=".12" stop-color="#6b4326"/><stop offset="1" stop-color="#492c17"/></linearGradient>'
  +'<linearGradient id="card" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fbeec9"/><stop offset="1" stop-color="#e3c68f"/></linearGradient>'
  +'</defs>';
-// 空
-s+='<rect x="0" y="0" width="1200" height="330" fill="url(#sky)"/>';
-s+='<circle cx="1020" cy="72" r="54" fill="#fff6bd" opacity=".45"/><circle cx="1020" cy="72" r="32" fill="#fffce8" opacity=".9"/>';
-[[150,96,1],[420,66,.82],[720,110,1.1],[960,150,.7],[300,160,.6]].forEach(function(c){
-  s+='<g transform="translate('+c[0]+','+c[1]+') scale('+c[2]+')" fill="#fff" opacity=".93">'
-   +'<ellipse cx="0" cy="0" rx="46" ry="21"/><ellipse cx="-30" cy="6" rx="28" ry="15"/><ellipse cx="28" cy="7" rx="30" ry="14"/><ellipse cx="-4" cy="-13" rx="26" ry="16"/></g>';});
-// 遠景の山
-s+='<path d="M0 300 L90 228 L150 268 L240 200 L330 272 L420 236 L520 292 L600 250 L700 288 L790 244 L880 286 L980 250 L1080 290 L1200 252 L1200 330 L0 330 Z" fill="#8fbf8a" opacity=".85"/>';
-s+='<path d="M0 316 L110 262 L200 300 L300 258 L400 302 L500 270 L620 308 L720 268 L840 306 L940 272 L1060 310 L1200 274 L1200 340 L0 340 Z" fill="#5f9e63"/>';
-// 遠い森
-var tl='';for(var i=0;i<=40;i++){var tx=i*31,th=20+rnd()*16;tl+='<path d="M'+(tx-15)+' 344 L'+tx+' '+(344-th)+' L'+(tx+15)+' 344 Z" fill="#2f7a4d"/>';}
-s+=tl+'<rect x="0" y="338" width="1200" height="22" fill="#2f7a4d"/>';
-// 手前の木
-for(var i=0;i<10;i++){var tx=250+i*70+rnd()*16,ts=.7+rnd()*.38;
-  s+='<g transform="translate('+tx+',372) scale('+ts+')">'
-   +'<rect x="-5" y="-14" width="10" height="20" fill="#6b4326" stroke="#2f1b0d" stroke-width="2.4"/>'
-   +'<path d="M-22-14 L0-56 L22-14 Z" fill="#3f9e5c" stroke="#1f5c36" stroke-width="2.6" stroke-linejoin="round"/>'
-   +'<path d="M-17-28 L0-62 L17-28 Z" fill="#4bb36a" stroke="#1f5c36" stroke-width="2.6" stroke-linejoin="round"/></g>';}
-// 草原
-s+='<rect x="0" y="360" width="1200" height="310" fill="url(#grass)"/>';
-for(var i=0;i<150;i++){var gx=rnd()*1200,gy=376+rnd()*330;
-  s+='<path d="M'+gx+' '+gy+' l-4 -8 M'+gx+' '+gy+' l0 -10 M'+gx+' '+gy+' l4 -8" stroke="#7ed06a" stroke-width="2" stroke-linecap="round" opacity=".7"/>';}
+// 背景（先方の絵 00_incoming/クエスト背景.png を左右反転。城の門が道の左はしに来るように、大きさと位置を合わせてある）
+s+='<image href="bg.jpg" x="-56" y="0" width="1616" height="760"/>';
 // 道
 var tp='',bp='';
-for(var x=-20;x<=1220;x+=20){tp+=(x===-20?"M":"L")+x+" "+(roadY(x)-RW)+" ";}
-for(var x=1220;x>=-20;x-=20){bp+="L"+x+" "+(roadY(x)+RW)+" ";}
+// 道は城の門から始まる
+var RX0=150;
+for(var x=RX0;x<=1220;x+=20){tp+=(x===RX0?"M":"L")+x+" "+(roadY(x)-RW)+" ";}
+for(var x=1220;x>=RX0;x-=20){bp+="L"+x+" "+(roadY(x)+RW)+" ";}
+s+='<ellipse cx="'+RX0+'" cy="'+roadY(RX0)+'" rx="'+(RW*.7)+'" ry="'+RW+'" fill="url(#road)" stroke="#8a6534" stroke-width="4"/>';
 s+='<path d="'+tp+bp+'Z" fill="url(#road)" stroke="#8a6534" stroke-width="4"/>';
-for(var i=0;i<60;i++){var px=rnd()*1200,py=roadY(px)+(rnd()*60-30);
+for(var i=0;i<60;i++){var px=RX0+10+rnd()*(1200-RX0-10),py=roadY(px)+(rnd()*60-30);
   s+='<ellipse cx="'+px+'" cy="'+py+'" rx="'+(2+rnd()*3)+'" ry="'+(1.4+rnd()*1.6)+'" fill="#9c7440" opacity=".55"/>';}
 
 // 日付の道標（毎日 1本）
@@ -738,7 +721,6 @@ for(var i=1;i<LANE;i++){var dd=addD(today,i);if(dd.getDate()!==1)continue;var xx
    +T(xx+70,(ry-189),"ここから "+(dd.getMonth()+1)+"月","gate","middle",16);}
 
 // 城（左）と勇者（城の右どなり・重ならない）
-s+=castle(88,606,.92,true);
 s+='<path d="M0 666 h224 l-14 -22 h-196 Z" fill="#17100a" opacity=".82"/>'+T(106,662,"あなたの城","cap","middle",16);
 
 var occL=[];
@@ -883,15 +865,6 @@ Object.keys(byDay).map(Number).sort(function(a,b){return a-b;}).forEach(function
 s+=stems;
 draws.sort(function(a,b){return a.y-b.y;}).forEach(function(d){s+=d.html;});
 s+=plates;
-
-// 草原の飾り
-for(var i=0;i<8;i++){var bx2=266+i*78+rnd()*24,by2=614+rnd()*26;
-  s+='<g transform="translate('+bx2+','+by2+')"><ellipse cx="0" cy="0" rx="20" ry="9" fill="rgba(0,0,0,.18)"/>'
-   +'<circle cx="-9" cy="-8" r="11" fill="#2f8f4a" stroke="#1c5c30" stroke-width="2.6"/>'
-   +'<circle cx="8" cy="-10" r="13" fill="#37a356" stroke="#1c5c30" stroke-width="2.6"/>'
-   +'<circle cx="0" cy="-16" r="10" fill="#43b863" stroke="#1c5c30" stroke-width="2.6"/></g>';}
-for(var i=0;i<15;i++){var fx=262+rnd()*600,fy2=608+rnd()*40;
-  s+='<g transform="translate('+fx+','+fy2+')"><circle cx="0" cy="0" r="3.6" fill="'+(["#ffe27a","#ff9ec7","#fff"][i%3])+'" stroke="#2f1b0d" stroke-width="1.4"/><circle cx="0" cy="0" r="1.2" fill="#e0a21c"/></g>';}
 
 /* ===== HUD ===== */
 // 口座残高の内訳：生活防衛ライン／次の収入までに確定で出ていく額／自由に撃てる額
