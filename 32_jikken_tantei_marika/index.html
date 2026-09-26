@@ -56,24 +56,39 @@ button{font-family:inherit;color:inherit;cursor:pointer}
 .tlogo{margin:18px 0 0;line-height:0}
 @keyframes hop{0%,100%{transform:translateY(0) rotate(-1.5deg)}50%{transform:translateY(-6px) rotate(1.5deg)}}
 .tlogo img{width:min(86vw,400px);height:auto;filter:drop-shadow(0 6px 10px rgba(30,20,10,.35));animation:hop 2.4s ease-in-out infinite}
-.tpanel{margin-top:22px;width:100%;max-width:540px;display:flex;flex-direction:column;align-items:center;gap:6px;
-  background:linear-gradient(165deg,rgba(40,30,52,.94),rgba(16,14,28,.96));border:3px solid #4A3A5E;border-radius:28px;
-  padding:18px 16px 22px;box-shadow:0 10px 30px rgba(10,20,50,.45)}
-.tpanel{--ink:#F3EEE4;--sub:#B4AC9C;--line:rgba(255,240,210,.14);color:var(--ink)}
-.kicker{font-size:.7rem;letter-spacing:.42em;color:var(--sub);text-transform:uppercase;margin:0 0 0 .42em}
-.tpanel p{max-width:26em;color:var(--sub);font-size:.9rem;margin:10px 0 4px;text-wrap:balance}
-.tpanel p b{color:var(--ink)}
-.files{display:flex;flex-direction:column;gap:8px;margin-top:14px;width:100%;max-width:400px}
-.file{display:flex;align-items:center;gap:12px;text-align:left;width:100%;border:1px solid var(--line);border-radius:14px;
-  padding:9px 12px;background:rgba(255,255,255,.04);transition:.15s}
-.file:hover{border-color:rgba(242,193,78,.55);background:rgba(242,193,78,.08)}
-.file .n{font-family:"Mochiy Pop One",sans-serif;font-size:1.1rem;color:var(--gold);min-width:1.6em;text-align:center}
-.file b{display:block;font-size:.92rem;line-height:1.4}
-.file small{display:block;font-size:.7rem;color:var(--sub);line-height:1.45}
-.file .rec{margin-left:auto;color:#ffd43b;font-size:.85rem;white-space:nowrap}
-.file .rec i{color:#4a4458;font-style:normal}
-.backlink{display:inline-block;margin-top:20px;font-size:.82rem;color:var(--sub);text-decoration:none;border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:6px 18px}
-.backlink:hover{color:#fff;border-color:rgba(255,255,255,.5)}
+.tpanel{position:relative;margin-top:34px;width:100%;max-width:640px;display:flex;flex-direction:column;align-items:center;gap:6px;
+  background:repeating-linear-gradient(135deg,rgba(255,255,255,.35) 0 12px,transparent 12px 24px),linear-gradient(170deg,#FFF6D8,#FFE7A6);
+  border:4px solid #5b3417;border-radius:26px;padding:34px 14px 20px;box-shadow:0 8px 0 #5b3417,0 16px 30px rgba(60,35,10,.3);color:var(--ink)}
+.tlabel{position:absolute;left:50%;top:-22px;transform:translateX(-50%) rotate(-2deg);white-space:nowrap;
+  background:#D6342A;color:#fff;font-family:"Mochiy Pop One",sans-serif;font-size:clamp(1.05rem,4.8vw,1.35rem);letter-spacing:.06em;
+  padding:6px 20px;border-radius:12px;border:3px solid #5b3417;box-shadow:0 4px 0 #5b3417}
+.intro{display:flex;align-items:flex-end;gap:10px;width:100%;max-width:560px}
+.intro img{width:96px;height:auto;flex:none}
+.intro .bubble{font-size:.9rem;padding:10px 14px;text-align:left}
+.intro .bubble b{color:#C0392B}
+.intro .bubble .big{display:block;font-family:"Mochiy Pop One",sans-serif;font-size:clamp(1.05rem,4.4vw,1.3rem);color:#3A1E08;line-height:1.4;margin-bottom:4px;word-break:keep-all}
+.prog{margin:10px 0 2px;font-weight:900;color:#5b3417;font-size:.9rem}
+.prog b{font-family:"Mochiy Pop One",sans-serif;font-weight:400;font-size:1.3rem;color:#D6342A}
+.files{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px 12px;margin-top:14px;width:100%}
+.file{position:relative;display:flex;align-items:center;gap:12px;text-align:left;width:100%;padding:16px 12px 12px;margin-top:10px;
+  border:3px solid #5b3417;border-radius:4px 16px 16px 16px;background:linear-gradient(170deg,#FFFDF6,#FFF1CC);color:var(--ink);
+  box-shadow:0 5px 0 #5b3417;transition:transform .12s,box-shadow .12s}
+.file::before{content:attr(data-case);position:absolute;left:-3px;top:-22px;padding:0 12px;height:22px;line-height:19px;border:3px solid #5b3417;border-bottom:0;
+  border-radius:10px 10px 0 0;background:#FFF1CC;font-family:"Mochiy Pop One",sans-serif;font-size:.72rem;color:#8d5528;letter-spacing:.08em}
+.file:hover{transform:translateY(-3px);box-shadow:0 8px 0 #5b3417}
+.file:active{transform:translateY(3px);box-shadow:0 2px 0 #5b3417}
+.file .n{flex:none;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:var(--k,#2F7FD0);color:#fff;
+  font-family:"Mochiy Pop One",sans-serif;font-size:1.35rem;border:3px solid #5b3417;box-shadow:0 3px 0 #5b3417}
+.file b{display:block;font-family:"Mochiy Pop One",sans-serif;font-weight:400;font-size:1.08rem;line-height:1.35;color:#3A1E08;word-break:keep-all}
+.file small{display:block;font-size:.68rem;color:var(--sub);line-height:1.45;margin-top:3px}
+.file .rec{position:absolute;right:10px;top:-19px;color:#E8A320;font-size:.95rem;white-space:nowrap;text-shadow:0 1px 0 #5b3417}
+.file .rec i{color:#E3D6C2;font-style:normal;text-shadow:none}
+.file .stp{position:absolute;right:8px;bottom:6px;transform:rotate(-12deg);border:3px solid #D6342A;color:#D6342A;border-radius:8px;
+  font-family:"Mochiy Pop One",sans-serif;font-size:.8rem;padding:0 6px;opacity:.85;background:rgba(255,255,255,.6)}
+.file.done{background:linear-gradient(170deg,#F4FFF4,#DDF5DD)}
+.file.done::before{background:#DDF5DD}
+.backlink{display:inline-block;margin-top:20px;font-size:.84rem;font-weight:700;color:#5b3417;text-decoration:none;border:2px solid #5b3417;border-radius:999px;padding:6px 18px;background:#fff}
+.backlink:hover{background:#FFF1CC}
 
 /* ---------- じけん ---------- */
 #play{display:none;padding-top:12px}
@@ -180,13 +195,13 @@ button{font-family:inherit;color:inherit;cursor:pointer}
   <h1 class="tlogo"><img src="art/title.png" alt="実験探偵まりか" width="362" height="300"></h1>
 
   <div class="tpanel">
-  <p class="kicker">Science Detective</p>
-  <p>わたしは <b>探偵まりか</b>。<br>
-     なぞを とく 決め手は <b>理科の 実験</b>！<br>
-     道具と 薬品を えらんで しらべ、<br>
-     わかったら「<b>これが答えだ！</b>」を おしてね。</p>
+  <div class="tlabel">🔍 じけんファイル</div>
+  <div class="intro"><img src="art/marika_look.png" alt="">
+    <div class="bubble"><span class="who">探偵まりか</span><span class="big">なぞを とく 決め手は 理科の 実験！</span>
+    道具と 薬品を えらんで しらべ、わかったら「<b>これが答えだ！</b>」を おしてね。</div></div>
+  <p class="prog" id="prog"></p>
   <div class="files" id="files"></div>
-  <p style="font-size:.72rem;color:var(--faint);margin-top:12px">小学3年〜6年の 理科の 実験から</p>
+  <p style="font-size:.72rem;color:var(--sub);margin-top:14px">小学3年〜6年の 理科の 実験から</p>
   <a class="backlink" href="../">◀ あたやさいさいゲームランドへ もどる</a>
   </div>
 </section>
@@ -530,12 +545,15 @@ var REC=load();
 var $=function(id){return document.getElementById(id);};
 var st=null;
 
+var FCOL=["#E4473B","#2F7FD0","#E8A320","#1FA873","#8A5BD6","#E0703A","#3AA0C0","#4CA64C","#D94F8C"];
 function paintFiles(){
+  var done=0;
   $("files").innerHTML=CASES.map(function(c,i){
-    var s=REC[i]||0;
-    return '<button class="file" data-i="'+i+'"><span class="n">'+(i+1)+'</span><span><b>'+c.t+'</b><small>'+c.g+'</small></span><span class="rec">'+
-      (s?"★".repeat(s)+"<i>"+"★".repeat(3-s)+"</i>":"<i>★★★</i>")+'</span></button>';
+    var s=REC[i]||0; if(s) done++;
+    return '<button class="file'+(s?" done":"")+'" data-i="'+i+'" data-case="CASE '+(i<9?"0":"")+(i+1)+'" style="--k:'+FCOL[i%FCOL.length]+'"><span class="n">'+(i+1)+'</span><span><b>'+c.t+'</b><small>'+c.g+'</small></span>'+
+      '<span class="rec">'+"★".repeat(s)+"<i>"+"★".repeat(3-s)+"</i></span>"+(s?'<span class="stp">かいけつ</span>':"")+'</button>';
   }).join("");
+  $("prog").innerHTML='かいけつした じけん　<b>'+done+'</b> ／ '+CASES.length;
 }
 $("files").addEventListener("click",function(e){var b=e.target.closest(".file");if(b) start(+b.dataset.i);});
 
