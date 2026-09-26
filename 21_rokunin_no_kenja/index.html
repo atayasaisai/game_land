@@ -202,6 +202,15 @@ img.sage.hop{animation:hop .3s steps(2)}
 .learnbox .lbhead{margin:0 0 6px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .learnbox .lbhead b{font-family:"Mochiy Pop One",sans-serif;font-weight:400;font-size:clamp(.8rem,2.4vw,.95rem);background:var(--ai);color:#fff;border-radius:999px;padding:1px 10px}
 .learnbox .lbhead small{font-size:.68rem;color:var(--sub)}
+.learnbox .fold{margin-left:auto;font:inherit;font-size:.72rem;font-weight:700;background:#fff;color:var(--ink);border:2px solid var(--ink);border-radius:999px;padding:1px 9px;cursor:pointer}
+.learnbox .fold .cnt{display:none;background:var(--do);color:#fff;border-radius:999px;padding:0 5px;margin-left:3px;font-size:.62rem}
+/* たたんだとき：見出しの 小さな ふだ だけに する（おすと ひらく） */
+.learnbox.folded{padding:4px 6px}
+.learnbox.folded .lbhead{margin:0}
+.learnbox.folded .lbhead small,.learnbox.folded .learnchips{display:none}
+.learnbox.folded .fold .cnt.on{display:inline-block}
+.learnbox.folded.ping{animation:ping .5s}
+@keyframes ping{50%{transform:scale(1.12)}}
 .learnchips{display:flex;flex-direction:column;gap:6px;align-items:flex-start}
 .chip{display:flex;align-items:center;gap:6px;background:#fff;border:3px solid var(--ink);border-radius:999px;padding:3px 12px 3px 4px;box-shadow:3px 3px 0 var(--ink);
   font-size:clamp(.72rem,2.3vw,.9rem);text-align:left;animation:chipin .45s cubic-bezier(.2,1.6,.4,1)}
@@ -296,7 +305,7 @@ img.sage.hop{animation:hop .3s steps(2)}
   </div>
   <div class="stats" id="stats"></div>
   <div class="learnbox" id="learnbox">
-    <p class="lbhead"><b>📖 社会の豆知識</b><small>おすと 読めるよ</small></p>
+    <p class="lbhead"><b>📖 社会の豆知識</b><small>おすと 読めるよ</small><button class="fold" id="lbFold" type="button" aria-expanded="true"><span id="lbFoldTx">たたむ ▴</span><span class="cnt" id="lbCnt"></span></button></p>
     <div class="learnchips" id="chips"></div>
   </div>
 
@@ -574,9 +583,22 @@ function addChip(id, isNew) {
   b.innerHTML = `<img src="${c.pic}" alt=""><span>${c.q}</span>`;
   b.addEventListener("click", () => { b.classList.add("read"); b.classList.remove("new"); openCard(id); });
   const box = $("chips"); box.prepend(b); $("learnbox").classList.add("on");
+  // たたんでいる ときは ひらかず、見ていない 札の 数だけ 見出しに 出す
+  if (lbFolded) { lbUnseen++; drawFold(); const lb = $("learnbox"); lb.classList.remove("ping"); void lb.offsetWidth; lb.classList.add("ping"); }
   // 画面が せまいので、出ているのは あたらしい 4まいまで（のこりは けっかと ノートで 読める）
   [...box.children].slice(4).forEach((x) => x.remove());
 }
+// 「たたむ」：スマホで 札が 地図を かくすので、見出しだけに できる（えらんだ 形は つぎも そのまま）
+const LS_FOLD = "kenja.lbFold";
+let lbFolded = lsGet(LS_FOLD, false), lbUnseen = 0;
+function drawFold() {
+  $("learnbox").classList.toggle("folded", lbFolded);
+  $("lbFold").setAttribute("aria-expanded", String(!lbFolded));
+  $("lbFoldTx").textContent = lbFolded ? "ひらく ▾" : "たたむ ▴";
+  $("lbCnt").textContent = lbUnseen ? "+" + lbUnseen : ""; $("lbCnt").classList.toggle("on", lbUnseen > 0);
+}
+$("lbFold").addEventListener("click", () => { SND.tap(); lbFolded = !lbFolded; if (!lbFolded) lbUnseen = 0; lsSet(LS_FOLD, lbFolded); drawFold(); });
+drawFold();
 function openCard(id) {
   const c = SHAKAI_BY[id]; SND.tap();
   $("kcPic").src = c.pic; $("kcField").textContent = c.field; $("kcTitle").textContent = c.title; $("kcBody").textContent = c.body;
@@ -599,7 +621,7 @@ function showNote() {
 // ---- はじめる ----
 function startGame() {
   st = RULES.newState(); busy = false; prevStats = null;
-  st.learned = []; $("chips").innerHTML = ""; $("learnbox").classList.remove("on");
+  st.learned = []; $("chips").innerHTML = ""; $("learnbox").classList.remove("on"); lbUnseen = 0; drawFold();
   $("result").classList.remove("on"); $("showRes").style.display = "none"; $("bottom").style.display = ""; $("sbubble").classList.remove("on");
   if (!$("kingPic").firstChild) $("kingPic").innerHTML = ART.king();
   buildField(); drawAll(); drawHud();
