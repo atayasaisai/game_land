@@ -79,6 +79,12 @@ button{font-family:inherit;font-weight:700;cursor:pointer}
 .chip{background:rgba(255,252,240,.92);border:2.5px solid var(--ink);border-radius:999px;padding:2px 12px;font-size:clamp(.72rem,2.2vw,1rem);box-shadow:0 3px 0 var(--ink);white-space:nowrap}
 .chip b{font-family:"Mochiy Pop One",sans-serif;font-weight:400;font-size:1.25em;color:var(--do)}
 .hud .r{display:flex;gap:6px;pointer-events:auto}
+.hud .l{display:flex;gap:6px}
+.hearts{color:#E8394D;letter-spacing:.05em}
+.hearts[hidden]{display:none}
+.hearts i{font-style:normal}
+.hearts i.e{color:rgba(60,40,30,.25)}
+.hearts.pop{animation:lpop .45s cubic-bezier(.2,1.8,.4,1)}
 .icon{width:34px;height:34px;border-radius:50%;border:2.5px solid var(--ink);background:#fff;box-shadow:0 3px 0 var(--ink);font-size:.95rem;padding:0;line-height:1}
 .banner{position:absolute;left:50%;top:30%;transform:translate(-50%,-50%);font-family:"Mochiy Pop One",sans-serif;font-size:clamp(1.1rem,4.4vw,2.2rem);
   color:#fff;white-space:nowrap;pointer-events:none;opacity:0;
@@ -155,6 +161,7 @@ button.zc:active{transform:scale(.95)}
 .zk .n{font-size:.75rem;color:var(--do);white-space:nowrap}
 .zk .say{border:2px solid var(--ink);border-radius:999px;background:#fff;font-size:.75rem;padding:1px 8px;box-shadow:0 2px 0 var(--ink)}
 .wordbar{position:absolute;left:50%;top:clamp(36px,9vw,54px);transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:3px;pointer-events:none}
+.wordbar[hidden]{display:none}
 .wordbar .sl{display:flex;gap:clamp(4px,1.2vw,8px)}
 .wordbar .sl i{font-style:normal;width:clamp(34px,8.4vw,62px);height:clamp(40px,9.6vw,70px);display:grid;place-items:center;border:3px solid var(--ink);border-radius:12px;
   background:rgba(255,252,240,.94);font-family:"Mochiy Pop One",sans-serif;font-size:clamp(1.4rem,5.6vw,2.7rem);box-shadow:0 4px 0 var(--ink);color:var(--ai)}
@@ -212,7 +219,7 @@ button.zc:active{transform:scale(.95)}
     <div class="eigo">
       <b class="etag">えいごモード（えいごアイテム）</b>
       <p>画面の 上に <b>おだい</b>（🐱 ねこ など）が 出るよ。<br>おちている <b>アルファベット</b>を えいごの つづりの <b>じゅんばんに ひろおう</b>。<br>
-         上の もじは ジャンプで、下の もじは そのまま 走って とる。いらない もじは よけよう。<br>できたら 意味が わかって、<b>ふしぎな こうか</b>が おきる！</p>
+         上の もじは ジャンプで、下の もじは そのまま 走って とる。いらない もじは よけよう。<br>できたら 意味が わかって、<b>ふしぎな こうか</b>が おきる！<br><b style="color:#E8394D">♥ ハートは 3つ</b>。ぶつかると 1つ へって、ぜんぶ なくなると おしまい。</p>
       <div class="zukan" id="zukan"></div>
       <button class="btn eg" id="eigoBtn2">えいごモードで はしる ▶</button>
       <p class="best" id="tBestE"></p>
@@ -226,7 +233,7 @@ button.zc:active{transform:scale(.95)}
   <div class="stage" id="stage">
     <canvas id="cv" aria-label="にんじゃくんが 走る ゲームの画面"></canvas>
     <div class="hud">
-      <div class="chip"><b id="hDist">0</b> m</div>
+      <div class="l"><div class="chip"><b id="hDist">0</b> m</div><div class="chip hearts" id="hHeart" hidden></div></div>
       <div class="chip" id="hArea">まちなみ</div>
       <div class="r"><div class="chip"><span class="sp-lab">はやさ </span><b id="hSpeed">×1.0</b></div>
         <button class="icon" id="hSound" aria-label="おとの きりかえ">♪</button><button class="icon" id="hHome" aria-label="さいしょの画面へ">✕</button></div>
@@ -360,14 +367,27 @@ let dist, speed, t, vy, jy, air, landT, joyT, hitT, hitOb, obs, nextWX, buffered
 // エンドレス：子どもむけに ゆっくり 加速。1200mまでは 1mごとに +0.2、そのあとも もっと ゆっくり ずっと はやくなる（上かぎり なし）
 //   300m→×1.3　600m→×1.5　900m→×1.8　1200m→×2.1　2000m→×2.3
 function speedAt(m){ return m<=1200 ? 220 + m*0.2 : 460 + (m-1200)*0.06; }
+// えいごモードは もじを 集めながら 長く あそべるよう、はやく なる ペースを ふつうの 半分に（600mで ×1.3、1200mで ×1.5）。
+//   はやさは sm（はやさの メートル）で きめる。SLOW の おだいが できると sm=0 で さいしょの はやさに もどる
+const EIGO_ACC=.5;
+let sm=0;
+// えいごモードは ハート（lives）で あそぶ。3つから はじまり、ぶつかると 1つ へる（そのあと invT びょう むてき）。0に なったら ゲームオーバー
+const LIFE0=3, LIFE_MAX=5;
+let lives=LIFE0, invT=0;
+function baseSpeed(){ return mode==="eigo" ? speedAt(sm) : speedAt(dist/PXM); }
 
 function reset(){
-  dist=0; speed=speedAt(0); t=0; vy=0; jy=0; air=false; landT=0; joyT=0; hitT=0; hitOb=null;
+  dist=0; sm=0; lives=LIFE0; invT=0; speed=speedAt(0); t=0; vy=0; jy=0; air=false; landT=0; joyT=0; hitT=0; hitOb=null;
   obs=[]; lastKs=[]; nextWX=NX+W*1.4; buffered=0; fade={from:0,to:0,a:1}; curArea=0; dust=[];
   letters=[]; buf=""; odai=null; odaiN=0; recent=[]; doneWord=null; doneT=0; nextT=0; jumpK=1; reading=0; $("wpop").classList.remove("on"); $("wrong").classList.remove("on"); $("stage").classList.remove("reading");
   fxT={}; flakes=[]; drops=[]; sparks=[]; parade=[]; made={}; gapStart=null; lastLetter="";
   if(mode==="eigo") newOdai();
-  $("result").classList.remove("on"); $("hArea").textContent=AREAS[0]; paintHud(); paintWord(); paintFx();
+  $("result").classList.remove("on"); $("hArea").textContent=AREAS[0]; paintHud(); paintHearts(); paintWord(); paintFx();
+}
+function paintHearts(pop){
+  const h=$("hHeart"); h.hidden=mode!=="eigo"; if(h.hidden) return;
+  h.innerHTML="<i>♥</i>".repeat(lives)+'<i class="e">♥</i>'.repeat(Math.max(0,LIFE0-lives));
+  if(pop){ h.classList.remove("pop"); void h.offsetWidth; h.classList.add("pop"); }
 }
 let looping=false;
 function start(){
@@ -449,7 +469,7 @@ function makeCombo(m,v){
 let lastKs=[];
 function spawn(){
   while(nextWX < dist + W + 40 + (mode==="eigo"?700:0)){    // えいごアイテムは さきまで 作っておき、もじを 画面の外に おく
-    const m=nextWX/PXM, v=speedAt(m), stage=Math.floor(m/AREA_M);
+    const m=nextWX/PXM, v=mode==="eigo"?speedAt(sm+(nextWX-dist)/PXM*EIGO_ACC):speedAt(m), stage=Math.floor(m/AREA_M);
     const skip=areaGap(nextWX); if(skip){ nextWX=skip; continue; }
     let tail;
     const pCombo=stage<1?0:Math.min(.35,.12*stage);          // 2つ組は 2ステージめから、だんだん ふえる
@@ -517,6 +537,7 @@ function update(dt){
     fxT[w]=Math.max(0,fxT[w]-dt);
     if(w==="DASH"&&fxT[w]===0) fxT.SAFE=Math.max(fxT.SAFE||0,1.2);   // ダッシュの おわりは 速さが かわるので 少しだけ むてきを のこす
   }
+  if(invT>0 && !(fxT.STOP>0)) invT=Math.max(0,invT-dt);
   stepWeather(dt);
   if(mode==="eigo") paintFx();
   if(state==="run" && fxT.STOP>0){                        // STOP：ぜんぶ とまって ひとやすみ
@@ -524,9 +545,9 @@ function update(dt){
     return;
   }
   if(state==="run"){
-    const slow=(fxT.SLOW>0?.6:1)*(fxT.DASH>0?1.4:1);
-    speed=speedAt(dist/PXM)*slow;
-    const before=dist; dist+=speed*dt;
+    const slow=fxT.DASH>0?1.4:1;
+    speed=baseSpeed()*slow;
+    const before=dist; dist+=speed*dt; sm+=speed*dt/PXM*EIGO_ACC;
     for(const o of obs){ const K=KINDS[o.k]; if(K && K.vx && ox(o)<W+30) o.wx-=K.vx*slow*dt; if(o.squish!=null) o.squish+=dt; }
     // 景色のかわりめ
     const a=Math.floor(dist/PXM/AREA_M);
@@ -539,8 +560,7 @@ function update(dt){
     if(fade.a<1) fade.a=Math.min(1,fade.a+dt/1.4);
     // ジャンプ
     if(air){
-      const tk=fxT.SLOW>0?.6:1;                              // SLOW は じぶんも スローモーション（ジャンプも ゆっくり）
-      jy+=vy*dt*tk; vy-=G*jumpK*dt*tk;
+      jy+=vy*dt; vy-=G*jumpK*dt;
       if(jy<=0){ jy=0; vy=0; air=false; landT=0.14; puff();
         if(buffered>0){ buffered=0; jumpK=fxT.JUMP>0?1.35:1; vy=V0*jumpK; air=true; landT=0; SE.jump(); } }
     }
@@ -550,7 +570,7 @@ function update(dt){
     spawn();
     // あたり（忍者くんは からだの まんなかだけで はかる）
     const n=[NX-12, GROUND-jy-60, NX+14, GROUND-jy-4];
-    if(!(fxT.SAFE>0||fxT.STAR>0||fxT.DASH>0)) hit: for(const o of obs){
+    if(!(fxT.SAFE>0||fxT.STAR>0||fxT.DASH>0||invT>0)) hit: for(const o of obs){
       if(o.squish!=null) continue;
       for(const b of obBoxes(o))
         if(b[2]>n[0] && b[0]<n[2] && b[3]>n[1] && b[1]<n[3]){
@@ -575,6 +595,14 @@ function update(dt){
 function puff(){ for(let i=0;i<5;i++) dust.push({x:NX-10+Math.random()*24,y:GROUND-2,vx:(Math.random()-.5)*40,vy:-20-Math.random()*30,t:0}); }
 
 function crash(o){
+  if(mode==="eigo" && lives>1){                       // ハートが のこって いれば 1つ へらして そのまま 走る
+    lives--; invT=2; paintHearts(true);
+    o.squish=0; SE.hit();
+    const st=$("stage"); st.classList.remove("shake"); void st.offsetWidth; st.classList.add("shake");
+    banner(`いたっ！ ハート のこり ${lives}`);
+    return;
+  }
+  if(mode==="eigo"){ lives=0; paintHearts(true); }
   state="hit"; hitT=0; hitOb=o; air=false; vy=0;
   SE.hit();
   const st=$("stage"); st.classList.remove("shake"); void st.offsetWidth; st.classList.add("shake");
@@ -598,13 +626,14 @@ function gameOver(){
 
 /* ───────── えいごアイテム モード（おだい方式） ─────────
    画面の上に「おだい」（絵と 日本語）が 出る。落ちている アルファベットを その単語の じゅんばんに ひろう。
-   上の もじは ジャンプで、下の もじは 走って とる。ちがう もじを とると、ならびが きえる。
+   上の もじは ジャンプで、下の もじは 走って とる。ちがう もじを とっても「ちがうよ！」と 出るだけで、あつめた もじは そのまま。
    できたら 読み上げて 意味を 出し、その単語の 効果が 出る。つぎの おだいへ。
    単語は 小学校の 外国語で 出てくる 3〜4もじの 50語（WORDS）と、とくべつな 5語（SPECIAL）。
    効果（FX）は、意味に あうものは その効果、あわないものは 絵が 空を とぶ＋小さな おまけ（help）。 */
 const FX={
   STOP:{dur:4,  c:"#F0603F",tag:"STOP", msg:"4びょう ぜんぶ とまるぞ！ ひとやすみ",       zk:"てきも じぶんも とまって ひとやすみ"},
-  SLOW:{dur:8,  c:"#4CB86B",tag:"SLOW", msg:"しばらく てきが ゆっくりに なるぞ！",       zk:"てきが ゆっくりに なる"},
+  LIFE:{dur:0,  c:"#E8394D",tag:"♥",    msg:"ハートが ふえた！",                        zk:"ハートが 1つ ふえる"},   // すぐ きく
+  SLOW:{dur:0,  c:"#4CB86B",tag:"SLOW", msg:"はやさが さいしょに もどったぞ！",          zk:"はやさが さいしょに もどる"},   // すぐ きく（のこり びょうは ない）
   SAFE:{dur:7,  c:"#F5B70A",tag:"SAFE", msg:"しばらく むてき！ ぶつかっても へいきだ！",   zk:"むてきに なる"},
   SNOW:{dur:12, c:"#6FA8DC",tag:"SNOW", msg:"ゆきが ふってきたぞ！",                     zk:"ゆきが ふる"},
   SOFT:{dur:10, c:"#E0569A",tag:"SOFT", msg:"しばらく しょうがいぶつが やわらかく なるぞ！", zk:"しょうがいぶつが やわらかくなって、ぶつかっても だいじょうぶ"},
@@ -618,7 +647,7 @@ const FX={
   HANABI:{dur:6,c:"#E0569A",tag:"HOT",  msg:"はなびが あがったぞ！",                     zk:"はなびが あがる"},
 };
 /* help：絵が 空を とぶ 単語に つく 小さな おまけ（5びょう） */
-const HELP=["SAFE","SLOW","JUMP","SOFT"];
+const HELP=["SAFE","SLOW","LIFE","JUMP","SOFT"];
 const WORDS=[
  // どうぶつ
  ["CAT","🐱","ねこ","キャット"],["DOG","🐶","いぬ","ドッグ"],["PIG","🐷","ぶた","ピッグ"],["COW","🐮","うし","カウ"],["FOX","🦊","きつね","フォックス"],
@@ -701,14 +730,10 @@ function grab(L){
     if(buf===odai.w) wordDone();
   }else{
     tone(300,180,.18,"sawtooth",.07);
-    const had=buf.length;
-    buf= L.ch===odai.w[0] ? L.ch : "";
     const sl=$("wSlots"); sl.classList.remove("ng"); void sl.offsetWidth; sl.classList.add("ng");
     const nx=`「<em>${need()}</em>」`;
     $("wrB").textContent=`「${L.ch}」は ちがうよ！`;
-    $("wrS").innerHTML= buf ? `「${buf}」から やりなおし。つぎは ${nx} だよ`
-                      : had ? `あつめた もじが きえちゃった… また ${nx} を とってね`
-                            : `つぎは ${nx} だよ`;
+    $("wrS").innerHTML=`つぎは ${nx} だよ`;      // あつめた もじは きえない（きえるのは きびしすぎた）
     const wr=$("wrong"); wr.classList.remove("on"); void wr.offsetWidth; wr.classList.add("on");
   }
   paintWord();
@@ -724,7 +749,12 @@ function wordDone(){
   pp.classList.remove("on"); void pp.offsetWidth; pp.classList.add("on");
   say(o.w); reading=performance.now(); $("stage").classList.add("reading");   // 読むあいだは とまる（タップで つづき）
   [523,659,784,1047,1319].forEach((f,i)=>tone(f,f,.14,"square",.07,i*.07));
-  fxT[k]=o.fx?F.dur:5;
+  if(k==="SLOW"){ sm=0; speed=speedAt(0); paintHud(); }   // はやさを さいしょに もどす
+  else if(k==="LIFE"){                                     // ハートを 1つ ふやす（5つまで）
+    if(lives<LIFE_MAX){ lives++; paintHearts(true); }
+    else $("wpF").textContent=`${o.e} が とんでいくよ！ ハートは もう いっぱい！`;
+  }
+  else fxT[k]=o.fx?F.dur:5;
   if(!o.fx) for(let i=0;i<9;i++) parade.push({e:o.e,x:W+30+i*55,y:40+Math.random()*120,v:130+Math.random()*60,ph:Math.random()*6,s:22+Math.random()*14});
   if(k==="STOP") vy=Math.min(vy,0);
   if(k==="SNOW") for(let i=0;i<60;i++) flakes.push(newFlake(true));
@@ -916,7 +946,7 @@ function draw(){
       if(fxT.STAR>0){ ctx.font="16px sans-serif"; ctx.textAlign="center"; for(let i=0;i<4;i++){ const a=t*3+i*Math.PI/2; ctx.fillText("⭐",NX+Math.cos(a)*44,feet-34+Math.sin(a)*48); } }
       if(fxT.DASH>0){ ctx.strokeStyle="rgba(255,255,255,.8)"; ctx.lineWidth=2; for(let i=0;i<5;i++){ const yy=feet-60+i*12+((t*40+i*7)%6); ctx.beginPath(); ctx.moveTo(NX-60-i*6,yy); ctx.lineTo(NX-30,yy); ctx.stroke(); } }
     }
-    frame(f,NX,feet+bob,fxT.BIG>0?1.5:1);
+    if(!(invT>0 && Math.floor(t*10)%2)) frame(f,NX,feet+bob,fxT.BIG>0?1.5:1);   // ぶつかった あとの むてきは ちかちか
   }else{
     const b=obBox(hitOb), hitX=Math.min(b[0],NX+14);   // ぶつかった ものの 左はし
     if(hitT<.5){ const kb=Math.min(1,hitT/.12)*6; shadow(hitX-18,jy); frame(SPR.bump, hitX-4-kb, feet); }
