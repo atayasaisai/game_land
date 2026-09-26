@@ -96,8 +96,8 @@ button{font-family:inherit;font-weight:700;cursor:pointer;color:inherit}
   padding:2px 10px;font-size:.74rem}
 .hud .snd{padding:2px 8px}
 .hud .sname{flex:1;min-width:0;font-size:.86rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.hud .dots{display:flex;gap:5px}
-.hud .dots i{width:13px;height:13px;border-radius:50%;border:2px solid #fff;display:block}
+.hud .dots{display:flex;gap:4px}
+.hud .dots i{width:12px;height:12px;border-radius:50%;border:2px solid #fff;display:block}
 .hud .dots i.done{background:var(--raku)}
 .hud .dots i.now{background:var(--ki);animation:pulse 1s ease-in-out infinite}
 @keyframes pulse{50%{transform:scale(1.25)}}
@@ -236,7 +236,7 @@ button{font-family:inherit;font-weight:700;cursor:pointer;color:inherit}
   </div>
 
   <div class="panel">
-    <h3>どの島へ いく？<small>島を えらぶと はじまります（1つの島で 橋が5本）</small></h3>
+    <h3>どの島へ いく？<small>島を えらぶと はじまります（1つの島で 橋が10本）</small></h3>
     <div class="islands" id="isles"></div>
 
     <div class="opt">
@@ -307,9 +307,9 @@ button{font-family:inherit;font-weight:700;cursor:pointer;color:inherit}
 
 /* ═══════════ 英文の島 ═══════════
    1行 = 1問。[ ] の中が あなになる ことば（英字だけ）。｜のあとが 日本語。
-   島をふやすときは、この配列に1つ足すだけ。 */
+   島をふやすときは、この配列に1つ足すだけ。bg は その島の 背景の絵（00_incoming/イングリッシュ背景*.png から切り出し）。 */
 var STAGES = [
- {id:"hello", name:"はじめまして", lv:1, c:"var(--raku)", q:[
+ {id:"hello", name:"はじめまして", lv:1, c:"var(--raku)", bg:"bg_flowers.jpg", q:[
   "[Hello], I am Ken.|こんにちは、ぼくは ケンです。",
   "Good [morning].|おはよう。",
   "Thank [you].|ありがとう。",
@@ -321,7 +321,7 @@ var STAGES = [
   "I am [fine].|げんきです。",
   "I am ten years [old].|わたしは 10さいです。",
   "Good [night].|おやすみなさい。"]},
- {id:"animal", name:"どうぶつ", lv:1, c:"var(--raku)", q:[
+ {id:"animal", name:"どうぶつ", lv:1, c:"var(--raku)", bg:"bg_jungle.jpg", q:[
   "I like [cats].|わたしは ねこが すきです。",
   "The [dog] is big.|その 犬は 大きい。",
   "I see a [bird].|鳥が 見えます。",
@@ -333,7 +333,7 @@ var STAGES = [
   "A [horse] can run fast.|馬は はやく 走れます。",
   "The [frog] is green.|その カエルは みどり色です。",
   "I have a [dog].|わたしは 犬を かっています。"]},
- {id:"food", name:"たべもの", lv:1, c:"var(--raku)", q:[
+ {id:"food", name:"たべもの", lv:1, c:"var(--raku)", bg:"bg_castle.jpg", q:[
   "I like [apples].|わたしは りんごが すきです。",
   "I eat [bread] every morning.|わたしは まいあさ パンを 食べます。",
   "I drink [milk].|わたしは 牛乳を のみます。",
@@ -345,7 +345,7 @@ var STAGES = [
   "I eat an [egg].|わたしは たまごを 1こ 食べます。",
   "The [soup] is good.|その スープは おいしい。",
   "I like [rice].|わたしは ごはんが すきです。"]},
- {id:"color", name:"いろ と かず", lv:1, c:"var(--raku)", q:[
+ {id:"color", name:"いろ と かず", lv:1, c:"var(--raku)", bg:"bg_mountain.jpg", q:[
   "The sky is [blue].|空は 青い。",
   "I like [red].|わたしは 赤が すきです。",
   "The banana is [yellow].|その バナナは 黄色です。",
@@ -357,7 +357,7 @@ var STAGES = [
   "I have [five] pencils.|わたしは えんぴつを 5本 もっています。",
   "I am [seven] years old.|わたしは 7さいです。",
   "I have [ten] fingers.|ゆびが 10本 あります。"]},
- {id:"school", name:"がっこう", lv:2, c:"var(--ai)", q:[
+ {id:"school", name:"がっこう", lv:2, c:"var(--ai)", bg:"bg_ruins.jpg", q:[
   "This is my [pen].|これは わたしの ペンです。",
   "I have a [book].|わたしは 本を もっています。",
   "Open the [door].|ドアを あけて。",
@@ -369,7 +369,7 @@ var STAGES = [
   "I like [music].|わたしは 音楽が すきです。",
   "I like [math].|わたしは 算数が すきです。",
   "This is my [friend].|この子は わたしの ともだちです。"]},
- {id:"day", name:"まいにち", lv:2, c:"var(--ai)", q:[
+ {id:"day", name:"まいにち", lv:2, c:"var(--ai)", bg:"bg_coast.jpg", q:[
   "I [play] soccer.|わたしは サッカーを します。",
   "I [get] up at six.|わたしは 6時に おきます。",
   "I [go] to bed at nine.|わたしは 9時に ねます。",
@@ -381,7 +381,7 @@ var STAGES = [
   "I [brush] my teeth.|わたしは 歯を みがきます。",
   "I can [run] fast.|わたしは はやく 走れます。",
   "I [help] my mother.|わたしは 母を 手つだいます。"]},
- {id:"weather", name:"てんき と きせつ", lv:2, c:"var(--ai)", q:[
+ {id:"weather", name:"てんき と きせつ", lv:2, c:"var(--ai)", bg:"bg.jpg", q:[
   "It is [sunny] today.|今日は 晴れです。",
   "It is [rainy] today.|今日は 雨です。",
   "It is [cloudy] today.|今日は くもりです。",
@@ -393,7 +393,7 @@ var STAGES = [
   "I like [spring].|わたしは 春が すきです。",
   "I swim in [summer].|わたしは 夏に およぎます。",
   "My birthday is in [May].|わたしの たんじょう日は 5月です。"]},
- {id:"jh1a", name:"中1 ① しつもん", lv:3, c:"var(--do)", q:[
+ {id:"jh1a", name:"中1 ① しつもん", lv:3, c:"var(--do)", bg:"bg_lava.jpg", q:[
   "[Are] you a student?|あなたは 生徒ですか？",
   "Yes, I [am].|はい、そうです。",
   "[Do] you like dogs?|あなたは 犬が すきですか？",
@@ -406,7 +406,7 @@ var STAGES = [
   "[Where] do you live?|あなたは どこに 住んでいますか？",
   "[Who] is that boy?|あの 男の子は だれですか？",
   "[How] many books do you have?|あなたは 本を 何さつ もっていますか？"]},
- {id:"jh1b", name:"中1 ② できる・している", lv:3, c:"var(--do)", q:[
+ {id:"jh1b", name:"中1 ② できる・している", lv:3, c:"var(--do)", bg:"bg_lava2.jpg", q:[
   "I [can] play the piano.|わたしは ピアノが ひけます。",
   "[Can] you swim?|あなたは およげますか？",
   "I am [reading] a book.|わたしは 本を 読んでいます。",
@@ -420,7 +420,7 @@ var STAGES = [
   "[Which] do you like, cats or dogs?|ねこと 犬の どちらが すきですか？"]}
 ];
 var LVNAME = {1:"★ 小学（はじめて）", 2:"★★ 小学（なれてきた）", 3:"★★★ 中学1年"};
-var PER = 5;   // 1つの島の 橋の数
+var PER = 10;  // 1つの島の 橋の数
 
 /* ═══════════ 小道具 ═══════════ */
 function $(id){ return document.getElementById(id); }
@@ -512,13 +512,14 @@ function start(sidx){
   var st, items;
   if(sidx==="weak"){
     items = shuffle(weakList()).slice(0, PER);
-    st = {id:"weak", name:"にがての島", c:"var(--do)"};
+    st = {id:"weak", name:"にがての島", c:"var(--do)", bg:"bg.jpg"};
   } else {
     st = STAGES[+sidx];
     items = shuffle(st.items.slice()).slice(0, PER);
   }
   G = {st:st, sidx:sidx, items:items, n:0, pos:0, miss:0, help:0, slotMiss:0, busy:false,
        log:[], t0:Date.now(), qMiss:0};
+  $("scene").style.backgroundImage = "url("+st.bg+")";
   $("sname").textContent = (sidx==="weak" ? "" : "しま"+(+sidx+1)+"　") + st.name;
   show("game");
   $("snd").textContent = pref.sound ? "🔊" : "🔈";
@@ -596,7 +597,8 @@ function placeWalker(across){
   w.style.bottom = groundY() + "px";
   if(across){
     // 最後の橋は、お城の手前で止まる
-    var cs = $("castle").classList.contains("on") ? $("castle").offsetWidth*.85 : 0;
+    // お城は SVG なので offsetWidth が無い。getBoundingClientRect で はかる
+    var cs = $("castle").classList.contains("on") ? $("castle").getBoundingClientRect().width*.85 : 0;
     w.style.left = (sc.clientWidth - ww*.96 - cs) + "px";
   } else {
     w.style.transition = "none";
@@ -746,7 +748,7 @@ function finish(){
 
 function result(){
   var pen = G.miss + G.help;
-  var stars = pen<=1 ? 3 : pen<=4 ? 2 : 1;
+  var stars = pen<=2 ? 3 : pen<=6 ? 2 : 1;
   var sid = G.st.id, isNew = false;
   if(sid!=="weak" && stars > (best[sid]||0)){ isNew = true; best[sid] = stars; save("kh_best", best); }
   var secs = Math.round((Date.now()-G.t0)/1000);
