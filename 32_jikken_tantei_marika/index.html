@@ -80,11 +80,25 @@ button{font-family:inherit;color:inherit;cursor:pointer}
 .hud{display:flex;align-items:center;gap:10px;margin-bottom:10px}
 .hud h2{font-size:.95rem;margin:0;font-weight:900;letter-spacing:.06em;flex:1;line-height:1.4}
 .hud h2 small{display:block;font-size:.66rem;color:var(--sub);font-weight:500;letter-spacing:.1em}
-.mission{display:flex;gap:10px;align-items:flex-start;margin-bottom:12px}
+.mission{position:relative;margin:18px 0 14px;padding:26px 16px 14px;border-radius:22px;border:4px solid #5b3417;
+  background:repeating-linear-gradient(135deg,rgba(255,255,255,.18) 0 12px,transparent 12px 24px),linear-gradient(160deg,#FFE9A8,#FFD166 60%,#F6B93B);
+  box-shadow:0 7px 0 #5b3417,0 14px 26px rgba(90,50,10,.25)}
+.mission.in{animation:stamp .55s cubic-bezier(.2,1.6,.4,1)}
+@keyframes stamp{0%{transform:scale(1.25) rotate(-3deg);opacity:0}60%{opacity:1}100%{transform:none}}
+.mlabel{position:absolute;left:50%;top:-20px;transform:translateX(-50%) rotate(-2deg);white-space:nowrap;display:flex;align-items:center;gap:6px;
+  background:#D6342A;color:#fff;font-family:"Mochiy Pop One",sans-serif;font-size:clamp(1rem,4.6vw,1.3rem);letter-spacing:.06em;
+  padding:6px 18px;border-radius:12px;border:3px solid #5b3417;box-shadow:0 4px 0 #5b3417}
+.mission.in .mlabel{animation:wob .9s .35s ease}
+@keyframes wob{0%,100%{transform:translateX(-50%) rotate(-2deg)}30%{transform:translateX(-50%) rotate(4deg) scale(1.08)}60%{transform:translateX(-50%) rotate(-5deg)}}
+.mlabel .mno{font-size:.7em;background:#fff;color:#D6342A;border-radius:999px;padding:0 8px;margin-left:4px}
+.mq{margin:6px 0 12px;text-align:center;font-family:"Mochiy Pop One",sans-serif;font-weight:400;line-height:1.45;
+  font-size:clamp(1.3rem,5.6vw,1.9rem);color:#3A1E08;text-wrap:balance;word-break:keep-all;overflow-wrap:anywhere;
+  text-shadow:2px 2px 0 #fff,-2px -2px 0 #fff,2px -2px 0 #fff,-2px 2px 0 #fff,0 2px 0 #fff,2px 0 0 #fff,0 -2px 0 #fff,-2px 0 0 #fff}
+.mfoot{display:flex;gap:10px;align-items:flex-end}
 .mission .face{flex:none;width:84px}
 .mission .face img,.ovc .face img{width:100%;height:auto;display:block}
-.bubble{position:relative;flex:1;background:#FFF8EA;color:#3A2A18;border-radius:16px;padding:10px 14px;font-size:.88rem;border:3px solid #5b3417}
-.bubble::before{content:"";position:absolute;left:-12px;top:20px;border:8px solid transparent;border-right-color:#5b3417}
+.bubble{position:relative;flex:1;background:#FFFDF6;color:#3A2A18;border-radius:16px;padding:8px 12px;font-size:.84rem;border:3px solid #5b3417;line-height:1.6}
+.bubble::before{content:"";position:absolute;left:-12px;bottom:16px;border:8px solid transparent;border-right-color:#5b3417}
 .bubble .who{font-size:.68rem;font-weight:900;color:#8d5528;letter-spacing:.1em}
 .bubble .q{display:block;margin-top:6px;font-weight:900;font-size:1.02rem;color:#B0341E;line-height:1.5}
 .card{background:var(--panel);border:2px solid var(--line);border-radius:18px;padding:12px;margin-bottom:12px;box-shadow:0 3px 0 #EADFCC}
@@ -184,9 +198,13 @@ button{font-family:inherit;color:inherit;cursor:pointer}
     <h2 id="cTitle"></h2>
   </div>
 
-  <div class="mission">
-    <div class="face" id="mFace"></div>
-    <div class="bubble"><span class="who">探偵まりか</span><div id="mStory"></div><span class="q" id="mQ"></span></div>
+  <div class="mission" id="mission">
+    <div class="mlabel"><span class="mic">🔍</span>今回の ミッション<span class="mno" id="mNo"></span></div>
+    <p class="mq" id="mQ"></p>
+    <div class="mfoot">
+      <div class="face" id="mFace"></div>
+      <div class="bubble"><span class="who">探偵まりか</span><div id="mStory"></div></div>
+    </div>
   </div>
 
   <div class="card" id="c1">
@@ -527,7 +545,9 @@ function start(i){
   $("title").style.display="none";$("play").style.display="block";$("board").style.display="block";
   $("cTitle").innerHTML='<small>じけんファイル '+(i+1)+' ／ '+CASES.length+'</small>'+c.t;
   $("mFace").innerHTML=marika("");
-  $("mStory").textContent=c.story;$("mQ").textContent=c.q;
+  $("mStory").textContent=c.story;$("mQ").textContent=c.q;$("mNo").textContent="No."+(i+1);
+  var m=$("mission");m.classList.remove("in");void m.offsetWidth;m.classList.add("in");
+  if(i===st.i) tone([392,523,659],.09);
   $("tools").innerHTML=c.tools.map(function(t){var T=TOOLS[t];return '<button class="tool" data-t="'+t+'"><img src="art/'+T.im+'.png" alt="">'+T.n+'</button>';}).join("");
   paintStep();paintSus();paintSum();window.scrollTo(0,0);
 }
