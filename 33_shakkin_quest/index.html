@@ -369,7 +369,7 @@ function itemArt(kind,ic,x,y,box){
 }
 
 /* ===== モンスターの絵（20種類・親分は大きく、子分は小さく） ===== */
-var MON={dragon:{w:290,h:239,ja:"ドラゴン"},bat:{w:256,h:147,ja:"コウモリ"},slime:{w:177,h:136,ja:"スライム"},goblin:{w:221,h:240,ja:"ゴブリン"},wizard:{w:278,h:226,ja:"魔法使い"},tree:{w:245,h:252,ja:"悪魔の木"},skeleton:{w:224,h:214,ja:"ガイコツ"},zombie:{w:202,h:209,ja:"ゾンビ"},chimera:{w:275,h:228,ja:"キメラ"},golem:{w:261,h:233,ja:"ゴーレム"},dragon2:{w:301,h:230,ja:"ドラゴン（色違い）"},bat2:{w:218,h:142,ja:"コウモリ（色違い）"},slime2:{w:192,h:135,ja:"スライム（色違い）"},goblin2:{w:220,h:231,ja:"ゴブリン（色違い）"},wizard2:{w:274,h:224,ja:"魔法使い（色違い）"},tree2:{w:247,h:235,ja:"悪魔の木（色違い）"},skeleton2:{w:223,h:209,ja:"ガイコツ（色違い）"},zombie2:{w:201,h:203,ja:"ゾンビ（色違い）"},chimera2:{w:268,h:217,ja:"キメラ（色違い）"},golem2:{w:257,h:226,ja:"ゴーレム（色違い）"}};
+var MON={dragon:{w:325,h:266,ja:"ドラゴン"},bat:{w:262,h:168,ja:"コウモリ"},slime:{w:166,h:147,ja:"スライム"},goblin:{w:283,h:235,ja:"ゴブリン"},wizard:{w:257,h:243,ja:"魔法使い"},tree:{w:267,h:265,ja:"悪魔の木"},skeleton:{w:233,h:242,ja:"ガイコツ"},zombie:{w:222,h:241,ja:"ゾンビ"},chimera:{w:281,h:253,ja:"キメラ"},golem:{w:257,h:247,ja:"ゴーレム"},dragon2:{w:312,h:242,ja:"ドラゴン（色違い）"},bat2:{w:283,h:175,ja:"コウモリ（色違い）"},slime2:{w:156,h:149,ja:"スライム（色違い）"},goblin2:{w:243,h:225,ja:"ゴブリン（色違い）"},wizard2:{w:257,h:237,ja:"魔法使い（色違い）"},tree2:{w:251,h:227,ja:"悪魔の木（色違い）"},skeleton2:{w:231,h:205,ja:"ガイコツ（色違い）"},zombie2:{w:214,h:204,ja:"ゾンビ（色違い）"},chimera2:{w:270,h:215,ja:"キメラ（色違い）"},golem2:{w:249,h:212,ja:"ゴーレム（色違い）"}};
 var MONKEYS=["dragon","bat","slime","goblin","wizard","tree","skeleton","zombie","chimera","golem","dragon2","bat2","slime2","goblin2","wizard2","tree2","skeleton2","zombie2","chimera2","golem2"];
 function monSrc(sp){return "mon/"+(MON[sp]?sp:"goblin")+".png";}
 /* 子分＝1倍、親分＝1.6倍。種類ごとの倍率は MONSCALE（ドラゴンだけ2倍） */
@@ -390,7 +390,8 @@ function creature(sp,tier,x,y,box,flip){
 }
 
 /* ===== 勇者（9ポーズ・状況で切り替え） ===== */
-var HERO={sword:{w:387,h:320,t:124},bow:{w:337,h:317,t:118},cannon:{w:401,h:289,t:112},magic:{w:370,h:317,t:122},powerup:{w:304,h:443,t:138},damage:{w:263,h:360,t:114},lowhp:{w:259,h:251,t:98},cheer:{w:257,h:387,t:126},guts:{w:315,h:363,t:120},stance:{w:308,h:341,t:120},stance2:{w:346,h:322,t:120},bowafter:{w:391,h:324,t:118},cannonfly:{w:442,h:320,t:112},powerup2:{w:389,h:448,t:138},cheer2:{w:372,h:391,t:126},guts2:{w:351,h:322,t:120}};
+/* 勇者はとどうふけんクエストと同じ子。どのポーズも 451×420 の同じキャンバスに、体の中心と足もとをそろえて描いてある */
+var HERO={sword:{w:451,h:420,t:150},bow:{w:451,h:420,t:150},cannon:{w:451,h:420,t:150},magic:{w:451,h:420,t:150},powerup:{w:451,h:420,t:150},damage:{w:451,h:420,t:150},lowhp:{w:451,h:420,t:150},cheer:{w:451,h:420,t:150},guts:{w:451,h:420,t:150},stance:{w:451,h:420,t:150},stance2:{w:451,h:420,t:150},bowafter:{w:451,h:420,t:150},cannonfly:{w:451,h:420,t:150},powerup2:{w:451,h:420,t:150},cheer2:{w:451,h:420,t:150},guts2:{w:451,h:420,t:150}};
 var HPAIR={stance:"stance2",sword:"stance2",bow:"bowafter",cannon:"cannonfly",guts:"guts2",cheer:"cheer2",powerup:"powerup2"};
 function heroOne(pose,x,y,scale,cls){
   var m=HERO[pose]||HERO.stance, h=(m.t||120)*(scale||1), w=h*m.w/m.h;
