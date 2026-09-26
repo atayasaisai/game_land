@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>さかなの かいてんずし｜ながれてくる魚の写真の名前をあてる無料の学習ゲーム｜あたやさいさいゲームランド</title>
-<meta name="description" content="回転ずしのレーンに、魚や貝の写真が のって ながれてくる。ながれて いってしまう前に、何の魚か えらぼう。写真は43しゅるい。漢字と ひとことも おぼえられる、子ども向けの無料の学習ゲーム。">
+<title>写真でわかるかな？ 回転寿司クイズ｜ながれてくる魚の写真の名前をあてる無料の学習ゲーム｜あたやさいさいゲームランド</title>
+<meta name="description" content="回転ずしのレーンに、魚や貝の写真が のって ながれてくる。ながれて いってしまう前に、何の魚か えらぼう。写真は73しゅるい。漢字と ひとことも おぼえられる、子ども向けの無料の学習ゲーム。">
 <meta name="robots" content="index,follow">
 <link rel="canonical" href="https://atayasaisai.github.io/game_land/31_kaiten_sushi/">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="あたやさいさいゲームランド">
-<meta property="og:title" content="さかなの かいてんずし｜この さかな なあに？">
+<meta property="og:title" content="写真でわかるかな？ 回転寿司クイズ｜この さかな なあに？">
 <meta property="og:url" content="https://atayasaisai.github.io/game_land/31_kaiten_sushi/">
 <meta property="og:image" content="https://atayasaisai.github.io/game_land/ogp.png">
 <meta property="og:locale" content="ja_JP">
@@ -21,12 +21,12 @@
   --ink:#3B2A1A; --sub:#7A6448; --faint:#B39C7C;
   --cream:#FFF8EC; --paper:#FFFDF7; --wood:#D9A760; --wood2:#B7813F; --dark:#5B3417;
   --navy:#22395E; --ok:#2FA36B; --ng:#D9493A;
-  --p1:#F4F6FA; --p1l:#3A6FC4; --p2:#E0453A; --p3:#E8B923;
+  --p1l:#2D62C8; --p2:#E0453A; --p3:#E8B923;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%}
 body{margin:0;font-family:"Zen Kaku Gothic New",-apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif;
-  color:var(--ink);background:#EFD9B4;line-height:1.7;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+  color:var(--ink);background:#FBF1DC;line-height:1.7;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 button{font-family:inherit;color:inherit;cursor:pointer}
 img{display:block}
 .wrap{max-width:640px;margin:0 auto;padding:0 16px calc(24px + env(safe-area-inset-bottom))}
@@ -37,89 +37,97 @@ img{display:block}
 .btn.sm{font-size:.82rem;padding:6px 12px;border-width:2px;box-shadow:0 3px 0 var(--dark)}
 .btn.pri{background:linear-gradient(#ff8a5c,#e0453a);color:#fff}
 
-/* ---------- タイトル（トップと同じ空の絵＋木の看板のロゴ） ---------- */
-#title{position:relative;min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;padding:24px 16px 40px;
-  background:#bfe3f5 url(bg.jpg) center 30%/cover no-repeat}
-.tlead{display:inline-block;font-size:.72rem;letter-spacing:.2em;border:2.5px solid #33312A;border-radius:999px;padding:3px 15px;
+/* ---------- すし屋の かべ（青海波）。絵は art/（00_incoming/回転寿司素材1〜3 から切り出し） ---------- */
+.wave{background-color:#FBF1DC;background-image:
+  radial-gradient(circle at 50% 100%,#FBF1DC 0 5px,#D5E7F1 5px 8px,#FBF1DC 8px 13px,#D5E7F1 13px 16px,#FBF1DC 16px 21px,#D5E7F1 21px 24px,#FBF1DC 24px 29px,transparent 29.5px),
+  radial-gradient(circle at 50% 100%,#FBF1DC 0 5px,#D5E7F1 5px 8px,#FBF1DC 8px 13px,#D5E7F1 13px 16px,#FBF1DC 16px 21px,#D5E7F1 21px 24px,#FBF1DC 24px 29px,transparent 29.5px);
+  background-size:60px 30px;background-position:0 0,30px 15px}
+
+/* ---------- タイトル ---------- */
+#title{position:relative;min-height:100dvh;display:flex;flex-direction:column;align-items:center;text-align:center;gap:0;padding:0 0 40px}
+.tlead{position:relative;z-index:3;margin:10px 0 6px;display:inline-block;font-size:.72rem;letter-spacing:.1em;border:2.5px solid #33312A;border-radius:999px;padding:3px 13px;
   background:#fff;color:#33312A;box-shadow:3px 3px 0 #33312A;text-decoration:none;font-weight:700}
-.logo{position:relative;display:flex;align-items:center;justify-content:center;gap:4px;margin:26px auto 0;max-width:640px}
-.logo .side{font-size:clamp(40px,12vw,84px);line-height:1;flex:none;filter:drop-shadow(0 4px 4px rgba(0,0,0,.25));animation:hop 1.6s ease-in-out infinite}
-.logo .side.r{animation-delay:-.8s}
-@keyframes hop{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-10px) rotate(3deg)}}
-.sign{position:relative;padding:20px clamp(12px,4vw,30px) 18px;border-radius:26px;line-height:1.1;
-  background:linear-gradient(#c98a4b,#a86a33 55%,#8d5528);border:4px solid #5b3417;
-  box-shadow:inset 0 3px 0 rgba(255,255,255,.35),inset 0 -5px 0 rgba(0,0,0,.18),0 8px 0 #5b3417,0 14px 22px rgba(40,30,10,.35);
-  animation:swing 3.2s ease-in-out infinite;transform-origin:50% 0}
-@keyframes swing{0%,100%{transform:rotate(-1.2deg)}50%{transform:rotate(1.2deg)}}
-.sign .star{position:absolute;font-size:1.3rem;color:#ffd43b;text-shadow:0 2px 0 #7a4a12;animation:twk 1.4s ease-in-out infinite}
-.sign .star.a{left:8px;top:6px}.sign .star.b{right:10px;bottom:4px;animation-delay:-.7s}
-@keyframes twk{0%,100%{transform:scale(1)}50%{transform:scale(1.35) rotate(15deg)}}
-.logo h1{font-family:"Mochiy Pop One",sans-serif;font-weight:400;line-height:1.1;letter-spacing:0;margin:0;font-size:1rem}
-.logo h1 .sm{display:block;font-size:clamp(.9rem,3.6vw,1.3rem);color:#fff;letter-spacing:.3em;
-  text-shadow:0 2px 0 #5b3417,2px 0 0 #5b3417,-2px 0 0 #5b3417,0 -2px 0 #5b3417;margin-bottom:4px}
-.logo h1 .bg{display:block;white-space:nowrap}
-.logo h1 .lt{display:inline-block;font-size:min(4.4rem,11vw,calc(46vw / var(--n,2)),calc(17rem / var(--n,2)));color:var(--k);
-  text-shadow:3px 0 0 #fff,-3px 0 0 #fff,0 3px 0 #fff,0 -3px 0 #fff,2px 2px 0 #fff,-2px -2px 0 #fff,2px -2px 0 #fff,-2px 2px 0 #fff,
-    0 7px 0 #5b3417,4px 5px 0 #5b3417,-4px 5px 0 #5b3417;
-  transform:rotate(var(--r,0deg));animation:jump 2.4s ease-in-out infinite;animation-delay:calc(var(--i) * .12s)}
-@keyframes jump{0%,78%,100%{transform:translateY(0) rotate(var(--r,0deg))}86%{transform:translateY(-9px) rotate(var(--r,0deg))}}
-.tpanel{margin-top:22px;width:100%;max-width:520px;display:flex;flex-direction:column;align-items:center;gap:6px;
-  background:var(--cream);border:4px solid var(--dark);border-radius:28px;padding:18px 16px 22px;box-shadow:0 8px 0 var(--dark),0 14px 26px rgba(40,30,10,.3)}
-.tpanel p{max-width:26em;color:var(--sub);font-size:.92rem;margin:4px 0;text-wrap:balance}
-.tpanel p b{color:var(--ink)}
-.plates{display:flex;gap:14px;justify-content:center;font-size:.78rem;color:var(--sub);margin-top:4px}
-.plates span{display:flex;align-items:center;gap:5px}
-.plates i{display:inline-block;width:26px;height:12px;border-radius:50%;border:2px solid var(--dark)}
-.tbtns{display:flex;flex-direction:column;gap:10px;margin-top:14px;width:100%;max-width:360px}
-.stg{display:flex;align-items:center;gap:12px;text-align:left;width:100%;border:3px solid var(--dark);border-radius:16px;padding:10px 14px;
-  background:#fff;box-shadow:0 4px 0 var(--dark);transition:transform .1s}
-.stg:active{transform:translateY(3px);box-shadow:0 1px 0 var(--dark)}
-.stg .ic{font-size:1.7rem;line-height:1}
-.stg b{display:block;font-size:1rem}
+.hero{position:relative;width:100%;max-width:980px;margin:0;line-height:0}
+.hero img{width:100%;height:auto;aspect-ratio:1200/395;object-fit:cover;object-position:50% 40%;animation:heroIn .6s cubic-bezier(.3,1.5,.5,1) both}
+@media (max-width:560px){.hero img{aspect-ratio:1000/395}}
+@keyframes heroIn{from{transform:scale(.85);opacity:0}}
+/* タイトルの下を ぐるぐる まわる レーン（ベルトと おすしを いっしょに うごかす） */
+.mq{--bh:clamp(70px,15vw,104px);--tw:calc(var(--bh) * 439 / 131);position:relative;width:100%;height:calc(var(--bh) + 26px);overflow:hidden;margin-top:-6px}
+.mq .tr{position:absolute;left:0;bottom:0;height:var(--bh);width:calc(var(--tw) * 8);
+  background:url(art/belt.jpg) 0 0/auto 100% repeat-x;animation:mqRun 16s linear infinite}
+@keyframes mqRun{to{transform:translateX(calc(var(--tw) * -4))}}
+.mq .tr img{position:absolute;bottom:calc(var(--bh) * .14);width:calc(var(--bh) * 1.45);left:calc(var(--tw) * .8 * var(--i));filter:drop-shadow(0 4px 3px rgba(0,0,0,.3))}
+.tpanel{position:relative;margin:18px 16px 0;width:calc(100% - 32px);max-width:540px;display:flex;flex-direction:column;align-items:center;gap:6px;
+  background:#FFFDF6;border:4px solid var(--dark);border-radius:28px;padding:16px 16px 22px;box-shadow:0 8px 0 var(--dark),0 14px 26px rgba(40,30,10,.25)}
+.tpanel .noren{position:absolute;left:50%;top:-12px;transform:translateX(-50%);width:150px;height:auto;pointer-events:none}
+.tpanel .deco{position:absolute;pointer-events:none;filter:drop-shadow(0 3px 2px rgba(0,0,0,.2))}
+.tpanel .deco.tea{width:54px;left:-20px;bottom:-14px;transform:rotate(-6deg)}
+.tpanel .deco.soy{width:42px;right:-14px;bottom:-12px;transform:rotate(5deg)}
+.greet{display:flex;align-items:flex-end;gap:6px;margin-top:44px;width:100%}
+.greet img{width:clamp(78px,22vw,120px);flex:none;animation:bob 2.4s ease-in-out infinite;transform-origin:50% 100%}
+@keyframes bob{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg) translateY(-3px)}}
+.greet .bub{position:relative;flex:1;text-align:left;background:#fff;border:3px solid var(--dark);border-radius:18px;padding:8px 12px;margin-bottom:34px;font-size:.9rem;line-height:1.65;color:var(--sub)}
+.greet .bub::before{content:"";position:absolute;left:-13px;bottom:16px;border:7px solid transparent;border-right:10px solid var(--dark)}
+.greet .bub::after{content:"";position:absolute;left:-7px;bottom:18px;border:5px solid transparent;border-right:7px solid #fff}
+.greet .bub b{color:var(--ink)}
+.greet .bub .hi{display:block;white-space:nowrap;font-family:"Mochiy Pop One",sans-serif;font-size:clamp(.95rem,4.4vw,1.15rem);color:#D13B2E;letter-spacing:.04em}
+.plates{display:flex;gap:10px;justify-content:center;font-size:.8rem;font-weight:700;color:var(--sub);margin-top:4px}
+.plates span{display:flex;flex-direction:column;align-items:center;gap:0}
+.plates img{width:54px}
+.tbtns{display:flex;flex-direction:column;gap:12px;margin-top:12px;width:100%;max-width:380px}
+.stg{position:relative;display:flex;align-items:center;gap:12px;text-align:left;width:100%;border:3px solid var(--dark);border-radius:18px;padding:10px 14px;
+  background:#fff;box-shadow:0 5px 0 var(--dark);transition:transform .1s}
+.stg:active{transform:translateY(4px);box-shadow:0 1px 0 var(--dark)}
+.stg.c1{background:linear-gradient(#fff,#FFF1E6)} .stg.c2{background:linear-gradient(#fff,#FFF6D6)} .stg.c3{background:linear-gradient(#fff,#E9F2FA)}
+.stg .ic{flex:none;width:62px;height:44px;position:relative}
+.stg .ic img{position:absolute;width:52px;left:4px;bottom:0}
+.stg .ic img.b{left:0;bottom:8px;width:46px}
+.stg .ic img.s{width:60px;left:1px;bottom:2px}
+.stg .ic img.fu{width:30px;left:16px;bottom:-4px}
+.stg b{display:block;font-size:1.05rem;font-family:"Mochiy Pop One",sans-serif;font-weight:400}
 .stg small{display:block;font-size:.72rem;color:var(--sub);line-height:1.5}
 .stg .rec{margin-left:auto;font-size:.8rem;color:var(--sub);white-space:nowrap;text-align:right;line-height:1.3}
-.stg .rec b{font-size:1rem;color:var(--p2)}
-.backlink{display:inline-block;margin-top:18px;font-size:.82rem;color:var(--sub);text-decoration:none;border:2px solid var(--faint);border-radius:999px;padding:5px 16px}
+.stg .rec b{font-size:1.05rem;color:var(--p2);display:inline;font-family:inherit;font-weight:900}
+.backlink{display:inline-block;margin-top:18px;font-size:.82rem;color:var(--sub);text-decoration:none;border:2px solid var(--faint);border-radius:999px;padding:5px 16px;background:#fff}
 .grade{font-size:.72rem;color:var(--faint);margin-top:8px}
 
 /* ---------- おみせ ---------- */
 .scr{display:none}
-.shop{min-height:100dvh;background:
-  linear-gradient(180deg,var(--navy) 0 64px,transparent 64px),
-  repeating-linear-gradient(90deg,#F3E2C3 0 46px,#EAD5B0 46px 48px)}
-.noren{height:64px;display:flex;align-items:center;justify-content:space-between;gap:8px;color:#fff;max-width:640px;margin:0 auto;padding:0 12px}
-.noren .mid{font-family:"Mochiy Pop One",sans-serif;font-size:1.05rem;letter-spacing:.1em}
-.noren .mid small{display:block;font-family:"Zen Kaku Gothic New",sans-serif;font-size:.7rem;letter-spacing:.1em;opacity:.8;text-align:center}
-.noren .btn.sm{background:rgba(255,255,255,.12);color:#fff;border-color:#fff;box-shadow:none}
-.bill{text-align:right;font-size:.7rem;line-height:1.2;opacity:.9}
-.bill b{display:block;font-size:1.05rem;font-variant-numeric:tabular-nums}
-.talk{display:flex;align-items:flex-end;gap:8px;margin:12px 0 6px}
-.talk .chef{font-size:2.4rem;line-height:1}
-.talk .bub{position:relative;background:#fff;border:2.5px solid var(--dark);border-radius:16px;padding:6px 12px;font-weight:700;font-size:.95rem}
-.talk .bub::before{content:"";position:absolute;left:-10px;bottom:10px;border:6px solid transparent;border-right:8px solid var(--dark)}
+.shop{min-height:100dvh}
+.shop .top{background:linear-gradient(#2C4A7A,#22395E);border-bottom:4px solid #152744;box-shadow:0 3px 0 rgba(0,0,0,.12)}
+.bar{height:60px;display:flex;align-items:center;justify-content:space-between;gap:8px;color:#fff;max-width:640px;margin:0 auto;padding:0 12px}
+.bar .mid{font-family:"Mochiy Pop One",sans-serif;font-size:1.05rem;letter-spacing:.1em;text-shadow:0 2px 0 #152744}
+.bar .mid small{display:block;font-family:"Zen Kaku Gothic New",sans-serif;font-size:.68rem;letter-spacing:.1em;opacity:.8;text-align:center;text-shadow:none}
+.bar .btn.sm{background:rgba(255,255,255,.12);color:#fff;border-color:#fff;box-shadow:none}
+.bill{text-align:right;font-size:.7rem;line-height:1.2;background:#FFF6DA;color:var(--dark);border:2.5px solid #C99A3A;border-radius:10px;padding:3px 9px}
+.bill b{display:block;font-size:1.05rem;font-variant-numeric:tabular-nums;color:#C0392B}
+.talk{display:flex;align-items:flex-end;gap:4px;margin:8px 0 0;min-height:122px}
+.talk .chef{width:112px;height:124px;flex:none;position:relative}
+.talk .chef img{position:absolute;bottom:0;left:50%;height:122px;width:auto;max-width:none;transform:translateX(-50%)}
+.talk .chef img.pop{animation:chefPop .35s ease-out}
+@keyframes chefPop{0%{transform:translateX(-50%) scale(.9)}60%{transform:translateX(-50%) scale(1.08)}}
+.talk .bub{position:relative;z-index:2;background:#fff;border:3px solid var(--dark);border-radius:16px;padding:7px 13px;font-weight:700;font-size:.98rem;margin-bottom:36px}
+.talk .bub::before{content:"";position:absolute;left:-13px;bottom:10px;border:7px solid transparent;border-right:10px solid var(--dark)}
+.talk .bub::after{content:"";position:absolute;left:-7px;bottom:12px;border:5px solid transparent;border-right:7px solid #fff}
 
 /* レーン（写真は右から左へながれる） */
-.lane{position:relative;height:min(58vw,250px);margin:0 -16px;overflow:hidden;
-  background:linear-gradient(180deg,#8d5528 0 10px,transparent 10px calc(100% - 14px),#8d5528 calc(100% - 14px));}
-.belt{position:absolute;left:0;right:0;top:10px;bottom:14px;
-  background:repeating-linear-gradient(90deg,#9FA7B3 0 2px,#C9CFD8 2px 58px);box-shadow:inset 0 6px 8px rgba(0,0,0,.18),inset 0 -6px 8px rgba(0,0,0,.18)}
-.train{position:absolute;left:0;top:0;bottom:14px;display:flex;align-items:flex-end;gap:36px;will-change:transform}
-.plate{position:relative;flex:none;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:10px}
-.dish{width:100%;height:30px;border-radius:50%;background:radial-gradient(ellipse at 50% 45%,#fff 0 48%,var(--rim) 50% 66%,#fff 68% 100%);
-  border:2.5px solid rgba(60,40,20,.55);box-shadow:0 5px 6px rgba(0,0,0,.25)}
-.plate.g1{--rim:var(--p1l)} .plate.g2{--rim:var(--p2)} .plate.g3{--rim:var(--p3)}
-.plate.deco{width:92px}
-.plate.deco .food{font-size:48px;line-height:1;margin-bottom:-14px;position:relative;z-index:1}
-.plate.q{width:min(56vw,236px)}
-.plate.q .ph{position:relative;z-index:1;width:94%;aspect-ratio:4/3;margin-bottom:-12px;border-radius:12px;overflow:hidden;
-  border:4px solid #fff;box-shadow:0 0 0 2.5px var(--dark),0 6px 10px rgba(0,0,0,.3);background:#ddd}
+.lane{--W:min(88vw,430px,46dvh);--bh:clamp(84px,calc(var(--W) * .36),140px);position:relative;height:calc(var(--W) * 1.02 + var(--bh) * .1 + 14px);margin:-8px calc(50% - 50vw) 0;overflow:hidden}
+.belt{position:absolute;left:0;right:0;bottom:0;height:var(--bh);background:url(art/belt.jpg) 0 0/auto 100% repeat-x;
+  box-shadow:0 -2px 0 rgba(0,0,0,.08)}
+.train{position:absolute;left:0;bottom:calc(var(--bh) * .1);display:flex;align-items:flex-end;gap:calc(var(--W) * .18);will-change:transform}
+.plate{position:relative;flex:none;display:flex;flex-direction:column;align-items:center;justify-content:flex-end}
+.plate>.dish{width:100%;height:auto;filter:drop-shadow(0 5px 4px rgba(0,0,0,.28))}
+.plate.deco{width:calc(var(--W) * .5)}
+.plate.q{width:var(--W)}
+.plate.q>.dish{width:90%}
+.plate.q .ph{position:relative;z-index:1;width:96%;aspect-ratio:4/3;margin-bottom:-25%;border-radius:12px;overflow:hidden;
+  border:4px solid #fff;box-shadow:0 0 0 2.5px var(--dark),0 8px 10px rgba(0,0,0,.35);background:#ddd}
 .plate.q .ph img{width:100%;height:100%;object-fit:cover}
-.plate.q .dish{height:36px}
-.stamp{position:absolute;z-index:2;left:50%;top:38%;transform:translate(-50%,-50%) rotate(-12deg);font-family:"Mochiy Pop One",sans-serif;
+.stamp{position:absolute;z-index:2;left:50%;top:34%;transform:translate(-50%,-50%) rotate(-12deg);font-family:"Mochiy Pop One",sans-serif;
   font-size:4.2rem;line-height:1;text-shadow:0 0 0 #fff,3px 3px 0 #fff,-3px -3px 0 #fff,3px -3px 0 #fff,-3px 3px 0 #fff;pointer-events:none;animation:stampIn .25s ease-out}
 .stamp.ok{color:var(--ok)} .stamp.ng{color:var(--ng)}
 @keyframes stampIn{from{transform:translate(-50%,-50%) rotate(-12deg) scale(2.2);opacity:0}}
-.timer{position:absolute;z-index:3;right:4px;top:6px;width:58px;height:58px;border-radius:50%;display:grid;place-items:center;
+.timer{position:absolute;z-index:3;right:-4px;top:-6px;width:58px;height:58px;border-radius:50%;display:grid;place-items:center;
   background:conic-gradient(var(--ok) var(--p,100%),#E4D6BF 0);border:3px solid var(--dark);box-shadow:0 3px 0 var(--dark);transition:opacity .3s}
 .timer b{width:42px;height:42px;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:1.35rem;font-weight:900;font-variant-numeric:tabular-nums}
 .timer.hurry{background:conic-gradient(var(--ng) var(--p,100%),#E4D6BF 0);animation:beat .5s ease-in-out infinite}
@@ -129,14 +137,20 @@ img{display:block}
 .flying{position:fixed;z-index:30;pointer-events:none;transition:transform .7s cubic-bezier(.5,-0.4,.6,1),opacity .7s}
 
 /* とった おさら */
-.counter{display:flex;align-items:center;gap:10px;margin:10px 0 8px;min-height:44px}
-.counter .lb{font-size:.72rem;color:var(--sub);line-height:1.3;flex:none}
-.stack{display:flex;flex-direction:column-reverse;align-items:center;flex:none;width:58px}
-.stack i{display:block;width:54px;height:10px;margin-top:-3px;border-radius:50%;border:2px solid var(--dark);background:#fff;box-shadow:inset 0 -3px 0 var(--rim)}
-.stack i.g1{--rim:var(--p1l)} .stack i.g2{--rim:var(--p2)} .stack i.g3{--rim:var(--p3)}
-.dots{display:flex;flex-wrap:wrap;gap:4px;margin-left:auto}
-.dots i{width:14px;height:14px;border-radius:50%;border:2px solid var(--faint);background:transparent;font-style:normal}
-.dots i.ok{background:var(--ok);border-color:var(--ok)} .dots i.ng{background:var(--ng);border-color:var(--ng)} .dots i.now{border-color:var(--dark)}
+.counter{display:flex;align-items:flex-end;gap:10px;margin:12px 0 10px;min-height:56px;padding:8px 10px 6px;border-radius:14px;
+  background:linear-gradient(#E9C58C,#D9A760);border:3px solid var(--dark);box-shadow:inset 0 3px 0 rgba(255,255,255,.35)}
+.counter .lb{font-size:.74rem;font-weight:700;color:var(--dark);line-height:1.3;flex:none;align-self:center}
+.stack{display:flex;flex-direction:column-reverse;align-items:center;flex:none;width:58px;min-height:36px}
+.stack img{display:block;width:56px;height:auto;margin-bottom:-24px;filter:drop-shadow(0 2px 1px rgba(0,0,0,.25))}
+.stack img:first-child{margin-bottom:0}
+.stack img:last-child{animation:plDrop .3s ease-out}
+@keyframes plDrop{from{transform:translateY(-24px);opacity:0}}
+.counter .goods{display:flex;align-items:flex-end;gap:2px;flex:none}
+.counter .goods img{height:52px;width:auto}
+.counter .goods img.sm{height:44px}
+.dots{display:flex;flex-wrap:wrap;gap:4px;margin-left:auto;max-width:110px;justify-content:flex-end;align-self:center}
+.dots i{width:14px;height:14px;border-radius:50%;border:2px solid var(--dark);background:#FFF6E6;font-style:normal}
+.dots i.ok{background:var(--ok)} .dots i.ng{background:var(--ng)} .dots i.now{background:#FFD43B;animation:beat .9s ease-in-out infinite}
 
 .chs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .ch{font-size:clamp(1.05rem,4.8vw,1.35rem);font-weight:900;padding:14px 6px;border-radius:16px;border:3px solid var(--dark);background:#fff;
@@ -152,8 +166,11 @@ img{display:block}
 .fb.on{display:block;animation:pop .25s ease}
 @keyframes pop{from{transform:scale(.96);opacity:0}to{transform:none;opacity:1}}
 .fb .hd{display:flex;align-items:center;gap:12px}
-.cup{flex:none;width:64px;height:72px;border-radius:10px 10px 22px 22px;background:linear-gradient(#6C8B6A,#4F6E4D);border:3px solid var(--dark);
-  display:flex;align-items:center;justify-content:center;color:#fff;font-family:"Mochiy Pop One",serif;font-size:1.6rem;line-height:1.05;text-align:center;writing-mode:vertical-rl;letter-spacing:.05em}
+.cup{flex:none;width:64px;height:74px;border-radius:10px 10px 22px 22px;border:3px solid #4F6E4D;
+  background:radial-gradient(circle at 50% 100%,transparent 0 5px,#3A6FC4 5px 7px,transparent 7px 10px,#3A6FC4 10px 12px,transparent 12px) 0 100%/18px 12px repeat-x,
+    linear-gradient(90deg,#E5EDD5,#F6F8EE 40%,#D9E3C6);
+  display:flex;align-items:center;justify-content:center;padding-bottom:8px;color:#22395E;font-family:"Mochiy Pop One",serif;font-size:1.6rem;line-height:1.05;text-align:center;writing-mode:vertical-rl;letter-spacing:.05em;
+  box-shadow:inset 0 5px 0 #8DB36B}
 .cup.l2{font-size:1.2rem} .cup.l3{font-size:.95rem}
 .fb .mk{font-weight:900;font-size:1.1rem}
 .fb.ok .mk{color:var(--ok)} .fb.ng .mk{color:var(--ng)}
@@ -168,12 +185,12 @@ img{display:block}
 .zhead .cnt{font-size:.85rem;color:var(--sub)}
 .zgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
 .zc{border:3px solid var(--dark);border-radius:14px;background:#fff;overflow:hidden;padding:0;text-align:left;box-shadow:0 4px 0 var(--dark)}
-.zc img{width:100%;aspect-ratio:4/3;object-fit:cover}
+.zc>img{width:100%;aspect-ratio:4/3;object-fit:cover}
 .zc .t{display:flex;align-items:center;justify-content:space-between;gap:4px;padding:4px 8px;font-weight:900}
 .zc .t small{font-weight:500;color:var(--sub);font-size:.8rem}
-.zc .t i{width:18px;height:8px;border-radius:50%;border:2px solid var(--dark);box-shadow:inset 0 -2px 0 var(--rim);flex:none}
+.zc .t img{width:30px;height:auto;flex:none}
 .zc.g1{--rim:var(--p1l)} .zc.g2{--rim:var(--p2)} .zc.g3{--rim:var(--p3)}
-.zc.no img{filter:brightness(0) opacity(.35)}
+.zc.no>img{filter:brightness(0) opacity(.35)}
 .zc.no .t{color:var(--faint)}
 details.credit{margin-top:22px;font-size:.74rem;color:var(--sub);line-height:1.7}
 details.credit summary{cursor:pointer;font-weight:700;text-align:center}
@@ -208,44 +225,45 @@ details.credit a{color:var(--sub);word-break:break-all}
 <body>
 
 <!-- ================= タイトル ================= -->
-<section id="title">
-  <a class="tlead" href="../">◀ あたやさいさいゲームランド</a>
-  <div class="logo">
-    <span class="side l" aria-hidden="true">🍣</span>
-    <div class="sign"><span class="star a">★</span><span class="star b">★</span>
-      <h1 aria-label="さかなの かいてんずし"><span class="sm">さかなの</span><span class="bg" style="--n:6"><span class="lt" style="--k:#E0453A;--i:0;--r:-6deg">か</span><span class="lt" style="--k:#F0A93F;--i:1;--r:4deg">い</span><span class="lt" style="--k:#3A86D8;--i:2;--r:-3deg">て</span><span class="lt" style="--k:#4CB86B;--i:3;--r:5deg">ん</span><span class="lt" style="--k:#8A5BD6;--i:4;--r:-4deg">ず</span><span class="lt" style="--k:#E8559A;--i:5;--r:3deg">し</span></span></h1>
-    </div>
-    <span class="side r" aria-hidden="true">🐟</span>
-  </div>
+<section id="title" class="wave">
+  <a class="tlead" href="../">◀ ゲームランド</a>
+  <h1 class="hero"><img src="art/title.jpg" alt="写真でわかるかな？ 回転寿司クイズ" width="1200" height="395"></h1>
+  <div class="mq" aria-hidden="true"><div class="tr">
+    <img src="art/sushi_tuna.png" style="--i:0" alt=""><img src="art/sushi_hirame.png" style="--i:1" alt=""><img src="art/sushi_salmon.png" style="--i:2" alt=""><img src="art/sushi_ebi.png" style="--i:3" alt=""><img src="art/sushi_hirame.png" style="--i:4" alt="">
+    <img src="art/sushi_tuna.png" style="--i:5" alt=""><img src="art/sushi_hirame.png" style="--i:6" alt=""><img src="art/sushi_salmon.png" style="--i:7" alt=""><img src="art/sushi_ebi.png" style="--i:8" alt=""><img src="art/sushi_hirame.png" style="--i:9" alt="">
+  </div></div>
 
   <div class="tpanel">
-    <p>へい、らっしゃい！<br>レーンに のって、<b>さかなの 写真</b>が ながれてくるよ。<br>
-       ながれて いって しまう 前に、<b>何の さかなか</b> えらぼう。<br>
-       あたったら、その おさらは きみの もの！</p>
-    <div class="plates"><span><i style="background:#fff;box-shadow:inset 0 -3px 0 var(--p1l)"></i>100円</span><span><i style="background:#fff;box-shadow:inset 0 -3px 0 var(--p2)"></i>200円</span><span><i style="background:#fff;box-shadow:inset 0 -3px 0 var(--p3)"></i>500円</span></div>
+    <img class="noren" src="art/noren.png" alt="">
+    <img class="deco tea" src="art/tea.png" alt=""><img class="deco soy" src="art/soy.png" alt="">
+    <div class="greet"><img src="art/chef.png" alt="いたまえさん">
+      <p class="bub"><span class="hi">へい、らっしゃい！</span>レーンに のって、<b>さかなの 写真</b>が ながれてくるよ。
+       目の前で 止まったら、<b>何の さかなか</b> えらんでね。あたったら、その おさらは きみの もの！</p></div>
+    <div class="plates"><span><img src="art/plate_b.png" alt="">100円</span><span><img src="art/plate_r.png" alt="">200円</span><span><img src="art/plate_y.png" alt="">500円</span></div>
     <div class="tbtns">
-      <button class="stg" data-course="nami"><span class="ic">🍣</span><span><b>なみの コース</b><small>10さら。白と 赤の おさら</small></span><span class="rec" id="recNami"></span></button>
-      <button class="stg" data-course="toku"><span class="ic">✨</span><span><b>とくじょう コース</b><small>10さら。むずかしい 金の おさらも 出る</small></span><span class="rec" id="recToku"></span></button>
-      <button class="stg" id="zukanBtn"><span class="ic">📖</span><span><b>さかな ずかん</b><small>あてた さかなが あつまる。漢字と ひとことも</small></span><span class="rec" id="recZukan"></span></button>
+      <button class="stg c1" data-course="nami"><span class="ic"><img class="b" src="art/plate_b.png" alt=""><img src="art/plate_r.png" alt=""></span><span><b>なみの コース</b><small>10さら。青と 赤の おさら</small></span><span class="rec" id="recNami"></span></button>
+      <button class="stg c2" data-course="toku"><span class="ic"><img class="s" src="art/stack.png" alt="" style="width:40px;left:10px"></span><span><b>とくじょう コース</b><small>10さら。むずかしい 金の おさらも 出る</small></span><span class="rec" id="recToku"></span></button>
+      <button class="stg c3" id="zukanBtn"><span class="ic"><img class="fu" src="art/fuda.png" alt=""></span><span><b>さかな ずかん</b><small>あてた さかなが あつまる。漢字と ひとことも</small></span><span class="rec" id="recZukan"></span></button>
     </div>
-    <p class="grade">写真は 43しゅるい</p>
+    <p class="grade" id="kinds"></p>
     <a class="backlink" href="../">◀ あたやさいさいゲームランドへ もどる</a>
   </div>
 </section>
 
 <!-- ================= おみせ ================= -->
-<section class="scr shop" id="game">
-  <div class="noren">
+<section class="scr shop wave" id="game">
+  <div class="top"><div class="bar">
     <button class="btn sm" id="quitBtn">◀ やめる</button>
-    <div class="mid" id="courseName">なみの コース<small>さかなの かいてんずし</small></div>
+    <div class="mid" id="courseName">なみの コース<small>回転寿司クイズ</small></div>
     <div class="bill">おかいけい<b id="yen">0円</b></div>
-  </div>
+  </div></div>
   <div class="wrap">
-    <div class="talk"><span class="chef" aria-hidden="true">🧑‍🍳</span><span class="bub" id="bub">へい、らっしゃい！</span></div>
+    <div class="talk"><span class="chef" aria-hidden="true"><img id="chefImg" src="art/chef.png" alt=""></span><span class="bub" id="bub">へい、らっしゃい！</span></div>
     <div class="lane" id="lane"><div class="belt" id="belt"></div><div class="train" id="train"></div></div>
     <div class="counter">
       <div class="stack" id="stack"></div>
       <span class="lb" id="stackLb">とった<br>おさら 0まい</span>
+      <span class="goods" aria-hidden="true"><img src="art/tea.png" alt=""><img class="sm" src="art/soy.png" alt=""></span>
       <div class="dots" id="dots"></div>
     </div>
     <div class="chs" id="chs"></div>
@@ -254,7 +272,7 @@ details.credit a{color:var(--sub);word-break:break-all}
 </section>
 
 <!-- ================= ずかん ================= -->
-<section class="scr" id="zukan"><div class="wrap">
+<section class="scr wave" id="zukan"><div class="wrap">
   <div class="zhead"><button class="btn sm" data-home>◀ もどる</button><h2>さかな ずかん</h2><span class="cnt" id="zcnt"></span></div>
   <div class="zgrid" id="zgrid"></div>
   <details class="credit">
@@ -266,11 +284,12 @@ details.credit a{color:var(--sub);word-break:break-all}
 
 <div class="ov" id="ov"><div class="ovc" id="ovc"></div></div>
 
-<script src="sakana.js?v=2"></script>
+<script src="sakana.js?v=3"></script>
 <script>
 'use strict';
 const $=s=>document.querySelector(s);
 const PRICE={1:100,2:200,3:500};
+const PL={1:'plate_b',2:'plate_r',3:'plate_y'};   // おさらの絵（青・赤・金）
 const COURSE={
   nami:{name:'なみの コース',pool:f=>f.g<=2,wait:10},
   toku:{name:'とくじょう コース',pool:()=>true,wait:10},
@@ -324,7 +343,7 @@ function makeCourse(c){
   const pool=FISH.filter(COURSE[c].pool);
   let list;
   if(c==='nami'){
-    // はじめの 3さらは よく知られた 白い おさらから
+    // はじめの 3さらは よく知られた 青い おさらから
     const w=shuffle(pool.filter(f=>f.g===1)),r=shuffle(pool.filter(f=>f.g===2));
     list=w.slice(0,3).concat(shuffle(w.slice(3,6).concat(r.slice(0,4))));
   }else{
@@ -343,11 +362,12 @@ function makeOpts(f,pool){
 
 /* ---------- ゲーム ---------- */
 let G=null,raf=0;
-const FOOD=['🍣','🍤','🍙','🍥','🥚','🍵','🦐','🍱'];
+// レーンに いっしょに のる おすし（art/sushi_*.png）。えらぶ 4つに 入っている さかなの おすしは のせない（ヒントに しない）
+const FOOD={tuna:['maguro'],hirame:['hirame','tai'],salmon:['sake'],ebi:['ebi','iseebi']};
 function start(c){
   wake();
   G={c,qs:makeCourse(c),i:0,res:[],yen:0,plates:[]};
-  $('#courseName').innerHTML=COURSE[c].name+'<small>さかなの かいてんずし</small>';
+  $('#courseName').innerHTML=COURSE[c].name+'<small>回転寿司クイズ</small>';
   $('#stack').innerHTML='';
   closeOv();show('game');drawHud();nextPlate();
 }
@@ -356,17 +376,20 @@ function drawHud(){
   $('#stackLb').innerHTML=`とった<br>おさら ${G.plates.length}まい`;
   $('#dots').innerHTML=G.qs.map((q,i)=>`<i class="${G.res[i]===true?'ok':G.res[i]===false?'ng':i===G.i?'now':''}"></i>`).join('');
 }
+// 板前さんの絵は 切り出した はばが ちがうので、もとの絵での 高さ（px）で 大きさを そろえる
+const CHEF_H={chef:339,chef_ok:315,chef_ng:343};
+function setChef(n){const im=$('#chefImg');if(im.dataset.n===n)return;im.dataset.n=n;im.src='art/'+n+'.png';im.style.height=(CHEF_H[n]*.36|0)+'px';im.classList.remove('pop');void im.offsetWidth;im.classList.add('pop');}
 function stopRun(){cancelAnimationFrame(raf);raf=0;}
 function nextPlate(){
   stopRun();
   if(G.i>=G.qs.length){finish();return;}
   const q=G.qs[G.i];
-  const f=FOOD[Math.random()*FOOD.length|0],f2=FOOD[Math.random()*FOOD.length|0];
-  const g=[1,2,3][Math.random()*3|0];
-  $('#train').innerHTML=
-    `<div class="plate deco g${g}"><span class="food">${f}</span><div class="dish"></div></div>`+
-    `<div class="plate q g${q.f.g}" id="qp"><div class="ph"><img src="photo/${q.f.p}.jpg" alt="この さかな なあに？" draggable="false"></div><div class="dish"></div><div class="timer" id="timer"><b id="tsec">${COURSE[G.c].wait}</b></div></div>`+
-    `<div class="plate deco g${g===3?1:g+1}"><span class="food">${f2}</span><div class="dish"></div></div>`;
+  const f=shuffle(Object.keys(FOOD).filter(k=>!q.opts.some(o=>FOOD[k].includes(o.k)))).map(k=>'sushi_'+k).concat(['plate_b','plate_r']);
+  const deco=k=>`<div class="plate deco"><img class="dish" src="art/${k}.png" alt="" draggable="false"></div>`;
+  $('#train').innerHTML=deco(f[0])+
+    `<div class="plate q g${q.f.g}" id="qp"><div class="ph"><img src="photo/${q.f.p}.jpg?v=3" alt="この さかな なあに？" draggable="false"></div><img class="dish" src="art/${PL[q.f.g]}.png" alt="" draggable="false"><div class="timer" id="timer"><b id="tsec">${COURSE[G.c].wait}</b></div></div>`+
+    deco(f[1]);
+  setChef('chef');
   $('#bub').textContent=['へい、らっしゃい！ この さかな なあに？','つぎ、いくよ！ この さかなは？','おっ、きたきた！ なんだと おもう？','よく 見てね！ この さかなは？'][G.i%4];
   $('#chs').innerHTML=q.opts.map((o,i)=>`<button class="ch" data-k="${o.k}">${o.n}</button>`).join('');
   $('#chs').querySelectorAll('.ch').forEach(b=>b.onclick=()=>answer(b.dataset.k));
@@ -433,13 +456,13 @@ function answer(k){
   const qp=$('#qp');
   qp.insertAdjacentHTML('beforeend',`<span class="stamp ${ok?'ok':'ng'}">${ok?'○':'×'}</span>`);
   if(ok){
-    SE.ok();
+    SE.ok();setChef('chef_ok');
     G.yen+=PRICE[q.f.g];G.plates.push(q.f.g);
     rec.got[q.f.k]=(rec.got[q.f.k]||0)+1;save();
     setTimeout(()=>flyToStack(qp,q.f.g),380);
     $('#bub').textContent=['おみごと！ '+q.f.n+'、いっちょう！','せいかい！ '+q.f.n+'だよ！','よく わかったね！ '+q.f.n+'！'][G.i%3];
   }else{
-    SE.ng();
+    SE.ng();setChef('chef_ng');
     $('#bub').textContent='ざんねん！ これは '+q.f.n+' だよ。';
   }
   showFb(ok?'ok':'ng',q.f);
@@ -448,12 +471,12 @@ function answer(k){
 function timeout(){
   G.live=false;                     // おさらは そのまま ながれて いく（run が うごかしつづける）
   const q=G.qs[G.i];G.res[G.i]=false;
-  SE.gone();lockChoices(null,false);
+  SE.gone();setChef('chef_ng');lockChoices(null,false);
   $('#bub').textContent='じかん ぎれ！ ながれて いっちゃう… '+q.f.n+' だったよ。';
   showFb('gone',q.f);drawHud();
 }
 function flyToStack(qp,g){
-  const put=()=>{SE.take();$('#stack').insertAdjacentHTML('beforeend',`<i class="g${g}"></i>`);};
+  const put=()=>{SE.take();$('#stack').insertAdjacentHTML('beforeend',`<img src="art/${PL[g]}.png" alt="">`);};
   if(!qp.isConnected){put();return;}        // もう つぎの おさらに すすんでいたら、すぐ つむ
   const r=qp.getBoundingClientRect(),s=$('#stack').getBoundingClientRect();
   const cl=qp.cloneNode(true);cl.removeAttribute('id');cl.classList.add('flying');
@@ -500,8 +523,8 @@ function openZukan(){
   const list=FISH.slice().sort((a,b)=>a.g-b.g);
   $('#zcnt').textContent=`${list.filter(f=>got(f.k)).length} / ${FISH.length}`;
   $('#zgrid').innerHTML=list.map(f=>got(f.k)
-    ?`<button class="zc g${f.g}" data-k="${f.k}"><img src="photo/${f.p}.jpg" alt="${f.n}" loading="lazy"><span class="t">${f.n}<small>${f.kj}</small><i></i></span></button>`
-    :`<button class="zc no g${f.g}" data-k="${f.k}"><img src="photo/${f.p}.jpg" alt="" loading="lazy"><span class="t">？？？<i></i></span></button>`).join('');
+    ?`<button class="zc g${f.g}" data-k="${f.k}"><img src="photo/${f.p}.jpg?v=3" alt="${f.n}" loading="lazy"><span class="t">${f.n}<small>${f.kj}</small><img src="art/${PL[f.g]}.png" alt=""></span></button>`
+    :`<button class="zc no g${f.g}" data-k="${f.k}"><img src="photo/${f.p}.jpg?v=3" alt="" loading="lazy"><span class="t">？？？<img src="art/${PL[f.g]}.png" alt=""></span></button>`).join('');
   $('#zgrid').querySelectorAll('.zc').forEach(b=>b.onclick=()=>zDetail(b.dataset.k));
   if(!$('#credits').children.length){
     $('#credits').innerHTML=FISH.map(f=>`<li>${f.n}：${esc(f.a)}（${esc(f.l)}） <a href="${f.u}" target="_blank" rel="noopener">もとの ページ</a></li>`).join('');
@@ -512,9 +535,9 @@ function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','
 function zDetail(k){
   const f=BY[k];
   if(!rec.got[k]){
-    $('#ovc').innerHTML=`<h3>まだ ひみつ</h3><p>かいてんずしで この さかなを あてると、ずかんに のるよ。<br>おさらの 色は <b>${{1:'白',2:'赤',3:'金'}[f.g]}</b>。${f.g===3?'とくじょう コースで 出るよ。':''}</p><div class="row"><button class="btn" id="ovClose">とじる</button></div>`;
+    $('#ovc').innerHTML=`<h3>まだ ひみつ</h3><p>かいてんずしで この さかなを あてると、ずかんに のるよ。<br>おさらの 色は <b>${{1:'青',2:'赤',3:'金'}[f.g]}</b>。${f.g===3?'とくじょう コースで 出るよ。':''}</p><div class="row"><button class="btn" id="ovClose">とじる</button></div>`;
   }else{
-    $('#ovc').innerHTML=`<img class="big" src="photo/${f.p}.jpg" alt="${f.n}">
+    $('#ovc').innerHTML=`<img class="big" src="photo/${f.p}.jpg?v=3" alt="${f.n}">
       <div class="dt">${cup(f)}<div><h3 style="margin:0">${f.n}</h3><p>${f.f}</p></div></div>
       <p class="src">写真：${esc(f.a)}（${esc(f.l)}） <a href="${f.u}" target="_blank" rel="noopener">もとの ページ</a><br>あてた かず：${rec.got[k]}かい</p>
       <div class="row"><button class="btn" id="ovClose">とじる</button></div>`;
@@ -535,6 +558,7 @@ document.addEventListener('keydown',e=>{
 });
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&G&&raf){/* 見ていない あいだは とめる */stopRun();G.paused=true;}
   else if(!document.hidden&&G&&G.paused){G.paused=false;run();}});
+$('#kinds').textContent=`写真は ${FISH.length}しゅるい`;
 drawRecs();
 </script>
 </body>
