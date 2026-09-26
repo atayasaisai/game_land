@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>野原の草花を見に行こう！｜写真の草花や木の名前をあてる無料の学習ゲーム｜あたやさいさいゲームランド</title>
+<meta name="description" content="のはらを さんぽしていると、ふわ〜っと 写真が とんでくる。これは なんだろう？ 草花や 木の 名前を 4つから えらぼう。写真は67しゅるい。きせつと ひとことも おぼえられる、子ども向けの無料の学習ゲーム。">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://atayasaisai.github.io/game_land/34_nohara_no_kusabana/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="あたやさいさいゲームランド">
+<meta property="og:title" content="野原の草花を見に行こう！｜これは なんだろう？">
+<meta property="og:url" content="https://atayasaisai.github.io/game_land/34_nohara_no_kusabana/">
+<meta property="og:image" content="https://atayasaisai.github.io/game_land/ogp.png">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap">
+<style>
+:root{
+  --ink:#3A2A17; --sub:#6F5A3C; --faint:#A89274;
+  --cream:#FFFBEF; --paper:#FFFDF6; --wood:#D9A760; --dark:#5B3A17;
+  --leaf:#3F8F3A; --leaf2:#2E6E2A; --sky1:#7CC4F2; --sky2:#DDF1FF;
+  --ok:#2FA36B; --ng:#D9493A; --gold:#F2B705;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{margin:0;font-family:"Zen Kaku Gothic New",-apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif;
+  color:var(--ink);background:#EAF7DC;line-height:1.7;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;color:inherit;cursor:pointer}
+img{display:block}
+.wrap{max-width:640px;margin:0 auto;padding:0 16px calc(24px + env(safe-area-inset-bottom))}
+
+.btn{border:3px solid var(--dark);background:#fff;color:var(--ink);font-weight:900;font-size:1rem;padding:11px 22px;border-radius:14px;
+  box-shadow:0 4px 0 var(--dark);transition:transform .1s}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--dark)}
+.btn.sm{font-size:.82rem;padding:6px 12px;border-width:2px;box-shadow:0 3px 0 var(--dark)}
+.btn.pri{background:linear-gradient(#7BD06A,#3F8F3A);color:#fff;text-shadow:0 1px 0 rgba(0,0,0,.25)}
+
+/* 空と のはら（絵は art/。00_incoming/野原の草花を見に行こう.png から切り出し） */
+.skybg{background:linear-gradient(180deg,var(--sky1) 0%,var(--sky2) 55%,#EAF7DC 100%)}
+.ground{position:absolute;left:0;right:0;bottom:0;background:url(art/ground.jpg) 0 100%/auto 100% repeat-x}
+.cloud{position:absolute;width:120px;height:40px;border-radius:40px;background:#fff;opacity:.9;pointer-events:none;animation:drift linear infinite}
+.cloud::before,.cloud::after{content:"";position:absolute;background:#fff;border-radius:50%}
+.cloud::before{width:56px;height:56px;left:18px;top:-26px}
+.cloud::after{width:40px;height:40px;left:58px;top:-16px}
+@keyframes drift{from{transform:translateX(-160px)}to{transform:translateX(calc(100vw + 40px))}}
+.bfly{position:absolute;font-size:26px;pointer-events:none;animation:fly 14s linear infinite;z-index:1}
+@keyframes fly{0%{transform:translate(-40px,0) rotate(-8deg)}25%{transform:translate(25vw,-30px) rotate(8deg)}50%{transform:translate(50vw,10px) rotate(-8deg)}75%{transform:translate(75vw,-24px) rotate(8deg)}100%{transform:translate(calc(100vw + 40px),0) rotate(-8deg)}}
+
+/* ---------- タイトル ---------- */
+#title{position:relative;min-height:100dvh;display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 0 150px;overflow:hidden}
+#title .ground{height:130px;animation:walk 26s linear infinite}
+@keyframes walk{to{background-position:-841px 100%}}  /* 841 = ground.jpg を 高さ300で ならべた ときの 1まいの はば */
+#title .ground{background-size:auto 130px}
+@keyframes walkT{to{background-position:calc(-841px * 130 / 300) 100%}}
+#title .ground{animation-name:walkT}
+.tlead{position:relative;z-index:3;margin:10px 0 8px;display:inline-block;font-size:.72rem;letter-spacing:.1em;border:2.5px solid #33312A;border-radius:999px;padding:3px 13px;
+  background:#fff;color:#33312A;box-shadow:3px 3px 0 #33312A;text-decoration:none;font-weight:700}
+.hero{position:relative;z-index:2;width:calc(100% - 24px);max-width:900px;margin:0;line-height:0;border-radius:22px;overflow:hidden;
+  border:4px solid #fff;box-shadow:0 6px 0 rgba(60,90,30,.35),0 12px 24px rgba(30,60,20,.25)}
+.hero img{width:100%;height:auto;aspect-ratio:1200/675;object-fit:cover;animation:heroIn .7s cubic-bezier(.3,1.5,.5,1) both}
+@keyframes heroIn{from{transform:scale(.85);opacity:0}}
+.tpanel{position:relative;z-index:2;margin:18px 16px 0;width:calc(100% - 32px);max-width:540px;display:flex;flex-direction:column;align-items:center;gap:6px;
+  background:var(--paper);border:4px solid var(--dark);border-radius:28px;padding:16px 16px 22px;box-shadow:0 8px 0 var(--dark),0 14px 26px rgba(30,50,10,.25)}
+.greet{display:flex;align-items:flex-end;gap:8px;width:100%}
+.face{flex:none;border-radius:50%;border:3px solid var(--dark);background:#fff;object-fit:cover;box-shadow:0 3px 0 var(--dark)}
+.greet .face{width:clamp(72px,20vw,96px);height:clamp(72px,20vw,96px);animation:bob 2.4s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg) translateY(-3px)}}
+.bubble{position:relative;flex:1;text-align:left;background:#fff;border:3px solid var(--dark);border-radius:18px;padding:8px 12px;font-size:.9rem;line-height:1.65;color:var(--sub)}
+.bubble::before{content:"";position:absolute;left:-13px;bottom:16px;border:7px solid transparent;border-right:10px solid var(--dark)}
+.bubble::after{content:"";position:absolute;left:-7px;bottom:18px;border:5px solid transparent;border-right:7px solid #fff}
+.greet .bubble{margin-bottom:10px}
+.bubble b{color:var(--ink)}
+.bubble .hi{display:block;white-space:nowrap;font-family:"Mochiy Pop One",sans-serif;font-size:clamp(.95rem,4.4vw,1.15rem);color:var(--leaf);letter-spacing:.04em}
+.tbtns{display:flex;flex-direction:column;gap:12px;margin-top:12px;width:100%;max-width:400px}
+.stg{position:relative;display:flex;align-items:center;gap:12px;text-align:left;width:100%;border:3px solid var(--dark);border-radius:18px;padding:10px 14px;
+  background:#fff;box-shadow:0 5px 0 var(--dark);transition:transform .1s}
+.stg:active{transform:translateY(4px);box-shadow:0 1px 0 var(--dark)}
+.stg.c1{background:linear-gradient(#fff,#FFF6D6)} .stg.c2{background:linear-gradient(#fff,#E4F5DA)} .stg.c3{background:linear-gradient(#fff,#E6EEFA)} .stg.c4{background:linear-gradient(#fff,#FBE8EE)}
+.stg .ic{flex:none;width:48px;height:48px;border-radius:50%;display:grid;place-items:center;font-size:28px;background:#fff;border:2.5px solid var(--dark)}
+.stg b{display:block;font-size:1.05rem;font-family:"Mochiy Pop One",sans-serif;font-weight:400}
+.stg small{display:block;font-size:.72rem;color:var(--sub);line-height:1.5}
+.stg .rec{margin-left:auto;font-size:.8rem;color:var(--sub);white-space:nowrap;text-align:right;line-height:1.3}
+.stg .rec b{font-size:1.05rem;color:var(--leaf);display:inline;font-family:inherit;font-weight:900}
+.backlink{display:inline-block;margin-top:18px;font-size:.82rem;color:var(--sub);text-decoration:none;border:2px solid var(--faint);border-radius:999px;padding:5px 16px;background:#fff}
+.grade{font-size:.72rem;color:var(--faint);margin-top:8px}
+
+/* ---------- さんぽ ---------- */
+.scr{display:none}
+#game{min-height:100dvh}
+.top{background:linear-gradient(#58AD48,#3F8F3A);border-bottom:4px solid var(--leaf2);box-shadow:0 3px 0 rgba(0,0,0,.12)}
+.bar{height:58px;display:flex;align-items:center;justify-content:space-between;gap:8px;color:#fff;max-width:640px;margin:0 auto;padding:0 12px}
+.bar .mid{font-family:"Mochiy Pop One",sans-serif;font-size:1.02rem;letter-spacing:.08em;text-shadow:0 2px 0 var(--leaf2);text-align:center;line-height:1.3}
+.bar .mid small{display:block;font-family:"Zen Kaku Gothic New",sans-serif;font-size:.68rem;letter-spacing:.1em;opacity:.85;text-shadow:none}
+.bar .btn.sm{background:rgba(255,255,255,.14);color:#fff;border-color:#fff;box-shadow:none}
+.found{text-align:right;font-size:.7rem;line-height:1.2;background:#FFFBE6;color:var(--dark);border:2.5px solid #C99A3A;border-radius:10px;padding:3px 9px}
+.found b{display:block;font-size:1.05rem;font-variant-numeric:tabular-nums;color:var(--leaf)}
+
+/* けしき：写真の カードが 右から ふわ〜っと とんできて、まんなかで 止まる */
+.scene{--W:min(80vw,400px,44dvh);position:relative;height:calc(var(--W) * .75 + 120px);margin:0 calc(50% - 50vw);overflow:hidden}
+.scene .ground{height:62%;background-size:auto 100%}
+.walker{position:absolute;z-index:5;left:max(10px,calc(50% - 300px));bottom:12px;width:58px;height:58px}
+.walker img{width:100%;height:100%}
+.walker.go img{animation:hop .5s ease-in-out infinite}
+@keyframes hop{50%{transform:translateY(-7px) rotate(4deg)}}
+.card{position:absolute;z-index:4;top:14px;left:0;width:var(--W);will-change:transform}
+.card .ph{position:relative;background:#fff;padding:7px 7px 0;border-radius:8px;box-shadow:0 0 0 2.5px var(--dark),0 10px 16px rgba(20,40,10,.35)}
+.card .ph img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:3px;background:#dde}
+.card .cap{height:30px;display:flex;align-items:center;justify-content:center;font-family:"Mochiy Pop One",sans-serif;font-size:.95rem;color:var(--sub);letter-spacing:.06em}
+.card .pin{position:absolute;left:50%;top:-12px;transform:translateX(-50%) rotate(-10deg);font-size:26px;filter:drop-shadow(0 2px 1px rgba(0,0,0,.3))}
+.stamp{position:absolute;z-index:2;left:50%;top:42%;transform:translate(-50%,-50%) rotate(-12deg);font-family:"Mochiy Pop One",sans-serif;
+  font-size:4.6rem;line-height:1;text-shadow:3px 3px 0 #fff,-3px -3px 0 #fff,3px -3px 0 #fff,-3px 3px 0 #fff;pointer-events:none;animation:stampIn .25s ease-out}
+.stamp.ok{color:var(--ok)} .stamp.ng{color:var(--ng)}
+@keyframes stampIn{from{transform:translate(-50%,-50%) rotate(-12deg) scale(2.2);opacity:0}}
+.timer{position:absolute;z-index:3;right:-10px;top:-12px;width:56px;height:56px;border-radius:50%;display:grid;place-items:center;
+  background:conic-gradient(var(--ok) var(--p,100%),#E4D6BF 0);border:3px solid var(--dark);box-shadow:0 3px 0 var(--dark);transition:opacity .3s}
+.timer b{width:40px;height:40px;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:1.3rem;font-weight:900;font-variant-numeric:tabular-nums}
+.timer.hurry{background:conic-gradient(var(--ng) var(--p,100%),#E4D6BF 0);animation:beat .5s ease-in-out infinite}
+.timer.hurry b{color:var(--ng)}
+.timer.off{opacity:0}
+@keyframes beat{50%{transform:scale(1.12)}}
+.flying{position:fixed;z-index:30;pointer-events:none;transition:transform .7s cubic-bezier(.5,-0.4,.6,1),opacity .7s}
+
+.talk{display:flex;align-items:flex-end;gap:8px;margin:10px 0 0}
+.talk .face{width:54px;height:54px}
+.talk .face.pop{animation:facePop .35s ease-out}
+@keyframes facePop{60%{transform:scale(1.12)}}
+.talk .bubble{font-weight:700;font-size:.98rem;color:var(--ink);padding:6px 12px;margin-bottom:4px}
+.talk .bubble::before{bottom:10px} .talk .bubble::after{bottom:12px}
+
+/* さんぽノート（あてた 写真が たまる） */
+.note{display:flex;align-items:center;gap:8px;margin:10px 0;min-height:52px;padding:6px 10px;border-radius:14px;
+  background:repeating-linear-gradient(#FFFDF4 0 21px,#D8E8F4 21px 22px);border:3px solid var(--dark);box-shadow:0 3px 0 var(--dark)}
+.note .lb{font-size:.72rem;font-weight:700;color:var(--dark);line-height:1.3;flex:none}
+.shots{display:flex;flex-wrap:wrap;gap:3px;flex:1;min-width:0}
+.shots img{width:34px;height:26px;object-fit:cover;border:2px solid #fff;box-shadow:0 0 0 1.5px var(--dark);border-radius:2px;animation:plDrop .3s ease-out}
+.shots img:nth-child(odd){transform:rotate(-4deg)} .shots img:nth-child(even){transform:rotate(3deg)}
+@keyframes plDrop{from{translate:0 -16px;opacity:0}}
+.dots{display:flex;flex-wrap:wrap;gap:4px;max-width:100px;justify-content:flex-end;flex:none}
+.dots i{width:13px;height:13px;border-radius:50%;border:2px solid var(--dark);background:#FFF6E6;font-style:normal}
+.dots i.ok{background:var(--ok)} .dots i.ng{background:var(--ng)} .dots i.now{background:var(--gold);animation:beat .9s ease-in-out infinite}
+
+.chs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ch{font-size:clamp(.95rem,4.4vw,1.25rem);font-weight:900;padding:14px 4px;border-radius:16px;border:3px solid var(--dark);background:#fff;
+  box-shadow:0 5px 0 var(--dark);transition:transform .1s,background .15s;line-height:1.3;word-break:keep-all;overflow-wrap:anywhere}
+.ch.long{font-size:clamp(.78rem,3.6vw,1.05rem);letter-spacing:-.02em}
+.ch:active{transform:translateY(4px);box-shadow:0 1px 0 var(--dark)}
+.ch:disabled{cursor:default;transform:none}
+.ch.ok{background:#D6F5E3;border-color:var(--ok);box-shadow:0 5px 0 var(--ok)}
+.ch.ng{background:#FBDAD5;border-color:var(--ng);box-shadow:0 5px 0 var(--ng)}
+.ch.dim{opacity:.45}
+
+.fb{display:none;margin-top:14px;background:var(--paper);border:3px solid var(--dark);border-radius:18px;padding:12px 14px;box-shadow:0 5px 0 var(--dark)}
+.fb.on{display:block;animation:pop .25s ease}
+@keyframes pop{from{transform:scale(.96);opacity:0}to{transform:none;opacity:1}}
+.fb .mk{font-weight:900;font-size:1.05rem}
+.fb.ok .mk{color:var(--ok)} .fb.ng .mk{color:var(--ng)}
+.fb .nm{font-size:1.5rem;font-weight:900;line-height:1.25}
+.fb .nm small{font-size:.8rem;color:var(--sub);font-weight:500;margin-left:6px}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.tag{font-size:.72rem;font-weight:700;border-radius:999px;padding:1px 10px;border:2px solid currentColor}
+.tag.k{color:#C0662B;background:#FFF1E4} .tag.j{color:var(--leaf2);background:#E9F6E2} .tag.s{color:#3A6FB0;background:#E8F1FB}
+.fb p{margin:8px 0 0;font-size:.95rem}
+.fb .btn{width:100%;margin-top:12px}
+
+/* ---------- ずかん ---------- */
+.zhead{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 0 8px}
+.zhead h2{margin:0;font-family:"Mochiy Pop One",sans-serif;font-weight:400;font-size:1.2rem}
+.zhead .cnt{font-size:.85rem;color:var(--sub)}
+.zsec{margin:16px 0 8px;font-family:"Mochiy Pop One",sans-serif;font-weight:400;font-size:1rem;color:var(--leaf2)}
+.zgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+.zc{border:3px solid var(--dark);border-radius:14px;background:#fff;overflow:hidden;padding:0;text-align:left;box-shadow:0 4px 0 var(--dark)}
+.zc>img{width:100%;aspect-ratio:4/3;object-fit:cover}
+.zc .t{display:flex;align-items:center;justify-content:space-between;gap:4px;padding:4px 8px;font-weight:900;font-size:.92rem}
+.zc .t small{font-weight:500;color:var(--sub);font-size:.72rem;white-space:nowrap}
+.zc .unk{display:grid;place-items:center;aspect-ratio:4/3;font-size:2.4rem;opacity:.45;background:repeating-linear-gradient(45deg,#EEF6E6 0 10px,#E2EFD8 10px 20px)}
+.zc.no .t{color:var(--faint)}
+details.credit{margin-top:22px;font-size:.74rem;color:var(--sub);line-height:1.7}
+details.credit summary{cursor:pointer;font-weight:700;text-align:center}
+details.credit ul{padding-left:1.2em;margin:8px 0}
+details.credit a{color:var(--sub);word-break:break-all}
+
+/* ---------- まど ---------- */
+.ov{position:fixed;inset:0;z-index:40;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(20,40,10,.55)}
+.ov.on{display:flex}
+.ovc{width:100%;max-width:400px;max-height:92dvh;overflow:auto;text-align:center;background:var(--cream);border:4px solid var(--dark);border-radius:24px;padding:20px 18px;box-shadow:0 8px 0 var(--dark)}
+.ovc h3{margin:4px 0;font-family:"Mochiy Pop One",sans-serif;font-weight:400;font-size:1.35rem}
+.ovc .big{font-size:2.2rem;font-weight:900;color:var(--leaf);line-height:1.2}
+.ovc .big small{font-size:1rem;color:var(--sub)}
+.ovc .new{display:inline-block;background:var(--gold);color:var(--dark);font-weight:900;font-size:.8rem;border-radius:999px;padding:1px 10px;margin-bottom:4px}
+.ovc .list{display:grid;grid-template-columns:1fr 1fr;gap:3px 12px;text-align:left;font-size:.86rem;margin:10px 0 14px}
+.ovc .list span.ok::before{content:"○ ";color:var(--ok);font-weight:900}
+.ovc .list span.ng::before{content:"× ";color:var(--ng);font-weight:900}
+.ovc .row{display:flex;gap:10px}
+.ovc .row .btn{flex:1;padding:11px 6px}
+.ovc img.big{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:12px;border:3px solid var(--dark);margin-bottom:8px}
+.ovc .dt{text-align:left}
+.ovc .dt p{margin:6px 0 0;font-size:.92rem}
+.ovc .src{font-size:.7rem;color:var(--sub);margin:10px 0 12px;text-align:left;word-break:break-all}
+.ovc .src a{color:var(--sub)}
+.ovc .face{width:70px;height:70px;margin:0 auto 6px}
+</style>
+
+<!-- ▼ 訪問者カウント（GoatCounter）。Cookieも個人情報も使わない集計。
+     goatcounter.com で決めたコードを MYCODE に入れて、この行のコメントを外すと動きます -->
+<!-- <script data-goatcounter="https://MYCODE.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script> -->
+</head>
+<body>
+
+<!-- ================= タイトル ================= -->
+<section id="title" class="skybg">
+  <span class="cloud" style="top:40px;animation-duration:70s;animation-delay:-20s"></span>
+  <span class="cloud" style="top:120px;animation-duration:95s;animation-delay:-60s;transform:scale(.7)"></span>
+  <span class="bfly" style="bottom:120px">🦋</span>
+  <div class="ground" aria-hidden="true"></div>
+  <a class="tlead" href="../">◀ ゲームランド</a>
+  <h1 class="hero"><img src="art/title.jpg" alt="野原の草花を見に行こう！" width="1200" height="675"></h1>
+
+  <div class="tpanel">
+    <div class="greet"><img class="face" src="art/boy.jpg" alt="たんけんたい の 男の子">
+      <p class="bubble"><span class="hi">さあ、さんぽに 出発！</span>のはらを 歩いていると、<b>ふわ〜っと 写真が とんでくる</b>よ。
+       止まったら「これは なんだろう？」。<b>草花や 木の 名前</b>を 4つから えらんでね。</p></div>
+    <div class="tbtns">
+      <button class="stg c1" data-course="kusa"><span class="ic">🌼</span><span><b>草花の みち</b><small>10まい。道ばたや のはらの 草花</small></span><span class="rec" id="rec_kusa"></span></button>
+      <button class="stg c2" data-course="ki"><span class="ic">🌳</span><span><b>木の みち</b><small>10まい。花や 葉や 実で 木を あてる</small></span><span class="rec" id="rec_ki"></span></button>
+      <button class="stg c3" data-course="oku"><span class="ic">⛰️</span><span><b>おく山の みち</b><small>10まい。草花も 木も。むずかしいのも 出る</small></span><span class="rec" id="rec_oku"></span></button>
+      <button class="stg c4" id="zukanBtn"><span class="ic">📖</span><span><b>のはら ずかん</b><small>あてた 草花と 木が あつまる</small></span><span class="rec" id="recZukan"></span></button>
+    </div>
+    <p class="grade" id="kinds"></p>
+    <a class="backlink" href="../">◀ あたやさいさいゲームランドへ もどる</a>
+  </div>
+</section>
+
+<!-- ================= さんぽ ================= -->
+<section class="scr" id="game">
+  <div class="top"><div class="bar">
+    <button class="btn sm" id="quitBtn">◀ やめる</button>
+    <div class="mid" id="courseName">草花の みち<small>野原の草花を見に行こう！</small></div>
+    <div class="found">みつけた<b id="foundN">0</b></div>
+  </div></div>
+  <div class="scene skybg" id="scene">
+    <span class="cloud" style="top:10px;animation-duration:60s;animation-delay:-10s"></span>
+    <span class="cloud" style="top:56px;animation-duration:85s;animation-delay:-50s;transform:scale(.6)"></span>
+    <div class="ground" id="ground"></div>
+    <div class="walker" id="walker"><img class="face" src="art/boy.jpg" alt=""></div>
+    <div class="card" id="card"></div>
+  </div>
+  <div class="wrap">
+    <div class="talk"><img class="face" id="talkFace" src="art/risu.jpg" alt=""><span class="bubble" id="bub">さあ、出発！</span></div>
+    <div class="note">
+      <span class="lb">さんぽ<br>ノート</span>
+      <div class="shots" id="shots"></div>
+      <div class="dots" id="dots"></div>
+    </div>
+    <div class="chs" id="chs"></div>
+    <div class="fb" id="fb"></div>
+  </div>
+</section>
+
+<!-- ================= ずかん ================= -->
+<section class="scr" id="zukan" style="background:#EAF7DC"><div class="wrap">
+  <div class="zhead"><button class="btn sm" data-home>◀ もどる</button><h2>のはら ずかん</h2><span class="cnt" id="zcnt"></span></div>
+  <h3 class="zsec">🌼 草花</h3><div class="zgrid" id="zgridK"></div>
+  <h3 class="zsec">🌳 木</h3><div class="zgrid" id="zgridJ"></div>
+  <details class="credit">
+    <summary>写真に ついて（クレジット）</summary>
+    <p>写真は、自由に つかって よい 写真を <a href="https://commons.wikimedia.org/" target="_blank" rel="noopener">ウィキメディア・コモンズ</a> から かりて、大きさを そろえた ものです。とった人・ライセンス・もとの ページは つぎの とおりです。ひとことの 文は この ゲームで 書いた ものです。</p>
+    <ul id="credits"></ul>
+  </details>
+</div></section>
+
+<div class="ov" id="ov"><div class="ovc" id="ovc"></div></div>
+
+<script src="plants.js?v=1"></script>
+<script>
+'use strict';
+const $=s=>document.querySelector(s);
+const COURSE={
+  kusa:{name:'草花の みち',pool:p=>p.t==='k'&&p.g<=2},
+  ki:{name:'木の みち',pool:p=>p.t==='j'&&p.g<=2},
+  oku:{name:'おく山の みち',pool:()=>true},
+};
+const N=10,WAIT=10;
+const BY={};PLANTS.forEach(p=>BY[p.k]=p);
+const PV='?v=1';   // 写真を さしかえたら 上げる
+
+/* ---------- きろく（この端末だけ） ---------- */
+const RK='nohara_kusabana_rec';
+let rec={best:{},got:{}};
+try{const r=JSON.parse(localStorage.getItem(RK)||'null');if(r)rec=Object.assign(rec,r);}catch(e){}
+function save(){try{localStorage.setItem(RK,JSON.stringify(rec));}catch(e){}}
+
+/* ---------- 音（WebAudio で ならすだけ） ---------- */
+let ac=null;
+function tone(fr,t0,dur,type,vol){
+  if(!ac)return;const o=ac.createOscillator(),g=ac.createGain();
+  o.type=type||'sine';o.frequency.value=fr;o.connect(g);g.connect(ac.destination);
+  const t=ac.currentTime+t0;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol||.18,t+.01);g.gain.exponentialRampToValueAtTime(.001,t+dur);
+  o.start(t);o.stop(t+dur+.05);
+}
+function wake(){try{if(!ac)ac=new (window.AudioContext||window.webkitAudioContext)();if(ac.state!=='running')ac.resume();}catch(e){}}
+const SE={
+  ok(){tone(880,0,.15,'triangle');tone(1320,.1,.3,'triangle');},
+  ng(){tone(200,0,.35,'square',.08);},
+  fuwa(){[660,880,990,1320].forEach((f,i)=>tone(f,i*.07,.35,'sine',.07));},
+  take(){tone(700,0,.08,'sine',.18);tone(1050,.07,.12,'sine',.18);},
+  tick(){tone(1000,0,.06,'square',.06);},
+  gone(){tone(520,0,.25,'sine',.1);tone(390,.18,.35,'sine',.1);},
+};
+
+/* ---------- 画面きりかえ ---------- */
+function show(id){
+  ['title','game','zukan'].forEach(s=>{$('#'+s).style.display=(s===id)?(s==='title'?'flex':'block'):'none';});
+  window.scrollTo(0,0);
+}
+function closeOv(){$('#ov').classList.remove('on');}
+function home(){stopRun();if(G)G.live=false;closeOv();drawRecs();show('title');}
+
+function drawRecs(){
+  for(const c in COURSE){
+    const b=rec.best[c];$('#rec_'+c).innerHTML=b!=null?`さいこう<br><b>${b}</b>/${N}`:'';
+  }
+  const n=Object.keys(rec.got).filter(k=>BY[k]).length;
+  $('#recZukan').innerHTML=`<b>${n}</b>/${PLANTS.length}`;
+}
+
+/* ---------- もんだいを つくる ---------- */
+const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]];}return a;};
+function makeCourse(c){
+  const pool=PLANTS.filter(COURSE[c].pool);
+  let list;
+  if(c==='oku'){
+    // むずかしい（g3）を 4まい ＋ のこり 6まい
+    const g3=shuffle(pool.filter(p=>p.g===3)),rest=shuffle(pool.filter(p=>p.g<3));
+    list=shuffle(g3.slice(0,4).concat(rest.slice(0,6)));
+  }else{
+    // はじめの 3まいは よく知られた もの（g1）から
+    const a=shuffle(pool.filter(p=>p.g===1)),b=shuffle(pool.filter(p=>p.g===2));
+    list=a.slice(0,3).concat(shuffle(a.slice(3,6).concat(b.slice(0,4))));
+  }
+  return list.slice(0,N).map(p=>({p,opts:makeOpts(p,pool)}));
+}
+function makeOpts(p,pool){
+  // まちがいの 3つ：なるべく おなじ なかま（草花／木）から
+  const same=shuffle(pool.filter(x=>x!==p&&x.t===p.t)),other=shuffle(PLANTS.filter(x=>x!==p&&x.t===p.t&&!pool.includes(x)));
+  const pick=same.concat(other).slice(0,3);
+  return shuffle([p].concat(pick));
+}
+
+/* ---------- ゲーム ---------- */
+let G=null,raf=0,groundX=0;
+function start(c){
+  wake();
+  G={c,qs:makeCourse(c),i:0,res:[]};
+  $('#courseName').innerHTML=COURSE[c].name+'<small>野原の草花を見に行こう！</small>';
+  $('#shots').innerHTML='';
+  closeOv();show('game');drawHud();nextCard();
+}
+function drawHud(){
+  $('#foundN').textContent=G.res.filter(Boolean).length;
+  $('#dots').innerHTML=G.qs.map((q,i)=>`<i class="${G.res[i]===true?'ok':G.res[i]===false?'ng':i===G.i?'now':''}"></i>`).join('');
+}
+function talk(face,t){
+  const f=$('#talkFace'),src='art/'+face+'.jpg';
+  if(!f.src.endsWith(src)){f.src=src;}
+  f.classList.remove('pop');void f.offsetWidth;f.classList.add('pop');
+  $('#bub').textContent=t;
+}
+function stopRun(){cancelAnimationFrame(raf);raf=0;$('#walker').classList.remove('go');}
+function nextCard(){
+  stopRun();
+  if(G.i>=G.qs.length){finish();return;}
+  const q=G.qs[G.i];
+  $('#card').innerHTML=`<div class="ph"><span class="pin">🍀</span><img src="photo/${q.p.p}.jpg${PV}" alt="これは なんだろう？" draggable="false"><div class="cap">これは なんだろう？</div><div class="timer" id="timer"><b id="tsec">${WAIT}</b></div></div>`;
+  $('#card').style.opacity='1';
+  talk('risu',['てくてく… あっ、なにか とんできた！','ふわ〜っ！ また きたよ！','よーく 見てね。これは なんだろう？','においも しそう！ なんだと おもう？'][G.i%4]);
+  $('#chs').innerHTML=q.opts.map(o=>`<button class="ch${o.n.length>=8?' long':''}" data-k="${o.k}">${o.n}</button>`).join('');
+  $('#chs').querySelectorAll('.ch').forEach(b=>{b.onclick=()=>answer(b.dataset.k);b.disabled=true;});
+  $('#fb').className='fb';$('#fb').innerHTML='';
+  drawHud();
+  const sc=$('#scene'),cw=$('#card').offsetWidth;
+  G.live=false;G.phase='in';G.left=WAIT;G.t=0;
+  G.x=sc.clientWidth+30;G.y=40;G.op=1;
+  G.walk=.5;                         // すこし 歩いてから 写真が くる
+  run();
+}
+// 写真の うごき。G.phase：'in'＝ふわ〜っと とんでくる → 'stop'＝まんなかで ゆらゆら（G.left 秒）→ 'out'＝とんでいく → 'done'
+function run(){
+  stopRun();
+  const sc=$('#scene'),card=$('#card'),ground=$('#ground'),walker=$('#walker');
+  let last=performance.now();
+  const W=sc.clientWidth,cw=card.offsetWidth,xStop=(W-cw)/2;
+  const drawTimer=()=>{
+    const t=$('#timer');if(!t)return;
+    $('#tsec').textContent=Math.max(0,Math.ceil(G.left));
+    t.style.setProperty('--p',(G.left/WAIT*100).toFixed(1)+'%');
+    t.classList.toggle('hurry',G.phase==='stop'&&G.live&&G.left<=3);
+    t.classList.toggle('off',G.phase!=='stop'||!G.live);
+  };
+  const step=now=>{
+    const dt=Math.min(.05,(now-last)/1000);last=now;G.t+=dt;
+    let walking=false;
+    if(G.phase==='in'){
+      walking=true;
+      if(G.walk>0){G.walk-=dt;}
+      else{
+        const d=G.x-xStop;
+        G.x-=Math.max(40,d*2.2)*dt;               // はじめは はやく、だんだん ゆっくり
+        G.y+= (0-G.y)*Math.min(1,dt*2);
+        if(G.x<=xStop+1){G.x=xStop;G.phase='stop';G.live=true;
+          $('#chs').querySelectorAll('.ch').forEach(b=>b.disabled=false);}
+        else if(d<W*.5&&!G.fuwa){G.fuwa=1;SE.fuwa();}
+      }
+    }else if(G.phase==='stop'){
+      if(G.live){
+        const before=Math.ceil(G.left);G.left-=dt;const after=Math.ceil(G.left);
+        if(after!==before&&after<=3&&after>0)SE.tick();
+        if(G.left<=0){G.left=0;timeout();}
+      }
+    }else if(G.phase==='out'){
+      G.x-=160*dt;G.y-=70*dt;G.op=Math.max(0,G.op-dt*.7);
+      if(G.op<=0){G.phase='done';}
+    }
+    if(walking){groundX-=W*.35*dt;ground.style.backgroundPositionX=groundX+'px';}
+    walker.classList.toggle('go',walking);
+    const bob=Math.sin(G.t*2.2)*7,rot=Math.sin(G.t*1.4)*3;
+    card.style.transform=`translate(${G.x}px,${G.y+bob}px) rotate(${rot}deg)`;
+    card.style.opacity=G.op;
+    drawTimer();
+    if(G.phase==='done'){raf=0;return;}
+    raf=requestAnimationFrame(step);
+  };
+  G.fuwa=0;raf=requestAnimationFrame(step);
+}
+function lockChoices(k){
+  const ans=G.qs[G.i].p.k;
+  $('#chs').querySelectorAll('.ch').forEach(b=>{
+    b.disabled=true;
+    if(b.dataset.k===ans)b.classList.add('ok');
+    else if(b.dataset.k===k)b.classList.add('ng');
+    else b.classList.add('dim');
+  });
+}
+function answer(k){
+  if(!G||!G.live)return;
+  wake();G.live=false;
+  const q=G.qs[G.i],ok=k===q.p.k;
+  G.res[G.i]=ok;lockChoices(k);
+  $('#card .ph').insertAdjacentHTML('beforeend',`<span class="stamp ${ok?'ok':'ng'}">${ok?'○':'×'}</span>`);
+  if(ok){
+    SE.ok();
+    rec.got[q.p.k]=(rec.got[q.p.k]||0)+1;save();
+    setTimeout(()=>flyToNote(q.p),420);
+    talk('boy',['せいかい！ '+q.p.n+' だね！','やったね！ '+q.p.n+'！','よく 知ってるね！ '+q.p.n+'！'][G.i%3]);
+  }else{
+    SE.ng();
+    talk('risu','ざんねん！ これは '+q.p.n+' だよ。');
+  }
+  showFb(ok?'ok':'ng',q.p);
+  drawHud();
+}
+function timeout(){
+  G.live=false;G.phase='out';            // 写真は ふわ〜っと とんでいく
+  const q=G.qs[G.i];G.res[G.i]=false;
+  SE.gone();lockChoices(null);
+  talk('risu','あっ、とんでいっちゃった… '+q.p.n+' だったよ。');
+  showFb('gone',q.p);drawHud();
+}
+function flyToNote(p){
+  const put=()=>{SE.take();$('#shots').insertAdjacentHTML('beforeend',`<img src="photo/${p.p}.jpg${PV}" alt="${p.n}">`);};
+  const card=$('#card');
+  if(!G||G.qs[G.i].p!==p||G.phase!=='stop'){put();return;}   // もう つぎへ すすんでいたら、すぐ はる
+  const r=card.getBoundingClientRect(),s=$('#shots').getBoundingClientRect();
+  const cl=card.cloneNode(true);cl.removeAttribute('id');cl.classList.add('flying');cl.querySelector('.timer')?.remove();
+  Object.assign(cl.style,{left:r.left+'px',top:r.top+'px',width:r.width+'px',transform:'none',opacity:1});
+  document.body.appendChild(cl);card.style.opacity='0';G.op=0;
+  requestAnimationFrame(()=>{
+    const dx=s.left+20-(r.left+r.width/2),dy=s.top+10-(r.top+r.height/2);
+    cl.style.transform=`translate(${dx}px,${dy}px) scale(.1) rotate(-20deg)`;cl.style.opacity='.3';
+  });
+  setTimeout(()=>{cl.remove();put();},720);
+}
+const TK={k:'草花',j:'木'};
+function tags(p){return `<div class="tags"><span class="tag ${p.t}">${TK[p.t]}</span><span class="tag s">きせつ：${p.s}</span></div>`;}
+function showFb(kind,p){
+  const mk={ok:'○ せいかい！ さんぽノートに はったよ',ng:'× ざんねん！ せいかいは…',gone:'じかん ぎれ！ せいかいは…'}[kind];
+  const last=G.i>=G.qs.length-1;
+  $('#fb').className='fb on '+(kind==='ok'?'ok':'ng');
+  $('#fb').innerHTML=`<div class="mk">${mk}</div><div class="nm">${p.n}${p.kj?`<small>漢字で「${p.kj}」</small>`:''}</div>${tags(p)}
+    <p>${p.f}</p><button class="btn pri" id="nextBtn">${last?'さんぽ おしまい ▶':'つぎへ 歩く ▶'}</button>`;
+  $('#nextBtn').onclick=()=>{wake();stopRun();G.i++;nextCard();};
+  setTimeout(()=>{const b=$('#nextBtn');if(b&&b.getBoundingClientRect().bottom>innerHeight)b.scrollIntoView({behavior:'smooth',block:'end'});},60);
+}
+
+function finish(){
+  stopRun();
+  const n=G.res.filter(Boolean).length;
+  const b=rec.best[G.c],isNew=b==null||n>b;
+  if(isNew){rec.best[G.c]=n;save();}
+  const title=n===10?'のはらの はかせ！':n>=8?'しょくぶつ 名人！':n>=5?'さんぽ 名人 見ならい':'ずかんで おぼえて また 行こう';
+  $('#ovc').innerHTML=`<img class="face" src="art/${n>=5?'boy':'risu'}.jpg" alt=""><h3>さんぽ おしまい！</h3>${isNew&&n>0?'<span class="new">じこ ベスト！</span>':''}
+    <div class="big">${n}<small> / ${N} こ みつけた</small></div>
+    <p style="margin:4px 0;font-weight:900">${title}</p>
+    <div class="list">${G.qs.map((q,i)=>`<span class="${G.res[i]?'ok':'ng'}">${q.p.n}</span>`).join('')}</div>
+    <div class="row"><button class="btn" data-home>おしまい</button><button class="btn pri" id="againBtn">もういちど</button></div>`;
+  $('#ov').classList.add('on');
+  $('#againBtn').onclick=()=>start(G.c);
+}
+
+/* ---------- ずかん ---------- */
+function openZukan(){
+  const got=k=>!!rec.got[k];
+  $('#zcnt').textContent=`${PLANTS.filter(p=>got(p.k)).length} / ${PLANTS.length}`;
+  const card=p=>got(p.k)
+    ?`<button class="zc" data-k="${p.k}"><img src="photo/${p.p}.jpg${PV}" alt="${p.n}" loading="lazy"><span class="t">${p.n}<small>${p.s}</small></span></button>`
+    :`<button class="zc no" data-k="${p.k}"><span class="unk">${p.t==='k'?'🌱':'🌳'}</span><span class="t">？？？</span></button>`;
+  const list=t=>PLANTS.filter(p=>p.t===t).sort((a,b)=>a.g-b.g);
+  $('#zgridK').innerHTML=list('k').map(card).join('');
+  $('#zgridJ').innerHTML=list('j').map(card).join('');
+  document.querySelectorAll('#zukan .zc').forEach(b=>b.onclick=()=>zDetail(b.dataset.k));
+  if(!$('#credits').children.length){
+    $('#credits').innerHTML=PLANTS.map(p=>`<li>${p.n}：${esc(p.a||'（なまえの 書かれて いない 投稿者）')}（${esc(p.l)}） <a href="${p.u}" target="_blank" rel="noopener">もとの ページ</a></li>`).join('');
+  }
+  show('zukan');
+}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function zDetail(k){
+  const p=BY[k];
+  if(!rec.got[k]){
+    $('#ovc').innerHTML=`<img class="face" src="art/risu.jpg" alt=""><h3>まだ ひみつ</h3><p>さんぽで この ${TK[p.t]}を あてると、ずかんに のるよ。${p.g===3?'<br>おく山の みちで 出るよ。':''}</p><div class="row"><button class="btn" id="ovClose">とじる</button></div>`;
+  }else{
+    $('#ovc').innerHTML=`<img class="big" src="photo/${p.p}.jpg${PV}" alt="${p.n}">
+      <div class="dt"><h3 style="margin:0">${p.n}${p.kj?` <small style="font-size:.8rem;color:var(--sub)">${p.kj}</small>`:''}</h3>${tags(p)}<p>${p.f}</p></div>
+      <p class="src">写真：${esc(p.a||'（なまえの 書かれて いない 投稿者）')}（${esc(p.l)}） <a href="${p.u}" target="_blank" rel="noopener">もとの ページ</a><br>あてた かず：${rec.got[k]}かい</p>
+      <div class="row"><button class="btn" id="ovClose">とじる</button></div>`;
+  }
+  $('#ov').classList.add('on');$('#ovClose').onclick=closeOv;
+}
+
+/* ---------- ボタン ---------- */
+document.querySelectorAll('[data-course]').forEach(b=>b.onclick=()=>start(b.dataset.course));
+$('#zukanBtn').onclick=openZukan;
+$('#quitBtn').onclick=home;
+document.addEventListener('click',e=>{if(e.target.closest('[data-home]'))home();});
+$('#ov').addEventListener('click',e=>{if(e.target.id==='ov'&&$('#zukan').style.display==='block')closeOv();});
+document.addEventListener('keydown',e=>{
+  if(!G||$('#game').style.display!=='block')return;
+  if(G.live&&/^[1-4]$/.test(e.key)){const b=$('#chs').children[+e.key-1];if(b)answer(b.dataset.k);}
+  else if(!G.live&&(e.key==='Enter'||e.key===' ')&&$('#nextBtn')){e.preventDefault();$('#nextBtn').click();}
+});
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&G&&raf){/* 見ていない あいだは とめる */stopRun();G.paused=true;}
+  else if(!document.hidden&&G&&G.paused){G.paused=false;run();}});
+$('#kinds').textContent=`写真は ${PLANTS.length}しゅるい`;
+drawRecs();
+</script>
+</body>
+</html>

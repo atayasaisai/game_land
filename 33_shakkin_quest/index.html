@@ -525,7 +525,7 @@ function T(x,y,txt,cls,anchor,size){return '<text class="'+cls+'" x="'+x+'" y="'
 var heroPose="";
 var LANE=22,X0=252,X1=846,SPAN=X1-X0;
 function X(d){return X0+d*(SPAN/(LANE-1));}
-function roadY(x){return 474+17*Math.sin(x/1200*Math.PI*2.3+0.7);}
+function roadY(x){return 474;}   // 道の絵（road.jpg）がまっすぐなので、道の高さも一定
 var RW=40;
 
 /* ===== 城（足元中央が原点） ===== */
@@ -693,16 +693,20 @@ s+='<defs>'
  +'</defs>';
 // 背景（先方の絵 00_incoming/クエスト背景.png を左右反転。城の門が道の左はしに来るように、大きさと位置を合わせてある）
 s+='<image href="bg.jpg" x="-56" y="0" width="1616" height="760"/>';
-// 道
-var tp='',bp='';
-// 道は城の門から始まる
-var RX0=150;
-for(var x=RX0;x<=1220;x+=20){tp+=(x===RX0?"M":"L")+x+" "+(roadY(x)-RW)+" ";}
-for(var x=1220;x>=RX0;x-=20){bp+="L"+x+" "+(roadY(x)+RW)+" ";}
-s+='<ellipse cx="'+RX0+'" cy="'+roadY(RX0)+'" rx="'+(RW*.7)+'" ry="'+RW+'" fill="url(#road)" stroke="#8a6534" stroke-width="4"/>';
-s+='<path d="'+tp+bp+'Z" fill="url(#road)" stroke="#8a6534" stroke-width="4"/>';
-for(var i=0;i<60;i++){var px=RX0+10+rnd()*(1200-RX0-10),py=roadY(px)+(rnd()*60-30);
-  s+='<ellipse cx="'+px+'" cy="'+py+'" rx="'+(2+rnd()*3)+'" ry="'+(1.4+rnd()*1.6)+'" fill="#9c7440" opacity=".55"/>';}
+// 道（先方の絵 road.jpg＝00_incoming/モンスターが来る道.png の いちばん上。2172×156、土は上から52〜105）
+// 城の門から始まる。上のはしと左のはしは うすくして草原になじませ、土のふちは少し濃くして道と平原を見分けやすくする
+var RX0=150, RTH=70, RK=RTH/53, RDW=2172*RK, RDH=156*RK, RDX=RX0-26, RDY=474-78*RK;
+s+='<defs><linearGradient id="rfv" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".3" stop-color="#fff"/></linearGradient>'
+ +'<linearGradient id="rfh" gradientUnits="userSpaceOnUse" x1="'+RDX+'" y1="0" x2="'+(RDX+56)+'" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#fff"/></linearGradient>'
+ +'<mask id="rmv" maskUnits="userSpaceOnUse" x="'+RDX+'" y="'+RDY+'" width="'+(1230-RDX)+'" height="'+RDH+'"><rect x="'+RDX+'" y="'+RDY+'" width="'+(1230-RDX)+'" height="'+RDH+'" fill="url(#rfv)"/></mask>'
+ +'<mask id="rmh" maskUnits="userSpaceOnUse" x="'+RDX+'" y="'+RDY+'" width="'+(1230-RDX)+'" height="'+RDH+'"><rect x="'+RDX+'" y="'+RDY+'" width="'+(1230-RDX)+'" height="'+RDH+'" fill="url(#rfh)"/></mask>'
+ +'<linearGradient id="redgeT" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a2e0e" stop-opacity=".6"/><stop offset="1" stop-color="#5a3a14" stop-opacity="0"/></linearGradient>'
+ +'<linearGradient id="redgeB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a3a14" stop-opacity="0"/><stop offset="1" stop-color="#4a2e0e" stop-opacity=".6"/></linearGradient></defs>';
+s+='<g mask="url(#rmv)"><g mask="url(#rmh)">';
+for(var rxi=RDX;rxi<1220;rxi+=RDW-1)s+='<image href="road.jpg" x="'+rxi.toFixed(1)+'" y="'+RDY.toFixed(1)+'" width="'+RDW.toFixed(1)+'" height="'+RDH.toFixed(1)+'" preserveAspectRatio="none"/>';
+s+='<rect x="'+RDX+'" y="'+(474-RTH/2-4)+'" width="'+(1230-RDX)+'" height="16" fill="url(#redgeT)"/>'
+ +'<rect x="'+RDX+'" y="'+(474+RTH/2-12)+'" width="'+(1230-RDX)+'" height="16" fill="url(#redgeB)"/>';
+s+='</g></g>';
 
 // 日付の道標（毎日 1本）
 for(var i=0;i<LANE;i++){

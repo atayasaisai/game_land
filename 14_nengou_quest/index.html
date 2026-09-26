@@ -491,6 +491,10 @@ function sceneSVG(){
   var u = H / 520, U = function(n){ return Math.round(n * u); };
   var fw = Math.round(FIMG.w * FK), fh = Math.round(FIMG.h * FK), rx = GATEX - 6;
   var fade = Math.round(fh * 0.05);                 // お城の旗より上の、空だけのところで なじませる
+  // モンスターが来る道 road.jpg（先方の絵、2172×156）。土のところは 上から 52〜105（まんなか 78）
+  var RIMG = {w:2172, h:156, mid:78, thick:53};
+  var rk = U(46) / RIMG.thick, rdw = RIMG.w * rk, rdh = Math.round(RIMG.h * rk),
+      rdx = rx - U(24), rdy = Math.round(GY + U(28) - RIMG.mid * rk);
   // 絵が上まで とどかないときは、絵の上のはしを空の色へ なじませる
   s += '<defs><linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">'
      + '<stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".1" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#fff"/></linearGradient>'
@@ -499,22 +503,20 @@ function sceneSVG(){
      + '<rect x="0" y="'+(FY0+fade)+'" width="'+W+'" height="'+fh+'" fill="#fff"/></mask>'
      + '<linearGradient id="skyfill" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="'+Math.max(FY0+fade,1)+'">'
      + '<stop offset="0" stop-color="#2F7FD6"/><stop offset="1" stop-color="#5AACF3"/></linearGradient>'
-     + '<clipPath id="roadclip"><rect x="'+rx+'" y="0" width="'+(W-rx)+'" height="'+H+'"/></clipPath></defs>';
+     // 道の絵：上のはしと 左のはし（お城の門のところ）を うすくして 草原に なじませる
+     + '<linearGradient id="rfv" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".3" stop-color="#fff"/></linearGradient>'
+     + '<linearGradient id="rfh" gradientUnits="userSpaceOnUse" x1="'+rdx+'" y1="0" x2="'+(rdx+U(60))+'" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#fff"/></linearGradient>'
+     + '<mask id="rmv" maskUnits="userSpaceOnUse" x="'+rdx+'" y="'+rdy+'" width="'+(W-rdx)+'" height="'+rdh+'"><rect x="'+rdx+'" y="'+rdy+'" width="'+(W-rdx)+'" height="'+rdh+'" fill="url(#rfv)"/></mask>'
+     + '<mask id="rmh" maskUnits="userSpaceOnUse" x="'+rdx+'" y="'+rdy+'" width="'+(W-rdx)+'" height="'+rdh+'"><rect x="'+rdx+'" y="'+rdy+'" width="'+(W-rdx)+'" height="'+rdh+'" fill="url(#rfh)"/></mask></defs>';
   // 絵が上まで とどかないときの空（上ほど こい青）
   s += '<rect width="'+W+'" height="'+H+'" fill="url(#skyfill)"/>';
   s += '<image href="'+IMG("field.jpg")+'" x="'+FX0+'" y="'+FY0+'" width="'+fw+'" height="'+fh+'"'
      + ' preserveAspectRatio="none"'+(FY0 > 0 ? ' mask="url(#fmask)"' : '')+'/>';
-  // 道（お城の門から はじまる）
-  var ry0 = GY + U(28);
-  s += '<ellipse cx="'+rx+'" cy="'+ry0+'" rx="'+U(16)+'" ry="'+U(21)+'" fill="#E4C795" stroke="#33312A" stroke-width="3.4"/>';
-  s += '<path clip-path="url(#roadclip)" d="M0,'+(GY+U(6))+' Q'+(W*.5)+','+(GY-U(12))+' '+W+','+(GY+U(2))+' V'+(GY+U(46))
-     + ' Q'+(W*.5)+','+(GY+U(32))+' 0,'+(GY+U(50))+' Z" fill="#E4C795" stroke="#33312A" stroke-width="3.4"/>';
-  // 足あと(道しるべの代わり。ここは日づけではなく「お城までの のこり歩数」)
-  var i, fx;
-  for(i=0;i<=STEPS;i++){
-    fx = LX1 - (i/STEPS)*(LX1-LX0);
-    s += '<ellipse cx="'+fx.toFixed(1)+'" cy="'+(GY+U(26))+'" rx="6" ry="3.6" fill="#C9A874" opacity=".85"/>';
-  }
+  // 道（お城の門から はじまる。絵をならべて右はしまで）
+  s += '<g mask="url(#rmv)"><g mask="url(#rmh)">';
+  for(var rxi = rdx; rxi < W; rxi += rdw - 1)
+    s += '<image href="'+IMG("road.jpg")+'" x="'+rxi.toFixed(1)+'" y="'+rdy+'" width="'+rdw.toFixed(1)+'" height="'+rdh+'" preserveAspectRatio="none"/>';
+  s += '</g></g>';
   s += '<g id="mobs"></g>';
   // 勇者の絵は 451x420 の共通キャンバスにそろえてある（体の位置と大きさが
   // ポーズごとに動かないように）。枠もその比率にして、足もとを GY にぴったり置く
