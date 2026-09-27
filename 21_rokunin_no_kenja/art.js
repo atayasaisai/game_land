@@ -210,9 +210,10 @@ const ART = (() => {
     const boxes = buildingBoxes(lvAll, comboIds, stages, ov);
     return GROUND.filter(([x, y]) => !boxes.some(([l, t, r, b]) => x > l && x < r && y > t && y < b));
   }
-  function crowd(pop, spots) {
+  // mon = モンスター王国（第2版）：人の かわりに モンスターが 町を 歩く
+  function crowd(pop, spots, mon) {
     const n = Math.min(spots.length, Math.floor(pop / 35));
-    return spots.slice(0, n).sort((a, b) => a[1] - b[1]).map(([x, y], k) => personAt(WALKERS[k % WALKERS.length], x, y, k)).join("");
+    return spots.slice(0, n).sort((a, b) => a[1] - b[1]).map(([x, y], k) => mon ? monsterAt(MONSTER_KINDS[k % MONSTER_KINDS.length], x, y, k) : personAt(WALKERS[k % WALKERS.length], x, y, k)).join("");
   }
   // ---- 自動車：道の上を 行ったり 来たり（1本の 道に 1台、3台まで）----
   function cars(lv, comboIds) {
@@ -246,6 +247,7 @@ const ART = (() => {
   // 国土の いきもの・うごき：はってん度に おうじて ふえる
   // score = はってん度、S = サブ指標（人口で 人の数、幸福度で 鳥の群れ、食料で 動物）
   function life(score, S) {
+    if (score <= -100) return ""; // モンスター王国：人の 世界の 動物は いない
     let out = ANIMALS.filter((a) => S.food >= a[4] || score >= a[4]).map((a) => fimg(a[0], a[1], a[2], a[3], "bob", `animation-delay:-${(a[1] % 10) / 8}s`)).join("");
     return out;
   }
@@ -293,6 +295,7 @@ const ART = (() => {
     out += spots.slice(0, bad.monsters).sort((a, b) => a[1] - b[1]).map(([x, y], k) => monsterAt(MONSTER_KINDS[(k * 3) % MONSTER_KINDS.length], x, y, k + 3)).join("");
     out += spots.slice(bad.monsters, bad.monsters + bad.bandits).map(([x, y]) => fimg("bandits", x, y, 70)).join("");
     if (bad.castle) out += fimg("darkcastle", 1400, 200, 150);
+    if (bad.monking) out += fimg("darkcastle", 880, 400, 240) + fimg("darkcastle", 430, 320, 150) + fimg("darkcastle", 1000, 660, 150); // モンスター王国の 城
     out += FLOOD_AT.slice(0, bad.floods).map(([x, y]) => fimg("wave", x, y + 20, 95, "bob")).join("");
     return out;
   }
@@ -345,5 +348,73 @@ const ART = (() => {
     return P.map(([x, y], i) => fimg("fireworks", x, y, 230, "fw") .replace('class="fw"', `class="fw" style="animation-delay:${i * 0.45}s"`)).join("");
   }
 
-  return { sage, king, preload, POSES, field, life, sky, sea, crowd, cars, freeGround, volcanoes, trouble, decor, activeCombos, comboMarkup, layer, siteStages, siteMarkup, flags, monster, volcano, fireworks, SITES };
+  // ---- 隠し けつまつの 絵 ----
+  // ---- 隠し けつまつの 絵（先方の 素材 00_incoming/異世界転生.jpg から 切り出した obj4/。切り出しは 異世界転生_切り出し.py）----
+  const OBJ4 = { alien: [145, 305], d_dragon: [309, 318], d_goblin: [222, 267], d_orc: [267, 309], drone: [280, 162], fut_dome: [264, 230], fut_saucer: [152, 162],
+    fut_small: [215, 135], fut_spire: [224, 199], fut_tower: [64, 142], satellite: [278, 187], ufo: [366, 199], ufo_beam: [243, 359], submarine: [378, 205] };
+  function o4(name, cx, cy, w, cls = "", style = "") {
+    const [W, H] = OBJ4[name]; const h = w * H / W;
+    return `<image class="${cls}" style="${style}" href="obj4/${name}.png?v=1" x="${cx - w / 2}" y="${cy - h}" width="${w}" height="${h}"/>`;
+  }
+  // 宇宙人：空いっぱいの UFO と、光の すじの UFO（地上）
+  function ufos() {
+    const beams = [[600, 720, 150], [1180, 600, 130], [330, 470, 120], [940, 380, 120], [760, 900, 120]];
+    const sky = [[420, 230, 200], [1060, 190, 230], [800, 380, 150], [250, 560, 130], [160, 180, 140], [640, 130, 170], [1360, 140, 160],
+      [1230, 420, 140], [520, 560, 120], [1000, 700, 130], [1420, 600, 120], [350, 850, 120], [1150, 900, 130]];
+    return beams.map(([x, y, w]) => o4("ufo_beam", x, y, w, "ufo")).join("")
+      + sky.map(([x, y, w], i) => `<g class="ufo" style="animation-delay:-${i * .6}s">${o4("ufo", x, y, w)}</g>`).join("");
+  }
+  // 宇宙人の 町：国土いっぱいに 近未来の 住居を ならべる（人の すみか 12か所は 大きく、ほかは 地面の 3つに 1つ）
+  const FUT = [["fut_dome", 1], ["fut_spire", .85], ["fut_small", .8], ["fut_tower", .3], ["fut_small", .75], ["fut_dome", .9], ["fut_spire", .8]];
+  function alienCity() {
+    const big = SITES.map(([x, y], k) => ({ x, y, w: 200, k }));
+    const many = GROUND.filter((_, i) => i % 3 === 0).map(([x, y], k) => ({ x, y, w: 120, k: k + 5 }));
+    return [...big, ...many].sort((a, b) => a.y - b.y).map(({ x, y, w, k }) => {
+      const [n, f] = FUT[k % FUT.length]; return o4(n, x, y + 10, w * f, "popin");
+    }).join("") + [[1250, 150, 110], [300, 150, 100], [700, 60, 90]].map(([x, y, w], i) => drift(o4("fut_saucer", x, y, w), i)).join("");
+  }
+  // 宇宙人（町を 歩く。建物の ない 地面に）
+  function aliens() {
+    return GROUND.filter((_, i) => i % 3 !== 0).slice(0, 80).sort((a, b) => a[1] - b[1])
+      .map(([x, y], k) => o4("alien", x, y, 20, "bob", `animation-delay:-${(k % 9) / 8}s`)).join("");
+  }
+  // ---- みんな なかよし！：画面いっぱいの 明るい モンスターと 人・虹・花火 ----
+  // 1つの 地面に 2人（明るい 色の モンスター＋人）。wave ＝ 何回目に ふやすか（0〜3）
+  function partyCrowd(spots, wave, waves) {
+    const per = Math.ceil(spots.length / waves); const part = spots.slice(wave * per, (wave + 1) * per);
+    return part.map(([x, y], i) => {
+      const k = wave * per + i; const man = WALKERS[k % WALKERS.length]; const [pW, pH] = FX_SIZE[man]; const ph = 38;
+      const [mon, mh] = [["d_dragon", 58], ["d_goblin", 50], ["d_orc", 54]][k % 3]; const [mW, mH] = OBJ4[mon];
+      const glow = `filter:saturate(1.3) brightness(1.1) hue-rotate(${[0, 40, 160, 280, 320][k % 5]}deg) drop-shadow(0 0 4px rgba(255,255,255,.8));animation-delay:-${(k % 5) / 8}s`;
+      const withMon = k % 10 >= 3; // モンスターは 3わり へらす（10組に 3組は 人だけ）
+      return (withMon ? o4(mon, x - 16, y, mh * mW / mH, "dancer", glow) : "") + fimg(man, x + 16, y + 4, ph * pW / pH, "dancer", `animation-delay:-${(k % 7) / 9}s`);
+    }).join("");
+  }
+  const RAINBOW_AT = [[360, 230, 380, 0], [1150, 260, 320, 20], [760, 140, 300, -20], [220, 620, 280, 40], [1300, 700, 300, -30], [700, 560, 260, 10], [1000, 420, 240, 60]];
+  function rainbowOne(i) { const [x, y, w, hue] = RAINBOW_AT[i % RAINBOW_AT.length]; return fimg("rainbow", x, y, w, "popin", `filter:hue-rotate(${hue}deg)`); }
+  const FW_AT = [[700, 230], [1150, 200], [300, 420], [1250, 560], [600, 800], [950, 120], [150, 250], [1400, 350], [450, 620], [1050, 780], [820, 430], [250, 880], [1350, 900], [560, 330]];
+  function fireworksMany() { return FW_AT.map(([x, y], i) => fimg("fireworks", x, y, 200 + (i % 3) * 40, "fw", `animation-delay:${(i * 0.37) % 1.6}s;filter:hue-rotate(${(i * 53) % 360}deg)`)).join(""); }
+  // 科学技術：ロケット・飛行機・ヘリ・人工衛星・電波塔を ふやす
+  // 科学技術：国いっぱいの ロケット発射台・空港・ショッピングモール、空に 飛行機・ヘリ・人工衛星・ドローン、海に 潜水艦
+  // ショッピングモール・空港・宇宙人の 近未来の 住居（fut_）を 多めに（2026-09-27 先方の指示）。ロケットは 3つに へらした
+  const SCI = [["mall", 150], ["airport", 160], ["fut_dome", 150], ["mall", 130], ["airport", 140], ["fut_spire", 130], ["rocket", 80],
+    ["mall", 140], ["airport", 150], ["fut_small", 130], ["fut_dome", 130], ["mall", 120], ["airport", 130], ["fut_tower", 45], ["rocket", 70],
+    ["fut_spire", 120], ["mall", 130], ["airport", 140], ["fut_small", 120], ["parabola", 90], ["rocket", 90]];
+  const SUB_AT = [[330, 960], [960, 975], [1250, 900], [560, 1000], [150, 720], [1420, 640], [1460, 420], [80, 420], [1480, 120], [100, 880], [760, 1000], [1120, 990]];
+  function science(free) {
+    const sky = [["plane", 300, 120, 130], ["plane", 900, 90, 150], ["heli", 600, 260, 100], ["heli", 1150, 330, 90], ["plane", 1400, 250, 120], ["plane", 520, 420, 100], ["heli", 250, 620, 80]];
+    const sky4 = [["satellite", 1320, 90, 120], ["satellite", 180, 330, 90], ["drone", 480, 420, 80], ["drone", 1000, 520, 70], ["drone", 760, 300, 60], ["drone", 1250, 760, 70]];
+    // 島じゅうの 地面に 建てる（2026-09-27 先方の指示。はじめ 240か所で「多すぎ」→ 4わり へらして 144か所＝GROUND の 10こに 9こ）
+    const spots = GROUND.filter((_, i) => i % 10 !== 0);
+    const land = spots.map(([x, y], k) => ({ x, y, k })).sort((a, b) => a.y - b.y).map(({ x, y, k }) => {
+      const [n, w0] = SCI[k % SCI.length]; const w = n === "rocket" ? w0 : w0 * 1.3; // モールと 空港と 住居は 大きめに
+      return n === "rocket" ? rocketLaunch(x, y + 10, w) : n.startsWith("fut_") ? o4(n, x, y + 10, w, "popin") : img(O3, n, x, y + 10, w, "popin");
+    }).join("");
+    const subs = SUB_AT.map(([x, y], i) => `<g class="sail" style="animation-duration:${22 + (i % 4) * 5}s;animation-delay:-${i * 3}s">${o4("submarine", x, y, 100 + (i % 3) * 20)}</g>`).join("");
+    return subs + rocketLaunch(1420, 810, 150) + rocketLaunch(200, 900, 110) + land
+      + sky.map(([n, x, y, w], i) => drift(img(O3, n, x, y, w), i)).join("")
+      + sky4.map(([n, x, y, w], i) => drift(o4(n, x, y, w), i + 5)).join("");
+  }
+
+  return { alienCity, aliens, partyCrowd, rainbowOne, RAINBOW_AT, fireworksMany, GROUND, ufos, science, sage, king, preload, POSES, field, life, sky, sea, crowd, cars, freeGround, volcanoes, trouble, decor, activeCombos, comboMarkup, layer, siteStages, siteMarkup, flags, monster, volcano, fireworks, SITES };
 })();

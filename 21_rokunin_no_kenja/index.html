@@ -196,6 +196,36 @@ img.sage.hop{animation:hop .3s steps(2)}
 .result .btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:6px}
 /* ───────── しらべ札（社会の おはなし）───────── */
 /* 「社会の豆知識」の囲み：札が 1まいでも 出たら 見える */
+/* 隠し けつまつ：異世界（光に つつまれる）・宇宙人（建物が 宇宙人の 色に） */
+#game.isekai .king{z-index:9} #game.isekai .result{z-index:10}
+.hidden-cap{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);z-index:11;width:min(92vw,900px);text-align:center;pointer-events:none;
+  font-family:"Mochiy Pop One",sans-serif;font-size:clamp(1.6rem,6.2vw,3.4rem);line-height:1.35;color:#fff;
+  text-shadow:0 0 12px rgba(0,0,0,.55),3px 3px 0 #3a2a10,-2px -2px 0 #3a2a10,2px -2px 0 #3a2a10,-2px 2px 0 #3a2a10;animation:capin 1s ease-out}
+@keyframes capin{0%{opacity:0;transform:translate(-50%,-50%) scale(.7)}100%{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+/* 隠し けつまつの 前の 一言：画面を 横に 3等分した まん中に 黒い 半透明の 帯、上下に 黄色と 黒の しましま（警告表示ふう） */
+.warn-band{position:absolute;left:0;right:0;top:33.333%;height:33.333%;z-index:11;pointer-events:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.4em;
+  background:rgba(10,10,14,.68);animation:warnopen .35s ease-out}
+.warn-band::before,.warn-band::after{content:"";position:absolute;left:0;right:0;height:clamp(10px,2.2vh,18px);
+  background:repeating-linear-gradient(-45deg,#ffd400 0 16px,#141414 16px 32px);background-size:45px 100%;animation:warnstripe 1s linear infinite}
+.warn-band::before{top:0}.warn-band::after{bottom:0;animation-direction:reverse}
+.warn-band .msg{font-family:"Mochiy Pop One",sans-serif;font-size:clamp(1.3rem,5.4vw,3rem);line-height:1.35;color:#fff;text-align:center;padding:0 12px;
+  text-shadow:0 0 10px rgba(255,40,40,.85),0 0 22px rgba(255,40,40,.55);animation:warnmsg 1s ease-in-out infinite}
+@keyframes warnopen{0%{transform:scaleY(0)}100%{transform:scaleY(1)}}
+@keyframes warnstripe{0%{background-position:0 0}100%{background-position:45px 0}}
+@keyframes warnmsg{0%,100%{opacity:1}50%{opacity:.78}}
+.isekai-light.fadeaway{animation:none;background:#fff;opacity:0;transition:opacity 1.5s ease-out}
+/* ホワイトアウト：画面中央の 小さな まばゆい光（丸く すける 絵）が 回りながら 画面いっぱいまで ひろがり、さいごは まっ白 */
+.isekai-light{position:absolute;inset:0;z-index:8;pointer-events:none;overflow:hidden;animation:wbg 2.6s ease-in forwards}
+@keyframes wbg{0%,55%{background-color:rgba(255,255,255,0)}100%{background-color:#fff}}
+#map.alien #L-road,#map.alien #L-cars{filter:hue-rotate(165deg) saturate(1.9) brightness(1.08) drop-shadow(0 0 5px #7ff)}
+#map.alien #L-combo,#map.alien #L-people,#map.alien #L-fun,#map.alien #L-school,#map.alien #L-farm,#map.alien #L-market,#map.alien #L-guard,#map.alien #L-crowd,#map.alien #L-decor{display:none}
+/* 異世界：光の まん中に 光の 絵、そのあと 雲の 上の 都市が あらわれる */
+.isekai-light .burst{position:absolute;left:50%;top:45%;width:min(60vw,480px);transform:translate(-50%,-50%) scale(.06);animation:burstgrow 2.6s cubic-bezier(.5,0,.8,.6) forwards}
+@keyframes burstgrow{0%{transform:translate(-50%,-50%) scale(.06) rotate(0)}100%{transform:translate(-50%,-50%) scale(7) rotate(50deg)}}
+.isekai-world{position:absolute;inset:0;z-index:8;background:#fff url(obj4/skycity.jpg?v=1) center/cover no-repeat;opacity:0;transition:opacity 2s ease-in}
+.isekai-world.on{opacity:1}
+.ufo{animation:ufo 3.2s ease-in-out infinite}
+@keyframes ufo{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
 .learnbox{position:absolute;left:8px;top:clamp(150px,30vh,260px);z-index:5;max-width:calc(100vw - 16px);display:none;
   background:rgba(255,252,240,.9);border:3px solid var(--ink);border-radius:18px;padding:6px 8px 8px;box-shadow:3px 3px 0 var(--ink)}
 .learnbox.on{display:block;animation:fade .3s}
@@ -327,9 +357,9 @@ img.sage.hop{animation:hop .3s steps(2)}
   <button class="btn showres" id="showRes" type="button" style="display:none">けっかを 見る</button>
 </section>
 
-<script src="rules.js?v=12"></script>
+<script src="rules2.js?v=11"></script><!-- もとに もどすときは rules.js?v=14 に（第1版。パターンなし） -->
 <script src="obj/sizes.js?v=9"></script>
-<script src="art.js?v=26"></script>
+<script src="art.js?v=41"></script>
 <script src="shakai.js?v=2"></script>
 <script>
 // ============================================================
@@ -400,18 +430,32 @@ function buildField() {
   document.querySelectorAll("#mon-slots .mon").forEach((g, i) => { g.innerHTML = ART.monster(i); g.style.display = "none"; });
   fitMap();
 }
+// ---- 地図は はってん度に あわせて 描く（2026-09-27 先方の指示「発展度を 正確に 地図に 反映」）----
+// 見せる だんかい：はってん度が だんかいの 合計より 低い ときは（あらされた・悪い パターンなど）、建物を その ぶん へらして 描く
+// 隠し けつまつの 演出中は st.forced（はってん度と だんかい）で 描く
+const scoreNow = () => (st.forced ? st.forced.score : RULES.score(st));
+const isDark = () => !st.forced && !!(RULES.dark && RULES.dark(st));
+const isMonking = () => !st.forced && !!(RULES.monking && RULES.monking(st));
+function viewLv() {
+  if (st.forced) return { ...st.forced.lv };
+  const lv = st.lv; const sum = RULES.ELEMS.reduce((a, e) => a + lv[e], 0); const s = RULES.score(st);
+  if (!sum || s >= 100) return { ...lv };
+  const k = Math.max(0, Math.min(1, s / (sum / 16 * 100)));
+  return Object.fromEntries(RULES.ELEMS.map((e) => [e, Math.round(lv[e] * k)]));
+}
 function drawLayer(elem, lv, pop) {
+  lv = Math.min(lv, viewLv()[elem]); (st.shown = st.shown || {})[elem] = lv;
   const g = $("L-" + elem); g.innerHTML = ART.layer(elem, lv);
   if (pop) { g.classList.remove("pop"); void g.offsetWidth; g.classList.add("pop"); }
 }
 // 組み合わせで できたもの。st.combos = いま 地図に 出している もの（1つずつ ふやして 見せるため、そろった ものと 別に もつ）
-function shownCombos() { const ids = st.combos || []; return ART.activeCombos(st.lv).filter((c) => ids.includes(c.id)); }
+function shownCombos() { const ids = st.combos || []; return ART.activeCombos(viewLv()).filter((c) => ids.includes(c.id)); }
 function renderCombos(popId) { $("L-combo").innerHTML = shownCombos().map((c) => ART.comboMarkup(c, c.id === popId ? "popin" : "")).join(""); }
 // pop = false：そろっている ぶんを いっぺんに 出す（はじめ）。true：新しく そろった ものの ならびを かえす（pick が 1つずつ 出す）
 function drawCombos(pop) {
-  const active = ART.activeCombos(st.lv).map((c) => c.id);
+  const active = ART.activeCombos(viewLv()).map((c) => c.id);
   st.combos = (st.combos || []).filter((id) => active.includes(id)); // あらされて なくなった ものは けす
-  const fresh = ART.activeCombos(st.lv).filter((c) => !st.combos.includes(c.id));
+  const fresh = ART.activeCombos(viewLv()).filter((c) => !st.combos.includes(c.id));
   if (!pop) { st.combos = active; renderCombos(null); return []; }
   renderCombos(null);
   return fresh;
@@ -423,32 +467,37 @@ function showCombo(c) {
 }
 // 人の すみか（12か所）を 1けんずつ 育てる
 async function growSites() {
-  const target = ART.siteStages(RULES.score(st)); const cur = (st.siteStages || target.map(() => 0)).slice();
+  const target = ART.siteStages(scoreNow()); const cur = (st.siteStages || target.map(() => 0)).slice();
   for (let k = 0; k < target.length; k++) {
     if (cur[k] === target[k]) continue;
     const up = target[k] > cur[k]; cur[k] = target[k];
     drawPeople(true, cur.slice()); if (up) SND.stage(1); await wait(up ? 320 : 150);
   }
 }
-function drawAll() { RULES.ELEMS.forEach((e) => drawLayer(e, st.lv[e], false)); st.siteStages = null; st.siteOv = null; st.combos = null; drawCombos(false); drawMonsters(st.threat); setMood(); }
+function drawAll() { st.shown = {}; RULES.ELEMS.forEach((e) => drawLayer(e, st.lv[e], false)); st.siteStages = null; st.siteOv = null; st.combos = null; drawCombos(false); drawMonsters(st.threat); setMood(); }
 // まもりが 3だんかい（じょうへき）なら、モンスターは 近づけない
 function drawMonsters(n) { if (st && st.lv.guard >= RULES.MAX_LV) n = 0; document.querySelectorAll("#mon-slots .mon").forEach((g, i) => { g.style.display = i < n ? "" : "none"; }); }
 // 国土ぜんたいの ようす：人の すみか（12か所）・旗・花火・噴火 を はってん度から 決める
 // stages を わたすと その だんかいで 描く（1けんずつ 育てる とき）。わたさなければ はってん度 どおり
 function drawPeople(pop, stagesNow) {
-  const s = RULES.score(st); const stages = stagesNow || ART.siteStages(s); const prev = st.siteStages || stages.map(() => 0);
+  const s = scoreNow(); const stages = stagesNow || ART.siteStages(s); const prev = st.siteStages || stages.map(() => 0);
   // 近代の 建物に 建てかわった すみか（地図に 出した ものだけ）
   const ov = {}; shownCombos().forEach((c) => { if (c.site) ov[c.site[0]] = c.site; });
   const prevOv = st.siteOv || {};
   $("L-people").innerHTML = stages.map((g, k) => ART.siteMarkup(k, g, pop && (g !== prev[k] || (ov[k] && !prevOv[k])) ? "popin" : "", ov[k])).join("");
   st.siteStages = stages; st.siteOv = ov;
   $("L-flags").innerHTML = s >= 100 ? ART.flags() : "";
-  const S = RULES.stats(st); $("L-life").innerHTML = ART.life(s, S) + ART.sea(S);
+  // 悪い 回の あと（gloom）・暗い 世界（dark）・モンスター王国（monking）は、良い 絵（花・鳥・船・花火・動物）を へらす（第2版）
+  const V = viewLv(); const S0 = RULES.stats({ ...st, lv: V }); const gl = st.gloom || 0; const dk = isDark(); const mk = isMonking();
+  const cut = (st.forced ? 0 : gl * 20) + (dk ? 45 : 0) + (mk ? 100 : 0);
+  const S = cut ? { ...S0, happy: Math.max(0, S0.happy - cut), trade: Math.max(0, S0.trade - cut / 2), culture: Math.max(0, S0.culture - cut / 2), food: Math.max(0, S0.food - cut / 2) } : S0;
+  $("L-life").innerHTML = ART.life(mk ? -100 : s, S) + ART.sea(S);
   { const ids = shownCombos().map((c) => c.id); const st4 = stages.map((g, k) => (ov[k] ? 4 : g));
     // 人は 建物より 手前の 層（建物の 絵の 上に なる 場所には 立たせない）。自動車は 道の 層（建物の うしろを 通る）
-    const free = ART.freeGround(st.lv, ids, st4, ov); const bad = badSigns(S);
-    $("L-crowd").innerHTML = ART.crowd(S.pop, free); $("L-trouble").innerHTML = ART.trouble(S, s, st.turn, bad, free); $("L-volcano").innerHTML = ART.volcanoes(bad.volcanoes); $("L-sky").innerHTML = ART.sky(s, S, shownCombos(), bad); $("L-cars").innerHTML = ids.includes("m_car") ? ART.cars(st.lv.road, ids) : ""; } $("L-decor").innerHTML = ART.decor(S);
-  $("fx-sky").innerHTML = s >= 100 ? ART.fireworks(true) : st.lv.fun >= 3 ? ART.fireworks(false) : "";
+    const free = ART.freeGround(V, ids, st4, ov); const bad = badSigns(S);
+    // モンスター王国：町を 歩くのは モンスター
+    $("L-crowd").innerHTML = ART.crowd(mk ? 35 * 30 : S0.pop, free, mk); $("L-trouble").innerHTML = ART.trouble(S, s, st.turn, bad, free); $("L-volcano").innerHTML = ART.volcanoes(bad.volcanoes); $("L-sky").innerHTML = ART.sky(s, S, shownCombos(), bad); $("L-cars").innerHTML = ids.includes("m_car") ? ART.cars(V.road, ids) : ""; } $("L-decor").innerHTML = ART.decor(S);
+  $("fx-sky").innerHTML = s >= 100 ? ART.fireworks(true) : s >= 60 && V.fun >= 3 && !(st.gloom || 0) && !isDark() ? ART.fireworks(false) : "";
   return stages.some((g, k) => g !== prev[k]);
 }
 // 悪化の しるし：数が わるいほど、モンスター・山賊・ドラゴン・洪水・噴火が 国じゅうに ふえる。
@@ -456,22 +505,30 @@ function drawPeople(pop, stagesNow) {
 // それだけでは 出さない（巣の まわりに 2ひきまで）。46656 通り（6人×6回）を ぜんぶ ためして、さいごに 75% 以上に なる 道では
 // worse に ならないことを たしかめた（2026-09-26）。モンスターの国（まもりなしで 2回 あらされた）は 治安 0 → いちばん ひどい 絵
 function badSigns(S) {
-  const sc = RULES.score(st); const worse = st.turn >= 4 && sc < 30; const safe = st.lv.guard >= RULES.MAX_LV;
+  // 大きく 悪くなった（rules2.js の big）あとは、はってん度が 50% に もどるまで 暗い 世界（cal = おきた 災いの しゅるい）
+  const dark = isDark(); const cal = dark ? st.calamity : [];
+  const gl = st.forced ? 0 : st.gloom || 0; const mk = isMonking(); // 悪い 回の あと・モンスター王国
+  const sc = scoreNow(); const worse = (st.turn >= 4 && sc < 30) || dark; const safe = st.lv.guard >= RULES.MAX_LV;
   const danger = safe ? 0 : Math.max(0, 70 - S.safety); // 0〜70
   return {
-    nest: st.turn >= 1 ? Math.min(2, Math.floor(danger / 15)) : 0,
-    monsters: worse ? Math.min(16, Math.round(danger / 70 * 12) + st.damage * 2) : 0,
-    bandits: worse && !safe && S.safety < 30 ? Math.min(4, 1 + Math.floor((30 - S.safety) / 10)) : 0,
-    dragons: worse && !safe && S.safety <= 20 ? Math.min(3, 1 + Math.floor((20 - S.safety) / 7)) : 0,
-    castle: worse && !safe && S.safety <= 10,
-    floods: worse && S.food < 40 ? Math.min(7, 1 + Math.floor((40 - S.food) / 7)) : 0,
-    volcanoes: sc < 0 ? Math.min(6, 1 + Math.floor(-sc / 15)) : worse ? Math.min(3, Math.floor((30 - sc) / 12)) : 0,
+    nest: st.turn >= 1 && sc < 75 ? Math.min(2, Math.floor(danger / 15) + gl) : 0, // 75% いじょうの 国には 巣の モンスターも いない
+    monsters: mk ? 0 : Math.max(sc < 50 ? Math.min(16, Math.round((50 - sc) / 6)) : 0, Math.min(8, gl * 2), cal.includes("dark") ? 8 : 0, worse ? Math.min(16, Math.round(danger / 70 * 12) + st.damage * 2 + (dark ? 3 : 0)) : 0),
+    bandits: Math.max(sc < 20 ? Math.min(4, 1 + Math.floor((20 - sc) / 20)) : 0, cal.includes("rebel") ? 3 : 0, worse && !safe && S.safety < 30 ? Math.min(4, 1 + Math.floor((30 - S.safety) / 10)) : 0),
+    monking: mk,
+    dragons: Math.max(mk ? 3 : 0, sc < -30 ? 2 : sc < 0 ? 1 : 0, cal.includes("dark") ? 2 : 0, cal.includes("rebel") ? 1 : 0, worse && !safe && S.safety <= 20 ? Math.min(3, 1 + Math.floor((20 - S.safety) / 7)) : 0),
+    castle: mk || cal.includes("rebel") || (worse && !safe && S.safety <= 10),
+    floods: Math.max(cal.includes("flood") ? 6 : 0, worse && S.food < 40 ? Math.min(7, 1 + Math.floor((40 - S.food) / 7)) : 0),
+    volcanoes: Math.max(cal.includes("volcano") ? 4 : 0, sc < 0 ? Math.min(6, 1 + Math.floor(-sc / 15)) : worse ? Math.min(3, Math.floor((30 - sc) / 12)) : 0),
   };
 }
 function setMood() {
-  const s = RULES.score(st); const t = $("tint"); if (!t) return;
+  const s = scoreNow(); const t = $("tint"); if (!t) return;
   drawPeople(true);
-  if (s < 0) { t.setAttribute("fill", "#2a1a4a"); t.setAttribute("opacity", ".4"); }
+  if (st.forced && st.forced.tint) { t.setAttribute("fill", st.forced.tint[0]); t.setAttribute("opacity", st.forced.tint[1]); } // 隠し けつまつ
+  else if (isMonking()) { t.setAttribute("fill", "#3a0018"); t.setAttribute("opacity", ".45"); } // モンスター王国
+  else if (s < 0) { t.setAttribute("fill", "#2a1a4a"); t.setAttribute("opacity", ".4"); }
+  else if (isDark()) { t.setAttribute("fill", "#2a1a4a"); t.setAttribute("opacity", ".32"); } // 大きく 悪くなった あと
+  else if (st.gloom) { t.setAttribute("fill", "#3a3a48"); t.setAttribute("opacity", String(Math.min(.28, .1 * st.gloom))); } // 悪い 回の あと（すこし くもる）
   else if (s >= 75) { t.setAttribute("fill", "#ffd84d"); t.setAttribute("opacity", ".14"); }
   else { t.setAttribute("opacity", "0"); }
 }
@@ -483,7 +540,7 @@ function fxText(text, cls = "") {
 // ---- HUD ----
 let prevStats = null;
 function drawStats() {
-  const S = RULES.stats(st);
+  const S = RULES.stats({ ...st, lv: viewLv() });
   $("stats").innerHTML = RULES.STAT_NAMES.map(([k, name]) => {
     const v = S[k]; const d = prevStats ? Math.sign(v - prevStats[k]) : 0;
     const bar = k === "pop" ? "" : `<i style="--p:${v}%"></i>`;
@@ -549,7 +606,7 @@ function setChoices(enabled, pickedId) {
 // しらべ札：国に 何かが できたら、左に しらべ札が 出る（えらぶ前には 出さない＝答えの ヒントに しない）
 // ============================================================
 function learnTriggers() {
-  const ids = []; const s = RULES.score(st); const S = RULES.stats(st);
+  const ids = []; const s = RULES.score(st); const S = RULES.stats({ ...st, lv: viewLv() });
   RULES.ELEMS.forEach((e) => { if (e !== "guard" && st.lv[e] >= 1) ids.push("lv_" + e); });
   if (st.picks.includes("guard")) ids.push("monster");   // 力の賢者を よんだら「国を まもる しくみ」
   if (st.lv.guard >= 2) ids.push("lv_guard");           // 城壁が できたら「関所と お城」
@@ -620,7 +677,7 @@ function showNote() {
 
 // ---- はじめる ----
 function startGame() {
-  st = RULES.newState(); busy = false; prevStats = null;
+  st = RULES.newState(); busy = false; prevStats = null; clearHidden();
   st.learned = []; $("chips").innerHTML = ""; $("learnbox").classList.remove("on"); lbUnseen = 0; drawFold();
   $("result").classList.remove("on"); $("showRes").style.display = "none"; $("bottom").style.display = ""; $("sbubble").classList.remove("on");
   if (!$("kingPic").firstChild) $("kingPic").innerHTML = ART.king();
@@ -652,22 +709,28 @@ async function pick(id) {
   const grow = events.find((e) => e.type === "grow");
   if (grow) { drawLayer("school", grow.to, true); SND.stage(1); await wait(500); }
   const gain = events.find((e) => e.type === "gain");
-  if (gain && gain.amount > 0) setPose(svg, "back");
+  // 地図に 見える のびは、はってん度に あわせた ぶんだけ（viewLv）
+  const vFrom = (st.shown || {})[id] ?? (gain ? gain.from : 0), vAmt = gain ? Math.max(0, Math.min(gain.to, viewLv()[id]) - vFrom) : 0;
+  if (gain && vAmt > 0) setPose(svg, "back");
   if (gain) {
-    if (gain.amount === 0) { SND.cap(); fxText(gain.capped ? "もう いっぱい！" : "…", "bad"); await wait(800); }
-    for (let k = 1; k <= gain.amount; k++) {
-      drawLayer(id, gain.from + k, true); SND.stage(k);
+    if (vAmt === 0) { SND.cap(); fxText(gain.capped && gain.amount === 0 ? "もう いっぱい！" : "…", "bad"); await wait(800); }
+    for (let k = 1; k <= vAmt; k++) {
+      drawLayer(id, vFrom + k, true); SND.stage(k);
       fxText(k === 1 ? "1だんかい！" : k === 2 ? "2だんかい！！" : "3だんかい！！！", k >= 2 ? "big" : "");
-      await wait(k === gain.amount ? 900 : 550);
+      await wait(k === vAmt ? 900 : 550);
     }
-    if (gain.capped && gain.amount > 0) { SND.cap(); fxText("もう いっぱい！", "bad"); await wait(600); }
+    if (gain.capped && vAmt > 0) { SND.cap(); fxText("もう いっぱい！", "bad"); await wait(600); }
     // ほかの 要素との 組み合わせで、大陸の べつの 場所にも ふえる
     for (const c of drawCombos(true)) { showCombo(c); SND.stage(2); fxText(c.say); await wait(1000); }
     setPose(svg, "stand");
-    if (gain.amount >= 3) kingSay(["おお、3だんかいも！"]); else if (gain.amount === 2) kingSay(["ほう、2だんかい すすんだ。"]);
+    if (vAmt >= 3) kingSay(["おお、3だんかいも！"]); else if (vAmt === 2) kingSay(["ほう、2だんかい すすんだ。"]);
   }
   const lose = events.find((e) => e.type === "lose");
   if (lose) { SND.bad(); $("L-farm").classList.add("hit"); drawLayer("farm", lose.to, false); fxText("はたけが へった…", "bad"); kingSay(["兵ばかりでは、はたけが こまるぞ。"]); await wait(900); $("L-farm").classList.remove("hit"); }
+
+  // 2b) かくれた パターン（rules2.js）：ほかの ものが のびる・さがる。文では 知らせず、絵が かわるだけ
+  for (const e of events.filter((x) => x.type === "pgain")) { drawLayer(e.elem, e.to, true); SND.stage(2); await wait(650); }
+  for (const e of events.filter((x) => x.type === "plose")) { SND.bad(); $("L-" + e.elem).classList.add("hit"); await wait(500); drawLayer(e.elem, e.to, false); $("L-" + e.elem).classList.remove("hit"); await wait(300); }
 
   // 3) モンスター
   const th = events.find((e) => e.type === "threat");
@@ -691,26 +754,106 @@ async function pick(id) {
   const master = events.find((e) => e.type === "master");
   if (master) { drawLayer(master.elem, 3, true); SND.stage(3); fxText("その道を きわめた！", "big"); await wait(1000); }
 
+  // 4) かくれた パターン：文では 知らせない。大きく 悪くなった ときだけ 地面が ゆれる（しるしは drawPeople が 地図に 出す）
+  if (events.some((e) => e.type === "pattern" && e.bad && !e.big.length)) { SND.bad(); }
+  if (events.some((e) => e.type === "pattern" && e.big.length)) { SND.raid(); $("map").classList.add("shake"); await wait(900); $("map").classList.remove("shake"); }
+
+  { const V = viewLv();
+    for (const e of RULES.ELEMS) {
+      const cur = (st.shown || {})[e] ?? 0; if (cur === V[e]) continue;
+      if (V[e] < cur) { $("L-" + e).classList.add("hit"); SND.bad(); await wait(400); drawLayer(e, V[e], false); $("L-" + e).classList.remove("hit"); await wait(200); }
+      else { drawLayer(e, V[e], true); SND.stage(1); await wait(400); }
+    } }
   const wasNeg = RULES.score(st) < 0 && !st.erupted;
   for (const c of drawCombos(true)) { showCombo(c); SND.stage(2); fxText(c.say); await wait(1000); } // きわめた・あらされた あとに そろった もの
   await growSites(); setMood(); drawHud();
   if (wasNeg) { st.erupted = true; SND.raid(); $("map").classList.add("shake"); fxText("火山が ふんかした！", "bad"); kingSay(["火山が…！ 国が あれてきたぞ…"]); await wait(1000); $("map").classList.remove("shake"); }
   await checkLearn();
   busy = false;
-  if (st.turn >= 6) { await wait(700); showResult(); } else { setChoices(true); }
+  if (st.turn >= 6) { const hid = RULES.hiddenOf ? RULES.hiddenOf(st) : null; if (hid) await playHidden(hid); await wait(700); showResult(); } else { setChoices(true); }
+}
+
+// ---- 隠し けつまつの 演出（RULES.HIDDEN の kind）----
+//  isekai 光に つつまれて 王さまの 声だけ ／ alien UFOが 来て 建物が 宇宙人の 色に ／ nakayoshi モンスターと 人が おどる・虹
+//  kagaku ロケット・飛行機・ヘリ・自動車・アンテナで いっぱい。UFO と 宇宙人は 絵が ないので 仮（UFO は 自作の SVG、宇宙人は 人の 絵の 色がえ）
+// 結末に 飛躍が あるので、まず 画面中央に 大きな 一言 → いったん ホワイトアウト → 白が はれると 国が かわっている（2026-09-27 先方の案）
+// 句の 切れ目で 改行（<br>）
+const HIDDEN_CAPTION = {
+  nakayoshi: "知恵と祈りの心が<br>モンスターに伝わった",
+  alien: "そのとき 謎の飛行物体が<br>空一面を 覆った",
+  isekai: "突然 まばゆい光が<br>世界を つつみこんだ",
+  kagaku: "国民の 創造性が<br>飛躍的に 高まった",
+};
+async function playHidden(h) {
+  const all3 = Object.fromEntries(RULES.ELEMS.map((e) => [e, RULES.MAX_LV]));
+  // 1) 大きな 一言（宇宙人は この あいだに UFO が 空を おおう）
+  const cap = document.createElement("div"); cap.className = "warn-band"; cap.innerHTML = `<div class="msg">${HIDDEN_CAPTION[h.kind]}</div>`; $("game").appendChild(cap);
+  if (h.kind === "alien") { SND.raid(); $("fx-land").innerHTML = ART.ufos(); } else SND.stage(3);
+  await wait(2800);
+  // 2) ホワイトアウト（異世界は この まま 白い 世界で おわる）
+  const L = document.createElement("div"); L.className = "isekai-light"; L.innerHTML = `<img class="burst" src="obj4/burst.png?v=1" alt="">`; $("game").appendChild(L); $("game").classList.add("isekai");
+  SND.great(); await wait(1600); cap.remove();
+  if (h.kind === "isekai") {
+    const W = document.createElement("div"); W.className = "isekai-world"; $("game").appendChild(W); await wait(50); W.classList.add("on"); await wait(2200);
+    // 王さまの すがたも 出す（2026-09-27 先方の指示）
+    kingSay(["……ここは どこじゃ……"]); await wait(2600); return;
+  }
+  // みんな なかよし！：白が はれたら、あれた 国が だんだん 発展した 国に 置きかわり、明るい モンスターと 人・虹・花火で あふれる
+  if (h.kind === "nakayoshi") { await nakayoshiParty(L, all3); return; }
+  // 3) 白い あいだに 国を かえる
+  const cfg = { alien: [99, ["#7fe0ff", ".16"]], nakayoshi: [95, ["#fff1a8", ".18"]], kagaku: [99, null] }[h.kind];
+  st.forced = { score: cfg[0], lv: all3, tint: cfg[1] };
+  if (h.kind === "alien") $("map").classList.add("alien");
+  drawAll(); drawMonsters(0); drawPeople(false); setMood();
+  if (h.kind === "alien") $("fx-land").innerHTML = ART.alienCity() + ART.aliens() + ART.ufos();
+  if (h.kind === "kagaku") $("fx-land").innerHTML = ART.science(ART.freeGround(all3, shownCombos().map((c) => c.id), st.siteStages || [], st.siteOv || {}));
+  drawStats(); await wait(600);
+  // 4) 白が はれる
+  L.classList.add("fadeaway"); await wait(1600); L.remove(); $("game").classList.remove("isekai");
+  SND.great(); await wait(1500);
+}
+async function nakayoshiParty(L, all3) {
+  // 白が はれて、いったん いまの（あれた）国が 見える
+  L.classList.add("fadeaway"); await wait(1500); L.remove(); $("game").classList.remove("isekai"); await wait(300);
+  // 光の あと：画面中央に「モンスターが 協力してくれるように なった」
+  const cap = document.createElement("div"); cap.className = "hidden-cap"; cap.innerHTML = "モンスターが<br>協力してくれるように なった"; $("game").appendChild(cap);
+  SND.stage(3); await wait(2800); cap.remove();
+  // 建物が 1つずつ 発展した すがたに 置きかわる（あれた ものは 消えていく）
+  st.forced = { score: 95, lv: all3, tint: ["#fff1a8", ".2"] }; setMood();
+  for (const e of RULES.ELEMS) { drawLayer(e, 3, true); SND.stage(2); await wait(380); }
+  for (const c of drawCombos(true)) { showCombo(c); SND.stage(1); await wait(220); }
+  drawMonsters(0); await growSites(); drawStats();
+  // 明るい モンスターと 人が 4回に 分けて ふえる。虹と 花火も ふえていく
+  const free = ART.freeGround(all3, shownCombos().map((c) => c.id), st.siteStages || [], st.siteOv || {});
+  const spots = free.length >= 60 ? free : ART.GROUND; // 地面が たりなければ 島じゅうの 地面を つかう
+  let html = ""; const waves = 4;
+  for (let w = 0; w < waves; w++) {
+    html += ART.partyCrowd(spots, w, waves);
+    for (let r = 0; r < 2 && w * 2 + r < ART.RAINBOW_AT.length; r++) html += ART.rainbowOne(w * 2 + r);
+    $("fx-land").innerHTML = html; SND.stage(3);
+    if (w === 1) $("fx-sky").innerHTML = ART.fireworks(true);
+    if (w === 3) $("fx-sky").innerHTML = ART.fireworksMany();
+    await wait(900);
+  }
+  SND.great(); await wait(1600);
+}
+function clearHidden() {
+  $("map").classList.remove("alien"); if ($("fx-land")) $("fx-land").innerHTML = ""; $("kingPic").style.visibility = ""; if ($("stats")) $("stats").style.visibility = "";
+  document.querySelectorAll(".isekai-light,.isekai-world,.hidden-cap,.warn-band").forEach((x) => x.remove()); $("game").classList.remove("isekai");
 }
 
 // ---- けっか ----
 function showResult() {
   $("game").classList.remove("hidescore");
-  const sc = RULES.score(st); const end = RULES.ending(st);
+  const sc = RULES.score(st); const end = RULES.ending(st); const hid = RULES.hiddenOf ? RULES.hiddenOf(st) : null;
   $("bottom").style.display = "none";
+  if (hid) return showHiddenResult(hid);
   kingSay([sc >= 100 ? "みごとじゃ！ りそうの 国に なった！" : sc >= 50 ? "よく やった。もっと よい 順番も あるかもしれんぞ。" : sc >= 0 ? "ふむ…。順番を かえて、もういちど やってみよ。" : "なんということだ…。"]);
 
   $("endName").textContent = end.name; $("congrats").style.display = sc >= 100 ? "block" : "none";
   const se = $("endScore"); se.innerHTML = `${sc}<small>%</small>`; se.classList.toggle("neg", sc < 0);
   $("endText").textContent = end.text;
-  { const S = RULES.stats(st); $("endStats").textContent = RULES.STAT_NAMES.map(([k, n]) => `${n} ${k === "pop" ? S[k].toLocaleString() : S[k]}`).join("　"); }
+  { const S = RULES.stats({ ...st, lv: viewLv() }); $("endStats").textContent = RULES.STAT_NAMES.map(([k, n]) => `${n} ${k === "pop" ? S[k].toLocaleString() : S[k]}`).join("　"); }
 
 
   const el = $("endLearn"); el.style.display = st.learned.length ? "" : "none";
@@ -719,6 +862,25 @@ function showResult() {
   const z = lsGet(LS_ZUKAN, []); if (!z.includes(end.id)) { z.push(end.id); lsSet(LS_ZUKAN, z); }
 
   if (sc >= 100) SND.great(); else if (sc >= 50) SND.good(); else SND.sad();
+  $("result").classList.add("on");
+}
+// 隠し けつまつ：はってん度の かわりに ？？？・∞・200%・300%。さいこう きろくには 入れない（ずかんには のこる）
+function showHiddenResult(h) {
+  const say = { isekai: "……ここは どこじゃ……", alien: "な、なんと！ 宇宙人と ともに くらす 国に なったぞ！", nakayoshi: "モンスターとも なかよく なれるとは！ すばらしい！", kagaku: "これが 科学の ちからか！ 見事じゃ！" }[h.kind];
+  if (h.kind !== "isekai") kingSay([say]);
+  $("endName").textContent = h.name; $("congrats").style.display = h.kind === "isekai" ? "none" : "block";
+  const m = /^(.*?)(%?)$/.exec(h.label); const se = $("endScore"); se.innerHTML = `${m[1]}${m[2] ? "<small>%</small>" : ""}`; se.classList.remove("neg");
+  $("devNum").textContent = h.label; $("devNum").classList.remove("neg");
+  // 隠し けつまつは とくべつ：はってん度の バーも、6つの 数の バーも すべて 満タン（100%）で 出す（2026-09-27 先方の指示）
+  $("devBar").style.width = "100%"; $("devBar").classList.remove("neg");
+  if (h.kind !== "isekai") $("stats").innerHTML = RULES.STAT_NAMES.map(([k, name]) =>
+    `<span>${name}</span><b>${k === "pop" ? "たくさん" : 100}<em class="up">▲</em></b>${k === "pop" ? "<span></span>" : `<i style="--p:100%"></i>`}`).join("");
+  $("endText").textContent = h.text; $("stats").style.visibility = h.kind === "isekai" ? "hidden" : "";
+  $("endStats").textContent = h.kind === "isekai" ? "人口 ？　幸福度 ？　食料 ？　商業 ？　文化 ？　治安 ？" : RULES.STAT_NAMES.map(([k, n]) => `${n} ${k === "pop" ? "たくさん" : 100}`).join("　");
+  const el = $("endLearn"); el.style.display = st.learned.length ? "" : "none";
+  el.textContent = `この国で 見つけた しらべ札：${st.learned.length}まい（「国を 見る」で 左の 札が 読めるよ。「しゃかいノート」にも のこります）`;
+  const z = lsGet(LS_ZUKAN, []); if (!z.includes(h.id)) { z.push(h.id); lsSet(LS_ZUKAN, z); }
+  if (h.kind !== "isekai") SND.great();
   $("result").classList.add("on");
 }
 
@@ -744,6 +906,18 @@ document.querySelector(".hud .dev").addEventListener("click", () => $("stats").c
 $("sound").addEventListener("click", () => { $("sound").textContent = SND.toggle() ? "🔊" : "🔇"; });
 $("sound").textContent = SND.on ? "🔊" : "🔇";
 buildChoices(); bestLine(); ART.preload();
+
+// ---- 確認用（この 端末だけ）：?kakushi=isekai / alien / nakayoshi / kagaku で、隠し けつまつの 順番を 5回目まで 一気に すませ、6回目から 見せる。
+//   公開先（github.io）では 動かない（127.0.0.1 と localhost だけ）。子どもが 答えを 知らないように
+(function kakushiPreview() {
+  const kind = new URLSearchParams(location.search).get("kakushi");
+  if (!kind || !/^(127\.0\.0\.1|localhost)$/.test(location.hostname) || !RULES.HIDDEN) return;
+  const h = RULES.HIDDEN.find((x) => x.kind === kind); if (!h) return;
+  startGame();
+  h.seq.slice(0, 5).forEach((id) => RULES.apply(st, id));
+  drawAll(); setMood(); drawHud(); setChoices(true);
+  setTimeout(() => pick(h.seq[5]), 600);
+})();
 </script>
 </body>
 </html>

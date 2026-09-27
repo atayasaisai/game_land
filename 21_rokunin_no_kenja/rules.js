@@ -141,24 +141,33 @@ const RULES = (() => {
     return events;
   }
 
-  const FULL = 17; // 先見の明の 道だけが とどく だんかい
+  const FULL = 17; // 先見の明の 道だけが とどく だんかい（100% には finale も いる）
 
   // 17だんかい（先見の明の 道だけ）で 100%。それ以外は 98% まで（ふつうの りそうの道 16 → 98%、15 → 94%）
+  // 100% は もう1つ 条件つき：はたけの あとに 市を ひらき、さいごは おまつりで しめくくる
+  // （17だんかいに とどく 3つの 順番のうち、知恵→創造→力→豊穣→繁栄→祈り だけが これを みたす）
+  const finale = (st) => { const p = st.picks; return p[p.length - 1] === "fun" && p.indexOf("farm") >= 0 && p.indexOf("farm") < p.indexOf("market"); };
   function score(st) {
     const total = ELEMS.reduce((a, e) => a + st.lv[e], 0) - st.damage * 3;
-    if (total >= FULL) return 100;
+    if (total >= FULL && finale(st)) return 100;
     const raw = Math.round((total / 16) * 100);
     return Math.max(-100, Math.min(98, raw));
   }
 
   // サブ指標：国の状態から 計算する（絵や 人の数は この数で 決める）
+  // どの指標も 2〜3人の 賢者で のびる（おもな 1人が いなくても、ほかの 賢者で ある ていど おぎなえる）
+  //   食料 ＝ はたけ ＋ 市（よその国から 買う）＋ 道（はこべる）
+  //   商業 ＝ 市 ＋ 道（お客が 来る）＋ はたけ（うる ものが ある）＋ まなび（そろばん）
+  //   文化 ＝ まなび ＋ にぎわい（うたと おどり）＋ 道（旅人が 話を はこぶ）
+  //   治安 ＝ まもり ＋ にぎわい（みんな 顔見知り）＋ まなび（きまりを まもる）＋ 道（見まわり）
+  //   治安は 0 から はじまる（さいしょは モンスターが いる 国なので）
   const clamp = (v, lo = 0, hi = 100) => Math.max(lo, Math.min(hi, Math.round(v)));
   function stats(st) {
     const l = st.lv; const sc = score(st);
-    const food = clamp(l.farm * 28 + (l.road ? 8 : 0) + (l.guard ? 4 : 0) - st.damage * 6);
-    const trade = clamp(l.market * 27 + l.road * 6 + (l.farm ? 5 : 0) - st.damage * 4);
-    const culture = clamp(l.school * 25 + l.fun * 12);
-    const safety = clamp(40 + l.guard * 22 - (l.guard >= MAX_LV ? 0 : st.threat * 14) - st.damage * 8); // じょうへきが あれば モンスターは こわくない
+    const food = clamp(l.farm * 20 + l.market * 10 + l.road * 6 - st.damage * 6);
+    const trade = clamp(l.market * 20 + l.road * 8 + l.farm * 6 + l.school * 4 - st.damage * 4);
+    const culture = clamp(l.school * 20 + l.fun * 12 + l.road * 4);
+    const safety = clamp(l.guard * 20 + l.fun * 8 + l.school * 6 + l.road * 4 - (l.guard >= MAX_LV ? 0 : st.threat * 8) - st.damage * 8); // じょうへきが あれば モンスターは こわくない
     const happy = clamp((food + culture + safety) / 3 + l.fun * 8 - st.damage * 10);
     const pop = Math.max(0, Math.round(20 + Math.max(0, sc) * 10 + food * 2 + trade + happy));
     return { pop, happy, food, trade, culture, safety };
