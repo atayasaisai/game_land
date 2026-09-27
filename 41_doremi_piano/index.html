@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>かんたん楽譜で音感ゲーム｜楽譜の読み方・音感・リズムを ピアノで おぼえる 無料の音楽ゲーム｜あたやさいさいゲームランド</title>
+<meta name="description" content="五線の 音符を 見て ピアノの けんばんを おす、音を きいて けんばんや 五線を えらぶ、流れてくる 音符に あわせて タップする。楽譜の 読み方（ト音記号・ヘ音記号・♯♭）と 音感と リズム（四分音符・八分音符・休符）を、はじめての 子どもが あそびながら おぼえられる 無料の 音楽ゲーム。広告なし・会員とうろくなし。">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://atayasaisai.github.io/game_land/41_doremi_piano/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="あたやさいさいゲームランド">
+<meta property="og:title" content="かんたん楽譜で音感ゲーム｜がくふ・音感・リズムを あそんで おぼえよう">
+<meta property="og:url" content="https://atayasaisai.github.io/game_land/41_doremi_piano/">
+<meta property="og:image" content="https://atayasaisai.github.io/game_land/ogp.png">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Noto+Music&family=Zen+Maru+Gothic:wght@500;700;900&display=swap">
+<style>
+:root{
+  --ink:#3a2c24; --sub:#7a6556; --paper:#fffdf7; --cream:#fbf1dc; --line:#ead9b8;
+  --red:#e8554a; --blue:#3f86d6; --green:#3aa65e; --gold:#f2b632; --wood:#8d5528; --pink:#e0569a;
+  color-scheme:light;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%}
+body{font-family:"Zen Maru Gothic","Hiragino Maru Gothic ProN",sans-serif;font-weight:700;color:var(--ink);background:#bfe3f5;line-height:1.7;overflow-x:hidden;-webkit-text-size-adjust:100%}
+button{font-family:inherit;font-weight:700;color:inherit;cursor:pointer}
+[hidden]{display:none!important}
+.mu{font-family:"Noto Music","Segoe UI Symbol","Apple Symbols",serif;font-weight:400}
+span.mu{font-size:1.6em;line-height:0;vertical-align:-.12em;margin:0 .05em}
+
+/* ---------- 最初の画面（トップと同じ空の絵＋木の看板のロゴ） ---------- */
+#title{position:relative;min-height:100dvh;display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;padding:24px 16px 40px;
+  background:#8fd0f2 url(art/bg.jpg) center bottom/cover no-repeat fixed}
+.tlead{display:inline-block;font-size:.72rem;letter-spacing:.2em;border:2.5px solid #33312A;border-radius:999px;padding:3px 15px;
+  background:#fff;color:#33312A;box-shadow:3px 3px 0 #33312A;text-decoration:none}
+.logo{margin:14px auto 0;width:min(560px,94vw);line-height:0}
+.logo img{width:100%;height:auto;filter:drop-shadow(0 6px 10px rgba(30,60,110,.3));animation:bob 3.2s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-.8deg)}50%{transform:translateY(-6px) rotate(.8deg)}}
+.tpanel{margin-top:22px;width:100%;max-width:560px;display:flex;flex-direction:column;gap:12px;
+  background:rgba(255,253,247,.95);border:3px solid #5b3417;border-radius:26px;padding:16px 14px 20px;box-shadow:0 8px 0 rgba(91,52,23,.35)}
+.tpanel>p{margin:0;color:var(--sub);font-size:.92rem;text-wrap:balance}
+.tpanel>p b{color:var(--ink)}
+/* メニュー：4まいの 大きな カード */
+#menu{display:flex;flex-direction:column;gap:22px;padding-bottom:6px}
+.big4{display:grid;grid-template-columns:1fr 1fr;gap:18px 12px}
+.mode{position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:168px;padding:14px 8px 12px;
+  border:4px solid #fff;border-radius:26px;color:#fff;text-align:center;
+  background:radial-gradient(circle at 25% 15%,rgba(255,255,255,.45) 0,transparent 45%),linear-gradient(160deg,var(--a),var(--b));
+  box-shadow:0 7px 0 var(--d),0 12px 20px rgba(60,30,10,.25);transition:transform .15s}
+.mode:hover{transform:translateY(-3px) rotate(-.6deg)}
+.mode:active{transform:translateY(5px);box-shadow:0 2px 0 var(--d)}
+.mode .mic{width:66px;height:66px;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:2.3rem;line-height:1;color:var(--b);
+  box-shadow:0 4px 0 rgba(0,0,0,.15);animation:hop 1.8s ease-in-out infinite;animation-delay:var(--dl,0s)}
+.mode .mic.mu{font-size:3rem}
+@keyframes hop{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-7px) rotate(4deg)}}
+.mode b{font-family:"Mochiy Pop One",sans-serif;font-weight:400;font-size:clamp(1.02rem,4.6vw,1.35rem);line-height:1.25;margin-top:6px;
+  text-shadow:0 2px 0 var(--d),2px 0 0 var(--d),-2px 0 0 var(--d),0 -2px 0 var(--d)}
+.mode small{font-size:clamp(.66rem,2.9vw,.76rem);opacity:.95;line-height:1.35}
+.mode .prog{margin-top:5px;font-size:.76rem;background:rgba(255,255,255,.92);color:var(--d);border-radius:999px;padding:1px 10px}
+.mode .fl{position:absolute;color:rgba(255,255,255,.5);font-size:1.6rem;animation:fl 3s ease-in-out infinite}
+.mode .fl.a{left:10px;top:8px}.mode .fl.b{right:12px;bottom:10px;animation-delay:-1.5s;font-size:1.3rem}
+@keyframes fl{0%,100%{transform:translateY(0) rotate(-10deg)}50%{transform:translateY(-8px) rotate(10deg)}}
+.freeb{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:3px solid #8d5528;border-radius:20px;padding:10px 14px;
+  background:linear-gradient(#fffaf0,#fbeed3);box-shadow:0 5px 0 #8d5528}
+.freeb:active{transform:translateY(4px);box-shadow:0 1px 0 #8d5528}
+.freeb .ic{flex:none;font-size:2rem;line-height:1}
+.freeb b{display:block;font-family:"Mochiy Pop One",sans-serif;font-weight:400;font-size:1.05rem;color:#8d5528;line-height:1.3}
+.freeb small{display:block;font-size:.76rem;color:var(--sub);line-height:1.4}
+/* ステージを えらぶ 画面 */
+.shead{position:relative;border:4px solid #fff;border-radius:26px;color:#fff;padding:14px 14px 14px;text-align:center;
+  background:radial-gradient(circle at 20% 10%,rgba(255,255,255,.4) 0,transparent 45%),linear-gradient(160deg,var(--a),var(--b));box-shadow:0 6px 0 var(--d)}
+.shead .mic{display:inline-grid;place-items:center;width:58px;height:58px;border-radius:50%;background:#fff;color:var(--b);font-size:2rem;line-height:1;animation:hop 1.8s ease-in-out infinite}
+.shead .mic.mu{font-size:2.6rem}
+.shead h2{margin:4px 0 0;font-family:"Mochiy Pop One",sans-serif;font-weight:400;font-size:1.45rem;line-height:1.3;text-shadow:0 2px 0 var(--d),2px 0 0 var(--d),-2px 0 0 var(--d),0 -2px 0 var(--d)}
+.shead p{margin:4px 0 0;font-size:.84rem;line-height:1.6}
+.sback{position:absolute;left:10px;top:10px;border:none;border-radius:999px;background:rgba(255,255,255,.92);color:var(--d);font-size:.8rem;padding:4px 12px}
+.slist{display:flex;flex-direction:column;gap:14px}
+.sbtn{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:3px solid var(--b);border-radius:20px;padding:9px 14px 9px 10px;background:#fff;box-shadow:0 5px 0 var(--b);transition:transform .12s}
+.sbtn:hover{transform:translateX(3px)}
+.sbtn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--b)}
+.sbtn .no{flex:none;width:44px;height:44px;border-radius:50%;background:linear-gradient(160deg,var(--a),var(--b));color:#fff;display:grid;place-items:center;font-family:"Mochiy Pop One",sans-serif;font-size:1.25rem;box-shadow:0 3px 0 var(--d)}
+.sbtn .tx{flex:1;min-width:0;font-family:"Mochiy Pop One",sans-serif;font-weight:400;font-size:1.05rem;line-height:1.3;color:var(--ink)}
+.sbtn .tx small{display:block;font-family:"Zen Maru Gothic",sans-serif;font-weight:700;font-size:.74rem;color:var(--sub);line-height:1.45;margin-top:2px}
+.sbtn .st{flex:none;font-size:1.15rem;color:var(--gold);letter-spacing:.02em;text-shadow:0 1px 0 #b58414}
+.sbtn .st i{font-style:normal;color:#e8dcc4;text-shadow:none}
+.backlink{align-self:center;display:inline-block;margin-top:4px;font-size:.84rem;color:var(--sub);text-decoration:none;border:2px solid var(--line);border-radius:999px;padding:5px 18px;background:#fff}
+.note{font-size:.74rem;color:var(--sub);text-align:left;margin:0}
+
+/* ---------- あそぶ画面 ---------- */
+#game{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;user-select:none;-webkit-user-select:none;
+  background:radial-gradient(ellipse at 50% 0,#fff8e6 0,transparent 70%),linear-gradient(#fbeed3,#f1dcb4);
+  padding:max(8px,env(safe-area-inset-top)) 8px max(8px,env(safe-area-inset-bottom))}
+.hud{width:100%;max-width:640px;display:flex;align-items:center;gap:8px}
+.ib{flex:none;min-width:42px;height:42px;border-radius:13px;border:2px solid #d8c29a;background:#fff;font-size:1rem;display:grid;place-items:center;padding:0 8px;box-shadow:0 3px 0 #d8c29a}
+.ib:active{transform:translateY(2px);box-shadow:0 1px 0 #d8c29a}
+.ib[aria-pressed="false"]{opacity:.55}
+.hud .ttl{flex:1;min-width:0;line-height:1.25}
+.hud .ttl b{display:block;font-size:.95rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dots{display:flex;gap:4px;margin-top:3px}
+.dots i{width:10px;height:10px;border-radius:50%;background:#e4d2ae}
+.dots i.ok{background:var(--green)}.dots i.ng{background:var(--red)}.dots i.now{background:var(--gold);box-shadow:0 0 0 2px #fff,0 0 0 4px var(--gold)}
+.stage{flex:1;width:100%;max-width:640px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:0;padding:6px 0}
+.tip{width:100%;font-size:.8rem;color:var(--sub);background:rgba(255,255,255,.6);border-radius:12px;padding:5px 10px;line-height:1.5;text-align:left}
+.q{font-family:"Mochiy Pop One",sans-serif;font-weight:400;font-size:clamp(1.1rem,4.6vw,1.5rem);margin:0;text-align:center;line-height:1.35}
+.paper{position:relative;width:100%;max-width:460px;background:var(--paper);border-radius:22px;border:3px solid #e2cda4;box-shadow:0 6px 0 #e2cda4;padding:4px 6px}
+.paper svg{display:block;width:100%;height:auto;touch-action:none}
+.paper .lab{position:absolute;left:0;right:0;bottom:6px;text-align:center;font-family:"Mochiy Pop One",sans-serif;font-size:1.5rem;line-height:1;pointer-events:none}
+.paper .mark{position:absolute;right:10px;top:4px;font-size:3.2rem;line-height:1;pointer-events:none;animation:pop .3s ease-out}
+.mark.ok{color:var(--green)}.mark.ng{color:var(--red)}
+@keyframes pop{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
+.sl{stroke:#5b4a3e;stroke-width:1.4}
+.ldg{stroke:#5b4a3e;stroke-width:1.6}
+.clef{fill:#3a2c24}
+.nt{fill:#2a1f19;stroke:#2a1f19}
+.nt .stem{stroke-width:1.8}
+.nt text{stroke:none}
+.nt.ok{fill:var(--green);stroke:var(--green)}
+.nt.ng{fill:var(--red);stroke:var(--red)}
+.nt.ghost{fill:#9a8a7c;stroke:#9a8a7c;opacity:.55}
+.nt.hint{fill:var(--green);stroke:var(--green);opacity:.5;animation:blink .8s ease-in-out infinite}
+@keyframes blink{50%{opacity:.15}}
+.msg{min-height:2.9em;font-size:.95rem;text-align:center;line-height:1.45;margin:0;padding:0 6px}
+.msg b{color:var(--red)}.msg em{font-style:normal;color:var(--green)}
+.row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.btn{border:none;border-radius:16px;padding:11px 22px;font-size:1rem;background:#fff;box-shadow:0 4px 0 #d8c29a;border:2px solid #d8c29a}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 #d8c29a}
+.btn.pri{background:linear-gradient(#ff9b5a,#ec6a3a);color:#fff;border-color:#c24e22;box-shadow:0 4px 0 #a8401a}
+.btn.big{font-size:1.2rem;padding:14px 28px}
+.spk{font-size:3rem;width:112px;height:112px;border-radius:50%;background:#fff;border:4px solid var(--blue);box-shadow:0 6px 0 #2c62a0;display:grid;place-items:center;padding:0}
+.spk:active{transform:translateY(4px);box-shadow:0 2px 0 #2c62a0}
+.spk.play{animation:pulse .5s ease-in-out infinite alternate}
+@keyframes pulse{to{transform:scale(1.07)}}
+.flow{font-size:.85rem;color:var(--sub);margin:0}
+
+/* ピアノ */
+.piano{width:100%;max-width:720px;background:linear-gradient(#7a2e22,#4a1a12);border-radius:16px 16px 12px 12px;padding:14px 8px 8px;box-shadow:0 6px 16px rgba(60,20,10,.35)}
+.kb{position:relative;display:flex;height:clamp(130px,30vh,210px);touch-action:none}
+.kw{flex:1;position:relative;background:linear-gradient(#fff 80%,#eee);border:1px solid #7a6a60;border-top:none;border-radius:0 0 8px 8px;margin:0 1px;
+  display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding-bottom:8px;font-size:clamp(.6rem,2.6vw,.9rem);color:#8a7a6e;line-height:1.1;box-shadow:inset 0 -5px 0 #ddd}
+.kw .c4{width:7px;height:7px;border-radius:50%;background:var(--red);margin-bottom:5px}
+.kb.nolab .kw span{visibility:hidden}
+.kb2{position:absolute;top:0;height:60%;background:linear-gradient(#444,#111 85%,#333);border-radius:0 0 5px 5px;z-index:2;box-shadow:inset 0 -4px 0 #000,1px 2px 3px rgba(0,0,0,.4)}
+.kw.dn{background:linear-gradient(#e6f0ff,#cfe0fa);box-shadow:inset 0 -2px 0 #bbb}
+.kb2.dn{background:linear-gradient(#333,#000)}
+.kw.ok,.kb2.ok{background:linear-gradient(#bff0c9,#6fd08a)}
+.kw.ng,.kb2.ng{background:linear-gradient(#ffd0cb,#f08a80)}
+.kw.hint,.kb2.hint{animation:khint .7s ease-in-out infinite}
+@keyframes khint{50%{background:#ffe27a}}
+.kw.ok span,.kw.hint span{visibility:visible!important;color:var(--ink)}
+
+/* リズム */
+.lane{position:relative;width:100%;max-width:640px;background:var(--paper);border-radius:22px;border:3px solid #e2cda4;box-shadow:0 6px 0 #e2cda4;overflow:hidden}
+.lane svg{display:block;width:100%;height:auto}
+.rl{stroke:#5b4a3e;stroke-width:1.6}
+.bar{stroke:#5b4a3e;stroke-width:1.6}
+.jl{stroke:var(--red);stroke-width:3;opacity:.75}
+.jz{fill:rgba(232,85,74,.1)}
+.rn{fill:#2a1f19;stroke:#2a1f19}
+.rn .stem,.rn .flag{stroke-width:1.8;fill:none}
+.rn .beam{stroke:none}
+.rn .hollow{fill:var(--paper);stroke-width:2.2}
+.rn.p{fill:var(--green);stroke:var(--green)}
+.rn.g{fill:var(--blue);stroke:var(--blue)}
+.rn.m{fill:var(--red);stroke:var(--red)}
+.rn text{stroke:none}
+.rest{fill:#2a1f19}
+.cnt{font-family:"Mochiy Pop One",sans-serif;fill:var(--red);font-size:44px;text-anchor:middle}
+.jt{font-family:"Mochiy Pop One",sans-serif;font-size:17px;text-anchor:middle;animation:up .6s ease-out forwards}
+@keyframes up{to{transform:translateY(-18px);opacity:0}}
+.pad{width:min(92vw,420px);height:clamp(110px,24vh,170px);border-radius:28px;border:4px solid #c24e22;background:linear-gradient(#ffb070,#ec6a3a);color:#fff;
+  font-family:"Mochiy Pop One",sans-serif;font-size:2.2rem;box-shadow:0 8px 0 #a8401a;touch-action:manipulation}
+.pad.hit{transform:translateY(6px);box-shadow:0 2px 0 #a8401a;background:linear-gradient(#ffc590,#f07a4a)}
+.rscore{display:flex;gap:14px;font-size:.9rem;color:var(--sub)}
+.rscore b{font-size:1.1rem}
+.rscore .p{color:var(--green)}.rscore .g{color:var(--blue)}.rscore .m{color:var(--red)}
+.legendR{font-size:.8rem;color:var(--sub);text-align:center;margin:0}
+
+/* 重ねる板 */
+.ov{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(60,40,20,.45);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+.box{width:100%;max-width:420px;background:var(--paper);border:4px solid #5b3417;border-radius:26px;padding:22px 18px;text-align:center;box-shadow:0 10px 0 rgba(91,52,23,.5);animation:pop .3s ease-out}
+.box h3{font-family:"Mochiy Pop One",sans-serif;font-weight:400;font-size:1.6rem;margin:0;color:var(--red)}
+.box .stars{font-size:2.6rem;letter-spacing:.1em;color:var(--gold);line-height:1.3;text-shadow:0 3px 0 #b58414}
+.box .stars i{font-style:normal;color:#e4d2ae;text-shadow:none}
+.box p{margin:6px 0 14px;color:var(--sub)}
+.box p b{color:var(--ink);font-size:1.15rem}
+</style>
+</head>
+<body>
+
+<!-- ===== 最初の画面 ===== -->
+<section id="title">
+  <a class="tlead" href="../">あたやさいさいゲームランド</a>
+  <h1 class="logo"><img src="art/title.png" alt="かんたん楽譜で音感ゲーム" width="740" height="345"></h1>
+
+  <div class="tpanel">
+    <p id="intro">五線の <b>おんぷ</b> を 見て、<b>ピアノ</b> を おしてみよう。<br>音を きいて あてたり、リズムに あわせて たたいたり。<br>はじめての 人も だいじょうぶ！</p>
+    <div id="menu"></div>
+    <p class="note">🔈 音が 出ないときは、iPhone・iPad の マナーモード（よこの スイッチ）を はずしてね。</p>
+    <a class="backlink" href="../">← ゲームランドの トップへ</a>
+  </div>
+</section>
+
+<!-- ===== あそぶ画面 ===== -->
+<section id="game" hidden>
+  <div class="hud">
+    <button class="ib" id="bBack" aria-label="もどる">◀</button>
+    <div class="ttl"><b id="gTitle"></b><div class="dots" id="dots"></div></div>
+    <button class="ib" id="bLab" aria-pressed="true" title="けんばんに ドレミを 出す">ドレミ</button>
+  </div>
+  <div class="stage" id="stage"></div>
+  <div class="piano" id="piano" hidden><div class="kb" id="kb"></div></div>
+</section>
+
+<!-- ===== けっか ===== -->
+<div class="ov" id="res" hidden><div class="box">
+  <h3 id="rTtl">できた！</h3>
+  <div class="stars" id="rStars"></div>
+  <p id="rMsg"></p>
+  <div class="row" id="rBtns"></div>
+</div></div>
+
+<script>
+/* =========================================================
+   かんたん楽譜で音感ゲーム
+   ・がくふを よもう：五線の おんぷ → ピアノの けんばん
+   ・音を きいて：音 → けんばん ／ 音 → 五線（音感）
+   ・リズム：流れてくる おんぷが 赤い線に きたら タップ
+   音は ぜんぶ WebAudio で 合成（録音なし）
+   ========================================================= */
+var REC_KEY="doremi_piano_rec",LAB_KEY="doremi_piano_lab";
+function load(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+var rec=load(REC_KEY,{}),showLab=load(LAB_KEY,true);
+function $(id){return document.getElementById(id);}
+function md(x,m){return ((x%m)+m)%m;}
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+
+/* ---------- 音の なまえ ----------
+   d＝まんなかの ド（C4）から 白い けんばんで いくつ目か。a＝♯なら1・♭なら-1 */
+var W=[0,2,4,5,7,9,11],NM=["ド","レ","ミ","ファ","ソ","ラ","シ"];
+var PCN=["ド","ド♯・レ♭","レ","レ♯・ミ♭","ミ","ファ","ファ♯・ソ♭","ソ","ソ♯・ラ♭","ラ","ラ♯・シ♭","シ"];
+function midiOf(n){return 60+12*Math.floor(n.d/7)+W[md(n.d,7)]+(n.a||0);}
+function oct(o){return o<0?"ひくい ":o>0?"高い ":"";}
+function nameOf(n){return oct(Math.floor(n.d/7))+NM[md(n.d,7)]+(n.a>0?"♯":n.a<0?"♭":"");}
+function nameMidi(m){return oct(Math.floor((m-60)/12))+PCN[md(m-60,12)];}
+function run(a,b){var r=[];for(var d=a;d<=b;d++)r.push({d:d,a:0});return r;}
+var ACC=[{d:0,a:1},{d:1,a:-1},{d:1,a:1},{d:2,a:-1},{d:3,a:1},{d:4,a:-1},{d:4,a:1},{d:5,a:-1},{d:5,a:1},{d:6,a:-1}].concat(run(0,7));
+
+/* ---------- ステージ ---------- */
+var MODES={
+  read:{name:"がくふを よもう",ic:"𝄞",c:"#e8554a",sub:"五線の おんぷ → ピアノ",desc:"五線に 書いた おんぷを 見て、ピアノの おなじ けんばんを おそう。",
+    q:"これは なんの 音？",st:[
+    {t:"ド・レ・ミ",notes:run(0,2),kb:[0,7],tip:"まんなかの ド は、五線の 下に 小さな 線（かせん）を 1本 ひいて 書くよ。けんばんの 赤い ● が まんなかの ド。"},
+    {t:"ド〜ソ",notes:run(0,4),kb:[0,7],tip:"線の 上の 音と、線と 線の あいだの 音が、こうたいに ならんでいるよ。"},
+    {t:"ド〜高い ド",notes:run(0,7),kb:[0,7],tip:"ド レ ミ ファ ソ ラ シ ド。五線の 上に いくほど 高い 音。"},
+    {t:"ひくい ソ〜高い ソ",notes:run(-3,11),kb:[-3,11],tip:"まんなかの ド より 下は「ひくい」、1つ上の ドから 上は「高い」を つけて よぶよ。"},
+    {t:"♯ と ♭",notes:ACC,kb:[0,7],tip:"♯（シャープ）は 半音 上＝右どなりの けんばん。♭（フラット）は 半音 下＝左どなりの けんばん。"},
+    {t:"ヘ音記号",clef:"F",notes:run(-7,0),kb:[-7,2],tip:"𝄢 ヘ音記号は ひくい 音の がくふ。上から 2本目の 線が「ひくい ファ」。上に かせんを 1本 ひくと まんなかの ド。"}]},
+  ear:{name:"音を きいて ピアノ",ic:"🎧",c:"#3f86d6",sub:"音感 ①　音 → ピアノ",desc:"さいしょに「ド」、つぎに もんだいの 音が なるよ。おなじ 音の けんばんを さがそう。",
+    q:"ドの つぎに なった 音は？",st:[
+    {t:"ド・ミ・ソ",notes:[{d:0},{d:2},{d:4}],kb:[0,7],tip:"ド・ミ・ソ の どれかが なるよ。ドより どのくらい 高いかな？"},
+    {t:"ド〜ソ",notes:run(0,4),kb:[0,7],tip:"ド レ ミ ファ ソ の どれか。けんばんを おして、おなじ 音を さがしてもいいよ。"},
+    {t:"ド〜高い ド",notes:run(0,7),kb:[0,7],tip:"8つの 音の どれか。高い ド は、ド と 「にている」 音に きこえるよ。"}]},
+  staff:{name:"音を きいて がくふ",ic:"🎼",c:"#3aa65e",sub:"音感 ②　音 → 五線",desc:"さいしょに「ド」、つぎに もんだいの 音が なるよ。その 音を 五線の どこに 書くか、タップしよう。",
+    q:"ドの つぎに なった 音を 五線に 書こう",st:[
+    {t:"ド・ミ・ソ",notes:[{d:0},{d:2},{d:4}],tip:"ドは かせんの 上、ミは いちばん 下の 線、ソは 下から 2本目の 線。"},
+    {t:"ド〜ソ",notes:run(0,4),tip:"ゆびを おいたまま 上下に うごかして、はなした 所に おんぷが 書けるよ。"},
+    {t:"ド〜高い ド",notes:run(0,7),tip:"高い ド は、下から 3つ目の あいだ。"}]},
+  rhythm:{name:"リズムを 楽しもう",ic:"🥁",c:"#e0569a",sub:"タイミングを あわせて タップ",desc:"メトロノームに あわせて、おんぷが 赤い 線に きたら タップ！ 休符は たたかないよ。",
+    st:[
+    {t:"♩ 四分音符",pool:["q"],bpm:72,tip:"♩（四分音符）は 1はく。「タン」と 1回 たたく。"},
+    {t:"𝄽 四分休符",pool:["q","q","r"],bpm:76,tip:"𝄽（四分休符）は 1はく お休み。たたかないでね。"},
+    {t:"𝅗𝅥 二分・全音符",pool:["q","h","h","r","w"],bpm:80,tip:"𝅗𝅥（二分音符）は 2はく、𝅝（全音符）は 4はく。はじめに 1回だけ たたいて、あとは のばす。"},
+    {t:"♫ 八分音符",pool:["q","p","p","r"],bpm:80,tip:"♫（八分音符）は 1はくに 2回。「タタ」と はやく 2回 たたく。"},
+    {t:"ミックス",pool:["q","h","p","p","r","s"],bpm:84,tip:"𝄾♪ は はくの うらで たたく。「ン・タ」。"}]}
+};
+var NQ=10;
+
+/* ---------- 音 ---------- */
+var AC=null,master=null;
+function audio(){
+  if(!AC){var C=window.AudioContext||window.webkitAudioContext;if(!C)return null;
+    AC=new C();master=AC.createGain();master.gain.value=.8;master.connect(AC.destination);}
+  if(AC.state!=="running")AC.resume();
+  return AC;
+}
+document.addEventListener("pointerdown",function(){if(AC&&AC.state!=="running")AC.resume();},true);
+function hz(m){return 440*Math.pow(2,(m-69)/12);}
+/* ピアノに にせた音（倍音を かさねて、だんだん 小さく・まるく） */
+function piano(m,t,vel){
+  if(!audio())return;t=t||AC.currentTime;vel=vel||.42;
+  var f=hz(m),g=AC.createGain(),lp=AC.createBiquadFilter(),dec=Math.max(.9,2.6-(m-60)*.05);
+  lp.type="lowpass";lp.frequency.setValueAtTime(Math.min(9000,f*9),t);lp.frequency.exponentialRampToValueAtTime(Math.max(700,f*2.5),t+1);
+  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vel,t+.004);g.gain.exponentialRampToValueAtTime(vel*.3,t+.28);g.gain.exponentialRampToValueAtTime(.0005,t+dec);
+  [[1,1],[2,.5],[3,.22],[4,.13],[5,.05],[6,.03]].forEach(function(p){
+    var o=AC.createOscillator(),gg=AC.createGain();o.type="sine";o.frequency.value=f*p[0]*(1+.0006*p[0]*p[0]);gg.gain.value=p[1];
+    o.connect(gg);gg.connect(lp);o.start(t);o.stop(t+dec+.05);});
+  lp.connect(g);g.connect(master);
+}
+function blip(f,t,d,v,type){
+  if(!audio())return;t=t||AC.currentTime;var o=AC.createOscillator(),g=AC.createGain();o.type=type||"sine";o.frequency.setValueAtTime(f,t);
+  g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0005,t+d);o.connect(g);g.connect(master);o.start(t);o.stop(t+d+.02);
+}
+function chime(){var t=AC.currentTime+.35;blip(1568,t,.25,.12);blip(2093,t+.1,.4,.12);}
+function click(t,accent){blip(accent?1760:1175,t,.05,accent?.35:.22,"triangle");}
+function wood(t){blip(820,t,.09,.45,"sine");blip(1650,t,.03,.12,"square");}
+
+/* ---------- 五線 ----------
+   viewBox 240×190。S＝線と線の半分。いちばん下の線が y=YB */
+var S=9,YB=124,NX=150;
+function clefLo(c){return c==="F"?-10:2;}
+function yOf(d,c){return YB-(d-clefLo(c))*S;}
+function noteSVG(n,c,cls,x){
+  var NX=x||150;
+  var lo=clefLo(c),hi=lo+8,y=yOf(n.d,c),h='<g class="nt '+(cls||"")+'">',e;
+  for(e=hi+2;e<=n.d;e+=2)h+='<line class="ldg" x1="'+(NX-16)+'" x2="'+(NX+16)+'" y1="'+yOf(e,c)+'" y2="'+yOf(e,c)+'"/>';
+  for(e=lo-2;e>=n.d;e-=2)h+='<line class="ldg" x1="'+(NX-16)+'" x2="'+(NX+16)+'" y1="'+yOf(e,c)+'" y2="'+yOf(e,c)+'"/>';
+  h+='<ellipse cx="'+NX+'" cy="'+y+'" rx="9.6" ry="7" transform="rotate(-20 '+NX+' '+y+')" stroke-width="0"/>';
+  if(n.d<lo+4)h+='<line class="stem" x1="'+(NX+8.6)+'" y1="'+(y-2)+'" x2="'+(NX+8.6)+'" y2="'+(y-54)+'"/>';
+  else h+='<line class="stem" x1="'+(NX-8.6)+'" y1="'+(y+2)+'" x2="'+(NX-8.6)+'" y2="'+(y+54)+'"/>';
+  if(n.a)h+='<text class="mu" x="'+(NX-34)+'" y="'+(y+(n.a>0?11:7))+'" font-size="40">'+(n.a>0?"♯":"♭")+'</text>';
+  return h+"</g>";
+}
+function staffSVG(c,inner){
+  c=c||"G";var h='<svg viewBox="0 0 240 190" aria-hidden="true">';
+  for(var k=0;k<5;k++){var y=YB-k*2*S;h+='<line class="sl" x1="6" x2="234" y1="'+y+'" y2="'+y+'"/>';}
+  if(c==="F")h+='<text class="clef mu" x="12" y="'+(yOf(-10,c)+2)+'" font-size="72">𝄢</text>';
+  else h+='<text class="clef mu" x="10" y="'+(yOf(4,c)+14)+'" font-size="72">𝄞</text>';
+  return h+'<g id="notes">'+(inner||"")+'</g></svg>';
+}
+
+/* ---------- ピアノ ---------- */
+var KB=null;   // {lo,hi,keys:{midi:el}}
+function buildKB(lo,hi){
+  var kb=$("kb"),n=hi-lo+1,h="",d,i;KB={keys:{}};
+  for(d=lo,i=0;d<=hi;d++,i++){
+    var m=midiOf({d:d});
+    h+='<div class="kw" data-m="'+m+'">'+(m===60?'<i class="c4"></i>':'')+'<span>'+NM[md(d,7)]+'</span></div>';
+  }
+  for(d=lo,i=0;d<hi;d++,i++){
+    if([0,1,3,4,5].indexOf(md(d,7))<0)continue;
+    var bw=100/n*.6;
+    h+='<div class="kb2" data-m="'+(midiOf({d:d})+1)+'" style="width:'+bw+'%;left:'+(100/n*(i+1)-bw/2)+'%"></div>';
+  }
+  kb.innerHTML=h;kb.classList.toggle("nolab",!showLab);
+  [].forEach.call(kb.querySelectorAll("[data-m]"),function(el){KB.keys[el.dataset.m]=el;});
+}
+$("kb").addEventListener("pointerdown",function(e){
+  var el=e.target.closest("[data-m]");if(!el)return;e.preventDefault();
+  var m=+el.dataset.m;piano(m);el.classList.add("dn");setTimeout(function(){el.classList.remove("dn");},160);
+  onKey(m,el);
+});
+function keyFx(m,cls,ms){var el=KB&&KB.keys[m];if(!el)return;el.classList.add(cls);if(ms)setTimeout(function(){el.classList.remove(cls);},ms);}
+function clearKeys(){if(!KB)return;for(var k in KB.keys)KB.keys[k].classList.remove("ok","ng","hint");}
+$("bLab").addEventListener("click",function(){showLab=!showLab;save(LAB_KEY,showLab);this.setAttribute("aria-pressed",showLab);$("kb").classList.toggle("nolab",!showLab);});
+
+/* ---------- メニュー ---------- */
+function stars(n){var s="";for(var i=0;i<3;i++)s+=i<n?"★":"<i>★</i>";return s;}
+/* カードの 色（明るい色 a → こい色 b、かげ d） */
+var CARD={read:["#ff9a6a","#ec5a48","#b8382e"],ear:["#6cb8ff","#3f86d6","#2c62a0"],staff:["#7ed98f","#3aa65e","#27773f"],rhythm:["#ff8fc6","#d9509a","#9e2f6c"]};
+var ICON={read:'<span class="mic mu">𝄞</span>',ear:'<span class="mic">🎧</span>',staff:'<span class="mic">🎼</span>',rhythm:'<span class="mic">🥁</span>'};
+var openMode=null;
+/* 𝄞𝄽𝅗𝅥 など 音楽の 記号は ふつうの 字体に ないので、Noto Music で 出す */
+function mu(t){return String(t).replace(/(?:[\u2669-\u266F]|\uD834[\uDD00-\uDDFF])+/g,function(m){return '<span class="mu">'+m+'</span>';});}
+function cvars(k){var c=CARD[k];return "--a:"+c[0]+";--b:"+c[1]+";--d:"+c[2];}
+function buildMenu(){
+  $("intro").hidden=!!openMode;
+  var h="";
+  if(!openMode){
+    h+='<div class="big4">';
+    ["read","ear","staff","rhythm"].forEach(function(k,i){
+      var M=MODES[k],got=0;M.st.forEach(function(_,j){got+=rec[k+j]||0;});
+      h+='<button class="mode" data-open="'+k+'" style="'+cvars(k)+';--dl:'+(-i*.4)+'s"><span class="fl a">♪</span><span class="fl b">♫</span>'+ICON[k]+
+        '<b>'+M.name.replace(/ (?=[^ ]+$)/,"<br>")+'</b><small>'+M.sub+'</small><span class="prog">★ '+got+' / '+M.st.length*3+'</span></button>';
+    });
+    h+='</div><button class="freeb" data-free="1"><span class="ic">🎹</span><span><b>じゆうに ひく</b><small>ピアノを ひくと、五線に おんぷが 出るよ</small></span></button>';
+  }else{
+    var M=MODES[openMode];
+    h+='<div class="shead" style="'+cvars(openMode)+'"><button class="sback" data-back="1">◀ もどる</button>'+ICON[openMode]+'<h2>'+M.name+'</h2><p>'+mu(M.desc)+'</p></div>';
+    h+='<div class="slist" style="'+cvars(openMode)+'">';
+    M.st.forEach(function(s,i){var r=rec[openMode+i]||0;
+      h+='<button class="sbtn" data-m="'+openMode+'" data-s="'+i+'"><span class="no">'+(i+1)+'</span><span class="tx">'+mu(s.t)+'<small>'+mu(s.tip.split("。")[0])+'。</small></span><span class="st">'+stars(r)+'</span></button>';});
+    h+='</div>';
+  }
+  $("menu").innerHTML=h;
+}
+function toPanel(){var y=document.querySelector(".tpanel").getBoundingClientRect().top+window.scrollY-10;window.scrollTo(0,y);}
+$("menu").addEventListener("click",function(e){
+  var b=e.target.closest("button");if(!b)return;audio();
+  if(b.dataset.open){openMode=b.dataset.open;buildMenu();toPanel();piano(72,0,.25);}
+  else if(b.dataset.back){openMode=null;buildMenu();toPanel();}
+  else if(b.dataset.free)startFree();
+  else start(b.dataset.m,+b.dataset.s);
+});
+
+/* ---------- 画面の きりかえ ---------- */
+var G=null,timers=[];
+function later(f,ms){timers.push(setTimeout(f,ms));}
+function stopAll(){timers.forEach(clearTimeout);timers=[];if(R){cancelAnimationFrame(R.raf);R=null;}}
+function showGame(title,piano){
+  $("title").hidden=true;$("game").hidden=false;$("res").hidden=true;
+  $("gTitle").innerHTML=mu(title);$("piano").hidden=!piano;$("bLab").hidden=!piano;$("bLab").setAttribute("aria-pressed",showLab);
+  window.scrollTo(0,0);
+}
+function toMenu(){var m=G&&G.mode!=="free"?G.mode:null;openMode=m;stopAll();G=null;$("game").hidden=true;$("res").hidden=true;$("title").hidden=false;buildMenu();if(openMode)toPanel();}
+$("bBack").addEventListener("click",toMenu);
+
+/* ---------- じゆうに ひく ---------- */
+function startFree(){
+  stopAll();G={mode:"free"};showGame("じゆうに ひく",true);$("dots").innerHTML="";
+  $("stage").innerHTML='<p class="q">ピアノを ひいてみよう</p><div class="paper" id="paper">'+staffSVG("G")+'<div class="lab" id="lab"></div></div>'+
+    '<p class="msg" id="msg">けんばんを おすと、その 音が 五線の どこに 書かれるか わかるよ。</p>';
+  buildKB(-3,11);
+}
+
+/* ---------- クイズ（がくふ・音感） ---------- */
+function makeQs(pool){
+  var q=[],bag=[];
+  while(q.length<NQ){
+    if(!bag.length)bag=shuffle(pool.slice());
+    var n=bag.pop();
+    if(q.length&&midiOf(q[q.length-1])===midiOf(n)){if(bag.length){bag.unshift(n);continue;}}
+    q.push(n);
+  }
+  return q;
+}
+function start(mode,si){
+  stopAll();
+  var M=MODES[mode],st=M.st[si];
+  if(mode==="rhythm")return startRhythm(si);
+  G={mode:mode,si:si,st:st,M:M,qs:makeQs(st.notes),i:0,res:[],miss:0,lock:false,clef:st.clef||"G"};
+  showGame(M.name+"　"+(si+1)+". "+st.t,mode!=="staff");
+  var h='<div class="tip">💡 '+mu(st.tip)+'</div><p class="q" id="qq">'+M.q+'</p>';
+  if(mode==="read")h+='<div class="paper" id="paper">'+staffSVG(G.clef)+'<div class="lab" id="lab"></div><div id="mk"></div></div>';
+  else if(mode==="ear")h+='<button class="spk" id="spk" aria-label="もういちど きく">🔊</button><p class="flow">ド → ？　（🔊で もういちど）</p><div class="paper" id="paper" style="max-width:300px">'+staffSVG("G")+'<div class="lab" id="lab"></div><div id="mk"></div></div>';
+  else h+='<div class="row"><button class="spk" id="spk" aria-label="もういちど きく" style="width:84px;height:84px;font-size:2.2rem">🔊</button></div><div class="paper" id="paper">'+staffSVG("G")+'<div class="lab" id="lab"></div><div id="mk"></div></div>';
+  h+='<p class="msg" id="msg"></p>';
+  $("stage").innerHTML=h;
+  if(mode!=="staff"){buildKB(st.kb[0],st.kb[1]);}
+  if($("spk"))$("spk").addEventListener("click",function(){playQ();});
+  if(mode==="staff")bindStaffInput();
+  nextQ();
+}
+function dotsUpd(){
+  var h="";for(var i=0;i<NQ;i++)h+='<i class="'+(G.res[i]===true?"ok":G.res[i]===false?"ng":i===G.i?"now":"")+'"></i>';
+  $("dots").innerHTML=h;
+}
+function setNotes(inner){var g=document.querySelector("#paper #notes");if(g)g.innerHTML=inner;}
+function mark(ok){$("mk").innerHTML='<div class="mark '+(ok?"ok":"ng")+'">'+(ok?"◯":"✕")+'</div>';}
+function nextQ(){
+  if(G.i>=NQ)return finish();
+  G.q=G.qs[G.i];G.miss=0;G.lock=false;dotsUpd();clearKeys();
+  $("lab").textContent="";$("mk").innerHTML="";
+  if(G.mode==="read"){setNotes(noteSVG(G.q,G.clef));$("msg").innerHTML="ピアノで おなじ 音の けんばんを おしてね。";}
+  else{setNotes("");$("msg").innerHTML=G.mode==="ear"?"よく きいて、ピアノで さがしてね。":"よく きいて、五線を タップしてね。";later(playQ,350);}
+}
+/* ドを ならしてから もんだいの 音 */
+function playQ(){
+  if(!G||!G.q||!audio())return;
+  var t=AC.currentTime+.05;piano(60,t);piano(midiOf(G.q),t+.8);
+  var s=$("spk");if(s){s.classList.add("play");later(function(){s.classList.remove("play");},1500);}
+}
+function answer(m){
+  if(!G||G.lock||!G.q)return;
+  var want=midiOf(G.q);
+  if(m===want){
+    G.lock=true;if(G.res[G.i]===undefined)G.res[G.i]=G.miss===0;
+    keyFx(m,"ok");mark(true);chime();
+    if(G.mode!=="read")setNotes(noteSVG(G.q,G.clef,"ok"));
+    else setNotes(noteSVG(G.q,G.clef,"ok"));
+    $("lab").textContent=nameOf(G.q);
+    $("msg").innerHTML=G.miss===0?"<em>せいかい！</em>　「"+nameOf(G.q)+"」だよ。":"<em>そう！</em>　これが「"+nameOf(G.q)+"」。";
+    G.i++;later(nextQ,1400);
+  }else{
+    G.miss++;G.res[G.i]=false;dotsUpd();mark(false);
+    var you=nameMidi(m);
+    if(G.mode==="read"){
+      keyFx(m,"ng",500);
+      $("msg").innerHTML="<b>ちがうよ。</b>それは「"+you+"」。"+(G.miss>=2?"光っている けんばんを おしてね。":(m<want?"もっと 右（高い 音）だよ。":"もっと 左（ひくい 音）だよ。"));
+    }else{
+      if(G.mode==="ear")keyFx(m,"ng",500);
+      $("msg").innerHTML="<b>ちがうよ。</b>それは「"+you+"」。"+(G.miss>=2?"光っている 所が こたえ。":(m<want?"もっと 高い 音だよ。":"もっと ひくい 音だよ。")+" もういちど きいてね。");
+      if(G.miss<2)later(function(){if(G&&!G.lock)piano(want);},900);
+    }
+    if(G.miss>=2){
+      if(G.mode==="staff")later(function(){if(G&&!G.lock)setNotes(noteSVG(G.q,G.clef,"hint")+(G.last?noteSVG(G.last,G.clef,"ng",100):""));},50);
+      else keyFx(want,"hint");
+    }
+  }
+}
+function onKey(m,el){
+  if(!G)return;
+  if(G.mode==="free"){
+    var d,a=0,pc=md(m-60,12),o=Math.floor((m-60)/12);
+    d=W.indexOf(pc);if(d<0){d=W.indexOf(pc-1);a=1;}
+    var n={d:d+7*o,a:a};setNotes(noteSVG(n,"G"));$("lab").textContent=nameOf(n);
+    $("msg").innerHTML=a?"くろい けんばんは、となりの 白い けんばんの 音に ♯（シャープ）や ♭（フラット）を つけて よぶよ。":"「"+nameOf(n)+"」";
+    return;
+  }
+  if(G.mode==="read"||G.mode==="ear")answer(m);
+}
+
+/* 五線を タップ（ゆびを おいて 上下に うごかし、はなした 所で きまる） */
+function bindStaffInput(){
+  var svg=document.querySelector("#paper svg"),down=false;
+  function dAt(e){
+    var p=svg.createSVGPoint();p.x=e.clientX;p.y=e.clientY;p=p.matrixTransform(svg.getScreenCTM().inverse());
+    return Math.max(-1,Math.min(8,Math.round((YB-p.y)/S)+2));
+  }
+  function ghost(e){if(!G||G.lock)return;var d=dAt(e);G.gd=d;setNotes(noteSVG({d:d},"G","ghost")+(G.miss>=2?noteSVG(G.q,"G","hint"):""));}
+  svg.addEventListener("pointerdown",function(e){if(!G||G.lock)return;e.preventDefault();down=true;try{svg.setPointerCapture(e.pointerId);}catch(_){}ghost(e);});
+  svg.addEventListener("pointermove",function(e){if(down)ghost(e);});
+  svg.addEventListener("pointerup",function(e){
+    if(!down)return;down=false;if(!G||G.lock)return;
+    var d=dAt(e),n={d:d},m=midiOf(n);G.last=n;piano(m);
+    if(m===midiOf(G.q))answer(m);
+    else{setNotes(G.miss>=1?noteSVG(n,"G","ng",100)+noteSVG(G.q,"G","hint"):noteSVG(n,"G","ng"));answer(m);}
+  });
+  svg.addEventListener("pointercancel",function(){down=false;});
+}
+function finish(){
+  var ok=G.res.filter(function(x){return x===true;}).length,s=ok>=10?3:ok>=8?2:1,key=G.mode+G.si;
+  if(s>(rec[key]||0)){rec[key]=s;save(REC_KEY,rec);}
+  showRes(ok===10?"パーフェクト！":ok>=8?"よくできました！":"できた！",s,"1回で あてたのは <b>"+ok+"</b> / "+NQ+" もん",G.mode,G.si);
+}
+function showRes(ttl,s,msg,mode,si){
+  $("rTtl").textContent=ttl;$("rStars").innerHTML=stars(s);$("rMsg").innerHTML=msg;
+  var M=MODES[mode],h='<button class="btn" id="rAgain">もういちど</button>';
+  if(si+1<M.st.length)h+='<button class="btn pri" id="rNext">つぎへ ▶</button>';
+  h+='<button class="btn" id="rMenu">えらぶ 画面へ</button>';
+  $("rBtns").innerHTML=h;$("res").hidden=false;
+  if(s===3){var t=AC.currentTime+.1;[72,76,79,84].forEach(function(m,i){piano(m,t+i*.12,.3);});}
+  $("rAgain").onclick=function(){start(mode,si);};
+  if($("rNext"))$("rNext").onclick=function(){start(mode,si+1);};
+  $("rMenu").onclick=toMenu;
+}
+
+/* =========================================================
+   リズム
+   1小節＝8つぶ（八分音符1つぶん）。
+   q 四分(2) h 二分(4) w 全(8) r 四分休符(2) p 八分2つ(2) s 八分休符＋八分(2)
+   ========================================================= */
+var TOK={q:{n:2,t:[0]},h:{n:4,t:[0]},w:{n:8,t:[0]},r:{n:2,t:[]},p:{n:2,t:[0,1]},s:{n:2,t:[1]}};
+var BARS=4,UX=40,XJ=78,LY=92;   // UX＝1つぶの はば、XJ＝赤い線の 場所、LY＝1本線の 高さ
+var R=null;
+function makeBars(pool){
+  var bars=[];
+  for(var b=0;b<BARS;b++){
+    var left=8,bar=[],tries=0;
+    while(left>0&&tries<50){tries++;
+      var k=pool[Math.floor(Math.random()*pool.length)];
+      if(TOK[k].n>left)continue;
+      if(k==="w"&&left!==8)continue;
+      if(k==="r"&&b===0&&left===8)continue;   // さいしょの 1はくめは たたく
+      bar.push(k);left-=TOK[k].n;
+    }
+    while(left>0){bar.push("q");left-=2;}
+    bars.push(bar);
+  }
+  /* 休符ばかりに ならないように：たたく 数が すくなすぎたら 作りなおす */
+  var taps=0;bars.forEach(function(br){br.forEach(function(k){taps+=TOK[k].t.length;});});
+  return taps<8?makeBars(pool):bars;
+}
+function rhythmSVG(bars){
+  var h="",pos=0,notes=[],x;
+  bars.forEach(function(bar,bi){
+    bar.forEach(function(k){
+      x=pos*UX+UX*.5;
+      if(k==="r")h+='<text class="rest mu" x="'+(x-7)+'" y="'+(LY+14)+'" font-size="44">𝄽</text>';
+      else if(k==="s"){
+        h+='<text class="rest mu" x="'+(x-7)+'" y="'+(LY+12)+'" font-size="44">𝄾</text>';
+        var x2=x+UX,id=notes.length;notes.push({pos:pos+1});
+        h+='<g class="rn" id="rn'+id+'"><ellipse cx="'+x2+'" cy="'+LY+'" rx="9" ry="6.6" transform="rotate(-20 '+x2+' '+LY+')"/><line class="stem" x1="'+(x2+8)+'" y1="'+(LY-2)+'" x2="'+(x2+8)+'" y2="'+(LY-46)+'"/><path class="flag" d="M'+(x2+8)+' '+(LY-46)+' q4 12 14 16 q4 6 -2 16"/></g>';
+      }else if(k==="p"){
+        var xa=x,xb=x+UX,ia=notes.length;notes.push({pos:pos},{pos:pos+1});
+        h+='<g class="rn" id="rn'+ia+'"><ellipse cx="'+xa+'" cy="'+LY+'" rx="9" ry="6.6" transform="rotate(-20 '+xa+' '+LY+')"/><line class="stem" x1="'+(xa+8)+'" y1="'+(LY-2)+'" x2="'+(xa+8)+'" y2="'+(LY-46)+'"/><rect class="beam" x="'+(xa+7.1)+'" y="'+(LY-49)+'" width="'+(UX+1.8)+'" height="6"/></g>';
+        h+='<g class="rn" id="rn'+(ia+1)+'"><ellipse cx="'+xb+'" cy="'+LY+'" rx="9" ry="6.6" transform="rotate(-20 '+xb+' '+LY+')"/><line class="stem" x1="'+(xb+8)+'" y1="'+(LY-2)+'" x2="'+(xb+8)+'" y2="'+(LY-46)+'"/></g>';
+      }else{
+        var id2=notes.length;notes.push({pos:pos});
+        var hollow=k!=="q";
+        h+='<g class="rn" id="rn'+id2+'"><ellipse class="'+(hollow?"hollow":"")+'" cx="'+x+'" cy="'+LY+'" rx="9" ry="6.6" transform="rotate(-20 '+x+' '+LY+')"/>'+
+          (k!=="w"?'<line class="stem" x1="'+(x+8)+'" y1="'+(LY-2)+'" x2="'+(x+8)+'" y2="'+(LY-46)+'"/>':'')+'</g>';
+        /* のばす はくを 点線で */
+        if(hollow)h+='<line x1="'+(x+14)+'" x2="'+(x+TOK[k].n*UX-14)+'" y1="'+(LY+18)+'" y2="'+(LY+18)+'" stroke="#c8b590" stroke-width="3" stroke-dasharray="2 6" stroke-linecap="round"/>';
+      }
+      pos+=TOK[k].n;
+    });
+    h+='<line class="bar" x1="'+(pos*UX)+'" x2="'+(pos*UX)+'" y1="'+(LY-22)+'" y2="'+(LY+22)+'"/>';
+  });
+  /* 1はくごとの めじるし */
+  for(var b=0;b<=BARS*4;b++)h='<circle cx="'+(b*2*UX+UX*.5)+'" cy="'+(LY+32)+'" r="'+(b%4===0?3.2:2)+'" fill="#d4c09a"/>'+h;
+  return {svg:h,notes:notes,len:pos};
+}
+function startRhythm(si){
+  stopAll();
+  var M=MODES.rhythm,st=M.st[si],bars=makeBars(st.pool),rs=rhythmSVG(bars);
+  G={mode:"rhythm",si:si,st:st};
+  showGame(M.name+"　"+(si+1)+". "+st.t,false);$("dots").innerHTML="";
+  $("stage").innerHTML='<div class="tip">💡 '+mu(st.tip)+'</div>'+
+    '<div class="lane"><svg viewBox="0 0 360 150" id="rsvg"><rect class="jz" x="'+(XJ-14)+'" y="0" width="28" height="150"/>'+
+    '<line class="rl" x1="0" x2="360" y1="'+LY+'" y2="'+LY+'"/><g id="roll">'+rs.svg+'</g>'+
+    '<line class="jl" x1="'+XJ+'" x2="'+XJ+'" y1="14" y2="136"/><text class="cnt" id="cnt" x="220" y="60"></text><g id="jts"></g></svg></div>'+
+    '<div class="rscore"><span class="p">ぴったり <b id="sP">0</b></span><span class="g">いいね <b id="sG">0</b></span><span class="m">ミス <b id="sM">0</b></span></div>'+
+    '<div class="row" id="rBtnRow"><button class="btn" id="bDemo">👂 おてほんを きく</button><button class="btn pri big" id="bGo">スタート ▶</button></div>'+
+    '<button class="pad" id="pad" hidden>タン！</button>'+
+    '<p class="legendR" id="rHelp">「スタート」を おすと、カチ・カチ・カチ・カチ（1・2・3・4）の あとで はじまるよ。<br>赤い 線に おんぷが きたら、下の ボタンを タップ（スペースキーでも OK）。</p>';
+  R={st:st,rs:rs,raf:0,on:false};
+  $("roll").setAttribute("transform","translate("+(XJ-UX*.5)+" 0)");
+  $("bDemo").onclick=function(){beginRhythm(true);};
+  $("bGo").onclick=function(){beginRhythm(false);};
+  var pad=$("pad");
+  pad.addEventListener("pointerdown",function(e){e.preventDefault();tap();pad.classList.add("hit");});
+  pad.addEventListener("pointerup",function(){pad.classList.remove("hit");});
+  pad.addEventListener("pointerleave",function(){pad.classList.remove("hit");});
+}
+function beginRhythm(demo){
+  if(!audio()||!R)return;
+  cancelAnimationFrame(R.raf);
+  var st=R.st,beat=60/st.bpm,u=beat/2,lat=AC.outputLatency||AC.baseLatency||0;
+  var T0=AC.currentTime+.4,T1=T0+4*beat,end=T1+BARS*4*beat;
+  R.demo=demo;R.on=true;R.u=u;R.T1=T1;R.end=end;R.lat=lat;R.cnt={p:0,g:0,m:0};
+  R.taps=R.rs.notes.map(function(n,i){return {t:T1+n.pos*u,i:i,j:null};});
+  for(var b=0;b<4+BARS*4;b++)click(T0+b*beat,b%4===0);
+  if(demo)R.taps.forEach(function(tp){wood(tp.t);});
+  R.rs.notes.forEach(function(n,i){var el=$("rn"+i);if(el)el.setAttribute("class","rn");});
+  ["sP","sG","sM"].forEach(function(id){$(id).textContent="0";});
+  $("rBtnRow").hidden=true;$("pad").hidden=demo;
+  $("rHelp").textContent=demo?"おてほんだよ。「ポク」の 音と、おんぷが 赤い 線に くる ところを 見てね。":"赤い 線に おんぷが きたら タップ！";
+  (function loop(){
+    if(!R)return;
+    var now=AC.currentTime-R.lat,x=XJ-UX*.5-(now-R.T1)/R.u*UX;
+    $("roll").setAttribute("transform","translate("+x.toFixed(1)+" 0)");
+    var c=$("cnt");
+    if(now<R.T1){var k=Math.floor((now-(R.T1-4*beat))/beat)+1;c.textContent=k>=1&&k<=4?k:"";}else c.textContent="";
+    if(!R.demo)R.taps.forEach(function(tp){if(tp.j===null&&now>tp.t+.22)judge(tp,"m");});
+    else R.taps.forEach(function(tp){if(tp.j===null&&now>=tp.t)judge(tp,"p",true);});
+    if(now>R.end+.3){R.on=false;rhythmEnd();return;}
+    R.raf=requestAnimationFrame(loop);
+  })();
+}
+function judge(tp,j,quiet){
+  tp.j=j;var el=$("rn"+tp.i);if(el)el.setAttribute("class","rn "+j);
+  if(quiet)return;
+  R.cnt[j]++;$("sP").textContent=R.cnt.p;$("sG").textContent=R.cnt.g;$("sM").textContent=R.cnt.m;
+  var t=document.createElementNS("http://www.w3.org/2000/svg","text");
+  t.setAttribute("class","jt");t.setAttribute("x",XJ);t.setAttribute("y",40);
+  t.setAttribute("fill",j==="p"?"#3aa65e":j==="g"?"#3f86d6":"#e8554a");
+  t.textContent=j==="p"?"ぴったり！":j==="g"?"いいね":"ミス";
+  $("jts").appendChild(t);setTimeout(function(){t.remove();},650);
+}
+function tap(){
+  if(!R||!R.on||R.demo)return;
+  wood(AC.currentTime);
+  var now=AC.currentTime-R.lat,best=null,bd=9;
+  R.taps.forEach(function(tp){if(tp.j!==null)return;var d=Math.abs(now-tp.t);if(d<bd){bd=d;best=tp;}});
+  if(!best||bd>.22)return;          // どの おんぷにも ちかくない タップは 数えない
+  judge(best,bd<=.075?"p":bd<=.15?"g":"m");
+}
+document.addEventListener("keydown",function(e){
+  if(!R||!R.on)return;
+  if(e.code==="Space"||e.code==="Enter"){e.preventDefault();if(!e.repeat){tap();var p=$("pad");p.classList.add("hit");setTimeout(function(){p.classList.remove("hit");},90);}}
+});
+function rhythmEnd(){
+  if(!R)return;
+  var si=G.si;
+  if(R.demo){
+    $("rBtnRow").hidden=false;$("pad").hidden=true;$("rHelp").textContent="つぎは 自分で たたいてみよう！";
+    R.rs.notes.forEach(function(n,i){var el=$("rn"+i);if(el)el.setAttribute("class","rn");});
+    $("roll").setAttribute("transform","translate("+(XJ-UX*.5)+" 0)");
+    return;
+  }
+  var n=R.taps.length,pt=(R.cnt.p*2+R.cnt.g)/(n*2),s=pt>=.9?3:pt>=.65?2:1;
+  if(s>(rec["rhythm"+si]||0)){rec["rhythm"+si]=s;save(REC_KEY,rec);}
+  showRes(R.cnt.m===0?"パーフェクト！":s>=2?"よくできました！":"できた！",s,
+    "ぴったり <b>"+R.cnt.p+"</b>　いいね <b>"+R.cnt.g+"</b>　ミス <b>"+R.cnt.m+"</b><br><small>リズムは あそぶたびに かわるよ</small>","rhythm",si);
+}
+
+buildMenu();
+</script>
+</body>
+</html>
