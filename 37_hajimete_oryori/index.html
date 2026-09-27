@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>ゲームで体験！はじめてのお料理！｜道具の名前・火の使い方・料理の手順を学ぶ無料の学習ゲーム｜あたやさいさいゲームランド</title>
+<meta name="description" content="ほうちょうは ねこの手、火を つける まえに かんきせん。しゃもじ・おたま・フライがえしの 名前から、ごはん・みそしる・めだまやき・やさいいため・サラダ・カレーライス、さいごは しょっきあらいまで。本物の 写真で おりょうりの 手じゅんを 体験しよう。">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://atayasaisai.github.io/game_land/37_hajimete_oryori/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="あたやさいさいゲームランド">
+<meta property="og:title" content="ゲームで体験！はじめてのお料理！｜ねこの手で トントン！">
+<meta property="og:url" content="https://atayasaisai.github.io/game_land/37_hajimete_oryori/">
+<meta property="og:image" content="https://atayasaisai.github.io/game_land/ogp.png">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap">
+<style>
+:root{
+  --ink:#3A2A17; --sub:#6F5A3C; --faint:#A89274; --paper:#FFFDF6; --dark:#5A3A1A;
+  --ok:#2FA36B; --ng:#D9493A; --gold:#F2B705; --red:#E0482E; --wood:#C98B4E; --wood2:#A96A33;
+}
+[hidden]{display:none!important}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{margin:0;font-family:"Zen Kaku Gothic New",-apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif;color:var(--ink);
+  background:#F6EEDC;line-height:1.7;overflow-x:hidden;-webkit-font-smoothing:antialiased;-webkit-user-select:none;user-select:none}
+/* キッチンの かべ（白い タイル） */
+body::before{content:"";position:fixed;inset:0;z-index:-1;
+  background:linear-gradient(#0000 0 0),
+   repeating-linear-gradient(0deg,#E6DCC8 0 2px,transparent 2px 48px),repeating-linear-gradient(90deg,#E6DCC8 0 2px,transparent 2px 48px),
+   linear-gradient(180deg,#FFFBF2,#F4EAD6)}
+button{font-family:inherit;color:inherit;cursor:pointer}
+img{display:block}
+.wrap{max-width:900px;margin:0 auto;padding:0 12px calc(24px + env(safe-area-inset-bottom))}
+.scr{display:none}.scr.on{display:block}
+.btn{border:3px solid var(--dark);background:#fff;color:var(--ink);font-weight:900;font-size:1rem;padding:10px 20px;border-radius:14px;box-shadow:0 4px 0 var(--dark);transition:transform .1s}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--dark)}
+.btn.go{background:linear-gradient(#FF8A5C,#E0482E);color:#fff;border-color:#8A2A12;box-shadow:0 5px 0 #8A2A12;font-size:1.2rem;padding:12px 30px}
+.btn.sm{font-size:.85rem;padding:6px 12px;border-width:2px;box-shadow:0 3px 0 var(--dark)}
+.btn:disabled{opacity:.4}
+.backlink{display:inline-block;margin:12px 0;color:var(--sub);font-weight:700;text-decoration:none;font-size:.9rem}
+
+/* タイトル */
+.ttl{margin:0 auto 6px;text-align:center}.ttl img{display:inline-block;width:min(78vw,380px);height:auto;filter:drop-shadow(0 4px 6px #0003)}
+.collage{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-width:640px;margin:0 auto}
+.collage img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:12px;border:3px solid #fff;box-shadow:0 3px 8px #0002}
+.lead{max-width:640px;margin:14px auto;background:var(--paper);border-radius:16px;padding:12px 16px;border:2px solid #E6D2B0;font-weight:700}
+.center{text-align:center}
+.rec{color:var(--sub);font-weight:700;font-size:.9rem;margin-top:8px}
+
+/* ボード */
+.bhead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:12px 0}
+.bhead h2{margin:0;font:400 1.3rem "Mochiy Pop One"}
+.mgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:620px){.mgrid{grid-template-columns:repeat(2,1fr)}}
+.mc{position:relative;border:3px solid var(--dark);border-radius:16px;background:#fff;padding:0;overflow:hidden;box-shadow:0 4px 0 var(--dark);text-align:left}
+.mc:active{transform:translateY(3px);box-shadow:0 1px 0 var(--dark)}
+.mc img{width:100%;aspect-ratio:4/3;object-fit:cover}
+.mc .no{position:absolute;left:8px;top:8px;background:var(--red);color:#fff;font:400 .9rem "Mochiy Pop One";padding:1px 10px;border-radius:99px;border:2px solid #fff}
+.mc .tx{padding:6px 10px 8px}
+.mc b{display:block;font-size:1rem;line-height:1.35}
+.mc small{display:block;color:var(--sub);font-size:.78rem;line-height:1.4}
+.mc .st{position:absolute;right:8px;top:8px;background:#fffd;border-radius:99px;padding:0 8px;font-size:.9rem;color:var(--gold);font-weight:900;letter-spacing:-.05em}
+.mc .st i{color:#ccc;font-style:normal}
+.credit{margin-top:22px;font-size:.72rem;color:var(--sub)}
+.credit summary{cursor:pointer;font-weight:700}
+.credit a{color:var(--sub)}
+
+/* プレイ */
+.phead{display:flex;align-items:center;gap:8px;margin:8px 0}
+.phead h2{margin:0;flex:1;font:400 1.05rem/1.3 "Mochiy Pop One"}
+.dots{display:flex;gap:3px;flex-wrap:wrap;max-width:45%}
+.dots i{width:10px;height:10px;border-radius:50%;background:#E3D3B6}
+.dots i.d{background:var(--ok)}
+@media(max-width:520px){.dots{max-width:34%}.dots i{width:7px;height:7px}.phead h2{font-size:.92rem}}.dots i.c{background:var(--red)}
+.msg{display:flex;gap:8px;align-items:flex-start;background:#fff;border:3px solid var(--dark);border-radius:16px;padding:8px 12px;margin-bottom:8px;min-height:62px}
+.msg .face{font-size:2rem;line-height:1}
+.msg p{margin:0;font-weight:900;font-size:1.05rem;line-height:1.5}
+.msg p small{display:block;font-weight:700;font-size:.85rem;color:var(--sub)}
+.stage{position:relative;width:100%;max-width:min(720px,calc((100vh - 250px)*4/3));min-width:min(100%,300px);margin:0 auto;aspect-ratio:4/3;border-radius:18px;overflow:hidden;border:3px solid var(--dark);
+  background:linear-gradient(180deg,#FFF8EA 0 64%,#D9A869 64% 66%,#C98B4E 66%);touch-action:none}
+.stage.board{background:linear-gradient(180deg,#FFF8EA 0 8%,#C98B4E 8%)}
+.stage.sink{background:radial-gradient(ellipse at 50% 55%,#DCE6EC 0 55%,#B8C6CE 56% 60%,#E9E1D0 61%)}
+.stage.plain{background:#FFF8EA}
+.ctrl{max-width:720px;margin:10px auto 0;display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-items:center}
+.toast{position:absolute;left:50%;top:10px;transform:translateX(-50%);background:#fff;border:3px solid var(--dark);border-radius:14px;padding:6px 14px;font-weight:900;
+  max-width:92%;text-align:center;z-index:30;box-shadow:0 4px 0 #0003;animation:pop .25s;font-size:.98rem;line-height:1.45}
+.toast.ng{border-color:var(--ng);color:#8A1F14;background:#FFF1EE}.toast.ok{border-color:var(--ok);color:#135C3A;background:#EFFFF6}
+@keyframes pop{from{transform:translate(-50%,-6px) scale(.9);opacity:0}}
+.cur{position:absolute;pointer-events:none;font-size:2.4rem;transform:translate(-50%,-60%);z-index:20;display:none;filter:drop-shadow(0 2px 2px #0004)}
+
+/* えらぶ（写真） */
+.opts{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px}
+.opt{border:4px solid #fff;border-radius:14px;padding:0;overflow:hidden;background:#fff;box-shadow:0 3px 8px #0003;position:relative}
+.opt img{width:100%;height:100%;object-fit:cover}
+.opt.ng{border-color:var(--ng);filter:grayscale(.7)}.opt.ok{border-color:var(--ok);box-shadow:0 0 0 4px var(--ok)}
+.opt .nm{position:absolute;left:0;right:0;bottom:0;background:#000a;color:#fff;font-weight:900;text-align:center;font-size:.95rem}
+.shake{animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-6px)}50%{transform:translateX(6px)}75%{transform:translateX(-4px)}}
+/* クイズ */
+.quiz{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;gap:10px;padding:14px}
+.quiz .q{font-weight:900;font-size:1.15rem;text-align:center;line-height:1.5}
+.quiz button{border:3px solid var(--dark);border-radius:14px;background:#fff;font-weight:900;font-size:1rem;padding:10px 12px;text-align:left;line-height:1.4;box-shadow:0 3px 0 var(--dark)}
+.quiz button.ok{background:#E3FAEC;border-color:var(--ok)}.quiz button.ng{background:#FFE7E2;border-color:var(--ng)}
+.exp{background:#FFFBE8;border:2px dashed #D9B24C;border-radius:12px;padding:8px 12px;font-weight:700;font-size:.95rem;line-height:1.55}
+.big{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);font:400 7rem/1 "Mochiy Pop One";z-index:25;pointer-events:none;animation:bigp .5s}
+.big.ok{color:var(--ok);text-shadow:0 0 0 #fff,0 4px 0 #fff}.big.ng{color:var(--ng)}
+@keyframes bigp{from{transform:translate(-50%,-50%) scale(.3);opacity:0}}
+/* せつめい */
+.say{position:absolute;inset:0;display:flex;flex-wrap:wrap;align-content:center;justify-content:center;gap:10px;padding:12px}
+.say figure{margin:0;width:calc(33% - 8px);min-width:120px;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 3px 8px #0002}
+.say figure.one{width:80%}
+.say figure img{width:100%;aspect-ratio:4/3;object-fit:cover}
+.say figcaption{text-align:center;font-weight:900;font-size:.9rem;padding:2px}
+/* こする・きる */
+.item{position:absolute;left:12%;top:10%;width:76%;height:76%}
+.item .ph{position:absolute;inset:0;border-radius:50%;box-shadow:0 6px 10px #0003}
+.item canvas{position:absolute;inset:0;width:100%;height:100%;border-radius:50%}
+.item svg{position:absolute;inset:0;width:100%;height:100%}
+.strip{position:absolute;inset:0;border-radius:50%;transition:transform .25s;box-shadow:0 5px 8px #0002}
+.guide{position:absolute;top:2%;bottom:2%;border-left:3px dashed #fff;filter:drop-shadow(0 0 2px #000a);pointer-events:none}
+.knife{position:absolute;font-size:3rem;z-index:5;pointer-events:none;animation:chop .3s forwards}
+@keyframes chop{from{transform:translate(-30%,-130%) rotate(-30deg)}to{transform:translate(-30%,-20%) rotate(-30deg);opacity:.2}}
+.bar{position:relative;width:min(90%,420px);height:18px;border:3px solid var(--dark);border-radius:99px;background:#fff;overflow:hidden}
+.bar i{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,#FFB14A,#E0482E);width:0}
+.bar span{position:absolute;inset:0;text-align:center;font-size:.72rem;font-weight:900;line-height:12px}
+.hands{display:flex;gap:12px}
+.hands button{font-size:1rem;font-weight:900;border:3px solid var(--dark);border-radius:14px;background:#fff;padding:8px 14px;box-shadow:0 3px 0 var(--dark);line-height:1.3}
+.hands button b{display:block;font-size:2.2rem}
+/* ひ */
+.kit svg{position:absolute;inset:0;width:100%;height:100%}
+.chunk{position:absolute;border-radius:32%;background-size:300% 300%;transform:translate(-50%,-50%);box-shadow:0 2px 3px #0005;transition:left .2s,top .2s,filter 1s}
+.chunk.e{background:none;box-shadow:none;font-size:1.6rem;display:grid;place-items:center}
+.aku{position:absolute;width:9%;aspect-ratio:1.4;border-radius:50%;background:radial-gradient(circle at 40% 40%,#fff,#E8D8B8 60%,#C8B08A);transform:translate(-50%,-50%);z-index:4;box-shadow:0 0 0 2px #fff8;animation:akup .4s}
+@keyframes akup{from{transform:translate(-50%,-50%) scale(.2)}}
+.fire{display:flex;gap:4px;background:#fff;border:3px solid var(--dark);border-radius:14px;padding:4px}
+.fire button,.fan{border:2px solid var(--dark);background:#fff;border-radius:10px;font-weight:900;padding:5px 9px;font-size:.9rem;line-height:1.2}
+.fire button.on{background:#FFE08A}.fire button[data-l=off].on{background:#E4E4E4}
+.fan.on{background:#CFF2FF}
+.chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;width:100%}
+.chip{display:flex;align-items:center;gap:5px;border:3px solid var(--dark);border-radius:12px;background:#fff;padding:3px 8px 3px 3px;font-weight:900;font-size:.9rem;box-shadow:0 3px 0 var(--dark)}
+.chip img,.chip .em{width:40px;height:30px;border-radius:7px;object-fit:cover;font-size:1.5rem;display:grid;place-items:center}
+.chip.used{opacity:.35;box-shadow:none}
+.clock{position:absolute;right:4%;top:4%;background:#fff;border:3px solid var(--dark);border-radius:14px;padding:4px 12px;font:400 1.6rem "Mochiy Pop One";z-index:6}
+.clock small{font:900 .75rem "Zen Kaku Gothic New";display:block;color:var(--sub)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spin{animation:spin .6s linear infinite;transform-origin:center;transform-box:fill-box}
+@keyframes bub{0%{transform:translateY(0) scale(.4);opacity:0}30%{opacity:1}100%{transform:translateY(-14px) scale(1);opacity:0}}
+.bub{animation:bub 1s infinite;transform-box:fill-box}
+@keyframes steam{0%{transform:translateY(0);opacity:0}40%{opacity:.7}100%{transform:translateY(-40px);opacity:0}}
+.steam{animation:steam 2.4s infinite;transform-box:fill-box}
+@keyframes flick{50%{transform:scaleY(.8)}}
+.flm{animation:flick .3s infinite;transform-box:fill-box;transform-origin:bottom}
+/* はかる */
+.pour{touch-action:none}
+/* ならべる */
+.ord{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px}
+.ord button{border:3px solid var(--dark);border-radius:16px;background:#fff;font-weight:900;font-size:1rem;position:relative;box-shadow:0 3px 0 var(--dark)}
+.ord button b{display:block;font-size:3rem;line-height:1.2}
+.ord button i{position:absolute;left:8px;top:6px;width:32px;height:32px;border-radius:50%;background:var(--ok);color:#fff;font:400 1.1rem/32px "Mochiy Pop One";font-style:normal}
+/* できあがり */
+.serve{position:absolute;inset:0;display:grid;place-items:center;background:radial-gradient(circle,#FFF6D6,#FFE3A6)}
+.serve img{width:84%;aspect-ratio:4/3;object-fit:cover;border-radius:18px;border:6px solid #fff;box-shadow:0 8px 20px #0004;animation:bigp .6s}
+.serve b{position:absolute;top:3%;font:400 2rem "Mochiy Pop One";color:var(--red);text-shadow:0 3px 0 #fff}
+.res{max-width:560px;margin:10px auto;background:var(--paper);border:3px solid var(--dark);border-radius:18px;padding:16px;text-align:center}
+.res .stars{font-size:3rem;color:var(--gold);letter-spacing:.05em}.res .stars i{color:#ddd;font-style:normal}
+.res ul{text-align:left;font-weight:700;padding-left:1.2em;margin:8px 0}
+.res li{margin:4px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<section class="scr on" id="s-title">
+  <a class="backlink" href="../">◀ あたやさいさいゲームランドへ もどる</a>
+  <h1 class="ttl"><img src="art/title.png?v=1" alt="はじめてのお料理！" width="400" height="324"></h1>
+  <div class="collage" id="collage"></div>
+  <p class="lead">ほうちょうは「ねこの手」。火を つける まえに かんきせん。<br>道具の 名前から、ごはん・みそしる・カレーライス、さいごの かたづけまで。本物の 写真で おりょうりの 手じゅんを 体験しよう！<br><small>※ほんとうの 火や ほうちょうは、おうちの人と いっしょに つかおうね。</small></p>
+  <p class="center"><button class="btn go" data-go="board">はじめる</button></p>
+  <p class="center rec" id="recline"></p>
+</section>
+
+<section class="scr" id="s-board">
+  <div class="bhead"><button class="btn sm" data-go="title">◀ もどる</button><h2>きょうの メニュー</h2><span></span></div>
+  <div class="mgrid" id="mgrid"></div>
+  <details class="credit"><summary>写真の クレジット（ウィキメディア・コモンズ）</summary><div id="credits"></div></details>
+</section>
+
+<section class="scr" id="s-play">
+  <div class="phead"><button class="btn sm" id="quit">◀ やめる</button><h2 id="ptitle"></h2><div class="dots" id="dots"></div></div>
+  <div class="msg"><span class="face" id="face">🧑‍🍳</span><p id="msg"></p></div>
+  <div class="stage" id="stage"></div>
+  <div class="ctrl" id="ctrl"></div>
+</section>
+
+<section class="scr" id="s-res">
+  <div class="res" id="res"></div>
+</section>
+
+</div>
+<script src="photos.js?v=1"></script>
+<script>
+'use strict';
+const PV='?v=1';
+const $=id=>document.getElementById(id);
+const PH={};PHOTOS.forEach(p=>PH[p.k]=p);
+const P=k=>`photo/${PH[k].p}.jpg${PV}`;
+const rnd=(a,b)=>a+Math.random()*(b-a);
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const REC='hajimete_oryori_rec';
+function loadRec(){try{return JSON.parse(localStorage.getItem(REC))||{}}catch(e){return{}}}
+function saveRec(r){try{localStorage.setItem(REC,JSON.stringify(r))}catch(e){}}
+
+/* ---------- 道具（名前あて） ---------- */
+const TOOLS={
+  shamoji:'ごはんを まぜたり、おちゃわんに よそったり する。',
+  otama:'しるや スープを すくう。みそを とかす ときにも つかう。',
+  furaigaeshi:'やいた ものを ひっくりかえしたり、もちあげたり する。',
+  furaipan:'いためる・やく。そこが ひろくて あさい。',
+  nabe:'にる・ゆでる・おゆを わかす。',
+  hocho:'ざいりょうを 切る。はを 人に むけない。',
+  manaita:'ざいりょうを 切る ときの 台。にくと やさいで 気を つける。',
+  piiraa:'やさいの かわを うすく むく。',
+  saibashi:'りょうり用の ながい おはし。まぜる・とりわける。',
+  zaru:'あらった やさいや ゆでた めんの 水を きる。',
+  keiryo_cup:'水などの りょうを はかる。1カップ＝200mL。',
+  keiryo_spoon:'大さじ＝15mL、小さじ＝5mL を はかる。',
+  awadateki:'たまごや クリームを まぜる・あわだてる。',
+  suihanki:'おこめと 水を 入れて、ごはんを たく。',
+  kankisen:'けむりや においを いえの 外へ だす。',
+  gasu:'ガスの 火で なべや フライパンを あたためる。',
+  ih:'火を つかわず、でんきの 力で なべの そこを あたためる。',
+  sponji:'せんざいを つけて しょっきを あらう。',
+  mizukiri:'あらった しょっきを ならべて かわかす。'
+};
+/* 写真の ない ざいりょう */
+const EMO={abura:['あぶら','🫗'],mizu:['水','💧'],roux:['カレールー','🟫'],shio:['しお','🧂'],niboshi_out:['にぼしを とりだす','🥢']};
+/* 切る・あらう ときに ざいりょうだけ 大きく 見せる（写真の 大きさ%・よこ%・たて%） */
+const ZOOM={jagaimo:[230,22,78],tamanegi:[190,50,62],kyabetsu:[150,50,50],kyuri:[170,50,42],tomato:[170,52,52],tofu:[230,4,40],butaniku:[210,42,62],ninjin:[130,50,50],piman:[130,50,50],negi:[130,50,50],retasu:[130,50,50]};
+const bgs=k=>{const z=ZOOM[k]||[100,50,50];return `background-image:url(${P(k)});background-size:${z[0]}% ${z[0]}%;background-position:${z[1]}% ${z[2]}%`};
+/* 先方の絵（art/。写真の かわり） */
+const ART={kome:['おこめ','art/kome.png?v=1'],roux:['カレールー','art/roux.png?v=1'],abura:['サラダあぶら','art/abura.png?v=1']};
+const nameOf=k=>PH[k]?PH[k].n:ART[k]?ART[k][0]:(EMO[k]?EMO[k][0]:k);
+const picOf=k=>PH[k]?P(k):ART[k]?ART[k][1]:'';
+
+/* ---------- 音 ---------- */
+let AC=null;
+function ac(){if(!AC){try{AC=new(window.AudioContext||window.webkitAudioContext)()}catch(e){}}if(AC&&AC.state==='suspended')AC.resume();return AC}
+function tone(f,d=.12,type='sine',v=.18,when=0){const a=ac();if(!a)return;const o=a.createOscillator(),g=a.createGain();o.type=type;o.frequency.value=f;
+  const t=a.currentTime+when;g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(g).connect(a.destination);o.start(t);o.stop(t+d+.02)}
+const sOK=()=>{tone(880,.12,'sine',.2);tone(1320,.18,'sine',.2,.1)};
+const sNG=()=>{tone(220,.25,'square',.1)};
+const sTap=()=>tone(660,.05,'triangle',.12);
+function noise(d=.08,v=.2,f=2500){const a=ac();if(!a)return;const b=a.createBuffer(1,a.sampleRate*d,a.sampleRate),c=b.getChannelData(0);for(let i=0;i<c.length;i++)c[i]=(Math.random()*2-1)*(1-i/c.length);
+  const s=a.createBufferSource(),fl=a.createBiquadFilter(),g=a.createGain();fl.type='bandpass';fl.frequency.value=f;g.gain.value=v;s.buffer=b;s.connect(fl).connect(g).connect(a.destination);s.start()}
+/* ジュー（いためている あいだだけ） */
+let SZ=null;
+function sizzle(on){const a=on?ac():AC;if(!a)return;
+  if(on&&!SZ){const b=a.createBuffer(1,a.sampleRate*2,a.sampleRate),c=b.getChannelData(0);for(let i=0;i<c.length;i++)c[i]=(Math.random()*2-1)*(Math.random()<.3?1:.3);
+    const s=a.createBufferSource(),fl=a.createBiquadFilter(),g=a.createGain();s.buffer=b;s.loop=true;fl.type='highpass';fl.frequency.value=3000;g.gain.value=.05;s.connect(fl).connect(g).connect(a.destination);s.start();SZ={s,g}}
+  if(!on&&SZ){try{SZ.s.stop()}catch(e){}SZ=null}}
+
+/* ---------- 画面 ---------- */
+function show(id){document.querySelectorAll('.scr').forEach(s=>s.classList.toggle('on',s.id==='s-'+id));scrollTo(0,0);
+  if(id==='board')buildBoard();if(id==='title')recLine()}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(b){sTap();show(b.dataset.go)}});
+
+function recLine(){const r=loadRec(),n=Object.values(r.stars||{}).reduce((a,b)=>a+b,0);$('recline').textContent=n?`あつめた ★ ${n} / ${MIS.length*3}`:''}
+$('collage').innerHTML=['curry_rice','misoshiru','medamayaki','salad'].map(k=>`<img src="${P(k)}" alt="">`).join('');
+
+function buildBoard(){const S=(loadRec().stars)||{};
+  $('mgrid').innerHTML=MIS.map((m,i)=>{const s=S[m.id]||0;
+    return `<button class="mc" data-m="${i}"><img src="${P(m.pic)}" alt="" loading="lazy"><span class="no">${i+1}</span>${s?`<span class="st">${'★'.repeat(s)}<i>${'★'.repeat(3-s)}</i></span>`:''}<span class="tx"><b>${m.title}</b><small>${m.sub}</small></span></button>`}).join('');
+  $('credits').innerHTML=PHOTOS.map(p=>`${p.n}：<a href="${p.u}" target="_blank" rel="noopener">${p.a||'作者不明'}</a>（${p.l}）`).join('　／　')}
+$('mgrid').addEventListener('click',e=>{const b=e.target.closest('[data-m]');if(b){sTap();start(+b.dataset.m)}});
+
+/* ---------- ミッション進行 ---------- */
+let G=null;             // いま あそんでいる ミッション
+function start(i){const m=MIS[i];G={i,m,steps:m.steps(),si:0,miss:0,fan:false,neko:false,alive:true,timers:[]};
+  $('ptitle').textContent=m.title;show('play');next()}
+function next(){clearStep();if(!G)return;
+  if(G.si>=G.steps.length)return finish();
+  const s=G.steps[G.si++];dots();
+  STEP[s.t](s)}
+function dots(){$('dots').innerHTML=G.steps.map((_,i)=>`<i class="${i<G.si-1?'d':i===G.si-1?'c':''}"></i>`).join('')}
+function clearStep(){if(G){G.timers.forEach(t=>{clearInterval(t);clearTimeout(t)});G.timers=[]}sizzle(false);
+  const st=$('stage');st.className='stage';st.innerHTML='';delete st.dataset.done;st.onpointerdown=st.onpointermove=st.onpointerup=st.onpointerleave=null;$('ctrl').innerHTML=''}
+const every=(ms,f)=>{const t=setInterval(f,ms);G.timers.push(t);return t};
+const cap=(el,e)=>{try{el.setPointerCapture(e.pointerId)}catch(_){}};
+const later=(ms,f)=>{const t=setTimeout(f,ms);G.timers.push(t);return t};
+$('quit').onclick=()=>{sTap();clearStep();G=null;show('board')};
+function say(t,sub,face='🧑‍🍳'){$('msg').innerHTML=t+(sub?`<small>${sub}</small>`:'');$('face').textContent=face}
+function toast(t,cls=''){const st=$('stage');st.querySelectorAll('.toast').forEach(x=>x.remove());const d=document.createElement('div');d.className='toast '+cls;d.innerHTML=t;st.appendChild(d);
+  if(G)later(3200,()=>d.remove())}
+function bigMark(ok){const d=document.createElement('div');d.className='big '+(ok?'ok':'ng');d.textContent=ok?'◯':'✕';$('stage').appendChild(d);setTimeout(()=>d.remove(),700)}
+function nextBtn(label='つぎへ ▶'){const b=document.createElement('button');b.className='btn go';b.textContent=label;b.onclick=()=>{sTap();next()};$('ctrl').appendChild(b)}
+function finish(){const m=G.m,miss=G.miss,s=miss===0?3:miss<=2?2:1;const r=loadRec();r.stars=r.stars||{};r.stars[m.id]=Math.max(r.stars[m.id]||0,s);saveRec(r);
+  const idx=G.i;G=null;clearStep();
+  $('res').innerHTML=`<h2 style="font:400 1.4rem 'Mochiy Pop One';margin:0">${m.title}<br>クリア！</h2>
+   <div class="stars">${'★'.repeat(s)}<i>${'★'.repeat(3-s)}</i></div>
+   <p style="margin:0;font-weight:900">${miss===0?'まちがい なし！ パーフェクト！':`まちがい ${miss}かい`}</p>
+   <div class="exp" style="margin-top:10px"><b>きょう おぼえたこと</b><ul>${m.learn.map(x=>`<li>${x}</li>`).join('')}</ul></div>
+   <p style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px"><button class="btn" id="again">もういちど</button><button class="btn go" data-go="board">メニューへ</button></p>`;
+  show('res');sOK();$('again').onclick=()=>{sTap();start(idx)}}
+
+/* ======================================================
+   ステップの しゅるい
+   ====================================================== */
+const STEP={};
+
+/* せつめい：写真を ならべて 見せる */
+STEP.say=s=>{say(s.txt,s.sub);const st=$('stage');st.className='stage plain';
+  st.innerHTML=`<div class="say">${(s.pics||[]).map(k=>`<figure class="${s.pics.length===1?'one':''}"><img src="${picOf(k)}" alt=""${ART[k]?' style="object-fit:contain;padding:8px;background:#FFF8EA"':''}><figcaption>${nameOf(k)}</figcaption></figure>`).join('')}</div>`;nextBtn()};
+
+/* 写真を えらぶ（道具の 名前） */
+STEP.pick=s=>{const ans=s.ans,others=shuffle((s.opts||Object.keys(TOOLS)).filter(k=>k!==ans)).slice(0,3),list=shuffle([ans,...others]);
+  say(s.q||`「${nameOf(ans)}」は どれかな？`,s.sub);const st=$('stage');st.className='stage plain';let tried=false;
+  st.innerHTML=`<div class="opts">${list.map(k=>`<button class="opt" data-k="${k}"><img src="${P(k)}" alt=""></button>`).join('')}</div>`;
+  st.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{const k=b.dataset.k;if(b.classList.contains('ng')||st.dataset.done)return;
+    b.insertAdjacentHTML('beforeend',`<span class="nm">${nameOf(k)}</span>`);
+    if(k===ans){st.dataset.done=1;b.classList.add('ok');bigMark(true);sOK();
+      say(`そう！ これが「${nameOf(ans)}」。`,TOOLS[ans]||s.exp||'');nextBtn()}
+    else{b.classList.add('ng','shake');sNG();if(!tried){tried=true;G.miss++}toast(`それは「${nameOf(k)}」。${TOOLS[k]||''}`,'ng')}})};
+
+/* クイズ（文） */
+STEP.quiz=s=>{say(s.q,s.sub,'🤔');const st=$('stage');st.className='stage plain';const ch=shuffle(s.c.map((t,i)=>({t,ok:i===0})));
+  st.innerHTML=`<div class="quiz">${ch.map((c,i)=>`<button data-i="${i}">${c.t}</button>`).join('')}</div>`;
+  st.querySelectorAll('.quiz button').forEach(b=>b.onclick=()=>{if(st.dataset.done)return;st.dataset.done=1;const c=ch[+b.dataset.i];
+    st.querySelectorAll('.quiz button').forEach(x=>{if(ch[+x.dataset.i].ok)x.classList.add('ok')});
+    if(c.ok){sOK();bigMark(true)}else{b.classList.add('ng');sNG();bigMark(false);G.miss++}
+    const q=st.querySelector('.quiz');q.insertAdjacentHTML('beforeend',`<div class="exp">${c.ok?'◯ せいかい！ ':'✕ ざんねん。'}${s.exp}</div>`);nextBtn()})};
+
+/* ならべる じゅんばん */
+STEP.order=s=>{say(s.q,'あらう じゅんに タップしよう','🤔');const st=$('stage');st.className='stage plain';let n=0,missed=false;
+  st.innerHTML=`<div class="ord">${shuffle(s.items.map((it,i)=>({...it,i}))).map(it=>`<button data-i="${it.i}"><b>${it.e}</b>${it.n}</button>`).join('')}</div>`;
+  st.querySelectorAll('.ord button').forEach(b=>b.onclick=()=>{if(b.querySelector('i'))return;
+    if(+b.dataset.i===n){n++;sTap();b.insertAdjacentHTML('afterbegin',`<i>${n}</i>`);
+      if(n===s.items.length){sOK();say('できた！',s.why);nextBtn()}}
+    else{sNG();b.classList.add('shake');setTimeout(()=>b.classList.remove('shake'),400);if(!missed){missed=true;G.miss++}toast(s.why,'ng')}})};
+
+/* できあがり */
+STEP.serve=s=>{say(`${nameOf(s.k)}の できあがり！`,s.sub||'おいしそう！','😋');const st=$('stage');
+  st.innerHTML=`<div class="serve"><b>できあがり！</b><img src="${P(s.k)}" alt=""></div>`;sOK();tone(1568,.3,'sine',.15,.3);nextBtn('クリア！ ▶')};
+
+/* ---------- こする（あらう・かわを むく・しょっきを あらう） ---------- */
+const DISH={
+  cup:`<svg viewBox="0 0 100 100"><path d="M28 12h44l-6 78H34z" fill="#DDF2FF" stroke="#8FB9D6" stroke-width="3"/><path d="M31 20h38" stroke="#fff" stroke-width="3"/></svg>`,
+  plate:`<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="#fff" stroke="#C9D3DA" stroke-width="3"/><circle cx="50" cy="50" r="30" fill="#F7F9FA" stroke="#DDE3E8" stroke-width="2"/></svg>`,
+  bowl:`<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="#fff" stroke="#3A5A8A" stroke-width="5"/><circle cx="50" cy="50" r="36" fill="#FAFCFF" stroke="#E2E8F0" stroke-width="2"/></svg>`,
+  pan:`<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="#3B3F46" stroke="#22252A" stroke-width="4"/><circle cx="50" cy="50" r="38" fill="#4A4F57"/></svg>`
+};
+STEP.rub=s=>{const mode=s.mode;const st=$('stage');st.className='stage '+(mode==='peel'?'board':'sink');
+  const cursor={wash:'💧',peel:'🥄',dish:'🧽'}[mode];
+  const title={wash:`${nameOf(s.k)}を あらおう`,peel:`${nameOf(s.k)}の かわを むこう`,dish:`${s.name}を あらおう`}[mode];
+  const sub={wash:'ゆびで こすって どろを おとそう',peel:'ピーラーを 手前に ひくように こすろう（ゆびに 気を つけて）',dish:'スポンジで こすって よごれを おとそう'}[mode];
+  say(title,sub,'🧼');
+  st.innerHTML=`<div class="item">${s.k?`<div class="ph" style="${bgs(s.k)}"></div>`:DISH[s.dish]}<canvas></canvas></div><div class="cur">${cursor}</div>`;
+  const cv=st.querySelector('canvas'),box=st.querySelector('.item'),cur=st.querySelector('.cur');
+  const W=cv.width=400,H=cv.height=300,ctx=cv.getContext('2d');
+  const GX=20,GY=15,cell=new Uint8Array(GX*GY);let total=0,phase=1;
+  const inOval=(x,y)=>((x/W-.5)/.5)**2+((y/H-.5)/.5)**2<.92;
+  function paint(kind){ctx.globalCompositeOperation='source-over';
+    if(kind==='peel'){ctx.fillStyle='rgba(120,84,40,.72)';ctx.beginPath();ctx.ellipse(W/2,H/2,W/2,H/2,0,0,7);ctx.fill();
+      ctx.strokeStyle='rgba(80,50,20,.5)';ctx.lineWidth=2;for(let i=0;i<30;i++){ctx.beginPath();const x=rnd(40,360),y=rnd(40,260);ctx.moveTo(x,y);ctx.lineTo(x+rnd(-20,20),y+rnd(10,30));ctx.stroke()}
+      for(let i=0;i<GX*GY;i++){const x=(i%GX+.5)*W/GX,y=((i/GX|0)+.5)*H/GY;if(inOval(x,y)){cell[i]=1}}}
+    else{const blobs=kind==='foam'?[]:[];const n=kind==='wash'?14:10;const col=kind==='wash'?'rgba(105,72,38,.9)':s.dish==='cup'?'rgba(255,255,255,.85)':'rgba(190,110,30,.85)';
+      if(kind==='foam'){ctx.fillStyle='rgba(255,255,255,.9)';for(let i=0;i<GX*GY;i++){if(!cell[i])continue}}
+      for(let k=0;k<n;k++){let x,y;do{x=rnd(60,340);y=rnd(50,250)}while(!inOval(x,y));const r=rnd(22,40);
+        ctx.fillStyle=col;ctx.beginPath();for(let a=0;a<6.3;a+=.5){const rr=r*rnd(.7,1.1);ctx.lineTo(x+Math.cos(a)*rr,y+Math.sin(a)*rr*.8)}ctx.fill();blobs.push([x,y,r])}
+      for(let i=0;i<GX*GY;i++){const x=(i%GX+.5)*W/GX,y=((i/GX|0)+.5)*H/GY;if(blobs.some(([bx,by,r])=>(x-bx)**2+((y-by)/.8)**2<r*r))cell[i]=1}}
+    total=cell.reduce((a,b)=>a+b,0)}
+  function foam(){ctx.globalCompositeOperation='source-over';for(let i=0;i<GX*GY;i++){const x=(i%GX+.5)*W/GX,y=((i/GX|0)+.5)*H/GY;if(inOval(x,y)&&Math.random()<.55){cell[i]=1;
+      ctx.fillStyle='rgba(255,255,255,.92)';ctx.beginPath();ctx.arc(x+rnd(-6,6),y+rnd(-6,6),rnd(9,15),0,7);ctx.fill();ctx.strokeStyle='rgba(170,200,230,.8)';ctx.stroke()}}total=cell.reduce((a,b)=>a+b,0)}
+  paint(mode==='dish'?'dish':mode);
+  const bar=document.createElement('div');bar.className='bar';bar.innerHTML='<i></i><span></span>';$('ctrl').appendChild(bar);
+  let done=false,lastSnd=0;
+  function pos(e){const r=box.getBoundingClientRect();return[(e.clientX-r.left)/r.width*W,(e.clientY-r.top)/r.height*H]}
+  function rubAt(e){const sr=st.getBoundingClientRect();cur.style.display='block';cur.style.left=(e.clientX-sr.left)+'px';cur.style.top=(e.clientY-sr.top)+'px';
+    if(done||!(e.buttons||e.pointerType==='touch'))return;const[x,y]=pos(e),R=mode==='peel'?30:34;
+    ctx.globalCompositeOperation='destination-out';ctx.beginPath();ctx.arc(x,y,R,0,7);ctx.fill();
+    if(mode==='dish'&&phase===1){ctx.globalCompositeOperation='source-over';ctx.fillStyle='rgba(255,255,255,.85)';for(let k=0;k<2;k++){ctx.beginPath();ctx.arc(x+rnd(-R,R),y+rnd(-R,R),rnd(5,10),0,7);ctx.fill()}}
+    for(let i=0;i<GX*GY;i++){if(!cell[i])continue;const cx=(i%GX+.5)*W/GX,cy=((i/GX|0)+.5)*H/GY;if((cx-x)**2+(cy-y)**2<R*R)cell[i]=0}
+    const left=cell.reduce((a,b)=>a+b,0),p=1-left/total;bar.querySelector('i').style.width=(p*100)+'%';
+    const now=performance.now();if(now-lastSnd>140){lastSnd=now;noise(.06,mode==='peel'?.25:.12,mode==='peel'?1800:5000)}
+    if(p>=.9){ctx.globalCompositeOperation='destination-out';ctx.fillRect(0,0,W,H);
+      if(mode==='dish'&&phase===1){phase=2;foam();cur.textContent='💧';say(`${s.name}の あわを 水で ながそう`,'こすって あわを おとそう','🧼');bar.querySelector('i').style.width='0'}
+      else{done=true;cur.style.display='none';sOK();bigMark(true);
+        say({wash:'ぴかぴか！ きれいに なった！',peel:'つるん！ かわが むけた！',dish:'ぴかぴか！'}[mode],s.after||'');nextBtn()}}}
+  st.onpointerdown=e=>{cap(st,e);rubAt(e)};st.onpointermove=rubAt;st.onpointerleave=()=>cur.style.display='none'};
+
+/* ---------- 切る ---------- */
+STEP.cut=s=>{const st=$('stage');st.className='stage board';const tear=s.mode==='tear';
+  const guides=tear?[]:Array.from({length:s.n},(_,i)=>(i+1)/(s.n+1));const cuts=[];let bara=0,done=false,ready=tear||G.neko;
+  say(tear?`${nameOf(s.k)}を 手で ちぎろう`:`${nameOf(s.k)}を ${s.how||'切ろう'}`,tear?'タップした ところで ちぎれるよ':'点線に あわせて、上から 下へ なぞるか タップ',tear?'🙌':'🔪');
+  st.innerHTML=`<div class="item"></div><div class="cur">${tear?'🤲':'🔪'}</div>`;const box=st.querySelector('.item');
+  function draw(){const xs=[0,...cuts.slice().sort((a,b)=>a-b),1],gap=tear?4:2.2,n=xs.length-1;
+    box.innerHTML=xs.slice(0,-1).map((x0,i)=>{const x1=xs[i+1],dx=(i-(n-1)/2)*gap,dy=tear?rnd(-3,3):0,rot=tear?rnd(-8,8):0;
+      return `<div class="strip" style="${bgs(s.k)};clip-path:inset(0 ${(1-x1)*100}% 0 ${x0*100}%);transform:translate(${dx}%,${dy}%) rotate(${rot}deg)"></div>`}).join('')+
+      guides.filter(g=>!cuts.used?.includes(g)).map(g=>`<div class="guide" style="left:${g*100}%"></div>`).join('')}
+  cuts.used=[];draw();
+  function askNeko(){const c=$('ctrl');c.innerHTML=`<div style="width:100%;text-align:center;font-weight:900">ざいりょうを おさえる 手は どっち？</div><div class="hands"><button data-h="neko"><b>🐱</b>ねこの手<br><small>ゆびを 丸める</small></button><button data-h="pa"><b>🖐️</b>パー<br><small>ゆびを のばす</small></button></div>`;
+    c.querySelectorAll('[data-h]').forEach(b=>b.onclick=()=>{if(b.dataset.h==='neko'){sOK();G.neko=true;ready=true;toast('そう！ ねこの手なら ゆびの 先を 切らないよ','ok');c.innerHTML='<div class="bar"><i></i><span></span></div>';upd()}
+      else{sNG();b.classList.add('shake');if(!G.nekoMiss){G.nekoMiss=true;G.miss++}toast('パーだと ゆびの 先を 切って しまうよ！ ゆびを 丸めて「ねこの手」','ng')}})}
+  if(!ready)askNeko();else $('ctrl').innerHTML='<div class="bar"><i></i><span></span></div>';
+  const need=tear?s.n:guides.length;
+  function upd(){const b=$('ctrl').querySelector('.bar i');if(b)b.style.width=(cuts.length/need*100)+'%'}
+  let down=null;
+  st.onpointermove=e=>{const sr=st.getBoundingClientRect();cur.style.display='block';cur.style.left=(e.clientX-sr.left)+'px';cur.style.top=(e.clientY-sr.top)+'px'};const cur=st.querySelector('.cur');
+  st.onpointerdown=e=>{down=[e.clientX,e.clientY]};
+  st.onpointerup=e=>{if(!down||done)return;if(!ready){toast('さきに おさえる 手を えらぼう');return}
+    const dx=e.clientX-down[0],dy=e.clientY-down[1];down=null;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy))return;
+    const r=box.getBoundingClientRect(),f=((e.clientX-dx/2)-r.left)/r.width;if(f<.04||f>.96)return;
+    if(tear){cuts.push(f);noise(.15,.25,1200)}
+    else{const left=guides.filter(g=>!cuts.used.includes(g));let g=left[0];left.forEach(x=>{if(Math.abs(x-f)<Math.abs(g-f))g=x});
+      cuts.used.push(g);const off=Math.abs(g-f)>.07;if(off){bara++;toast('ずれちゃった！ 点線に あわせると 大きさが そろうよ','ng')}
+      cuts.push(off?f:g);noise(.07,.35,900);const k=document.createElement('div');k.className='knife';k.textContent='🔪';k.style.left=(r.left-st.getBoundingClientRect().left+(off?f:g)*r.width)+'px';k.style.top='40%';st.appendChild(k);setTimeout(()=>k.remove(),400)}
+    draw();upd();
+    if(cuts.length>=need){done=true;if(bara>=2)G.miss++;sOK();cur.style.display='none';
+      say(tear?'ちぎれた！':(bara>=2?'切れた！ つぎは 大きさを そろえよう':'きれいに 切れた！ 大きさも そろったね'),s.after||(tear?'レタスは 手で ちぎると、切り口が 茶色く なりにくいよ':''));
+      $('ctrl').innerHTML='';nextBtn()}}};
+
+/* ---------- はかる（けいりょうカップ） ---------- */
+STEP.measure=s=>{const st=$('stage');st.className='stage plain';const max=s.max,tgt=s.target,tol=s.tol||max*.05;let v=0,pour=0,done=false;
+  say(s.q,s.sub||'「そそぐ」を おしている あいだ 入るよ。目もりは 目の 高さで 見よう','📏');
+  const col=s.col||'#8FD0FF';
+  st.innerHTML=`<div class="kit"><svg viewBox="0 0 400 300">
+    <rect x="0" y="260" width="400" height="40" fill="#C98B4E"/>
+    <path d="M140 40 L260 40 L252 262 L148 262 Z" fill="#fff" fill-opacity=".55" stroke="#8AA6B8" stroke-width="4"/>
+    <clipPath id="cc"><path d="M142 42 L258 42 L250 260 L150 260 Z"/></clipPath>
+    <rect id="liq" x="130" y="260" width="140" height="0" fill="${col}" clip-path="url(#cc)"/>
+    ${Array.from({length:6},(_,i)=>{const y=260-(i/5)*200;return `<line x1="232" x2="250" y1="${y}" y2="${y}" stroke="#35607A" stroke-width="2"/><text x="274" y="${y+5}" font-size="14" font-weight="900" fill="#35607A">${Math.round(max*i/5)}</text>`}).join('')}
+    <line x1="140" x2="262" y1="${260-tgt/max*200}" y2="${260-tgt/max*200}" stroke="#E0482E" stroke-width="3" stroke-dasharray="8 5"/>
+    <text x="30" y="${265-tgt/max*200}" font-size="16" font-weight="900" fill="#E0482E">${s.label} →</text>
+    <text x="16" y="30" font-size="15" font-weight="900" fill="#6F5A3C">${s.unit||'mL'}</text>
+    <g id="stream"><rect x="196" y="0" width="8" height="260" fill="${col}" opacity=".8"/></g>
+  </svg><div class="clock" style="left:4%;right:auto"><small>いま</small><span id="mv">0</span></div></div>`;
+  const liq=st.querySelector('#liq'),stream=st.querySelector('#stream');stream.style.display='none';
+  const c=$('ctrl');c.innerHTML=`<button class="btn pour" id="pin">▼ そそぐ</button><button class="btn pour" id="pout">▲ もどす</button><button class="btn go" id="pok">これで OK</button>`;
+  function draw(){const h=v/max*200;liq.setAttribute('y',260-h);liq.setAttribute('height',h);$('mv').textContent=Math.round(v)}
+  const hold=(id,d)=>{const b=$(id);b.onpointerdown=e=>{e.preventDefault();pour=d;if(d>0)stream.style.display=''};b.onpointerup=b.onpointerleave=b.onpointercancel=()=>{pour=0;stream.style.display='none'}};
+  hold('pin',1);hold('pout',-1);
+  every(40,()=>{if(!pour||done)return;v=Math.max(0,Math.min(max,v+pour*max*.012));draw();if(pour>0&&Math.random()<.3)noise(.05,.05,700)});
+  let tried=false;
+  $('pok').onclick=()=>{if(done)return;if(Math.abs(v-tgt)<=tol){done=true;sOK();bigMark(true);say('ぴったり！',s.after||'');c.innerHTML='';nextBtn()}
+    else{sNG();if(!tried){tried=true;G.miss++}toast(v<tgt?'まだ たりないよ。赤い 線まで':'入れすぎ！「もどす」で へらそう','ng')}}};
+
+/* ---------- おこめを とぐ ---------- */
+STEP.togu=s=>{const st=$('stage');st.className='stage sink';let round=0,cloud=0,dist=0,state='rub';const R=3,need=1800;
+  say('おこめを とごう','水の 中で 手を まるく うごかして こすろう。にごった 水は すてる','🍚');
+  st.innerHTML=`<div class="kit"><svg viewBox="0 0 400 300"><ellipse cx="200" cy="160" rx="160" ry="110" fill="#E9EEF1" stroke="#9AA9B2" stroke-width="6"/>
+   <g id="rice">${Array.from({length:260},()=>{const a=rnd(0,6.28),r=Math.sqrt(Math.random())*125;return `<ellipse cx="${200+Math.cos(a)*r}" cy="${165+Math.sin(a)*r*.62}" rx="5" ry="2.6" transform="rotate(${rnd(0,180)|0} ${200+Math.cos(a)*r} ${165+Math.sin(a)*r*.62})" fill="#FBFAF4" stroke="#DCD6C4" stroke-width=".8"/>`}).join('')}</g>
+   <ellipse id="wat" cx="200" cy="160" rx="150" ry="100" fill="#fff" opacity="0"/></svg></div><div class="cur">✋</div>`;
+  const wat=st.querySelector('#wat'),cur=st.querySelector('.cur'),rice=st.querySelector('#rice');
+  const c=$('ctrl');c.innerHTML=`<div class="bar"><i></i><span></span></div><button class="btn" id="dump" disabled>水を すてて 入れかえる</button>`;
+  function setW(){wat.setAttribute('opacity',state==='empty'?0:.25+cloud*.6);c.querySelector('.bar i').style.width=(Math.min(1,dist/need)*100)+'%';c.querySelector('.bar span').textContent=`${round+1} / ${R} かいめ`}
+  setW();let last=null;
+  st.onpointerdown=e=>{cap(st,e);last=[e.clientX,e.clientY]};
+  st.onpointerup=()=>last=null;
+  st.onpointermove=e=>{const sr=st.getBoundingClientRect();cur.style.display='block';cur.style.left=(e.clientX-sr.left)+'px';cur.style.top=(e.clientY-sr.top)+'px';
+    if(!last||state!=='rub')return;const d=Math.hypot(e.clientX-last[0],e.clientY-last[1]);last=[e.clientX,e.clientY];dist+=d;
+    cloud=Math.min(1-round*.3,cloud+d/need*(1-round*.3));rice.setAttribute('transform',`rotate(${dist/40%360} 200 165)`);if(Math.random()<.2)noise(.05,.08,3000);
+    if(dist>=need){state='full';$('dump').disabled=false;say(round<R-1?'水が にごったね。すてて 入れかえよう':'水が すこし すきとおって きた！ さいごの 水を すてよう','')}setW()};
+  $('dump').onclick=()=>{sTap();noise(.4,.2,500);state='empty';setW();$('dump').disabled=true;round++;
+    if(round>=R){sOK();bigMark(true);say('とげた！','いまの おこめは 3かいくらい 水を かえれば じゅうぶん。ごしごし こすりすぎると われて しまうよ');c.innerHTML='';nextBtn();return}
+    later(700,()=>{state='rub';dist=0;cloud=0;setW();say(`${round+1}かいめ。また こすろう`,'水が だんだん すきとおって くるよ')})}};
+
+/* ---------- すいはんき ---------- */
+STEP.cooker=s=>{const st=$('stage');st.className='stage plain';say('すいはんきの「すいはん」を おそう','ふたを しっかり しめてから','🍚');
+  st.innerHTML=`<div class="say"><figure class="one" style="width:62%"><img src="${P('suihanki')}" alt=""></figure></div><div class="clock"><small>のこり</small><span id="ck">--</span></div>`;
+  const c=$('ctrl');c.innerHTML=`<button class="btn go" id="ck-go">すいはん スタート</button>`;
+  $('ck-go').onclick=()=>{sTap();c.innerHTML='<div class="bar"><i></i><span>たいているよ（ほんとうは 40分くらい）</span></div>';let m=40;
+    const t=every(80,()=>{m--;$('ck').textContent=m+'分';c.querySelector('.bar i').style.width=((40-m)/40*100)+'%';
+      if(m<=0){clearInterval(t);tone(784,.2);tone(988,.2,'sine',.18,.25);tone(1175,.35,'sine',.18,.5);say('ピー！ たきあがった！','たきあがったら 10分くらい「むらす」と ふっくら','🍚');c.innerHTML='';nextBtn()}})}};
+
+/* ======================================================
+   コンロ（火を つかう）
+   phases：['fan'] ['fire',lv,why] ['add',k,why] ['addAny',[k..],why] ['stir',量,文] ['boil',秒,文,{aku}] ['wait',秒,文] ['timer',{target,tol,label}]
+   ====================================================== */
+const LV={off:'けす',low:'よわ火',mid:'中火',high:'強火'};
+const VES={nabe:{cx:200,cy:118,rx:92,ry:40,depth:72},furaipan:{cx:190,cy:160,rx:112,ry:48,depth:14}};
+STEP.heat=s=>{const st=$('stage');st.className='stage';st.style.background='';const v=VES[s.ves];
+  const H={fire:'off',ph:0,chunks:[],liquid:s.liquid||null,liqLv:s.liquid?1:0,oil:false,missed:{},boilT:0,stirD:0,aku:[],temp:s.hot?1:0,added:[]};G.H=H;
+  const firstMsg=()=>showPhase();
+  /* 絵 */
+  const pot=s.ves==='nabe'?
+    `<path d="M${v.cx-v.rx} ${v.cy} L${v.cx-v.rx+6} ${v.cy+v.depth} Q${v.cx} ${v.cy+v.depth+30} ${v.cx+v.rx-6} ${v.cy+v.depth} L${v.cx+v.rx} ${v.cy} Z" fill="#B9C2CA" stroke="#6B7680" stroke-width="3"/>
+     <rect x="${v.cx-v.rx-26}" y="${v.cy+8}" width="28" height="10" rx="5" fill="#333"/><rect x="${v.cx+v.rx-2}" y="${v.cy+8}" width="28" height="10" rx="5" fill="#333"/>
+     <ellipse cx="${v.cx}" cy="${v.cy}" rx="${v.rx}" ry="${v.ry}" fill="#7D8790" stroke="#5B656E" stroke-width="4"/>`:
+    `<path d="M${v.cx-v.rx} ${v.cy} Q${v.cx} ${v.cy+v.ry+30} ${v.cx+v.rx} ${v.cy}" fill="#2F3238" stroke="#1C1E22" stroke-width="3"/>
+     <rect x="${v.cx+v.rx-8}" y="${v.cy-8}" width="92" height="16" rx="8" fill="#222" transform="rotate(-6 ${v.cx+v.rx} ${v.cy})"/>
+     <ellipse cx="${v.cx}" cy="${v.cy}" rx="${v.rx}" ry="${v.ry}" fill="#43474F" stroke="#1C1E22" stroke-width="5"/>`;
+  st.innerHTML=`<div class="kit"><svg viewBox="0 0 400 300">
+    <g id="hood"><path d="M110 0 H290 L310 34 H90 Z" fill="#D8DCE0" stroke="#9AA2AA" stroke-width="3"/><circle cx="200" cy="16" r="11" fill="#fff" stroke="#9AA2AA" stroke-width="2"/>
+      <g id="fanblade"><path d="M200 16 L200 7 M200 16 L208 21 M200 16 L192 21" stroke="#6B7680" stroke-width="4" stroke-linecap="round"/></g>
+      <g id="wind" opacity="0">${[0,1,2].map(i=>`<path class="steam" style="animation-delay:${i*.6}s" d="M${160+i*40} 60 q-6 -10 0 -20 q6 -10 0 -20" stroke="#9FC9E0" stroke-width="3" fill="none"/>`).join('')}</g></g>
+    <rect x="40" y="206" width="320" height="34" rx="8" fill="#3A3D42"/><rect x="60" y="214" width="280" height="6" fill="#55595F"/>
+    <g id="flame" transform="translate(200 204)"></g>
+    <g id="pot">${pot}</g>
+    <clipPath id="vc"><ellipse cx="${v.cx}" cy="${v.cy}" rx="${v.rx-6}" ry="${v.ry-5}"/></clipPath>
+    <g clip-path="url(#vc)"><ellipse id="liq" cx="${v.cx}" cy="${v.cy}" rx="${v.rx-6}" ry="${v.ry-5}" fill="none"/><ellipse id="oil" cx="${v.cx-10}" cy="${v.cy-4}" rx="${v.rx*.55}" ry="${v.ry*.45}" fill="#FFE070" opacity="0"/>
+      <g id="bubs"></g></g>
+    <g id="steamg" opacity="0">${[0,1,2].map(i=>`<path class="steam" style="animation-delay:${i*.8}s" d="M${v.cx-30+i*30} ${v.cy-10} q-8 -12 0 -24 q8 -12 0 -24" stroke="#fff" stroke-width="5" fill="none" opacity=".8"/>`).join('')}</g>
+  </svg></div><div class="cur">🥢</div>`;
+  const $s=q=>st.querySelector(q),cur=$s('.cur');
+  const pct=(x,y)=>[x/4,y/3];
+  function drawFire(){const n={off:0,low:1,mid:2,high:3}[H.fire];let g='';
+    if(n){const h=[0,10,20,32][n];for(let i=-5;i<=5;i++){const x=i*16;g+=`<path class="flm" style="animation-delay:${(i+5)*.03}s" d="M${x-6} 0 Q${x} ${-h*1.4} ${x+6} 0 Z" fill="#3D8BFF" opacity=".9"/><path class="flm" d="M${x-3} 0 Q${x} ${-h*.8} ${x+3} 0 Z" fill="#BFE0FF"/>`}}
+    $s('#flame').innerHTML=g;
+    $('ctrl').querySelectorAll('.fire button').forEach(b=>b.classList.toggle('on',b.dataset.l===H.fire))}
+  function drawLiq(){const l=$s('#liq');if(H.liquid){l.setAttribute('fill',H.liquid);l.setAttribute('opacity',.85)}else l.setAttribute('fill','none');
+    $s('#oil').setAttribute('opacity',H.oil&&!H.liquid?.55:0)}
+  function drawFan(){$s('#fanblade').classList.toggle('spin',G.fan);$s('#wind').setAttribute('opacity',G.fan?1:0);const b=$('fanb');if(b){b.classList.toggle('on',G.fan);b.textContent=G.fan?'🌀 かんきせん ON':'🌀 かんきせん OFF'}}
+  /* ざいりょうを 入れる */
+  function putIn(k){H.added.push(k);
+    if(k==='mizu'){H.liquid='#BFE3FF';drawLiq();noise(.5,.2,600);return}
+    if(k==='abura'){H.oil=true;drawLiq();return}
+    if(k==='roux'){H.liquid='#7A4A1A';drawLiq();return}
+    if(k==='miso'){H.liquid='#D9B46E';drawLiq();return}
+    if(k==='shio'){toast('パラパラ… しお ひとつまみ');return}
+    if(k==='niboshi_out'){H.chunks=H.chunks.filter(c=>{if(c.k==='niboshi'){c.el.remove();return false}return true});H.liquid='#E9D7A0';drawLiq();return}
+    const n=k==='tamago'?(s.ves==='nabe'?2:1):k==='wakame'?10:k==='negi'?14:8;
+    for(let i=0;i<n;i++){const el=document.createElement('div');el.className='chunk';let sz=k==='negi'?4:k==='wakame'?6:9;
+      if(k==='tamago'&&s.ves==='furaipan'){sz=30;el.style.backgroundImage=`url(${P('medamayaki')})`;el.style.backgroundSize='240% 240%';el.style.backgroundPosition='50% 40%';el.style.borderRadius='50%';el.style.boxShadow='none'}
+      else if(k==='tamago'){sz=12;el.style.backgroundImage=`url(${P('tamago')})`;el.style.backgroundSize='240% 240%';el.style.backgroundPosition=i?'80% 45%':'20% 55%';el.style.borderRadius='50%'}
+      else{el.style.backgroundImage=`url(${P(k)})`;el.style.backgroundPosition=`${rnd(30,70)}% ${rnd(30,70)}%`}
+      el.style.width=sz+'%';el.style.aspectRatio=k==='tamago'?(s.ves==='furaipan'?'1.9':'1/.8'):'1';
+      const c={k,el,age:0,flat:k==='tamago'&&s.ves==='furaipan'};place(c,!c.flat);if(c.flat){const[px,py]=pct(v.cx,v.cy+2);el.style.left=px+'%';el.style.top=py+'%'}st.appendChild(el);H.chunks.push(c)}
+    noise(.2,.2,1500)}
+  function place(c,first){const a=rnd(0,6.28),r=Math.sqrt(Math.random())*(c.k==='tamago'&&s.ves==='furaipan'?.1:.72);
+    const x=v.cx+Math.cos(a)*v.rx*r,y=v.cy+Math.sin(a)*v.ry*r;const[px,py]=pct(x,y);c.el.style.left=px+'%';c.el.style.top=py+'%';if(first)c.el.style.transform=`translate(-50%,-50%) rotate(${rnd(0,360)|0}deg)`}
+  /* コントロール */
+  const c=$('ctrl');
+  c.innerHTML=`<button class="fan" id="fanb"></button><div class="fire">${['off','low','mid','high'].map(l=>`<button data-l="${l}">${LV[l]}</button>`).join('')}</div>
+    <div class="chips" id="chips">${(s.items||[]).map(k=>`<button class="chip" data-k="${k}">${PH[k]||ART[k]?`<img src="${picOf(k)}" alt=""${ART[k]?' style="object-fit:contain"':''}>`:`<span class="em">${EMO[k][1]}</span>`}${nameOf(k)}</button>`).join('')}</div>
+    <div class="bar" id="hbar" hidden><i></i><span></span></div><button class="btn go" id="tstop" hidden>ここで 火を とめる！</button>`;
+  drawFire();drawLiq();drawFan();
+  const ph=()=>s.ph[H.ph];
+  function missOnce(key){if(!H.missed[key]){H.missed[key]=1;G.miss++}}
+  function wrong(t,key){sNG();toast(t,'ng');missOnce(key??H.ph)}
+  function adv(){H.ph++;H.stirD=0;H.boilT=0;if(H.ph>=s.ph.length){done();return}showPhase()}
+  function showPhase(){const p=ph();const bar=$('hbar');bar.hidden=true;$('tstop').hidden=true;
+    const T={fan:['さいしょに かんきせんを つけよう','けむりや においを 外へ だすよ'],
+      fire:[p[1]==='off'?'火を けそう':`${LV[p[1]]}に しよう`,p[1]==='mid'?'中火＝ほのおの 先が なべの そこに ちょうど とどく くらい':p[1]==='low'?'よわ火＝ほのおの 先が なべの そこに とどかない くらい':p[1]==='high'?'強火＝ほのおが なべの そこ いっぱいに あたる くらい':''],
+      add:[`${nameOf(p[1])}を 入れよう`,''],addAny:['やさいを 入れよう','どれからでも いいよ'],
+      stir:[p[2]||'まぜよう',s.ves==='furaipan'?'なべの 中を ゆびで ぐるぐる なぞろう':'なべの 中を ゆびで ぐるぐる なぞろう'],
+      boil:[p[2]||'にこもう',p[3]&&p[3].aku?'あくが 出たら タップして すくおう':'しばらく まとう'],wait:[p[2]||'まとう',''],
+      timer:[`ちゅうもんは「${p[1]?.label}」`,`${p[1]?.target}分に なったら 火を とめよう`]}[p[0]];
+    if(p[0]==='add'&&s.hideName){T[0]=s.hideName}
+    say(T[0],p.sub||T[1],'🧑‍🍳');
+    if(['stir','boil','wait'].includes(p[0])){bar.hidden=false;bar.querySelector('i').style.width='0';bar.querySelector('span').textContent=''}
+    if(p[0]==='timer'){$('tstop').hidden=false;H.min=0;st.insertAdjacentHTML('beforeend','<div class="clock" id="tclock"><small>ゆでた 時間</small><span>0分</span></div>')}
+    if(p[0]==='fan'&&G.fan)adv()}
+  $('fanb').onclick=()=>{if(G.fan){toast('りょうりが おわるまで つけて おこう');return}sTap();G.fan=true;drawFan();if(ph()&&ph()[0]==='fan')adv()};
+  c.querySelectorAll('.fire button').forEach(b=>b.onclick=()=>{const l=b.dataset.l,p=ph();if(!p)return;
+    if(l!=='off'&&!G.fan){wrong('火を つける まえに、かんきせんを つけよう！','fan');return}
+    if(p[0]==='fire'){if(p[1]===l){sTap();H.fire=l;if(l!=='off')noise(.25,.15,4000);drawFire();adv()}
+      else wrong(p[2]||(l==='off'?'まだ とちゅうだよ':`いまは ${LV[p[1]]}に しよう`))}
+    else if(p[0]==='fan'){wrong('火を つける まえに、かんきせんを つけよう！','fan')}
+    else if(l===H.fire){}
+    else toast(l==='off'?'まだ とちゅうだよ。火は このままで':'火の 強さは このままで だいじょうぶ')});
+  c.querySelectorAll('.chip').forEach(b=>b.onclick=()=>{const k=b.dataset.k,p=ph();if(!p||b.classList.contains('used'))return;
+    if(p[0]==='add'&&p[1]===k){sTap();b.classList.add('used');putIn(k);adv()}
+    else if(p[0]==='addAny'&&p[1].includes(k)){sTap();b.classList.add('used');putIn(k);p.got=(p.got||0)+1;if(p.got>=p[1].length)adv()}
+    else if(p[0]==='fan'){wrong('火を つける まえに、かんきせんを つけよう！','fan')}
+    else if(p[0]==='fire'&&H.fire==='off'&&p[1]!=='off'){wrong(`さきに 火を つけよう（${LV[p[1]]}）`)}
+    else wrong(p[2]||(p[0]==='add'||p[0]==='addAny'?`いまは ${nameOf(k)}じゃ ないよ`:'いまは 入れないよ'))});
+  /* まぜる */
+  let last=null;
+  st.onpointerdown=e=>{cap(st,e);last=[e.clientX,e.clientY]};st.onpointerup=()=>last=null;
+  st.onpointermove=e=>{const sr=st.getBoundingClientRect();cur.style.display='block';cur.style.left=(e.clientX-sr.left)+'px';cur.style.top=(e.clientY-sr.top)+'px';
+    if(!last)return;const d=Math.hypot(e.clientX-last[0],e.clientY-last[1])/sr.width*400;last=[e.clientX,e.clientY];const p=ph();
+    if(p&&p[0]==='stir'){if(H.fire==='off'&&p[3]!=='cold'){if(!H.warnCold){H.warnCold=1;toast(`火が きえているよ。${LV[s.ph.slice(0,H.ph).reverse().find(q=>q[0]==='fire'&&q[1]!=='off')?.[1]||'mid']}に しよう`)}return}
+      H.stirD+=d;if(Math.random()<.25){const cc=H.chunks[Math.random()*H.chunks.length|0];if(cc&&!(cc.k==='tamago'&&s.ves==='furaipan'))place(cc)}
+      const need=(p[1]||1)*1400;$('hbar').querySelector('i').style.width=Math.min(100,H.stirD/need*100)+'%';if(H.stirD>=need){sOK();adv()}}};
+  /* 時間で すすむ もの */
+  every(100,()=>{if(!G)return;const p=ph();const on=H.fire!=='off';
+    if(on)H.temp=Math.min(1,H.temp+.012*({low:.5,mid:1,high:1.6}[H.fire]));else H.temp=Math.max(0,H.temp-.004);
+    $s('#steamg').setAttribute('opacity',H.liquid&&H.temp>.6?1:0);
+    const boiling=H.liquid&&on&&H.temp>.6;
+    const bubs=$s('#bubs');if(boiling&&bubs.childElementCount<12){bubs.insertAdjacentHTML('beforeend',`<circle class="bub" style="animation-delay:${rnd(0,1).toFixed(2)}s" cx="${v.cx+rnd(-v.rx*.8,v.rx*.8)}" cy="${v.cy+rnd(-v.ry*.6,v.ry*.6)}" r="${rnd(3,6)}" fill="#fff" opacity=".8"/>`)}
+    if(!boiling)bubs.innerHTML='';
+    sizzle(on&&s.ves==='furaipan'&&(H.oil||H.chunks.length)&&!H.liquid);
+    if(on)H.chunks.forEach(c=>{c.age+=.1;if(c.k!=='tamago'&&c.k!=='tofu'&&c.k!=='wakame')c.el.style.filter=`sepia(${Math.min(.5,c.age*.03)}) saturate(${1+Math.min(.3,c.age*.02)})`});
+    if(!p)return;const bar=$('hbar');
+    if(p[0]==='boil'){if(!on)return;if(!boiling){bar.querySelector('span').textContent='あたためているよ…';return}
+      H.boilT+=.1;const need=p[1];bar.querySelector('i').style.width=Math.min(100,H.boilT/need*100)+'%';bar.querySelector('span').textContent='ぐつぐつ';
+      const ak=p[3]&&p[3].aku||0;if(ak&&H.akuMade===undefined)H.akuMade=0;
+      if(ak&&H.akuMade<ak&&H.boilT>(H.akuMade+.5)*need/(ak+1)){H.akuMade++;const el=document.createElement('button');el.className='aku';el.setAttribute('aria-label','あく');
+        const a=rnd(0,6.28),r=rnd(0,.6),[px,py]=pct(v.cx+Math.cos(a)*v.rx*r,v.cy+Math.sin(a)*v.ry*r);el.style.left=px+'%';el.style.top=py+'%';el.style.border='none';
+        el.onpointerdown=e=>{e.stopPropagation();sTap();el.remove();H.aku=H.aku.filter(x=>x!==el);toast('おたまで あくを すくった！','ok')};st.appendChild(el);H.aku.push(el);if(H.akuMade===1)toast('しろい あわ＝「あく」が 出てきた！ タップして すくおう')}
+      if(H.boilT>=need){if(H.aku.length){bar.querySelector('span').textContent='あくを すくおう';return}sOK();H.akuMade=undefined;adv()}}
+    else if(p[0]==='wait'){H.boilT+=.1;bar.querySelector('i').style.width=Math.min(100,H.boilT/p[1]*100)+'%';if(H.boilT>=p[1]){sTap();adv()}}
+    else if(p[0]==='timer'){if(!on||!boiling)return;H.min+=.1/0.7;const cl=$s('#tclock span');if(cl)cl.textContent=Math.floor(H.min)+'分';
+      if(H.min>p[1].target+6){finishTimer()}}});
+  function finishTimer(){if(H.tdone)return;H.tdone=1;const p=ph(),t=Math.floor(H.min),d=t-p[1].target;H.fire='off';drawFire();$s('#tclock')?.remove();
+    if(Math.abs(d)<=p[1].tol){sOK();bigMark(true);toast(`${t}分！ ちょうど いい「${p[1].label}」`,'ok')}
+    else{sNG();G.miss++;toast(d<0?`${t}分は はやすぎ！ まだ 中が ${p[1].early}`:`${t}分は ながすぎ！ ${p[1].late}`,'ng')}
+    later(1800,adv)}
+  $('tstop').onclick=()=>{sTap();finishTimer()};
+  function done(){sizzle(false);H.fire==='off';say(s.end||'できた！',s.endSub||'');$('ctrl').innerHTML='';nextBtn()}
+  firstMsg()};
+
+/* ======================================================
+   ミッション
+   ====================================================== */
+const Q=(q,c,exp,sub)=>({t:'quiz',q,c,exp,sub});
+const MIS=[
+{id:'dougu',title:'キッチンの どうぐ',sub:'しゃもじ・おたま・フライがえし…名前を おぼえよう',pic:'otama',
+ learn:['しゃもじ＝ごはん、おたま＝しる、フライがえし＝やいた ものを うらがえす','けいりょうカップは 1カップ＝200mL、大さじ＝15mL・小さじ＝5mL','ざる＝水を きる、まないた＝切る ときの 台'],
+ steps:()=>[{t:'say',txt:'りょうりの まえに、どうぐの 名前を おぼえよう！',sub:'「○○ とって！」と たのまれたら、写真から えらんでね',pics:['shamoji','otama','furaigaeshi']},
+   ...shuffle(Object.keys(TOOLS).filter(k=>!['gasu','ih','kankisen','suihanki'].includes(k))).slice(0,9).map(k=>({t:'pick',ans:k,q:`「${nameOf(k)}」 とって！`}))]},
+{id:'konro',title:'コンロと かんきせん',sub:'ガス・IH の つかいかたと 火の あんぜん',pic:'gasu',
+ learn:['火を つける まえに かんきせん','中火＝ほのおの 先が なべの そこに とどく くらい','なべの とっては 手前に 出さない','ガスの においが したら、スイッチに さわらず まどを あけて おとなに','あぶらの 火に 水は ぜったい かけない'],
+ steps:()=>[{t:'say',txt:'りょうりの 火は、ガスコンロ か IHクッキングヒーター',sub:'けむりや においは かんきせんで 外へ だすよ',pics:['gasu','ih','kankisen']},
+   Q('火を つける まえに すること は？',['かんきせんを つける','まどを ぜんぶ しめる','からっぽの なべを あたためておく'],'ガスが もえると 空気が よごれるし、けむりや においも 出る。かんきせんで 外へ だそう。'),
+   {t:'heat',ves:'nabe',liquid:'#BFE3FF',items:[],ph:[['fan'],['fire','mid'],['boil',4,'おゆが わくまで まとう'],['fire','off','おゆが わいたね。火を けそう']],end:'おゆが わいた！',endSub:'火を つける→火の 強さを かえる→火を けす。つかいおわったら かならず 火が きえたか 見よう'},
+   Q('なべの とっては どこに むける？',['よこ か おくの ほう','手前に つきだす','どこでも いい'],'手前に 出ていると、からだや そでが ひっかかって、あつい なべが おちて しまうよ。'),
+   Q('IHで つかえない なべは どれ？',['そこが 丸い なべ や 土なべ','そこが たいらな 鉄の フライパン','そこが たいらな ステンレスの なべ'],'IHは でんきの 力で 鉄などの なべの そこを じかに あたためる しくみ。そこが たいらで「IH対応」の なべを つかおう。'),
+   Q('IHで なべを おろした あと、ヒーターの 上を すぐ さわって いい？',['だめ。しばらく あつい','火が 見えないから だいじょうぶ'],'IHは 火が 見えないけど、あつく なった なべの ねつで 上が あつく なっているよ。'),
+   Q('ガスの へんな においが したら？',['火も スイッチも さわらず、まどを あけて おとなに しらせる','かんきせんの スイッチを 入れる','火を つけて たしかめる'],'スイッチを 入れる ときの 小さな 火花でも、ガスに 火が つく ことが あるよ。'),
+   Q('フライパンの あぶらに 火が 入って もえだしたら？',['火を けして、すぐ おとなを よぶ。水は かけない','水を かける','うちわで あおぐ'],'あぶらの 火に 水を かけると、ばくはつ するように もえひろがって とても あぶない。'),
+   Q('りょうりの ときの かっこうは？',['そでを まくり、かみを まとめて、エプロン','ながい そでの まま','かみの 毛は そのまま'],'そでや かみが 火や ざいりょうに ふれないように。手も せっけんで あらってから はじめよう。')]},
+{id:'gohan',title:'ごはんを たこう',sub:'おこめを はかって・といで・すいはんき',pic:'gohan',
+ learn:['おこめ 1ごう＝おこめ用の カップ 1ぱい（180mL）','とぐ ときは 水を 3かい くらい 入れかえる','たけたら しゃもじで さっくり まぜる'],
+ steps:()=>[{t:'say',txt:'おこめを たこう！',sub:'ふくろから おこめを 出して、はかる ところから',pics:['kome','suihanki','shamoji']},{t:'measure',q:'おこめを 1ごう はかろう',sub:'1ごう＝180mL。赤い 線まで 入れよう',max:250,target:180,tol:10,label:'1ごう',col:'#FBF7EA',unit:'mL（おこめ）',after:'ほんとうは カップに 山もりに 入れて、ぼうで すりきると ぴったりに なるよ'},
+   {t:'togu'},
+   {t:'measure',q:'すいはんきに 水を 入れよう',sub:'うちがまの 目もり「1」まで（1ごう用）',max:300,target:200,tol:12,label:'目もり 1',after:'おこめ 1ごうに 水 200mL くらい。すこし 水に つけて おくと ふっくら'},
+   {t:'cooker'},
+   {t:'pick',ans:'shamoji',q:'ごはんを まぜる どうぐは？',opts:['otama','furaigaeshi','saibashi','awadateki','keiryo_spoon']},
+   {t:'serve',k:'gohan',sub:'しゃもじで 下から さっくり まぜて、よそおう'}]},
+{id:'misoshiru',title:'みそしる',sub:'にぼしで だしを とって、みそは 火を とめて から',pic:'misoshiru',
+ learn:['にぼしは あたまと はらわたを とると にがく ならない','みそは 火を とめてから とかす（にたたせると かおりが とぶ）','とうふは くずれやすいので、そっと 入れる'],
+ steps:()=>[{t:'say',txt:'きょうの ざいりょう',sub:'にぼしで「だし」を とる みそしるだよ',pics:['niboshi','tofu','wakame','negi','miso']},
+   Q('にぼしの あたまと はらわたを とるのは なぜ？',['にがみが 出にくく なる','はやく にえる','色が 赤く なる'],'はらわたには にがみが ある。手で かんたんに とれるよ。'),
+   {t:'measure',q:'なべに 水を 400mL 入れよう',sub:'2人ぶん。けいりょうカップ 2はい',max:500,target:400,tol:15,label:'400'},
+   {t:'heat',ves:'nabe',liquid:'#BFE3FF',items:['niboshi','niboshi_out'],ph:[['fan'],['add','niboshi','さきに にぼしを 入れて、しばらく つけて おこう'],['fire','mid'],['boil',5,'にたったら 5分くらい にだそう'],['add','niboshi_out','だしが 出たら にぼしを とりだそう'],['fire','off']],end:'だしが とれた！',endSub:'きいろっぽい 色＝にぼしの うまみ'},
+   {t:'cut',k:'tofu',n:4,how:'さいの目に 切ろう',after:'とうふは やわらかいので、ほうちょうを 上から まっすぐ おろすよ'},
+   {t:'cut',k:'negi',n:7,how:'小口切りに しよう',after:'はしから うすく 切るのが「小口切り」'},
+   {t:'heat',ves:'nabe',liquid:'#E9D7A0',hot:1,items:['tofu','wakame','miso','negi'],ph:[['fire','mid'],['add','tofu','まずは とうふ'],['add','wakame','つぎは わかめ'],['boil',3,'ひと にたち させよう'],['fire','off','みそは にたたせると かおりが とぶよ。火を とめてから 入れよう'],['add','miso','みそは 火を とめてから'],['stir',.7,'おたまの 中で みそを とかそう','cold'],['add','negi','さいごに ねぎ']],end:'みそしるの できあがり！'},
+   {t:'serve',k:'misoshiru'}]},
+{id:'tamago',title:'ゆでたまご・めだまやき',sub:'時間で かたさが かわる！',pic:'medamayaki',
+ learn:['たまごは 水から ゆでる','半熟は 7分、かたゆでは 12分 くらい','ゆでたら 水で ひやすと からが むきやすい','めだまやきは 白身が かたまったら よわ火で'],
+ steps:()=>{const o=Math.random()<.5?{target:7,tol:1,label:'半熟',early:'どろどろ',late:'きみが かたまって きた'}:{target:12,tol:1,label:'かたゆで',early:'きみが やわらかい',late:'きみの まわりが みどりっぽく なるよ'};
+  return [{t:'heat',ves:'nabe',items:['tamago','mizu'],ph:[['fan'],['add','tamago','たまごを さきに そっと 入れてから 水。にえた おゆに いきなり 入れると われやすいよ'],['add','mizu'],['fire','mid'],['timer',o]],end:`ゆでたまご（${o.label}）が できた！`},
+   Q('ゆでた たまごを すぐ 水で ひやすと？',['からが むきやすく なる','あまく なる','大きく なる'],'ひやすと 中が すこし ちぢんで、からとの あいだに すきまが できるよ。'),
+   {t:'say',txt:`ゆでたまご（${o.label}）！`,sub:'つぎは めだまやきに ちょうせん',pics:['yudetamago']},
+   Q('たまごを わる ときは どこで うつ？',['たいらな ところで かるく','テーブルの かどで つよく'],'かどで わると、からが 中に 入りやすいよ。'),
+   {t:'heat',ves:'furaipan',items:['abura','tamago'],ph:[['fan'],['fire','mid'],['add','abura','さきに あぶらを ひこう'],['wait',2,'フライパンを あたためよう'],['add','tamago'],['wait',2,'白身が かたまって くるのを まとう'],['fire','low','白身が かたまったら よわ火に。こげずに 中まで 火が とおるよ'],['wait',3,'ふたを して 2〜3分'],['fire','off']],end:'めだまやきが やけた！'},
+   {t:'pick',ans:'furaigaeshi',q:'めだまやきを おさらに うつす どうぐは？',opts:['otama','shamoji','awadateki','saibashi','keiryo_spoon']},
+   {t:'serve',k:'medamayaki'}]}},
+{id:'yasaiitame',title:'やさいいため',sub:'かたい ものから じゅんばんに',pic:'yasaiitame',
+ learn:['いためる ときは かたい ものから（にんじん→キャベツ→ピーマン）','ほうちょうの ときは ねこの手','いためものは 中火〜強火で てばやく'],
+ steps:()=>[{t:'rub',mode:'wash',k:'kyabetsu'},{t:'cut',k:'kyabetsu',n:4,how:'ざく切りに しよう'},{t:'cut',k:'ninjin',n:6,how:'たんざく切りに しよう'},{t:'cut',k:'piman',n:5,how:'ほそ切りに しよう'},
+   {t:'heat',ves:'furaipan',items:['abura','kyabetsu','piman','ninjin','shio'],ph:[['fan'],['fire','mid'],['add','abura','さきに あぶらを ひこう'],
+     ['add','ninjin','かたい ものから 入れよう。いちばん かたいのは？'],['stir',1,'にんじんを いためよう'],['add','kyabetsu','つぎに かたいのは？'],['stir',1,'キャベツを いためよう'],['fire','high','しあげは 強火で てばやく'],['add','piman'],['stir',.8,'ピーマンを いためよう'],['add','shio'],['stir',.4,'ぜんたいを まぜよう'],['fire','off']],end:'やさいいための できあがり！',endSub:'かたい ものから 入れると、ぜんぶ ちょうど よく 火が とおるよ'},
+   {t:'serve',k:'yasaiitame'}]},
+{id:'salad',title:'サラダ',sub:'あらって・ちぎって・水を きる',pic:'salad',
+ learn:['レタスは 手で ちぎる','きゅうりの 輪切り、トマトの くし切り','水気を よく きると ドレッシングが うすまらない'],
+ steps:()=>[{t:'rub',mode:'wash',k:'retasu'},{t:'rub',mode:'wash',k:'tomato'},{t:'cut',k:'retasu',mode:'tear',n:5},
+   {t:'cut',k:'kyuri',n:8,how:'輪切りに しよう',after:'はしから おなじ あつさで 切るのが「輪切り」'},{t:'cut',k:'tomato',n:5,how:'くし切りに しよう',after:'まん中から 月の 形に 切るのが「くし切り」'},
+   {t:'pick',ans:'zaru',q:'あらった やさいの 水を きる どうぐは？',opts:['nabe','keiryo_cup','furaipan','manaita','otama']},
+   Q('やさいの 水気を よく きると？',['ドレッシングが うすまらず おいしい','やさいが あまく なる','やさいが 大きく なる'],'水が のこっていると 味が うすく なって、べちゃっと するよ。'),
+   {t:'serve',k:'salad'}]},
+{id:'curry',title:'カレーライス',sub:'あらう・むく・切る・いためる・にこむ',pic:'curry_rice',
+ learn:['じゃがいもの め と 緑の ところは とる','にくは さいごに 切る（まないたの ばいきん）','にこむ ときは あくを すくう','ルーは 火を とめてから 入れる'],
+ steps:()=>[{t:'say',txt:'カレーライスを つくろう！',sub:'ごはんは たいて あるよ',pics:['jagaimo','ninjin','tamanegi','butaniku','roux','abura']},
+   {t:'rub',mode:'wash',k:'jagaimo'},{t:'rub',mode:'wash',k:'ninjin'},
+   {t:'pick',ans:'piiraa',q:'かわを むく どうぐは？',opts:['awadateki','keiryo_spoon','saibashi','otama','shamoji']},
+   {t:'rub',mode:'peel',k:'jagaimo'},
+   Q('じゃがいもの「め」や 緑の ところは？',['とる。どくが ある','そのまま 食べて いい'],'じゃがいもの め や 緑色の ところには、ソラニンなどの どくが ある。ピーラーの はしで えぐりとろう。'),
+   {t:'rub',mode:'peel',k:'ninjin'},
+   {t:'cut',k:'jagaimo',n:4,how:'ひとくち大に 切ろう'},{t:'cut',k:'ninjin',n:5,how:'らん切りに しよう'},{t:'cut',k:'tamanegi',n:5,how:'くし切りに しよう',after:'たまねぎで 目が いたく なるのは、切ると 出る ガスの せい'},
+   Q('ぶたにくは いつ 切る？',['やさいを 切った あと','いちばん さいしょ'],'なまの にくを 切った まないたで やさいを 切ると、ばいきんが うつる ことが ある。にくは さいごに 切って、まないたと 手を すぐ あらおう。'),
+   {t:'cut',k:'butaniku',n:4,how:'食べやすく 切ろう'},
+   {t:'heat',ves:'nabe',items:['abura','butaniku','tamanegi','ninjin','jagaimo','mizu','roux'],ph:[['fan'],['fire','mid'],['add','abura','さきに あぶらを ひこう'],['add','butaniku','さいしょは にくから いためよう'],['stir',1,'にくの 色が かわるまで いためよう'],
+     ['addAny',['tamanegi','ninjin','jagaimo'],'つぎは やさいを 入れよう'],['stir',1,'やさいに あぶらが まわるまで いためよう'],['add','mizu'],['boil',7,'にたったら あくを すくいながら にこもう',{aku:4}],
+     ['fire','off','ルーは 火を とめてから 入れると ダマに なりにくいよ'],['add','roux','火を とめたら ルーを 入れよう'],['stir',.7,'ルーを とかそう','cold'],['fire','low','とけたら よわ火で とろみを つけよう'],['stir',1,'そこが こげないように まぜよう'],['fire','off']],end:'カレーの できあがり！'},
+   {t:'serve',k:'curry_rice'}]},
+{id:'shokki',title:'しょっきあらい',sub:'かたづけまでが おりょうり',pic:'sponji',
+ learn:['あぶらの よごれは 紙で ふいてから あらう','よごれの すくない ものから あらう','ほうちょうは はに ゆびを むけずに あらう','あらった しょっきは 水きりかごへ'],
+ steps:()=>[{t:'say',txt:'食べおわったら、かたづけも おりょうりの うち！',sub:'スポンジと 水きりかごを つかうよ',pics:['sponji','mizukiri']},
+   Q('あぶらで よごれた おさらは？',['いらない 紙で ふいてから あらう','そのまま あらう'],'さきに ふきとると、水も せんざいも すこしで すむ。川や 海の よごれも へるよ。'),
+   {t:'order',q:'どの じゅんばんで あらう？',items:[{e:'🥛',n:'コップ'},{e:'🍚',n:'おちゃわん'},{e:'🍽️',n:'カレーの おさら'},{e:'🍳',n:'あぶらの フライパン'}],why:'よごれの すくない ものから あらうと、スポンジが よごれにくいよ'},
+   {t:'rub',mode:'dish',dish:'cup',name:'コップ'},{t:'rub',mode:'dish',dish:'plate',name:'おさら'},
+   Q('ほうちょうを あらう ときは？',['はに ゆびを むけず、せなかの ほうから あらう','水おけに ほかの しょっきと いっしょに しずめる'],'見えない 水の 中に ほうちょうが あると、手を 切って しまうよ。'),
+   {t:'pick',ans:'mizukiri',q:'あらった しょっきを おく ところは？',opts:['zaru','manaita','nabe','furaipan']}]}
+];
+recLine();
+</script>
+</body>
+</html>
