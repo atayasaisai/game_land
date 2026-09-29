@@ -187,6 +187,24 @@ span.mu{font-size:1.6em;line-height:0;vertical-align:-.12em;margin:0 .05em}
 .rscore .p{color:var(--green)}.rscore .g{color:var(--blue)}.rscore .m{color:var(--red)}
 .legendR{font-size:.8rem;color:var(--sub);text-align:center;margin:0}
 
+/* うたって こたえよう（マイク） */
+.big4 .mode.wide{grid-column:1/-1;min-height:140px}
+.singrow{display:flex;align-items:center;justify-content:center;gap:14px;width:100%}
+.singrow .paper{flex:1;max-width:340px}
+.bigname{font-family:"Mochiy Pop One",sans-serif;font-size:clamp(3rem,16vw,4.6rem);line-height:1.1;color:var(--pink);background:var(--paper);border:3px solid #e2cda4;box-shadow:0 6px 0 #e2cda4;border-radius:22px;padding:14px 26px;min-width:160px;text-align:center}
+.bigname small{display:block;font-family:"Zen Maru Gothic",sans-serif;font-size:.85rem;color:var(--sub)}
+.meter{position:relative;flex:none;width:74px;height:210px;border-radius:18px;background:linear-gradient(#ffe1dc,#fff 38%,#fff 62%,#dcecff);border:3px solid #d8c29a;overflow:hidden}
+.meter .zone{position:absolute;left:0;right:0;top:calc(50% - 8.33%);height:16.67%;background:rgba(58,166,94,.22);border-top:2px dashed var(--green);border-bottom:2px dashed var(--green)}
+.meter .tl,.meter .bl{position:absolute;left:0;right:0;text-align:center;font-size:.72rem;color:var(--sub)}
+.meter .tl{top:3px}.meter .bl{bottom:3px}
+.meter .ball{position:absolute;left:50%;top:50%;width:38px;height:38px;margin:-19px 0 0 -19px;border-radius:50%;background:#bbb;color:#fff;display:grid;place-items:center;font-size:.8rem;line-height:1;transition:top .08s linear,background .15s;opacity:.25}
+.meter .ball.on{opacity:1;background:var(--red)}
+.meter .ball.good{background:var(--green)}
+.micst{display:flex;align-items:center;gap:8px;font-size:.9rem;color:var(--sub)}
+.micst .lv{width:90px;height:10px;border-radius:5px;background:#e4d2ae;overflow:hidden}
+.micst .lv i{display:block;height:100%;width:0;background:var(--green);transition:width .06s}
+.micst.wait{opacity:.5}
+
 /* 重ねる板 */
 .ov{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(60,40,20,.45);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
 .box{width:100%;max-width:420px;background:var(--paper);border:4px solid #5b3417;border-radius:26px;padding:22px 18px;text-align:center;box-shadow:0 10px 0 rgba(91,52,23,.5);animation:pop .3s ease-out}
@@ -207,6 +225,7 @@ span.mu{font-size:1.6em;line-height:0;vertical-align:-.12em;margin:0 .05em}
   <div class="tpanel">
     <p id="intro">五線の <b>おんぷ</b> を 見て、<b>ピアノ</b> を おしてみよう。<br>音を きいて あてたり、リズムに あわせて たたいたり。<br>はじめての 人も だいじょうぶ！</p>
     <div id="menu"></div>
+    <p class="note">🎤「うたって こたえよう」は マイクを つかいます。声は この 端末の 中で 音の 高さを はかるだけで、録音も しないし、どこにも 送りません。</p>
     <p class="note">🔈 音が 出ないときは、iPhone・iPad の マナーモード（よこの スイッチ）を はずしてね。</p>
     <a class="backlink" href="../">← ゲームランドの トップへ</a>
   </div>
@@ -278,6 +297,13 @@ var MODES={
     {t:"ド・ミ・ソ",notes:[{d:0},{d:2},{d:4}],tip:"ドは かせんの 上、ミは いちばん 下の 線、ソは 下から 2本目の 線。"},
     {t:"ド〜ソ",notes:run(0,4),tip:"ゆびを おいたまま 上下に うごかして、はなした 所に おんぷが 書けるよ。"},
     {t:"ド〜高い ド",notes:run(0,7),tip:"高い ド は、下から 3つ目の あいだ。"}]},
+  sing:{name:"うたって こたえよう",ic:"🎤",c:"#8a5cd6",sub:"マイクに むかって うたう",desc:"マイクに むかって「あー」と うたってね。音の 高さが あっていれば せいかい！ 声が 高くても ひくくても、おなじ 音なら OK。",
+    st:[
+    {t:"まねっこ ド・ミ・ソ",kind:"copy",notes:[{d:0},{d:2},{d:4}],tip:"なった 音と おなじ 高さで「あー」と のばして うたおう。"},
+    {t:"まねっこ ド〜高い ド",kind:"copy",notes:run(0,7),tip:"8つの 音の どれかが なるよ。よく きいて、まねして うたおう。"},
+    {t:"ことばで ド〜ソ",kind:"name",notes:run(0,4),tip:"さいしょに ド が なるよ。ド レ ミ… と 小さく うたって、いわれた 音で のばしても いいよ。"},
+    {t:"がくふで ド〜ソ",kind:"staff",notes:run(0,4),tip:"五線の おんぷを 読んで、その 音を うたおう。さいしょに ド が なるよ。"},
+    {t:"がくふで ド〜高い ド",kind:"staff",notes:run(0,7),tip:"高い ド は、ド と おなじ 高さで うたっても せいかいだよ。"}]},
   rhythm:{name:"リズムを 楽しもう",ic:"🥁",c:"#e0569a",sub:"タイミングを あわせて タップ",desc:"メトロノームに あわせて、おんぷが 赤い 線に きたら タップ！ 休符は たたかないよ。",
     st:[
     {t:"♩ 四分音符",pool:["q"],bpm:72,tip:"♩（四分音符）は 1はく。「タン」と 1回 たたく。"},
@@ -369,8 +395,8 @@ $("bLab").addEventListener("click",function(){showLab=!showLab;save(LAB_KEY,show
 /* ---------- メニュー ---------- */
 function stars(n){var s="";for(var i=0;i<3;i++)s+=i<n?"★":"<i>★</i>";return s;}
 /* カードの 色（明るい色 a → こい色 b、かげ d） */
-var CARD={read:["#ff9a6a","#ec5a48","#b8382e"],ear:["#6cb8ff","#3f86d6","#2c62a0"],staff:["#7ed98f","#3aa65e","#27773f"],rhythm:["#ff8fc6","#d9509a","#9e2f6c"]};
-var ICON={read:'<span class="mic mu">𝄞</span>',ear:'<span class="mic">🎧</span>',staff:'<span class="mic">🎼</span>',rhythm:'<span class="mic">🥁</span>'};
+var CARD={sing:["#b98cff","#8a5cd6","#5e3aa0"],read:["#ff9a6a","#ec5a48","#b8382e"],ear:["#6cb8ff","#3f86d6","#2c62a0"],staff:["#7ed98f","#3aa65e","#27773f"],rhythm:["#ff8fc6","#d9509a","#9e2f6c"]};
+var ICON={sing:'<span class="mic">🎤</span>',read:'<span class="mic mu">𝄞</span>',ear:'<span class="mic">🎧</span>',staff:'<span class="mic">🎼</span>',rhythm:'<span class="mic">🥁</span>'};
 var openMode=null;
 /* 𝄞𝄽𝅗𝅥 など 音楽の 記号は ふつうの 字体に ないので、Noto Music で 出す */
 function mu(t){return String(t).replace(/(?:[\u2669-\u266F]|\uD834[\uDD00-\uDDFF])+/g,function(m){return '<span class="mu">'+m+'</span>';});}
@@ -380,9 +406,9 @@ function buildMenu(){
   var h="";
   if(!openMode){
     h+='<div class="big4">';
-    ["read","ear","staff","rhythm"].forEach(function(k,i){
+    ["read","ear","staff","rhythm","sing"].forEach(function(k,i){
       var M=MODES[k],got=0;M.st.forEach(function(_,j){got+=rec[k+j]||0;});
-      h+='<button class="mode" data-open="'+k+'" style="'+cvars(k)+';--dl:'+(-i*.4)+'s"><span class="fl a">♪</span><span class="fl b">♫</span>'+ICON[k]+
+      h+='<button class="mode'+(k==="sing"?" wide":"")+'" data-open="'+k+'" style="'+cvars(k)+';--dl:'+(-i*.4)+'s"><span class="fl a">♪</span><span class="fl b">♫</span>'+ICON[k]+
         '<b>'+M.name.replace(/ (?=[^ ]+$)/,"<br>")+'</b><small>'+M.sub+'</small><span class="prog">★ '+got+' / '+M.st.length*3+'</span></button>';
     });
     h+='</div><button class="freeb" data-free="1"><span class="ic">🎹</span><span><b>じゆうに ひく</b><small>ピアノを ひくと、五線に おんぷが 出るよ</small></span></button>';
@@ -408,13 +434,13 @@ $("menu").addEventListener("click",function(e){
 /* ---------- 画面の きりかえ ---------- */
 var G=null,timers=[];
 function later(f,ms){timers.push(setTimeout(f,ms));}
-function stopAll(){timers.forEach(clearTimeout);timers=[];if(R){cancelAnimationFrame(R.raf);R=null;}}
+function stopAll(){timers.forEach(clearTimeout);timers=[];if(R){cancelAnimationFrame(R.raf);R=null;}cancelAnimationFrame(singRaf);}
 function showGame(title,piano){
   $("title").hidden=true;$("game").hidden=false;$("res").hidden=true;
   $("gTitle").innerHTML=mu(title);$("piano").hidden=!piano;$("bLab").hidden=!piano;$("bLab").setAttribute("aria-pressed",showLab);
   window.scrollTo(0,0);
 }
-function toMenu(){var m=G&&G.mode!=="free"?G.mode:null;openMode=m;stopAll();G=null;$("game").hidden=true;$("res").hidden=true;$("title").hidden=false;buildMenu();if(openMode)toPanel();}
+function toMenu(){var m=G&&G.mode!=="free"?G.mode:null;openMode=m;stopAll();micClose();G=null;$("game").hidden=true;$("res").hidden=true;$("title").hidden=false;buildMenu();if(openMode)toPanel();}
 $("bBack").addEventListener("click",toMenu);
 
 /* ---------- じゆうに ひく ---------- */
@@ -440,6 +466,7 @@ function start(mode,si){
   stopAll();
   var M=MODES[mode],st=M.st[si];
   if(mode==="rhythm")return startRhythm(si);
+  if(mode==="sing")return startSing(si);
   G={mode:mode,si:si,st:st,M:M,qs:makeQs(st.notes),i:0,res:[],miss:0,lock:false,clef:st.clef||"G"};
   showGame(M.name+"　"+(si+1)+". "+st.t,mode!=="staff");
   var h='<div class="tip">💡 '+mu(st.tip)+'</div><p class="q" id="qq">'+M.q+'</p>';
@@ -545,6 +572,144 @@ function showRes(ttl,s,msg,mode,si){
   $("rAgain").onclick=function(){start(mode,si);};
   if($("rNext"))$("rNext").onclick=function(){start(mode,si+1);};
   $("rMenu").onclick=toMenu;
+}
+
+/* =========================================================
+   うたって こたえよう（マイク）
+   ・マイクの 音から 声の 高さ（ヘルツ）を はかる（YIN という やり方）
+   ・オクターブは 見ない：ドなら 高い ドでも ひくい ドでも せいかい
+   ・音は この 端末の 中で はかるだけ。録音も 送信も しない
+   ========================================================= */
+var MIC=null,singRaf=0;
+var TOL=.5,HOLD=.45,GATE=.012;   // TOL＝半音の いくつまで OK か、HOLD＝何びょう のばせば きまるか、GATE＝これより 小さい 音は きかない
+function micOpen(cb){
+  if(MIC)return cb(true);
+  if(!audio()||!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia)return cb(false,"none");
+  navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:false,autoGainControl:false}}).then(function(st){
+    var src=AC.createMediaStreamSource(st),an=AC.createAnalyser();an.fftSize=2048;src.connect(an);
+    MIC={st:st,src:src,an:an,buf:new Float32Array(an.fftSize)};cb(true);
+  },function(e){cb(false,e&&e.name);});
+}
+function micClose(){if(!MIC)return;MIC.st.getTracks().forEach(function(t){t.stop();});try{MIC.src.disconnect();}catch(_){}MIC=null;}
+/* 声の 高さを はかる。かえすのは {f:ヘルツ（0＝きこえない）, v:音の 大きさ} */
+function pitchNow(){
+  var b=MIC.buf;MIC.an.getFloatTimeDomainData(b);
+  var n=b.length,rms=0,i,t;for(i=0;i<n;i++)rms+=b[i]*b[i];rms=Math.sqrt(rms/n);
+  if(rms<GATE)return {f:0,v:rms};
+  var sr=AC.sampleRate,tmin=Math.floor(sr/1100),tmax=Math.min(Math.floor(sr/75),n>>1),W=n-tmax,d=MIC.d||(MIC.d=new Float32Array(tmax+2)),sum=0,best=-1;
+  d[0]=1;
+  for(t=1;t<=tmax;t++){var s=0;for(i=0;i<W;i++){var x=b[i]-b[i+t];s+=x*x;}sum+=s;d[t]=sum?s*t/sum:1;}
+  for(t=tmin;t<tmax;t++)if(d[t]<.15){while(t+1<tmax&&d[t+1]<d[t])t++;best=t;break;}
+  if(best<1)return {f:0,v:rms};
+  var a=d[best-1],c=d[best+1],den=a+c-2*d[best],sh=den?(a-c)/(2*den):0;
+  return {f:sr/(best+sh),v:rms};
+}
+function median(a){var s=a.slice().sort(function(x,y){return x-y;});return s[s.length>>1];}
+function singPrompt(){
+  var k=G.st.kind;
+  if(k==="copy")return "この 音を まねして うたおう";
+  if(k==="name")return "「"+NM[md(G.q.d,7)]+"」を うたって！";
+  return "この 音を うたおう";
+}
+function startSing(si){
+  var M=MODES.sing,st=M.st[si];
+  G={mode:"sing",si:si,st:st,M:M,qs:makeQs(st.notes),i:0,res:[],miss:0,lock:true,clef:"G"};
+  showGame(M.name+"　"+(si+1)+". "+st.t,false);dotsUpd();
+  var h='<div class="tip">💡 '+mu(st.tip)+'</div><p class="q" id="qq"></p><div class="singrow">';
+  if(st.kind==="staff")h+='<div class="paper" id="paper">'+staffSVG("G")+'<div class="lab" id="lab"></div><div id="mk"></div></div>';
+  else if(st.kind==="name")h+='<div class="paper" id="paper" style="max-width:220px;padding:10px 6px 30px"><div class="bigname" id="bn" style="border:none;box-shadow:none;padding:0"></div><div class="lab" id="lab"></div><div id="mk"></div></div>';
+  else h+='<div class="paper" id="paper" style="max-width:220px;padding:14px 6px 30px;display:grid;place-items:center"><button class="spk" id="spk2" aria-label="もういちど きく">🔊</button><div class="lab" id="lab"></div><div id="mk"></div></div>';
+  h+='<div class="meter" aria-hidden="true"><div class="zone"></div><span class="tl">高い ▲</span><span class="bl">ひくい ▼</span><div class="ball" id="ball"></div></div></div>'+
+    '<div class="micst wait" id="micst"><span id="micTx">🎤 マイクを じゅんびちゅう…</span><span class="lv"><i id="lv"></i></span></div>'+
+    '<p class="msg" id="msg"></p><div class="row"><button class="btn" id="bAgain">🔊 もういちど きく</button><button class="btn" id="bSkip">とばす ▶</button></div>';
+  $("stage").innerHTML=h;
+  $("bAgain").onclick=function(){playRef();};
+  if($("spk2"))$("spk2").onclick=function(){playRef();};
+  $("bSkip").onclick=function(){if(!G||G.lock)return;G.res[G.i]=false;G.lock=true;showAns(false);G.i++;later(nextSing,1600);};
+  micOpen(function(ok,why){
+    if(!G||G.mode!=="sing")return;
+    if(!ok){
+      $("micTx").textContent="🎤 マイクが つかえないよ";
+      $("msg").innerHTML="<b>マイクが つかえません。</b><br>"+(why==="NotAllowedError"||why==="SecurityError"?"「マイクを つかう」を きょかしてね。わからない ときは おうちの 人に きいてね。":"マイクの ついた 端末で あそんでね。");
+      $("bAgain").hidden=true;$("bSkip").hidden=true;return;
+    }
+    nextSing();singLoop();
+  });
+}
+/* きく 音：まねっこ＝その 音、ほか＝きじゅんの ド。なっている あいだは マイクを きかない */
+function playRef(){
+  if(!G||!G.q||!audio())return;
+  var t=AC.currentTime+.05,m=G.st.kind==="copy"?midiOf(G.q):60;
+  piano(m,t);G.mute=t+1.5;G.sg=newSg();
+  var s=$("spk2");if(s){s.classList.add("play");later(function(){s.classList.remove("play");},1200);}
+}
+function newSg(){return {h:[],ok:0,ph:0,sil:0,sum:0,cnt:0};}
+function nextSing(){
+  if(!G)return;
+  if(G.i>=NQ){cancelAnimationFrame(singRaf);return finish();}
+  G.q=G.qs[G.i];G.miss=0;G.lock=false;dotsUpd();
+  $("qq").textContent=singPrompt();$("lab").textContent="";$("mk").innerHTML="";
+  if(G.st.kind==="staff")setNotes(noteSVG(G.q,"G"));
+  if(G.st.kind==="name")$("bn").textContent=NM[md(G.q.d,7)];
+  $("msg").innerHTML=G.st.kind==="copy"?"よく きいてね…":"ド の 音を きいてね…";
+  later(playRef,400);
+}
+function showAns(ok){
+  var nm=NM[md(G.q.d,7)];
+  $("lab").textContent=nm;mark(ok);
+  if(G.st.kind==="staff")setNotes(noteSVG(G.q,"G",ok?"ok":"hint"));
+  if(!ok){$("msg").innerHTML="こたえは「"+nm+"」。 きいてみよう。";piano(midiOf(G.q));G.mute=AC.currentTime+1.6;}
+}
+function singLoop(){
+  var last=AC.currentTime,acc=0;
+  cancelAnimationFrame(singRaf);
+  (function loop(){
+    if(!G||G.mode!=="sing"||!MIC)return;
+    singRaf=requestAnimationFrame(loop);
+    var now=AC.currentTime,dt=Math.min(.1,now-last);acc+=dt;last=now;
+    if(acc<.03)return;dt=acc;acc=0;          // 1びょうに 30回くらい はかる
+    var r=pitchNow(),ball=$("ball"),ms=$("micst");
+    $("lv").style.width=Math.min(100,r.v*900)+"%";
+    if(G.lock||!G.q||now<G.mute){ms.classList.add("wait");$("micTx").textContent=G.lock?"🎤":"🎤 きいてね…";ball.className="ball";ball.style.top="50%";ball.textContent="";return;}
+    ms.classList.remove("wait");$("micTx").textContent="🎤 うたってね！";
+    if($("msg").textContent.indexOf("きいてね")>=0)$("msg").innerHTML="マイクに むかって「あー」と のばして うたおう。";
+    var sg=G.sg||(G.sg=newSg()),want=midiOf(G.q);
+    if(r.f){
+      var mf=69+12*Math.log(r.f/440)/Math.LN2,dd=md(mf-want+6,12)-6;   // こたえから 何半音 ずれているか（オクターブは 見ない）
+      sg.h.push(dd);if(sg.h.length>5)sg.h.shift();
+      var m=median(sg.h),good=Math.abs(m)<=TOL;
+      sg.sil=0;sg.ph+=dt;sg.sum+=m;sg.cnt++;
+      sg.ok=good?sg.ok+dt:Math.max(0,sg.ok-dt*1.5);
+      ball.className="ball on"+(good?" good":"");
+      ball.style.top=(50-Math.max(-3,Math.min(3,m))/3*42)+"%";
+      ball.textContent=NM[W.indexOf(md(Math.round(want+m)-60,12))]||"";
+      if(sg.ok>=HOLD)return singOk();
+      if(sg.ph>3)singMiss(sg);               // ずっと ちがう 高さの まま
+    }else{
+      sg.sil+=dt;
+      if(sg.sil>.25){ball.className="ball";if(sg.ph>.6&&sg.ok<HOLD)singMiss(sg);else if(sg.ph<=.6)G.sg=newSg();}
+    }
+  })();
+}
+function singOk(){
+  G.lock=true;if(G.res[G.i]===undefined)G.res[G.i]=G.miss===0;
+  chime();showAns(true);
+  var nm=NM[md(G.q.d,7)];
+  $("msg").innerHTML=G.miss===0?"<em>せいかい！</em>　「"+nm+"」の 高さ だよ。":"<em>できた！</em>　これが「"+nm+"」の 高さ。";
+  G.i++;later(nextSing,1600);
+}
+function singMiss(sg){
+  var avg=sg.sum/Math.max(1,sg.cnt),want=midiOf(G.q),sungPc=md(Math.round(want+avg)-60,12);
+  G.sg=newSg();G.miss++;G.res[G.i]=false;dotsUpd();
+  var sung=PCN[sungPc],dir=avg>0?"もうすこし <b>ひくく</b>":"もうすこし <b>高く</b>";
+  var near=Math.abs(avg)<1.5;
+  $("msg").innerHTML=(near?"おしい！ ":"<b>ちがうよ。</b>")+"いまのは「"+sung+"」くらい。"+dir+" うたってみよう。";
+  if(G.miss>=2){
+    var nm=NM[md(G.q.d,7)];$("lab").textContent=nm;
+    if(G.st.kind==="staff")setNotes(noteSVG(G.q,"G","hint"));
+    $("msg").innerHTML+="<br>こたえの「"+nm+"」を ならすよ。";
+    piano(want,AC.currentTime+.05);G.mute=AC.currentTime+1.6;
+  }
 }
 
 /* =========================================================
