@@ -182,6 +182,13 @@ button.zc:active{transform:scale(.95)}
 .wordbar .sl i.g{color:rgba(74,107,192,.4);background:rgba(255,255,255,.8);border-style:dashed;box-shadow:none}
 .wordbar .wo{font-size:clamp(.8rem,2.8vw,1.3rem);background:rgba(255,252,240,.94);border:2.5px solid var(--ink);border-radius:999px;padding:0 14px;box-shadow:0 3px 0 var(--ink);white-space:nowrap}
 .wordbar .wo .e{font-size:1.25em;margin-right:4px;vertical-align:-.1em}
+/* せまい 画面では おだいの わくを 左上に よせて 小さく（まんなかを はしる 忍者の 上の もじが わくの うらに かくれないように） */
+@media (max-width:900px){
+  .wordbar{left:6px;transform:none;align-items:flex-start;top:clamp(30px,7vw,44px)}
+  .wordbar .sl{gap:3px}
+  .wordbar .sl i{width:clamp(26px,6.4vw,40px);height:clamp(30px,7.4vw,46px);font-size:clamp(1.05rem,4.2vw,1.7rem);border-width:2.5px;border-radius:9px;box-shadow:0 3px 0 var(--ink)}
+  .wordbar .wo{font-size:clamp(.72rem,2.4vw,1rem);padding:0 10px}
+}
 .wordbar .wo .sp{font-size:.7em;color:#fff;background:var(--do);border-radius:999px;padding:0 7px;margin-left:6px;vertical-align:.15em}
 .wordbar .sl.ng{animation:ng .35s}
 @keyframes ng{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
