@@ -328,7 +328,8 @@ a.btn{text-decoration:none;display:inline-flex;align-items:center}
 .recipe .ing b{color:#fff;font-size:1.05rem}
 .aDot{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;font-weight:900;font-size:.72rem;color:#111;flex:none}
 .rule{margin-top:8px;font-size:.76rem;color:#9FD3FF;line-height:1.7}
-#board{display:block;width:min(92vw,400px);height:auto;margin:0 auto;touch-action:none;user-select:none;
+.rule2{margin:14px 4px 0;text-align:center}
+#board{display:block;width:min(92vw,400px,max(220px,calc(100dvh - 460px)));height:auto;margin:0 auto;touch-action:none;user-select:none;
   border:1px solid var(--line);border-radius:22px;background:radial-gradient(circle at 50% 45%,rgba(94,139,255,.10),rgba(94,139,255,0) 70%)}
 #board .atom{cursor:pointer}
 #board .atom.extra .ball{stroke:#FF9B4A;stroke-width:3;stroke-dasharray:5 4}
@@ -345,7 +346,7 @@ a.btn{text-decoration:none;display:inline-flex;align-items:center}
 #board .empty{fill:#5E6B8A;font-size:14px}
 #board .xlab{fill:#FF9B4A;font-size:12px;font-weight:700}
 .tools2{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:10px 0}
-.tray2{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;border:1px solid var(--line);border-radius:20px;padding:12px;
+.tray2{display:flex;flex-wrap:wrap;gap:8px 9px;justify-content:center;border:1px solid var(--line);border-radius:20px;padding:8px 12px 10px;
   background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.02))}
 .tray2 .lab{flex-basis:100%;text-align:center;font-size:.72rem;color:var(--sub);letter-spacing:.06em}
 .abtn{display:flex;flex-direction:column;align-items:center;gap:2px;border:1px solid rgba(255,255,255,.2);border-radius:16px;
@@ -425,8 +426,6 @@ a.btn{text-decoration:none;display:inline-flex;align-items:center}
     <button class="btn sm hintbtn" id="hintBtn">ヒント</button>
     <div class="qname"><span id="qName">—</span><em id="qYomi"></em><span class="qsuf">を つくろう</span></div>
     <div class="recipe" id="recipe"></div>
-    <div class="rule">下の原子を おすと、手が かってに つながる。<b>ぜんぶの手が つながったら できあがり！</b><br>
-      まちがえて 入れた原子は、盤の上で タップすると はずせる。</div>
     <div class="hint" id="hintTxt"></div>
   </div>
 
@@ -434,6 +433,9 @@ a.btn{text-decoration:none;display:inline-flex;align-items:center}
   <p class="msg" id="msg"></p>
   <div class="tray2" id="tray"></div>
   <div class="tools2"><button class="btn sm" id="clrBtn">ぜんぶ けす</button></div>
+  <!-- あそびかたの文は 下へ（原子の ボタンと 盤が 1画面に 入るように） -->
+  <div class="rule rule2">原子の ボタンを おすと、手が かってに つながる。<b>ぜんぶの手が つながったら できあがり！</b><br>
+    まちがえて 入れた原子は、盤の上で タップすると はずせる。</div>
 </div></section>
 
 <!-- ================= OVERLAYS ================= -->
