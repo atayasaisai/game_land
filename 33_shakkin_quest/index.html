@@ -1254,7 +1254,9 @@ function renderExtras(){
 function el(id){return document.getElementById(id);}
 function openDlg(id){var d=el(id);if(d&&!d.open)d.showModal();}
 function toast(msg,big){
-  var layer=el("toastLayer"),t=document.createElement("div");
+  // ひらいている ダイアログが あるときは、その 中に 出す（外に 出すと ダイアログの 暗い 幕の 下に なって 読めない）
+  var dlg=document.querySelector("dialog[open]"),layer=el("toastLayer"),t=document.createElement("div");
+  if(dlg){layer=dlg.querySelector(".toast-layer");if(!layer){layer=document.createElement("div");layer.className="toast-layer";layer.setAttribute("aria-live","polite");dlg.appendChild(layer);}}
   t.className="toast"+(big?" big":"");t.textContent=msg;layer.appendChild(t);
   requestAnimationFrame(function(){t.classList.add("show");});
   setTimeout(function(){t.classList.remove("show");setTimeout(function(){t.remove();},400);},big?4200:2600);
@@ -1370,7 +1372,8 @@ function doAttack(mode){
     amt=(d.mode==="lump")?d.balance:(d.minPayment||0);
   }
   amt=Math.min(amt,d.balance,DB.set.balance);
-  if(amt<=0){toast(mode==="cannon"?"繰り上げで返す金額を入れてください":"金額を入れてください");return;}
+  if(amt<=0){toast(DB.set.balance<=0?"口座残高が足りません。「借金モンスター 登録／設定」の「口座」で残高を入れてください"
+    :mode==="cannon"?"繰り上げで返す金額を入れてください":"金額を入れてください");return;}
 
   var wasActive=!d.defeatedAt;
   var bpos=BOSSPOS[d.id];
