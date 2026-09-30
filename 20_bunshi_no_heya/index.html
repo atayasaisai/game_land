@@ -131,7 +131,7 @@ a.btn{text-decoration:none;display:inline-flex;align-items:center}
 #title p{max-width:26em;color:var(--sub);font-size:.9rem;margin:16px 0 4px;text-wrap:balance}
 #title p b{color:var(--ink);font-weight:700}
 .titleAtom{width:min(62vw,230px);margin:6px auto 2px;filter:drop-shadow(0 0 40px rgba(90,150,255,.4))}
-.tbtns{display:flex;gap:11px;flex-wrap:wrap;justify-content:center;margin-top:20px}
+.tbtns{display:flex;gap:11px;flex-wrap:wrap;justify-content:center;margin-top:20px;position:sticky;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:3}   /* 「はじめる」を スクロールせずに おせるように */
 .ladder{margin-top:34px;display:flex;flex-direction:column;gap:5px;width:100%;max-width:330px}
 .rung{display:flex;align-items:center;gap:11px;font-size:.78rem;color:var(--sub);
   border:1px solid var(--line);border-radius:11px;padding:8px 13px;background:rgba(255,255,255,.03);text-align:left}
