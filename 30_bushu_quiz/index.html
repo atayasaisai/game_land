@@ -107,6 +107,7 @@ button{font-family:inherit;font-weight:700;cursor:pointer;color:inherit}
 .grp.weak{--c:var(--do)}.grp.all{--c:var(--ai)}
 .grp[disabled]{opacity:.45;pointer-events:none}
 .opt{margin-top:16px;text-align:center}
+.opt0{margin:0 0 16px}
 .opt h4{margin:0 0 8px;font-size:.8rem;letter-spacing:.14em;color:var(--sub)}
 .row{display:flex;flex-wrap:wrap;gap:9px;justify-content:center}
 .pick{background:#fff;border:2.5px solid var(--ink);border-radius:999px;padding:7px 16px;font-size:.9rem;box-shadow:0 3px 0 var(--ink)}
@@ -128,6 +129,7 @@ button{font-family:inherit;font-weight:700;cursor:pointer;color:inherit}
 .hud .nm{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .hud b{color:var(--ki)}
 .vs{flex:none;display:flex;align-items:center;gap:8px;padding:5px 10px;background:rgba(255,252,240,.9);border-bottom:3px solid var(--ink)}
+body.typing .vs{display:none}
 .vs .boy{width:56px;flex:none;aspect-ratio:340/280;background:url(runner.webp) calc(1*100%/7) 0/800% 100% no-repeat}
 .vs .boy.hurt{animation:shake .4s}
 .vs .mid{flex:1;min-width:0;text-align:center}
@@ -246,15 +248,16 @@ button{font-family:inherit;font-weight:700;cursor:pointer;color:inherit}
   </div>
 
   <div class="panel">
-    <h3>どの組に ちょうせん する？<small>1回 10問（すくない組は ぜんぶ）</small></h3>
-    <div class="grps" id="grps"></div>
-    <div class="opt">
+    <!-- むずかしさは 組を えらぶ 前に きめる（組を おすと すぐ はじまるため） -->
+    <div class="opt opt0">
       <h4>むずかしさ</h4>
       <div class="row" id="modeRow">
         <button class="pick" type="button" data-mode="easy">やさしい<small>部首の 場所と 形が はじめから 見える</small></button>
         <button class="pick" type="button" data-mode="hard">ふつう<small>漢字 だけ</small></button>
       </div>
     </div>
+    <h3>どの組に ちょうせん する？<small>1回 10問（すくない組は ぜんぶ）</small></h3>
+    <div class="grps" id="grps"></div>
   </div>
 
   <div class="note">
@@ -611,6 +614,11 @@ $("ans").addEventListener("keydown", function(e){
   e.preventDefault(); e.stopPropagation(); answer();
 });
 $("ans").addEventListener("input", function(){ $("msg").textContent = ""; });
+// スマホで 入力している あいだは 上の モンスターの 帯を たたむ（キーボードで 説明や ヒントの ボタンが かくれないように）
+if(window.matchMedia && matchMedia("(pointer: coarse)").matches){
+  $("ans").addEventListener("focus", function(){ document.body.classList.add("typing"); });
+  $("ans").addEventListener("blur", function(){ setTimeout(function(){ if(document.activeElement !== $("ans")) document.body.classList.remove("typing"); }, 150); });
+}
 document.addEventListener("keydown", function(e){
   if(!G || !G.wait || !$("game").classList.contains("on")) return;
   if(e.key === "Enter" || e.key === " "){ e.preventDefault(); next(); }
