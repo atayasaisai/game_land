@@ -23,7 +23,7 @@ for(a = 1; a <= 9; a++){
 // ふつう：10いくつ－1けた、くり下がりあり（こたえ1けた）
 for(a = 11; a <= 18; a++){
   for(b = 2; b <= 9; b++){
-    if(b < a - 9){
+    if(b > a - 10){
       items.push({ key:"f"+a+"_"+b, q:card(a+"−"+b), a:String(a-b), lv:2, reg:"lv2" });
     }
   }
@@ -34,6 +34,7 @@ for(a = 11; a <= 18; a++){
   [3,6,9].forEach(function(uu){
     a = tt * 10 + uu;
     [1,4,7].forEach(function(bb){
+      if(a <= 18 && bb > a - 10) return;   // 「ふつう」と おなじ しきは 入れない
       items.push({ key:"m"+a+"_"+bb, q:card(a+"−"+bb), a:String(a-bb), lv:3, reg:"lv3" });
     });
   });
