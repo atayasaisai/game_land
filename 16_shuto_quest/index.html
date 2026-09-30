@@ -129,6 +129,8 @@ svg{display:block}
 .qnote{flex-basis:100%;margin:6px 0 0;text-align:center;font-size:.74rem;color:var(--sub)}
 .qnote b{color:var(--ink)}
 .start{display:block;margin:30px auto 0;font-size:1.3rem;padding:13px 46px}
+/* 「はじめる」は スクロールしなくても 見えるように、画面の 下に くっつけておく */
+.start{position:sticky;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:3}
 .note{margin:26px auto 0;max-width:30em;font-size:.76rem;color:var(--sub);line-height:1.9;
   background:#fff;border:2.5px dashed var(--ink);border-radius:18px;padding:13px 17px}
 .note b{color:var(--ink)}
@@ -161,7 +163,8 @@ svg{display:block}
 .hud .combo.hot{animation:pulse .5s ease infinite alternate}
 @keyframes pulse{to{transform:scale(1.14)}}
 .hud .quit{background:none;border:2px solid rgba(255,255,255,.5);color:#fff;border-radius:999px;
-  padding:1px 11px;font-size:.74rem}
+  padding:1px 11px;font-size:.74rem;min-height:36px;min-width:60px}
+.hud .quit.ask{background:#E0503A;border-color:#fff;font-weight:900}
 
 .field{flex:1;min-height:0;position:relative;background:#BFE6F4;overflow:hidden}
 .field svg{width:100%;height:100%}
@@ -178,6 +181,8 @@ svg{display:block}
 .ask{text-align:center;font-size:.86rem;color:var(--sub);margin:0 0 7px}
 .ask b{color:var(--ink)}
 .choices{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:680px;margin:0 auto}
+/* スマホを 横に したとき：こたえを 1れつに ならべて、戦場を ひろく とる（旗が 上で 切れないように） */
+@media (orientation:landscape) and (max-height:500px){.choices{grid-template-columns:repeat(4,1fr);max-width:none}.ans{padding-top:6px}}
 .ch{background:#fff;border:3px solid var(--ink);border-radius:16px;box-shadow:0 4px 0 var(--ink);
   padding:12px 8px;font-size:clamp(.95rem,3.6vw,1.2rem);line-height:1.3;transition:transform .08s;min-height:52px}
 .ch:hover{transform:translateY(-2px)}
@@ -226,7 +231,7 @@ svg{display:block}
 .w small{display:block;color:var(--sub);font-size:.7rem}
 .flagsvg{width:100%;height:auto;display:block}
 .allok{text-align:center;font-size:1rem;color:var(--raku)}
-.rbtns{display:flex;flex-wrap:wrap;gap:11px;justify-content:center}
+.rbtns{display:flex;flex-wrap:wrap;gap:11px;justify-content:center;margin-bottom:22px}
 
 @media (max-width:620px){
   .pad{padding:16px 14px 34px}
@@ -238,7 +243,7 @@ svg{display:block}
   .hud .mid b{font-size:.95rem}
   .hud .hearts{font-size:.95rem}
   .hud .combo{font-size:.7rem;min-width:0}
-  .hud .quit{font-size:.68rem;padding:1px 8px}
+  .hud .quit{font-size:.68rem;padding:1px 8px;min-height:34px;min-width:52px}
   .hud .score{padding:1px 10px 2px}
   .hud .score small{display:none}
   .hud .score b{font-size:1rem;min-width:2.1em}
@@ -311,13 +316,14 @@ svg{display:block}
 <section class="screen" id="result"><div class="pad">
   <div class="rhead" id="rhead"></div>
   <div class="stats" id="stats"></div>
-  <div class="weakbox" id="weakbox"></div>
+  <!-- ボタンは にがての 一覧より 上に（一覧が ながくても スクロールせずに おせるように） -->
   <div class="rbtns">
     <button class="btn" id="again">もういっかい ▶</button>
     <button class="btn warn" id="weakonly">にがてだけ ▶</button>
     <button class="btn sub" id="home">タイトルへ</button>
     <a class="btn sub" href="../">ゲームランドへ</a>
   </div>
+  <div class="weakbox" id="weakbox"></div>
 </div></section>
 
 </div>
@@ -378,6 +384,7 @@ function paintTitle(){
   }).join("");
 
   var weakN = Object.keys(loadWeak(curPack().id)).length;
+  if(!weakN && sel.weakOnly) sel.weakOnly = false;   // にがてが なくなったら、ふつうの えらびかたに もどす
   $("lvRow").innerHTML = [1,2,3,0].map(function(l){
     return '<button class="pick" type="button" data-lv="'+l+'" aria-pressed="'+(!sel.weakOnly&&sel.lv===l)+'">'
       + LVNAME[l] + '</button>';
@@ -544,11 +551,13 @@ function mobSVG(m){
   var fw  = FW, fh = FH, box = BOX,
       top = GY - box,                                         // モンスターのあたま
       // 旗は1つおきに高さをずらす(となり合っても どちらも読めるように)
-      fy  = top - 12 - fh - ((m.id % 2) ? Math.round(fh * 0.62) : 0),
+      bh  = Math.round(fh * 0.34),
+      // 高くする分は、点数ふだが 戦場の 上に はみ出さない ところまで（横むきの スマホなど 戦場が ひくいとき）
+      lift = (m.id % 2) ? Math.max(0, Math.min(Math.round(fh * 0.62), top - 27 - fh - bh)) : 0,
+      fy  = top - 12 - fh - lift,
       pt  = fy - 9,                                           // 旗ざおのてっぺん
       px  = -fw/2 - 4,
       bw  = Math.round(fw * 0.46),                            // 点数ふだ
-      bh  = Math.round(fh * 0.34),
       bs  = Math.round(fh * 0.27),
       by  = fy - 4 - bh / 2 - 7;
   return '<g class="mob" data-id="'+m.id+'" transform="translate('+mobX(m)+',0)">'
@@ -684,7 +693,7 @@ function start(weakOnly){
   S = {
     pid: curPack().id, ask: curPack().ask,
     queue: items.map(function(it){ return {it:it, tries:0}; }),
-    field: [], life: LIVES, hit: 0, total: items.length, attempted: 0,
+    field: [], life: LIVES, hit: 0, total: items.length, attempted: 0, first: 0,
     combo: 0, best: 0, score: 0, weak: {}, t0: Date.now(), over: false, sinceSpawn: SPAWN,
     endless: sel.qn === "endless"
   };
@@ -804,7 +813,7 @@ $("choices").addEventListener("click", function(e){
     S.hit++; S.combo++; S.best = Math.max(S.best, S.combo);
     S.score += gain;
     flyScore(rect, gain);
-    if(m.tries === 0) clearWeak(m.it);               // 一発で当てたら にがてから外す
+    if(m.tries === 0){ clearWeak(m.it); S.first++; }               // 一発で当てたら にがてから外す
     boom(x);
     pose(S.combo >= 5 ? "cannon" : "guts", 1100);
     b.classList.add("good");
@@ -897,6 +906,11 @@ function showResult(cleared){
   var missed = Object.keys(S.weak).length,
       total = S.endless ? S.attempted : S.total,
       pct = total ? Math.round(Math.max(0, total - missed) / total * 100) : 0;
+  // お城が おちたときは、まだ こたえていない 問題が のこるので、こたえた 問題のうち 一発で あてた わりあいに する
+  if(!cleared && !S.endless){
+    var answered = S.attempted - S.field.filter(function(f){ return f.tries === 0; }).length;
+    pct = answered > 0 ? Math.round(S.first / answered * 100) : 0;
+  }
   $("stats").innerHTML =
       '<div class="stat"><small>たおした数</small><b>' + S.hit + '<span style="font-size:.6em">' + (S.endless ? "" : "/" + S.total) + '</span></b></div>'
     + '<div class="stat"><small>いっぱつ正解</small><b>' + pct + '%</b></div>'
@@ -938,7 +952,17 @@ $("home").addEventListener("click", function(){
   $("title").classList.add("on");
   paintTitle();
 });
+// 「やめる」は 2かい おして はじめて やめる（まちがえて おしても ゲームが きえないように）
+var quitAsk = 0;
 $("quit").addEventListener("click", function(){
+  var q = $("quit");
+  if(!q.classList.contains("ask")){
+    q.classList.add("ask"); q.textContent = "ほんとに やめる？";
+    clearTimeout(quitAsk);
+    quitAsk = setTimeout(function(){ q.classList.remove("ask"); q.textContent = "やめる"; }, 3000);
+    return;
+  }
+  clearTimeout(quitAsk); q.classList.remove("ask"); q.textContent = "やめる";
   clearInterval(stepTimer);
   if(S) S.over = true;
   $("game").classList.remove("on");
