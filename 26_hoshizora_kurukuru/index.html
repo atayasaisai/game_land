@@ -470,13 +470,27 @@ function draw(cv,st){
   var fs=Math.round(Math.max(10,11*k));
   if(st.names){
     // 右はしに 近い 名前は、星の 左がわに 書く
-    var label=function(t,x,y){var w=c.measureText(t).width;if(x+6+w>W-4){c.textAlign="right";c.fillText(t,x-6,y);}else{c.textAlign="left";c.fillText(t,x+6,y);}};
+    // 名前どうしが かさならないように：右 → 左 → 上 → 下 と ずらして さがし、どこも かさなるなら 星の 名前は 書かない
+    var boxes=[];
+    var hit=function(r){return boxes.some(function(q){return r[0]<q[2]&&r[2]>q[0]&&r[1]<q[3]&&r[3]>q[1];});};
+    var label=function(t,x,y,must){var w=c.measureText(t).width,h=fs;
+      var cand=[[x+6,y,"left"],[x-6,y,"right"],[x-w/2,y-12,"left"],[x-w/2,y+14,"left"]];
+      if(x+6+w>W-4)cand.unshift(cand.splice(1,1)[0]);
+      for(var i=0;i<cand.length;i++){var cx=cand[i][0],al=cand[i][2],lx=al==="right"?cx-w:cx,r=[lx-2,cand[i][1]-h,lx+w+2,cand[i][1]+3];
+        if(lx<2||lx+w>W-2)continue;
+        if(!hit(r)){boxes.push(r);c.textAlign=al;c.fillText(t,cx,cand[i][1]);return;}}
+      if(must){c.textAlign="left";c.fillText(t,x+6,y);}};
     c.textBaseline="alphabetic";
     c.font="700 "+fs+"px 'Zen Kaku Gothic New',sans-serif";c.fillStyle="rgba(255,228,150,"+(0.9*Math.max(sAlpha,0.5))+")";
-    CON.forEach(function(cn){var p=pos[cn.lb].xy;if(p&&pos[cn.lb].alt>1)label(cn.nm,p[0],p[1]-7);});
+    CON.forEach(function(cn){var p=pos[cn.lb].xy;if(p&&pos[cn.lb].alt>1)label(cn.nm,p[0],p[1]-7,true);});
     c.font="500 "+(fs-1)+"px 'Zen Kaku Gothic New',sans-serif";c.fillStyle="rgba(210,225,255,"+(0.85*Math.max(sAlpha,0.5))+")";
-    for(var nid in SNAME){var np=pos[nid].xy;if(np&&pos[nid].alt>1)label(SNAME[nid],np[0],np[1]+13);}
+    for(var nid in SNAME){var np=pos[nid].xy;if(np&&pos[nid].alt>1)label(SNAME[nid],np[0],np[1]+13,false);}
   }
+  // 北の 空では、名前を 出さない ときも 北極星にだけ 印と 名前を つける（どこを 中心に 回るかが わかるように）
+  if(!st.names&&st.view==="N"&&pos.polaris&&pos.polaris.xy){var pp=pos.polaris.xy;
+    c.strokeStyle="rgba(255,236,160,.9)";c.lineWidth=1.6*k;c.beginPath();c.arc(pp[0],pp[1],9*k,0,7);c.stroke();
+    c.font="700 "+fs+"px 'Zen Kaku Gothic New',sans-serif";c.fillStyle="rgba(255,236,160,.95)";c.textAlign="left";c.textBaseline="middle";
+    c.fillText("北極星",pp[0]+12*k,pp[1]);c.textBaseline="alphabetic";}
   // 太陽
   if(sa>-4){var sp=P.p(sa,sAA[1]);if(sp){var sg2=c.createRadialGradient(sp[0],sp[1],0,sp[0],sp[1],40*k);
     sg2.addColorStop(0,"#fff6c8");sg2.addColorStop(.25,"#ffd34d");sg2.addColorStop(1,"rgba(255,160,40,0)");
