@@ -404,7 +404,7 @@ function fitField(){
   var w = f.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
   var hh = f.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
   var gap = Math.max(6, Math.min(14, w*.025)), bestW = 0, bc = 4;
-  [4,3,2].forEach(function(c){
+  [8,4,3,2].forEach(function(c){   // 8 は 横むきの スマホ用（ひくい 画面では 1れつに ならべたほうが 札が 大きい）
     var r = Math.ceil(ON_FIELD/c);
     var cw = Math.min((w - gap*(c-1))/c, ((hh - gap*(r-1))/r) * 53/73, 150);
     if(cw > bestW + 1){ bestW = cw; bc = c; }
