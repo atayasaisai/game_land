@@ -819,7 +819,7 @@ $("choices").addEventListener("click", function(e){
     m.tries = Math.max(m.tries, 1);
     m.step = Math.min(STEPS - 1, m.step + 2);        // ばつとして2歩すすむ
     pose("damage", 900);
-    toast("ちがう！ " + (m.it.sub ? m.it.sub + " ではない" : "もういちど"), "ng");
+    toast("ちがう！ " + (m.it.sub ? "それは " + m.it.sub + " の しゅと では ないよ" : "もういちど"), "ng");
     syncMobs(); paintHUD();
   }
 });

@@ -204,11 +204,21 @@ function flag(id){
   return '<rect x="4.5" y="-.5" width="81" height="61" fill="#33312A"/>'
        + '<image href="flags/'+id+'.svg" x="5" y="0" width="80" height="60" preserveAspectRatio="none"/>';
 }
+// しゅとの問題は、旗を小さくして 下に国の名前を出す（旗が わからなくても こたえられるように）
+function flagNamed(c){
+  var fit = c.n.length > 7 ? ' textLength="84" lengthAdjust="spacingAndGlyphs"' : '';
+  return '<rect width="90" height="60" fill="#FFFCF2"/>'
+       + '<rect x="21.5" y=".5" width="47" height="36" fill="#33312A"/>'
+       + '<image href="flags/'+c.id+'.svg" x="22" y="1" width="46" height="35" preserveAspectRatio="none"/>'
+       + '<text x="45" y="53" text-anchor="middle" font-size="14" font-weight="900"'
+       + ' font-family="Zen Maru Gothic, sans-serif" fill="#33312A"'+fit+'>'+c.n+'</text>';
+}
 function build(kind){
   return C.map(function(c){
     return {
       key:c.id,
-      q:'<svg class="flagsvg" viewBox="0 0 90 60" role="img" aria-label="国旗">'+flag(c.id)+'</svg>',
+      q:'<svg class="flagsvg" viewBox="0 0 90 60" role="img" aria-label="'+(kind==="cap"?c.n+"の 国旗":"国旗")+'">'
+        +(kind==="cap"?flagNamed(c):flag(c.id))+'</svg>',
       a:(kind==="cap")?c.cap:c.n,
       sub:(kind==="cap")?c.n:"",
       lv:c.lv, reg:c.reg, note:c.note||""
