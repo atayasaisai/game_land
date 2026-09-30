@@ -36,6 +36,15 @@ body{margin:0;padding:0 0 46px;background:#16202b;color:#f4e9d2;font-family:"Zen
 .note{margin:0;font-size:.8rem;font-weight:700;color:#9fb1c2;line-height:1.7}
 .screen{border:6px solid #3a2113;border-radius:16px;overflow:hidden;box-shadow:0 18px 40px -12px rgba(0,0,0,.8),inset 0 0 0 3px #8a5a33}
 .screen svg{display:block;width:100%;height:auto}
+.dock2{display:none}
+@media(max-width:700px){
+  .dock2{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px}
+  .dock2 button{min-height:48px;padding:4px 2px;border:3px solid #2f1b0d;border-radius:12px;background:linear-gradient(#f6e7c8,#e2c792);
+    color:#3a2113;font-weight:900;font-size:.82rem;line-height:1.25;box-shadow:0 3px 0 #2f1b0d}
+  .dock2 button:active{transform:translateY(2px);box-shadow:0 1px 0 #2f1b0d}
+  .dock2 .d-atk{background:linear-gradient(#e8604f,#c0392b);color:#fff}
+  .dock2 .d-reg{grid-column:span 2;background:linear-gradient(#8a5a33,#5d3920);color:#fff}
+}
 
 .hint{margin:2px 0 -4px;font-size:.78rem;font-weight:900;color:#ffd978;text-align:center}
 .win{background:linear-gradient(180deg,#7a4d2b,#5d3920);border:5px solid #2f1b0d;border-radius:14px;padding:0 0 14px;
@@ -266,9 +275,19 @@ dialog.gdlg::backdrop{background:rgba(8,14,20,.72);backdrop-filter:blur(3px);}
   <a class="back" href="../">◀ あたやさいさいゲームランドへ</a>
   <header class="hdr">
     <img class="logo" src="logo.jpg" alt="借金退治クエスト ― モンスターから王国を守れ">
-    <p class="note"><span class="beta">β版</span>道は「日付」そのもの。返済日に向かって子分が毎日ちかづいてきます。まず右下の「借金モンスター 登録／設定」から、借金・固定費・収入・口座残高を入れてください。下のコマンドで、こうげき（返済）・カレンダー・戦況・予言が使えます。</p>
+    <p class="note"><span class="beta">β版</span>道は「日付」そのもの。返済日に向かって子分が毎日ちかづいてきます。まず下の「借金モンスター 登録／設定」から、借金・固定費・収入・口座残高を入れてください。下のコマンドで、こうげき（返済）・カレンダー・戦況・予言が使えます。</p>
   </header>
   <div class="screen"><svg id="game" viewBox="0 0 1200 808" role="img" aria-label="返済予定が日付の道を進んで城に迫る戦場画面"></svg></div>
+  <!-- スマホ：絵の中の コマンドは 小さすぎるので、絵の下に ふつうの ボタンとして ならべる -->
+  <nav class="dock2" id="dock2" aria-label="コマンド">
+    <button data-cmd="attack" class="d-atk">⚔️ こうげき</button>
+    <button data-cmd="lane">接近レーン</button>
+    <button data-cmd="cal">カレンダー</button>
+    <button data-cmd="war">戦況</button>
+    <button data-cmd="orb">予言</button>
+    <button data-cmd="backup">保存・呼出</button>
+    <button data-cmd="reg" class="d-reg">借金モンスター 登録／設定</button>
+  </nav>
   <p class="foot">記録はこの端末のブラウザにだけ保存され、どこにも送られません。利息や完済時期は概算です。<br>β版のため、表示や計算を今後変えることがあります。ときどき「保存・呼出」からファイルに保存しておいてください。</p>
 </div>
 <dialog id="dlgLane" class="gdlg"><div class="gwin"><div class="gwt"><span class="wo">4</span>接近レーン（45日ぶん）<button class="gx" data-close>✕</button></div>
@@ -1564,7 +1583,13 @@ function fillSim(){
 }
 /* ===== イベント配線 ===== */
 function wire(){
-  el("game").addEventListener("click",function(ev){
+  // スマホは 絵の 下の コマンド（絵の中の コマンドの 帯は 切りおとす）
+  var NARROW=matchMedia("(max-width:700px)");
+  function fitView(){el("game").setAttribute("viewBox",NARROW.matches?"0 0 1200 664":"0 0 1200 808");}
+  fitView();if(NARROW.addEventListener)NARROW.addEventListener("change",fitView);
+  el("dock2").addEventListener("click",onCmd);
+  el("game").addEventListener("click",onCmd);
+  function onCmd(ev){
     var g=ev.target.closest?ev.target.closest("[data-cmd]"):null;
     if(!g)return;
     var c=g.getAttribute("data-cmd");
@@ -1575,7 +1600,7 @@ function wire(){
     else if(c==="orb"){fillSim();openDlg("dlgSim");}
     else if(c==="reg"){editing=null;regTab="debt";fillRegister();openDlg("dlgReg");}
     else if(c==="backup"){fillBackup();openDlg("dlgBackup");}
-  });
+  }
   document.addEventListener("click",function(ev){
     var t=ev.target;
     if(t.hasAttribute&&t.hasAttribute("data-close")){t.closest("dialog").close();return;}
