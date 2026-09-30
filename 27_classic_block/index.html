@@ -142,6 +142,12 @@ details.credit a{color:var(--sub)}
 .ib{flex:none;width:40px;height:40px;border-radius:12px;border:1px solid rgba(255,230,190,.25);background:rgba(255,240,220,.08);font-size:1.05rem;display:grid;place-items:center;padding:0}
 .ib:active{transform:scale(.94)}
 #cv{display:block;border-radius:14px;touch-action:none;box-shadow:0 0 0 3px #6b4424,0 0 0 6px #2a170c,0 16px 40px rgba(0,0,0,.6);cursor:none}
+.turn{display:none;position:absolute;inset:0;z-index:5;background:rgba(20,10,6,.94);color:#fff;text-align:center;place-items:center;padding:16px}
+.turn .ph{display:block;font-size:44px;animation:turnph 1.6s ease-in-out infinite}
+.turn b{display:block;font-size:1.3rem;margin:6px 0}
+.turn small{display:block;font-size:.8rem;color:var(--sub)}
+@keyframes turnph{0%,30%{transform:rotate(90deg)}60%,100%{transform:rotate(0)}}
+@media (orientation:landscape) and (max-height:500px) and (hover:none){.turn{display:grid}}
 
 /* ---------- 重ねる板（しょうかい・ざんねん） ---------- */
 .ov{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;padding:16px;
@@ -220,6 +226,7 @@ details.credit a{color:var(--sub)}
     <button class="ib" id="bSnd" aria-label="音">🔊</button>
   </div>
   <canvas id="cv" width="480" height="760"></canvas>
+  <div class="turn" id="turn"><div><span class="ph">📱</span><b>スマホを たてに してね</b><small>よこむきだと 画面が 小さく なりすぎるので、ひとやすみ しています</small></div></div>
 </section>
 
 <!-- ===== しょうかい ===== -->
@@ -578,7 +585,10 @@ function fit(){
   var dpr=Math.min(window.devicePixelRatio||1,2);
   cv.width=Math.round(w*dpr);cv.height=Math.round(w*H/W*dpr);K=cv.width/W;
 }
-addEventListener("resize",function(){if(!$("#game").hidden)fit();});
+addEventListener("resize",function(){if(!$("#game").hidden){fit();if(TURN.matches)togglePause(true);}});
+/* スマホを よこに したら「たてに してね」を 出して、ゲームを とめておく（もどしたら ▶ で つづき） */
+var TURN=matchMedia("(orientation:landscape) and (max-height:500px) and (hover:none)");
+TURN.addEventListener("change",function(e){if(e.matches&&!$("#game").hidden)togglePause(true);});
 
 function startStage(i){
   var s=STAGES[i],done=!!rec.c[s.id];audio();
