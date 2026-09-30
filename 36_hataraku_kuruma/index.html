@@ -235,7 +235,7 @@ img{display:block}
 .fact{display:flex;gap:10px;align-items:flex-start;background:#fff;border:2.5px solid var(--dark);border-radius:14px;padding:8px 12px;font-size:.92rem;line-height:1.65}
 .fact .ic{flex:none;font-size:24px;line-height:1.2}
 .fact b{color:var(--red)}
-.rbtns{display:flex;gap:10px;justify-content:center;margin-top:18px;flex-wrap:wrap}
+.rbtns{display:flex;gap:10px;justify-content:center;margin:14px 0 6px;flex-wrap:wrap}
 </style>
 </head>
 <body>
@@ -351,12 +351,13 @@ img{display:block}
     <img class="rpic" id="rPic" alt="">
     <div class="stars" id="stars"></div>
     <div class="rrow" id="rrow"></div>
-    <div class="rnote" id="rwhy"></div>
-    <div class="facts" id="facts"></div>
+    <!-- ボタンは 説明の 札より 上に（スクロールせずに おせるように） -->
     <div class="rbtns">
       <button class="btn pri" id="againBtn">もういちど</button>
       <button class="btn" data-go="board">ミッション ボードへ</button>
     </div>
+    <div class="rnote" id="rwhy"></div>
+    <div class="facts" id="facts"></div>
   </div>
 </div></section>
 
@@ -529,7 +530,7 @@ function pickVeh(id,b){ac();if(b.classList.contains('no')||document.querySelecto
     const emg=m.drive&&DRV[m.drive].siren;
     ex.className='explain ok';ex.innerHTML=m.ok+'<button class="btn pri big go" id="goBtn">'+(emg?'🚨 しゅつどう！':'🚚 しゅっぱつ！')+'</button>';
     $('goBtn').onclick=()=>startMission(m);ex.scrollIntoView({behavior:'smooth',block:'nearest'})}
-  else{b.classList.add('no');sNG();ex.className='explain';ex.innerHTML=VEH[id].role+' '+((m.hint||{})[id]||'')+'<br><small>ほかの 車も 見てみよう。'+m.hintAll+'</small>'}}
+  else{b.classList.add('no');sNG();ex.className='explain';ex.innerHTML=VEH[id].role+' '+((m.hint||{})[id]||'')+'<br><small>ほかの 車も 見てみよう。'+m.hintAll+'</small>';ex.scrollIntoView({behavior:'smooth',block:'nearest'})}}   // まちがえた ときも 説明が 見える ところまで
 function startMission(m){if(m.drive)startDrive(m.drive);else OPS[m.id].start()}
 
 /* =====================================================================
@@ -613,6 +614,8 @@ function updDrive(dt){const d=D,C=d.C,TL=d.TL;if(d.done){d.done+=dt;if(d.done>70
     else{let stop=false;for(const s of d.sig){const gap=s.x-(c.x+150);if(gap>0&&gap<70&&sigState(s,d.t)!=='g')stop=true}   // まわりの 車も しんごうを まもる
       c.v=stop?Math.max(0,c.v-.2*dt):Math.min(c.v0,c.v+.05*dt)}
     c.x+=c.v*dt}
+  // 先に 走っていった 車が 目的地の 前に 着いて 映りこまないように、画面の 外で 目的地に ちかづいた 車は けす
+  if(!C.chase)d.cars=d.cars.filter(c=>!(c.x>d.GOAL-1300&&c.x-d.x>W));
   let nx=d.x+d.v*dt;
   for(const c of d.cars){if(c.yo>-40&&c.x>front0-20&&nx+TL>c.x-14){nx=c.x-14-TL;d.v=Math.min(d.v,c.v);d.block+=dt;
       if(C.siren&&!d.hint.block&&!d.siren){d.hint.block=true;toast('まえの 車が いて すすめない…<br><b>サイレン</b>を ならそう！','ng',3200);flashSiren()}}}
