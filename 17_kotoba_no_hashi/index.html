@@ -89,6 +89,7 @@ button{font-family:inherit;font-weight:700;cursor:pointer;color:inherit}
 .isl .best b{color:var(--ki);font-weight:400}
 .isl.weak{--c:var(--do)}
 .opt{margin-top:18px;text-align:center}
+.opt0{margin:0 0 16px}
 .opt h4{margin:0 0 8px;font-size:.8rem;letter-spacing:.14em;color:var(--sub)}
 .row{display:flex;flex-wrap:wrap;gap:9px;justify-content:center}
 .pick{background:#fff;border:2.5px solid var(--ink);border-radius:999px;padding:7px 16px;
@@ -256,16 +257,17 @@ button{font-family:inherit;font-weight:700;cursor:pointer;color:inherit}
   </div>
 
   <div class="panel">
-    <h3>どの島へ いく？<small>島を えらぶと はじまります（1つの島で 橋が10本）</small></h3>
-    <div class="islands" id="isles"></div>
-
-    <div class="opt">
+    <!-- こたえかたは 島を えらぶ 前に きめる（島を おすと すぐ はじまるため） -->
+    <div class="opt opt0">
       <h4>こたえかた</h4>
       <div class="row" id="modeRow">
         <button class="pick" type="button" data-mode="tile">もじふだ（やさしい）</button>
         <button class="pick" type="button" data-mode="kb">キーボード</button>
       </div>
     </div>
+    <h3>どの島へ いく？<small>島を えらぶと はじまります（1つの島で 橋が10本）</small></h3>
+    <div class="islands" id="isles"></div>
+
   </div>
 
   <p class="note">
@@ -759,11 +761,11 @@ function result(){
     + '<div class="stars">'+st+'</div>'
     + '<div class="rmeta">まちがい '+G.miss+'かい ／ ヒント '+G.help+'かい ／ '+secs+'びょう</div>'
     + (isNew ? '<span class="rnew">きろく こうしん！</span>' : '')
-    + '<ul class="wl">'+list+'</ul>'
     + '<div class="rbtns">'+nextBtn
     + '<button class="btn '+(nextBtn?"sub":"")+'" id="rAgain">もういちど</button>'
     + '<button class="btn sub" id="rHome">島をえらぶ</button>'
-    + '<a class="btn sub" href="../">ゲームランドへ</a></div>';
+    + '<a class="btn sub" href="../">ゲームランドへ</a></div>'
+    + '<ul class="wl">'+list+'</ul>';   // ボタンは 一覧より 上に（スクロールせずに おせるように）
   show("result"); $("result").scrollTop = 0;
   if(stars===3) confetti();
   var n = $("rNext"); if(n) n.onclick = function(){ start(String(+G.sidx+1)); };
