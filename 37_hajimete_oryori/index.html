@@ -111,6 +111,9 @@ img{display:block}
 @keyframes shake{25%{transform:translateX(-6px)}50%{transform:translateX(6px)}75%{transform:translateX(-4px)}}
 /* クイズ */
 .quiz{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;gap:10px;padding:14px}
+/* せつめいと クイズは 文が ふえると はみ出すので、4:3 の わくを やめて 中身に 合わせて のびる */
+.stage.grow{aspect-ratio:auto;min-height:min(56vw,400px);overflow:visible}
+.stage.grow .say,.stage.grow .quiz{position:relative;inset:auto;min-height:inherit}
 .quiz .q{font-weight:900;font-size:1.15rem;text-align:center;line-height:1.5}
 .quiz button{border:3px solid var(--dark);border-radius:14px;background:#fff;font-weight:900;font-size:1rem;padding:10px 12px;text-align:left;line-height:1.4;box-shadow:0 3px 0 var(--dark)}
 .quiz button.ok{background:#E3FAEC;border-color:var(--ok)}.quiz button.ng{background:#FFE7E2;border-color:var(--ng)}
@@ -146,7 +149,7 @@ img{display:block}
 .aku{position:absolute;width:9%;aspect-ratio:1.4;border-radius:50%;background:radial-gradient(circle at 40% 40%,#fff,#E8D8B8 60%,#C8B08A);transform:translate(-50%,-50%);z-index:4;box-shadow:0 0 0 2px #fff8;animation:akup .4s}
 @keyframes akup{from{transform:translate(-50%,-50%) scale(.2)}}
 .fire{display:flex;gap:4px;background:#fff;border:3px solid var(--dark);border-radius:14px;padding:4px}
-.fire button,.fan{border:2px solid var(--dark);background:#fff;border-radius:10px;font-weight:900;padding:5px 9px;font-size:.9rem;line-height:1.2}
+.fire button,.fan{border:2px solid var(--dark);background:#fff;border-radius:10px;font-weight:900;padding:5px 9px;font-size:.9rem;line-height:1.2;min-height:44px;min-width:56px}
 .fire button.on{background:#FFE08A}.fire button[data-l=off].on{background:#E4E4E4}
 .fan.on{background:#CFF2FF}
 .chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;width:100%}
@@ -321,7 +324,7 @@ function finish(){const m=G.m,miss=G.miss,s=miss===0?3:miss<=2?2:1;const r=loadR
 const STEP={};
 
 /* せつめい：写真を ならべて 見せる */
-STEP.say=s=>{say(s.txt,s.sub);const st=$('stage');st.className='stage plain';
+STEP.say=s=>{say(s.txt,s.sub);const st=$('stage');st.className='stage plain grow';
   st.innerHTML=`<div class="say">${(s.pics||[]).map(k=>`<figure class="${s.pics.length===1?'one':''}"><img src="${picOf(k)}" alt=""${ART[k]?' style="object-fit:contain;padding:8px;background:#FFF8EA"':''}><figcaption>${nameOf(k)}</figcaption></figure>`).join('')}</div>`;nextBtn()};
 
 /* 写真を えらぶ（道具の 名前） */
@@ -335,7 +338,7 @@ STEP.pick=s=>{const ans=s.ans,others=shuffle((s.opts||Object.keys(TOOLS)).filter
     else{b.classList.add('ng','shake');sNG();if(!tried){tried=true;G.miss++}toast(`それは「${nameOf(k)}」。${TOOLS[k]||''}`,'ng')}})};
 
 /* クイズ（文） */
-STEP.quiz=s=>{say(s.q,s.sub,'🤔');const st=$('stage');st.className='stage plain';const ch=shuffle(s.c.map((t,i)=>({t,ok:i===0})));
+STEP.quiz=s=>{say(s.q,s.sub,'🤔');const st=$('stage');st.className='stage plain grow';const ch=shuffle(s.c.map((t,i)=>({t,ok:i===0})));
   st.innerHTML=`<div class="quiz">${ch.map((c,i)=>`<button data-i="${i}">${c.t}</button>`).join('')}</div>`;
   st.querySelectorAll('.quiz button').forEach(b=>b.onclick=()=>{if(st.dataset.done)return;st.dataset.done=1;const c=ch[+b.dataset.i];
     st.querySelectorAll('.quiz button').forEach(x=>{if(ch[+x.dataset.i].ok)x.classList.add('ok')});
@@ -620,7 +623,12 @@ const MIS=[
 {id:'dougu',title:'キッチンの どうぐ',sub:'しゃもじ・おたま・フライがえし…名前を おぼえよう',pic:'otama',
  learn:['しゃもじ＝ごはん、おたま＝しる、フライがえし＝やいた ものを うらがえす','けいりょうカップは 1カップ＝200mL、大さじ＝15mL・小さじ＝5mL','ざる＝水を きる、まないた＝切る ときの 台'],
  steps:()=>[{t:'say',txt:'りょうりの まえに、どうぐの 名前を おぼえよう！',sub:'「○○ とって！」と たのまれたら、写真から えらんでね',pics:['shamoji','otama','furaigaeshi']},
-   ...shuffle(Object.keys(TOOLS).filter(k=>!['gasu','ih','kankisen','suihanki'].includes(k))).slice(0,9).map(k=>({t:'pick',ans:k,q:`「${nameOf(k)}」 とって！`}))]},
+   ...(ks=>[   // 出題する 9つを 先に ぜんぶ 見せてから（見せていない 道具を 聞かないように）、じゅんばんを かえて 聞く
+     {t:'say',txt:'きょう つかう どうぐ ①',sub:'名前と 形を よく 見てね',pics:ks.slice(0,3)},
+     {t:'say',txt:'きょう つかう どうぐ ②',sub:'名前と 形を よく 見てね',pics:ks.slice(3,6)},
+     {t:'say',txt:'きょう つかう どうぐ ③',sub:'さあ、「○○ とって！」に こたえられるかな？',pics:ks.slice(6,9)},
+     ...shuffle(ks.slice()).map(k=>({t:'pick',ans:k,q:`「${nameOf(k)}」 とって！`}))
+   ])(shuffle(Object.keys(TOOLS).filter(k=>!['gasu','ih','kankisen','suihanki'].includes(k))).slice(0,9))]},
 {id:'konro',title:'コンロと かんきせん',sub:'ガス・IH の つかいかたと 火の あんぜん',pic:'gasu',
  learn:['火を つける まえに かんきせん','中火＝ほのおの 先が なべの そこに とどく くらい','なべの とっては 手前に 出さない','ガスの においが したら、スイッチに さわらず まどを あけて おとなに','あぶらの 火に 水は ぜったい かけない'],
  steps:()=>[{t:'say',txt:'りょうりの 火は、ガスコンロ か IHクッキングヒーター',sub:'けむりや においは かんきせんで 外へ だすよ',pics:['gasu','ih','kankisen']},
