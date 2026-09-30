@@ -400,6 +400,8 @@ function nextPlate(){
   $('#bub').textContent=['へい、らっしゃい！ この さかな なあに？','つぎ、いくよ！ この さかなは？','おっ、きたきた！ なんだと おもう？','よく 見てね！ この さかなは？'][G.i%4];
   $('#chs').innerHTML=q.opts.map((o,i)=>`<button class="ch" data-k="${o.k}">${o.n}</button>`).join('');
   $('#chs').querySelectorAll('.ch').forEach(b=>b.onclick=()=>answer(b.dataset.k));
+  // えらぶ 4つが 画面の 下に かくれていたら、おさらが くる 前に そこまで うごかしておく（10びょうの あいだに スクロールしなくて よいように）
+  {const c=$('#chs');if(c.getBoundingClientRect().bottom>innerHeight)c.scrollIntoView({block:'end'});}
   $('#fb').className='fb';$('#fb').innerHTML='';
   drawHud();
   G.live=true;G.x=$('#lane').clientWidth+8;          // 列車の 左はし（レーンの 右の 外から）

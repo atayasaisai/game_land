@@ -99,7 +99,7 @@ img{display:block}
 .found b{display:block;font-size:1.05rem;font-variant-numeric:tabular-nums;color:var(--orange)}
 
 /* 売り場：写真が 台の 上を 右から すべってきて、まんなかで 止まる（写真は 大きく 見やすく） */
-.scene{--W:min(94vw,560px,64dvh);position:relative;height:calc(var(--W) * .75 + 70px);margin:0 calc(50% - 50vw);overflow:hidden;background:#EFE6D0}
+.scene{--W:min(94vw,560px,64dvh,max(220px,calc((100dvh - 320px) * 4 / 3)));position:relative;height:calc(var(--W) * .75 + 70px);margin:0 calc(50% - 50vw);overflow:hidden;background:#EFE6D0}
 .scene .shop{filter:saturate(1.05) blur(1.5px) brightness(1.08)}
 .scene .fade{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:1}
 .scene .fade.on{animation:aisle .6s ease-out}
@@ -157,7 +157,7 @@ img{display:block}
 .dots i{width:13px;height:13px;border-radius:50%;border:2px solid var(--dark);background:#FFF6E6;font-style:normal}
 .dots i.ok{background:var(--ok)} .dots i.ng{background:var(--ng)} .dots i.now{background:var(--gold);animation:beat .9s ease-in-out infinite}
 
-.q{text-align:center;font-family:"Mochiy Pop One",sans-serif;font-size:1.05rem;margin:4px 0 8px;color:var(--leaf2)}
+.q{text-align:center;font-family:"Mochiy Pop One",sans-serif;font-size:1.05rem;margin:10px 0 8px;color:var(--leaf2)}
 .chs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .ch{font-size:clamp(.95rem,4.4vw,1.25rem);font-weight:900;padding:14px 4px;border-radius:16px;border:3px solid var(--dark);background:#fff;
   box-shadow:0 5px 0 var(--dark);transition:transform .1s,background .15s;line-height:1.3;word-break:keep-all;overflow-wrap:anywhere}
@@ -286,15 +286,16 @@ details.credit a{color:var(--sub);word-break:break-all}
     <div class="card" id="card"></div>
   </div>
   <div class="wrap">
+    <!-- えらぶ ボタンは 写真の すぐ下（10びょうの あいだに スクロールしなくても 4つとも 見えるように） -->
+    <p class="q">この やさいの 名前は？</p>
+    <div class="chs" id="chs"></div>
+    <div class="fb" id="fb"></div>
     <div class="talk"><img class="face" id="talkFace" src="art/i_tomato.png" alt=""><span class="bubble" id="bub">さあ、お買い物に 出発！</span></div>
     <div class="note">
       <span class="lb">かごの<br>中</span>
       <div class="shots" id="shots"></div>
       <div class="dots" id="dots"></div>
     </div>
-    <p class="q">この やさいの 名前は？</p>
-    <div class="chs" id="chs"></div>
-    <div class="fb" id="fb"></div>
   </div>
 </section>
 
@@ -448,7 +449,8 @@ function run(){
         const d=G.x-xStop;
         G.x-=Math.max(140,d*3)*dt;               // はじめは はやく、だんだん ゆっくり
         if(G.x<=xStop+1){G.x=xStop;G.phase='stop';G.live=true;
-          $('#chs').querySelectorAll('.ch').forEach(b=>b.disabled=false);}
+          $('#chs').querySelectorAll('.ch').forEach(b=>b.disabled=false);
+          const c=$('#chs');if(c.getBoundingClientRect().bottom>innerHeight)c.scrollIntoView({block:'end'});}   // 横むきの スマホなど、画面が ひくい ときは えらぶ ボタンまで うごかす
         else if(d<W*.5&&!G.come){G.come=1;SE.come();}
       }
     }else if(G.phase==='stop'){
