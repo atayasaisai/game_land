@@ -224,6 +224,21 @@ button{font-family:inherit;font-weight:700;cursor:pointer;color:inherit}
   .pad{padding:12px 12px 34px}
   .scene{min-height:190px}
 }
+/* スマホを 横に したとき：たかさが たりないので、こたえる所を ひくく まとめる（ふだは 1れつ・キーは ひくく） */
+@media (orientation:landscape) and (max-height:500px){
+  .hud{padding:4px 10px}
+  .scene{min-height:0}
+  .walker{width:92px}
+  .jp{padding:3px 12px;font-size:.9rem}
+  .jp small{display:none}
+  .pad2{padding:4px 8px calc(6px + env(safe-area-inset-bottom,0px))}
+  .tools{margin-bottom:4px}
+  .hintb{padding:1px 12px}
+  .tiles{max-width:none;gap:6px}
+  .tile{width:44px;height:42px;font-size:1.35rem;box-shadow:0 3px 0 var(--woodd)}
+  .kb{gap:4px}
+  .key{height:32px;max-width:48px;font-size:1rem}
+}
 @media (prefers-reduced-motion: reduce){
   *{animation:none!important;transition:none!important}
 }
@@ -542,9 +557,9 @@ function setQ(first){
     + planks(pre)
     + '<span class="gap">'+slots+(glue?'<span class="plank p en">'+esc(glue)+'</span>':'')+'</span>'
     + planks(post) + '<span class="fill-r"></span></div>';
+  paintInput();          // こたえる所を 先に つくる（その 高さが きまってから、いみの 札の 位置を きめる）
   fitBridge();
   placeWalker(false);
-  paintInput();
   markCur();
   if(!first){
     var stg = $("stage"); stg.classList.add("in");
