@@ -434,7 +434,9 @@ $("menu").addEventListener("click",function(e){
 /* ---------- 画面の きりかえ ---------- */
 var G=null,timers=[];
 function later(f,ms){timers.push(setTimeout(f,ms));}
-function stopAll(){timers.forEach(clearTimeout);timers=[];if(R){cancelAnimationFrame(R.raf);R=null;}cancelAnimationFrame(singRaf);}
+function stopAll(){timers.forEach(clearTimeout);timers=[];if(R){cancelAnimationFrame(R.raf);R=null;}cancelAnimationFrame(singRaf);cutSound();}
+/* 先まで よやくしてある 音（リズムの カチカチ・おてほんの ポク）を まとめて けす：出口の つまみを つけかえる */
+function cutSound(){if(!AC||!master)return;try{master.disconnect();}catch(e){}master=AC.createGain();master.gain.value=.8;master.connect(AC.destination);}
 function showGame(title,piano){
   $("title").hidden=true;$("game").hidden=false;$("res").hidden=true;
   $("gTitle").innerHTML=mu(title);$("piano").hidden=!piano;$("bLab").hidden=!piano;$("bLab").setAttribute("aria-pressed",showLab);
