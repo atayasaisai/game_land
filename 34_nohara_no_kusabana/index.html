@@ -151,7 +151,7 @@ img{display:block}
 .dots i{width:13px;height:13px;border-radius:50%;border:2px solid var(--dark);background:#FFF6E6;font-style:normal}
 .dots i.ok{background:var(--ok)} .dots i.ng{background:var(--ng)} .dots i.now{background:var(--gold);animation:beat .9s ease-in-out infinite}
 
-.chs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.chs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
 .ch{font-size:clamp(.95rem,4.4vw,1.25rem);font-weight:900;padding:14px 4px;border-radius:16px;border:3px solid var(--dark);background:#fff;
   box-shadow:0 5px 0 var(--dark);transition:transform .1s,background .15s;line-height:1.3;word-break:keep-all;overflow-wrap:anywhere}
 .ch.long{font-size:clamp(.78rem,3.6vw,1.05rem);letter-spacing:-.02em}
@@ -225,15 +225,16 @@ details.credit a{color:var(--sub);word-break:break-all}
   <h1 class="hero"><img src="art/title.jpg" alt="野原の草花を見に行こう！" width="1200" height="675"></h1>
 
   <div class="tpanel">
-    <div class="greet"><img class="face" src="art/boy.jpg" alt="たんけんたい の 男の子">
-      <p class="bubble"><span class="hi">さあ、さんぽに 出発！</span>のはらを 歩いていると、<b>ふわ〜っと 写真が とんでくる</b>よ。
-       止まったら「これは なんだろう？」。<b>草花や 木の 名前</b>を 4つから えらんでね。</p></div>
+    <!-- コースの ボタンは 上のほうに（スクロールしなくても えらべるように） -->
     <div class="tbtns">
       <button class="stg c1" data-course="kusa"><span class="ic">🌼</span><span><b>草花の みち</b><small>10まい。道ばたや のはらの 草花</small></span><span class="rec" id="rec_kusa"></span></button>
       <button class="stg c2" data-course="ki"><span class="ic">🌳</span><span><b>木の みち</b><small>10まい。花や 葉や 実で 木を あてる</small></span><span class="rec" id="rec_ki"></span></button>
       <button class="stg c3" data-course="oku"><span class="ic">⛰️</span><span><b>おく山の みち</b><small>10まい。草花も 木も。むずかしいのも 出る</small></span><span class="rec" id="rec_oku"></span></button>
       <button class="stg c4" id="zukanBtn"><span class="ic">📖</span><span><b>のはら ずかん</b><small>あてた 草花と 木が あつまる</small></span><span class="rec" id="recZukan"></span></button>
     </div>
+    <div class="greet"><img class="face" src="art/boy.jpg" alt="たんけんたい の 男の子">
+      <p class="bubble"><span class="hi">さあ、さんぽに 出発！</span>のはらを 歩いていると、<b>ふわ〜っと 写真が とんでくる</b>よ。
+       止まったら「これは なんだろう？」。<b>草花や 木の 名前</b>を 4つから えらんでね。</p></div>
     <p class="grade" id="kinds"></p>
     <a class="backlink" href="../">◀ あたやさいさいゲームランドへ もどる</a>
   </div>
@@ -254,14 +255,15 @@ details.credit a{color:var(--sub);word-break:break-all}
     <div class="card" id="card"></div>
   </div>
   <div class="wrap">
+    <!-- えらぶ ボタンは 写真の すぐ下（10びょうの あいだに スクロールしなくても 4つとも 見えるように） -->
+    <div class="chs" id="chs"></div>
+    <div class="fb" id="fb"></div>
     <div class="talk"><img class="face" id="talkFace" src="art/risu.jpg" alt=""><span class="bubble" id="bub">さあ、出発！</span></div>
     <div class="note">
       <span class="lb">さんぽ<br>ノート</span>
       <div class="shots" id="shots"></div>
       <div class="dots" id="dots"></div>
     </div>
-    <div class="chs" id="chs"></div>
-    <div class="fb" id="fb"></div>
   </div>
 </section>
 
