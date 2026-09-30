@@ -109,7 +109,7 @@ button{font-family:inherit;color:inherit;cursor:pointer}
 .stg small{display:block;font-size:.74rem;color:var(--sub);line-height:1.5}
 .stg .rec{flex:none;color:var(--gold);font-size:.8rem;letter-spacing:.03em;white-space:nowrap;text-align:right;line-height:1.4}
 .stg .rec i{display:block;color:var(--faint);font-style:normal;font-size:.68rem}
-.stg .rd{display:block;margin-top:4px;font-size:.7rem;color:var(--ink);border:1px solid rgba(255,215,106,.5);border-radius:999px;padding:1px 9px}
+.stg .rd{display:block;margin-top:6px;font-size:.78rem;color:var(--ink);border:1px solid rgba(255,215,106,.6);border-radius:999px;padding:8px 12px;min-height:36px;background:rgba(255,215,106,.12)}
 .stg .rd:hover{background:rgba(255,215,106,.2)}
 .stg.boss{border-color:rgba(255,107,91,.45);background:rgba(255,107,91,.08)}
 .stg.boss .n{color:var(--red)}
@@ -157,13 +157,13 @@ details.credit a{color:var(--sub)}
 @keyframes pop{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
 .frame{display:inline-block;padding:9px;border-radius:6px;background:linear-gradient(135deg,#f5d77a,#b8862c 40%,#f2d27a 60%,#8f6420);
   box-shadow:0 8px 20px rgba(0,0,0,.5), inset 0 0 0 2px #6b4a14}
-.frame img{display:block;width:min(240px,60vw);height:auto;border:2px solid #5a3c10}
+.frame img{display:block;width:min(240px,60vw,28dvh);height:auto;border:2px solid #5a3c10}
 .box h2{font-family:"Mochiy Pop One",sans-serif;font-weight:400;font-size:1.35rem;margin:12px 0 0;line-height:1.35;color:var(--gold)}
 .box .meta{font-size:.8rem;color:var(--sub);margin:2px 0 10px}
 .box .song{display:inline-block;font-size:.84rem;background:rgba(255,215,106,.12);border:1px solid rgba(255,215,106,.35);border-radius:10px;padding:4px 12px;margin-bottom:10px}
 .box .about{text-align:left;font-size:.92rem;line-height:1.9;margin:0 0 8px}
 .box .pd{font-size:.68rem;color:var(--faint);text-align:left;margin:6px 0 12px;line-height:1.6}
-.box .btns{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.box .btns{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;position:sticky;bottom:-20px;padding:10px 0 4px;background:linear-gradient(rgba(34,20,11,0),#22140b 30%)}   /* 長い しょうかい文でも ボタンが いつも 見える */
 .box .big{font-family:"Mochiy Pop One",sans-serif;font-size:1.6rem;color:var(--gold);margin:4px 0}
 .box .score{font-size:.9rem;color:var(--sub);margin-bottom:12px}
 .box .score b{color:var(--ink);font-size:1.2rem}
