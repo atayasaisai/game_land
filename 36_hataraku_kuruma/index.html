@@ -198,6 +198,28 @@ img{display:block}
 .ctrl.grid .pad.act2{grid-column:1/-1}
 .help{max-width:960px;margin:10px auto 0;display:flex;gap:10px;align-items:center;background:#fff;border:3px solid var(--dark);border-radius:14px;padding:8px 12px;font-size:.9rem;box-shadow:0 3px 0 var(--dark)}
 .help .ic{font-size:28px}
+/* スマホを 横に したとき：ボタンを 絵の 右に たてに ならべ、絵と ボタンを 1画面に 入れる */
+@media (orientation:landscape) and (max-height:500px){
+  #play{padding-top:4px}
+  #play .wrap{display:grid;grid-template-columns:minmax(0,1fr) 170px;grid-template-rows:auto auto auto;gap:4px 8px;padding-bottom:4px}
+  #play .quitbar{grid-column:2;grid-row:1;margin:0;justify-self:end}
+  #play .hud{grid-column:1;grid-row:1;margin:0;flex-wrap:nowrap}
+  #play .hud .meter{min-width:60px;height:18px}
+  #play .chip{padding:0 8px;font-size:.85rem}
+  #play .stage{grid-column:1;grid-row:2;width:min(100%,calc((100dvh - 56px) * 16 / 9));justify-self:center;margin:0}
+  #play .ctrl{grid-column:2;grid-row:2;flex-direction:column;margin:0;gap:8px}
+  #play .ctrl.grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  #play .ctrl.grid .pad{font-size:.85rem;padding:6px 2px}
+  #play .ctrl .pad{padding:8px 4px;font-size:1rem}
+  #play .ctrl .pad small{display:none}
+  #play .ctrl .pad.accel{flex:1.6}
+  #play .help{grid-column:1/-1;grid-row:3;margin:0;padding:4px 10px;font-size:.8rem}
+  #play .help .ic{font-size:20px}
+  /* F1 は 上の 帯が 2本 あるので、2本目を 絵の 下へ（せつめいの 文は 横むきの ときは かくす） */
+  #play #hudRace2{grid-row:3}
+  #play .wrap:has(#hudRace2:not([hidden])) .help{display:none}
+  #play .wrap:has(#hudRace2:not([hidden])) .stage{width:min(100%,calc((100dvh - 90px) * 16 / 9))}
+}
 
 /* ---------- けっか ---------- */
 #result{padding-top:16px}
