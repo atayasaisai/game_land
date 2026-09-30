@@ -88,13 +88,14 @@ button{font-family:inherit;font-weight:700;cursor:pointer}
 .hud{position:absolute;left:0;right:0;top:0;display:flex;justify-content:space-between;align-items:flex-start;padding:8px 10px;pointer-events:none;gap:8px}
 .chip{background:rgba(255,252,240,.92);border:2.5px solid var(--ink);border-radius:999px;padding:2px 12px;font-size:clamp(.72rem,2.2vw,1rem);box-shadow:0 3px 0 var(--ink);white-space:nowrap}
 .chip b{font-family:"Mochiy Pop One",sans-serif;font-weight:400;font-size:1.25em;color:var(--do)}
-.hud .r{display:flex;gap:6px;pointer-events:auto}
+.hud .r{display:flex;gap:10px;pointer-events:auto}
 .hud .l{display:flex;gap:6px}
 .hearts{color:#E8394D;letter-spacing:.05em}
 .hearts[hidden]{display:none}
 .hearts i{font-style:normal}
 .hearts i.e{color:rgba(60,40,30,.25)}
 .hearts.pop{animation:lpop .45s cubic-bezier(.2,1.8,.4,1)}
+.icon.ask{width:auto!important;border-radius:999px;padding:0 10px;background:#E0503A;color:#fff;font-weight:900}
 .icon{width:34px;height:34px;border-radius:50%;border:2.5px solid var(--ink);background:#fff;box-shadow:0 3px 0 var(--ink);font-size:.95rem;padding:0;line-height:1}
 .banner{position:absolute;left:50%;top:30%;transform:translate(-50%,-50%);font-family:"Mochiy Pop One",sans-serif;font-size:clamp(1.1rem,4.4vw,2.2rem);
   color:#fff;white-space:nowrap;pointer-events:none;opacity:0;
@@ -110,7 +111,7 @@ button{font-family:inherit;font-weight:700;cursor:pointer}
 @media (max-width:560px){
   .hud{padding:5px 6px;gap:4px}
   .chip{padding:1px 8px;border-width:2px;box-shadow:0 2px 0 var(--ink)}
-  .icon{width:26px;height:26px;font-size:.75rem;border-width:2px;box-shadow:0 2px 0 var(--ink)}
+  .icon{width:34px;height:34px;font-size:.85rem;border-width:2px;box-shadow:0 2px 0 var(--ink)}
   .sp-lab{display:none}
 }
 .turn{display:none;color:#cfd6f0;font-size:.8rem;text-align:center;margin:4px 0 0}
@@ -226,13 +227,13 @@ button.zc:active{transform:scale(.95)}
 
   <div class="tpanel">
     <p>にんじゃくんが まちを 走るよ。<br>そうさは <b>ジャンプ</b> だけ！<span class="kb">（<span class="key">スペース</span> か <span class="key">↑</span> でも とべる）</span></p>
+    <div class="row modes"><button class="btn" id="startBtn">ふつうに はしる ▶</button><button class="btn eg" id="eigoBtn">えいごモード ▶</button></div>
     <div class="how2">
       <div class="j"><b>とぶ！</b>はこや どうぶつは<br>ジャンプで とびこえる<div class="obrow" id="obJ"></div></div>
       <div class="r"><b>とばない！</b>上が ふさがって いたら<br>そのまま 下を 走りぬける<div class="obrow"><div class="stk" id="obR"></div></div></div>
     </div>
     <p style="font-size:.92rem">ゴールは ないよ。<b>ずっと つづいて</b>、どんどん <b>はやく</b> なる！<br>どこまで 走れるかな？</p>
     <p class="best" id="tBest"></p>
-    <div class="row modes"><button class="btn" id="startBtn">ふつうに はしる ▶</button><button class="btn eg" id="eigoBtn">えいごモード ▶</button></div>
     <div class="eigo">
       <b class="etag">えいごモード（えいごアイテム）</b>
       <p>画面の 上に <b>おだい</b>（🐱 ねこ など）が 出るよ。<br>おちている <b>アルファベット</b>を えいごの つづりの <b>じゅんばんに ひろおう</b>。<br>
@@ -635,7 +636,7 @@ function gameOver(){
   const msgs=[[3000,"かみわざ！ もう だれにも とめられない！"],[1500,"ちょうじん にんじゃ！ 目にも とまらぬ はやさだ！"],[850,"すごすぎる！ でんせつの にんじゃだ！"],[600,"すごい！ おしろも こえたね！"],[300,"やったね！ つぎの まちまで いけたよ"],[100,"いいぞ！ もっと さきへ いこう"],
     [0, tunnel?"トンネルは とばずに そのまま 走りぬけよう！":"じゃまものは ジャンプで とびこえよう！"]];
   $("rMsg").textContent=(rec&&best?`まえの さいこうは ${best} m。`:"")+msgs.find(x=>m>=x[0])[1];
-  if(mode==="eigo"){ const ws=Object.keys(made); $("rMsg").textContent+= ws.length? `　つくった ことば：${ws.map(w=>w+(made[w]>1?"×"+made[w]:"")).join("・")}` : "　S から じゅんばんに ひろって ことばを つくろう！"; }
+  if(mode==="eigo"){ const ws=Object.keys(made); $("rMsg").textContent+= ws.length? `　つくった ことば：${ws.map(w=>w+(made[w]>1?"×"+made[w]:"")).join("・")}` : "　おだいの つづりの じゅんばんに もじを ひろって、ことばを つくろう！"; }
   $("result").classList.add("on");
   rec?SE.record():SE.over();
   setTimeout(()=>$("againBtn").focus({preventScroll:true}),50);
@@ -983,7 +984,11 @@ $("startBtn").onclick=()=>{ mode="normal"; start(); };
 $("eigoBtn").onclick=$("eigoBtn2").onclick=()=>{ mode="eigo"; start(); };
 $("zukan").addEventListener("click",e=>{ const b=e.target.closest(".zc[data-w]"); if(b) say(b.dataset.w,true); });
 $("soundBtn").onclick=toggleSound; $("hSound").onclick=e=>{e.stopPropagation();toggleSound();};
-$("hHome").onclick=e=>{e.stopPropagation();goTitle();};
+// ✕ は 2かい おして はじめて やめる（♪ と まちがえて おしても 走った きろくが きえないように）
+let homeAsk=0;
+$("hHome").onclick=e=>{e.stopPropagation();const b=$("hHome");
+  if(!b.classList.contains("ask")){b.classList.add("ask");b.textContent="やめる？";clearTimeout(homeAsk);homeAsk=setTimeout(()=>{b.classList.remove("ask");b.textContent="✕";},2500);return;}
+  clearTimeout(homeAsk);b.classList.remove("ask");b.textContent="✕";goTitle();};
 $("againBtn").onclick=e=>{e.stopPropagation();start();};
 $("homeBtn").onclick=e=>{e.stopPropagation();goTitle();};
 const jb=$("jumpBtn");
