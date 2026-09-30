@@ -353,7 +353,10 @@ function start(opt){
   var pool = shuffle(opt.pool.slice());
   pool.sort(function(a,b){ return (got[a.id]?1:0) - (got[b.id]?1:0); });
   var qs = shuffle(pool.slice(0, Math.min(PER_GAME, pool.length)));
-  var foe = FOES[Math.floor(Math.random()*FOES.length)];
+  // モンスターの名前が こたえに なる字（蝙蝠＝コウモリ など）が 出る回は、その モンスターを 出さない
+  var hira = function(s){ return s.replace(/[ァ-ヶ]/g, function(c){ return String.fromCharCode(c.charCodeAt(0)-0x60); }); };
+  var foes = FOES.filter(function(f){ var n = hira(FOE_NM[f]); return !qs.some(function(w){ return w.y===n; }); });
+  var foe = foes[Math.floor(Math.random()*foes.length)];
   G = {opt:opt, qs:qs, i:0, ok:0, hints:0, miss:[], done:[], foe:foe, busy:false, hinted:false};
   $("gName").textContent = opt.nm;
   $("foe").src = "mon/"+foe+".png"; $("foe").alt = FOE_NM[foe]; $("foe").className = "foe";
