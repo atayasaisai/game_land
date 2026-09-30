@@ -180,6 +180,9 @@ img.sage.hop{animation:hop .3s steps(2)}
   box-shadow:0 -3px 0 rgba(0,0,0,.08)}
 .card b{display:block;font-size:clamp(.6rem,2vw,.86rem);line-height:1.1;white-space:nowrap}
 .card b{padding:2px 0 4px}
+.card b.sn{white-space:normal;font-size:clamp(.78rem,3.2vw,1rem);line-height:1.15}
+.card b.sn small{display:block;font-size:.72em;margin-top:1px}
+.card b.sn rt{font-size:.5em;letter-spacing:0}
 .card:hover{transform:translateY(-6px)}
 .card:disabled{cursor:default;transform:none;filter:saturate(.4) opacity(.7)}
 .card.picked{filter:none;transform:translateY(-10px)}
@@ -291,7 +294,7 @@ img.sage.hop{animation:hop .3s steps(2)}
       おなじ人に なんども たのんでも いいよ。</p>
     <p class="small">だれに、<b>どの順番で</b> たのむかで、国の すがたが かわります。<br>めざせ、はってん 100%！</p>
     <p class="small">国に 建物が できたり 何かが おきたりすると、<br>左に 出る 札で <b>社会（地理・歴史・公民）の おはなし</b>が 読めるよ。</p>
-    <button class="btn pop" id="go">はじめる ▶</button>
+    <button class="btn pop" id="go" style="position:sticky;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:3">はじめる ▶</button>
     <p class="best" id="bestLine"></p>
     <p style="margin:10px 0 0;display:flex;gap:8px;justify-content:center;flex-wrap:wrap"><button class="btn sub" id="toZukan" style="font-size:.9rem;padding:6px 18px">見つけた けつまつ</button><button class="btn sub" id="toNote" style="font-size:.9rem;padding:6px 18px">しゃかいノート</button></p>
   </div>
@@ -603,7 +606,7 @@ function addLine(text, plus) {
 
 // ---- えらぶところ ----
 function buildChoices() {
-  $("choices").innerHTML = RULES.SAGES.map((s) => `<button class="card" type="button" data-id="${s.id}"><span class="pic">${ART.sage(s.id)}</span><span class="plate"><b>${s.name}</b></span></button>`).join("");
+  $("choices").innerHTML = RULES.SAGES.map((s) => `<button class="card" type="button" data-id="${s.id}" aria-label="${s.name}"><span class="pic">${ART.sage(s.id)}</span><span class="plate">${sageLabel(s.name)}</span></button>`).join("");
   $("choices").querySelectorAll(".card").forEach((b) => b.addEventListener("click", () => pick(b.dataset.id)));
   // えらぶ前だけ、ときどき だれかが ぴょこんと はねる（そうだん中は 動かさない）
   setInterval(() => { if (busy || !st || st.turn >= 6) return; const cards = $("choices").querySelectorAll(".card img"); if (!cards.length) return; const c = cards[Math.floor(Math.random() * cards.length)]; if (!c.classList.contains("talking")) { c.classList.add("hop"); setTimeout(() => c.classList.remove("hop"), 320); } }, 1600);
@@ -685,6 +688,13 @@ function showNote() {
   showScreen("noteScreen");
 }
 
+// 札の 名前：むずかしい 漢字に ふりがなを つけ、「〇〇」と「の賢者」の 2だんに する（スマホで 札が せまいため）
+const SAGE_YOMI = { "力": "ちから", "知恵": "ちえ", "豊穣": "ほうじょう", "祈り": "いのり", "創造": "そうぞう", "繁栄": "はんえい" };
+function sageLabel(name){
+  const m = name.match(/^(.+)の賢者$/); if (!m) return `<b>${name}</b>`;
+  const k = m[1], y = SAGE_YOMI[k];
+  return `<b class="sn"><ruby>${k}${y ? `<rt>${y}</rt>` : ""}</ruby><small>の<ruby>賢者<rt>けんじゃ</rt></ruby></small></b>`;
+}
 // ---- はじめる ----
 function startGame() {
   st = RULES.newState(); busy = false; prevStats = null; clearHidden();
@@ -867,7 +877,7 @@ function showResult() {
 
 
   const el = $("endLearn"); el.style.display = st.learned.length ? "" : "none";
-  el.textContent = `この国で 見つけた しらべ札：${st.learned.length}まい（「国を 見る」で 左の 札が 読めるよ。「しゃかいノート」にも のこります）`;
+  el.textContent = `この国で 見つけた しらべ札：${st.learned.length}まい（「国を 見る」で 左に 出ている あたらしい 札が 読めるよ。ぜんぶの 札は タイトルの「しゃかいノート」で 読めます）`;
   const best = lsGet(LS_BEST, null); if (best === null || sc > best) lsSet(LS_BEST, sc);
   const z = lsGet(LS_ZUKAN, []); if (!z.includes(end.id)) { z.push(end.id); lsSet(LS_ZUKAN, z); }
 
@@ -888,7 +898,7 @@ function showHiddenResult(h) {
   $("endText").textContent = h.text; $("stats").style.visibility = h.kind === "isekai" ? "hidden" : "";
   $("endStats").textContent = h.kind === "isekai" ? "人口 ？　幸福度 ？　食料 ？　商業 ？　文化 ？　治安 ？" : RULES.STAT_NAMES.map(([k, n]) => `${n} ${k === "pop" ? "たくさん" : 100}`).join("　");
   const el = $("endLearn"); el.style.display = st.learned.length ? "" : "none";
-  el.textContent = `この国で 見つけた しらべ札：${st.learned.length}まい（「国を 見る」で 左の 札が 読めるよ。「しゃかいノート」にも のこります）`;
+  el.textContent = `この国で 見つけた しらべ札：${st.learned.length}まい（「国を 見る」で 左に 出ている あたらしい 札が 読めるよ。ぜんぶの 札は タイトルの「しゃかいノート」で 読めます）`;
   const z = lsGet(LS_ZUKAN, []); if (!z.includes(h.id)) { z.push(h.id); lsSet(LS_ZUKAN, z); }
   if (h.kind !== "isekai") SND.great();
   $("result").classList.add("on");
