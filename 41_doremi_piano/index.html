@@ -111,8 +111,9 @@ span.mu{font-size:1.6em;line-height:0;vertical-align:-.12em;margin:0 .05em}
 .dots{display:flex;gap:4px;margin-top:3px}
 .dots i{width:10px;height:10px;border-radius:50%;background:#e4d2ae}
 .dots i.ok{background:var(--green)}.dots i.ng{background:var(--red)}.dots i.now{background:var(--gold);box-shadow:0 0 0 2px #fff,0 0 0 4px var(--gold)}
-.stage{flex:1;width:100%;max-width:640px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:0;padding:6px 0}
+.stage{flex:1;width:100%;max-width:640px;display:flex;flex-direction:column;align-items:center;justify-content:safe center;gap:8px;min-height:0;padding:6px 0;overflow-y:auto}   /* safe：中身が 高いときに 上の ボタンに かぶらないように */
 .tip{width:100%;font-size:.8rem;color:var(--sub);background:rgba(255,255,255,.6);border-radius:12px;padding:5px 10px;line-height:1.5;text-align:left}
+@media (max-height:720px){.tip{font-size:.74rem;padding:3px 8px;line-height:1.4}}
 .q{font-family:"Mochiy Pop One",sans-serif;font-weight:400;font-size:clamp(1.1rem,4.6vw,1.5rem);margin:0;text-align:center;line-height:1.35}
 .paper{position:relative;width:100%;max-width:460px;background:var(--paper);border-radius:22px;border:3px solid #e2cda4;box-shadow:0 6px 0 #e2cda4;padding:4px 6px}
 .paper svg{display:block;width:100%;height:auto;touch-action:none}
@@ -147,6 +148,8 @@ span.mu{font-size:1.6em;line-height:0;vertical-align:-.12em;margin:0 .05em}
 /* ピアノ */
 .piano{width:100%;max-width:720px;background:linear-gradient(#7a2e22,#4a1a12);border-radius:16px 16px 12px 12px;padding:14px 8px 8px;box-shadow:0 6px 16px rgba(60,20,10,.35)}
 .kb{position:relative;display:flex;height:clamp(130px,30vh,210px);touch-action:none}
+.piano.scroll{overflow-x:auto}
+.piano.scroll .kb{touch-action:pan-x}
 .kw{flex:1;position:relative;background:linear-gradient(#fff 80%,#eee);border:1px solid #7a6a60;border-top:none;border-radius:0 0 8px 8px;margin:0 1px;
   display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding-bottom:8px;font-size:clamp(.6rem,2.6vw,.9rem);color:#8a7a6e;line-height:1.1;box-shadow:inset 0 -5px 0 #ddd}
 .kw .c4{width:7px;height:7px;border-radius:50%;background:var(--red);margin-bottom:5px}
@@ -382,13 +385,27 @@ function buildKB(lo,hi){
   }
   kb.innerHTML=h;kb.classList.toggle("nolab",!showLab);
   [].forEach.call(kb.querySelectorAll("[data-m]"),function(el){KB.keys[el.dataset.m]=el;});
+  // けんばんが おおくて 1つが 34px より せまく なるときは、けんばんを 横に スクロール できるように する（まんなかの ド を 見せる）
+  var pw=$("piano"),wide=n*34>pw.clientWidth-16;
+  kb.style.minWidth=wide?(n*34)+"px":"";pw.classList.toggle("scroll",wide);KB.wide=wide;
+  if(wide&&KB.keys[60])setTimeout(function(){var c=KB.keys[60];pw.scrollLeft=c.offsetLeft-pw.clientWidth/2+c.offsetWidth/2;},0);
 }
-$("kb").addEventListener("pointerdown",function(e){
-  var el=e.target.closest("[data-m]");if(!el)return;e.preventDefault();
+function pressKey(el){
   var m=+el.dataset.m;piano(m);el.classList.add("dn");setTimeout(function(){el.classList.remove("dn");},160);
   onKey(m,el);
+}
+var kbDown=null;
+$("kb").addEventListener("pointerdown",function(e){
+  var el=e.target.closest("[data-m]");if(!el)return;
+  if(KB&&KB.wide){kbDown={el:el,x:e.clientX,y:e.clientY};return;}   // スクロールの ときは はなした ときに きめる（よこに なぞっただけで 音が 答えに ならないように）
+  e.preventDefault();pressKey(el);
 });
-function keyFx(m,cls,ms){var el=KB&&KB.keys[m];if(!el)return;el.classList.add(cls);if(ms)setTimeout(function(){el.classList.remove(cls);},ms);}
+$("kb").addEventListener("pointerup",function(e){
+  if(!kbDown)return;var d=kbDown;kbDown=null;
+  if(Math.abs(e.clientX-d.x)<10&&Math.abs(e.clientY-d.y)<10)pressKey(d.el);
+});
+$("kb").addEventListener("pointercancel",function(){kbDown=null;});
+function keyFx(m,cls,ms){var el=KB&&KB.keys[m];if(!el)return;el.classList.add(cls);if(cls==="hint"&&KB.wide){var pw=$("piano");pw.scrollLeft=el.offsetLeft-pw.clientWidth/2+el.offsetWidth/2;}if(ms)setTimeout(function(){el.classList.remove(cls);},ms);}
 function clearKeys(){if(!KB)return;for(var k in KB.keys)KB.keys[k].classList.remove("ok","ng","hint");}
 $("bLab").addEventListener("click",function(){showLab=!showLab;save(LAB_KEY,showLab);this.setAttribute("aria-pressed",showLab);$("kb").classList.toggle("nolab",!showLab);});
 
