@@ -127,6 +127,17 @@ button{font-family:inherit;color:inherit;cursor:pointer}
 .bubble b{color:#C0392B}
 .bubble.hint{background:#FFF1F0;animation:shake .4s}
 @keyframes shake{0%,100%{transform:none}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.lpos{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin:8px 0 4px}
+.lpos .btn{padding:6px 0;min-height:48px;font-size:1.1rem;line-height:1.1}
+.lpos .btn small{display:block;font-size:.6rem;font-weight:700}
+/* スマホ：ミッションの 囲みを ひくく して、道具と ボタンを 1画面に 入れやすく する */
+@media (max-width:600px){
+  .mission{margin:16px 0 8px;padding:26px 10px 8px}
+  .mq{font-size:clamp(1.02rem,4.6vw,1.3rem);margin-bottom:6px}
+  .mission .face{width:46px}
+  .bubble{font-size:.78rem;padding:5px 10px;line-height:1.5;min-height:0}
+  .bubble .who{display:none}
+}
 
 .card{background:var(--panel);border:2px solid var(--line);border-radius:18px;padding:10px;margin-bottom:12px;box-shadow:0 3px 0 #EADFCC}
 .stage{position:relative;border-radius:14px;background:linear-gradient(#EAF4FC,#F7FBFF 72%,#EFE6D6 72%,#E9DDC8);overflow:hidden;touch-action:manipulation}
@@ -623,6 +634,15 @@ function showQ(){
   paintDots();window.scrollTo(0,0);
   var lab="ミッション "+(st.i+1)+" / "+st.qs.length;
   ({choice:qChoice,read:qRead,fill:qFill,bal:qBal,lever:qLever})[q.t](q,lab);
+  fitWork();var y0=window.scrollY;setTimeout(function(){if(Math.abs(window.scrollY-y0)<2)fitWork();},450);   // 絵が よみこまれて 高さが かわる ぶんも もういちど
+}
+/* 下の ボタンが 画面の 外に あるときは、問題文が 見える はんいで 下へ ずらす */
+function fitWork(){
+  var w=$("work"),bs=w.querySelectorAll("button"),last=0;
+  for(var i=0;i<bs.length;i++){var r=bs[i].getBoundingClientRect();if(r.height)last=Math.max(last,r.bottom);}
+  var over=last+8-innerHeight;if(over<=0)return;
+  var mq=-6,e=$("mQ");while(e){mq+=e.offsetTop;e=e.offsetParent;}   // 登場の アニメで 大きさが かわるので、offsetTop で はかる
+  window.scrollTo({top:Math.max(0,Math.min(over,mq)),behavior:"instant"});
 }
 
 /* ---------- えらぶ 問題 ---------- */
@@ -820,8 +840,11 @@ function qLever(q,lab){
   var R=[0,0,0,0,0,0,0],done=false,ML=q.L.reduce(function(a,p){return a+p[0]*p[1];},0);
   var h='<div class="stage" style="padding:4px"><svg viewBox="0 50 400 250" id="lsvg" xmlns="'+NS+'"><g id="ldr"></g><g id="lhit"></g></svg></div>'
     +'<p class="balmsg" id="bm"></p>'
-    +'<div class="ctrl"><button class="btn sm" id="lReset">↺ 右の おもりを ぜんぶ はずす</button></div>';
+    // 絵の 穴は 小さいので、下にも 1〜6の ボタンを ならべる（1こ もどす も できる）
+    +'<div class="lpos" id="lpos">'+[1,2,3,4,5,6].map(function(d){return '<button class="btn sm" type="button" data-d="'+d+'">'+d+'<small>に つるす</small></button>';}).join("")+'</div>'
+    +'<div class="ctrl"><button class="btn sm" id="lUndo">↶ 1こ もどす</button><button class="btn sm" id="lReset">↺ ぜんぶ はずす</button></div>';
   $("work").innerHTML=h;
+  var hist=[];
   var sv=$("lsvg"),ang=0,vel=0,target=0;
   function MR(){var m=0;for(var d=1;d<=6;d++)m+=d*R[d];return m;}
   function count(){var c=0;for(var d=1;d<=6;d++)c+=R[d];return c;}
@@ -874,10 +897,12 @@ function qLever(q,lab){
   }
   sv.addEventListener("click",function(e){
     var t=e.target;if(done||!t.getAttribute||!t.getAttribute("data-d"))return;
-    var d=+t.getAttribute("data-d");if(R[d]>=6){say("1か所に つるせるのは 6こまで だよ。");return;}
-    R[d]++;sTap();update();
+    hangAt(+t.getAttribute("data-d"));
   });
-  $("lReset").onclick=function(){if(done)return;R=[0,0,0,0,0,0,0];sTap();update();};
+  function hangAt(d){if(done)return;if(R[d]>=6){say("1か所に つるせるのは 6こまで だよ。");return;}R[d]++;hist.push(d);sTap();update();}
+  $("lpos").addEventListener("click",function(e){var b=e.target.closest("[data-d]");if(b)hangAt(+b.getAttribute("data-d"));});
+  $("lUndo").onclick=function(){if(done||!hist.length)return;R[hist.pop()]--;sTap();update();};
+  $("lReset").onclick=function(){if(done)return;R=[0,0,0,0,0,0,0];hist=[];sTap();update();};
   startAnim(function(dt){
     var acc=(target-ang)*30-vel*5;vel+=acc*dt;ang+=vel*dt;
     if(!document.body.contains(sv)) return false;
