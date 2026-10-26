@@ -370,7 +370,7 @@ img.sage.hop{animation:hop .3s steps(2)}
   <button class="btn showres" id="showRes" type="button" style="display:none">けっかを 見る</button>
 </section>
 
-<script src="rules2.js?v=11"></script><!-- もとに もどすときは rules.js?v=14 に（第1版。パターンなし） -->
+<script src="rules2.js?v=12"></script><!-- もとに もどすときは rules.js?v=14 に（第1版。パターンなし） -->
 <script src="obj/sizes.js?v=9"></script>
 <script src="art.js?v=41"></script>
 <script src="shakai.js?v=2"></script>
@@ -767,6 +767,7 @@ async function pick(id) {
     await wait(900); drawLayer(raid.elem, raid.to, false);
     $("map").classList.remove("shake"); $("L-" + raid.elem).classList.remove("hit");
     document.querySelectorAll("#mon-slots .mon").forEach((g) => g.classList.remove("jump"));
+    drawMonsters(st.threat); // ぶんどって にげた（1ぴきだけ のこる。2026-10-26）
     await wait(300);
   } else if (events.find((e) => e.type === "lurk")) {
     fxText("モンスターが うろついている…", "bad"); await wait(700);

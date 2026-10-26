@@ -8,7 +8,7 @@
 //   サブ指標は だんかいから 計算するので いっしょに うごく。はってん度は pts で こまかく うごく。
 //   adj … つづけて えらぶ（2つ・3つ）      ord … その順番で えらぶ（あいだに ほかの 賢者が 入って よい。ぜんぶ つづけた ときは adj の ほう）
 //   good 良くなる（up＝この回の のびが ふえる → 2だんかい・3だんかいが 出やすい、also＝ほかの ものも のびる）
-//   bad 悪くなる（down＝この回の のびが へる、lose＝ほかの ものが さがる）/ none その回の のびが なくなる
+//   bad 悪くなる（lose＝ほかの ものが さがる。その回の のびは ふつうに ある＝2026-10-26 に「のび なし」を やめた）/ none その回の のびが なくなる
 //   big 大きく 悪くなる（世界が 暗くなる）
 //   プレイヤーには 文では 知らせない。地図の 変化で 気づく。1回に いくつ そろっても ぜんぶ 入れる
 //   大きく 悪くなった あとも そこから 国は そだつ。はってん度が 50% まで もどれば 世界は 明るくなる（→ よみがえった国）
@@ -21,8 +21,16 @@
 // これが 順番で 結果が かわる しくみ。
 //
 // モンスター（threat 0〜3）は 毎ターン 1ぴき ふえる。
-// 3びきに なると、まもりが 3 でなければ はたけ か いち を あらす。
+// 3びきに なると、まもりが 3 でなければ はたけ か いち を あらし、ぶんどって にげる（1ぴきに もどる）。
 // まもりの けんじゃを よぶと 0びきに もどる。
+//
+// ★ バランス調整（2026-10-26。「むずかしすぎて 爽快感が ない」で）：
+//   ・あらされた ときの はってん度の へりを 1回 −25% → −13% に（damage×3 → ×1）。あらした あとは 1ぴきに もどる（毎回は あらさない）
+//   ・悪い パターンの 回も、その回の のびは ふつうに ある（良い パターンの おまけだけ なし）
+//   ・「おまつりの あとに 畑」「市の あとに 畑」は、すぐ あとの ときだけ（ord → adj）
+//   ・はってん度は 15だんかいで 98%（16 → 15）。学びは 道が あると +1、おまつりは 畑が あると +1
+//   ・100% は 知恵→創造→力→豊穣→繁栄→祈り の 1通りだけ の まま（先見の明＝1回目が 知恵 も 条件に 入れた）
+//   全46656通り：中央値 8% → 43%、マイナス 39% → 5%、6人を 1回ずつ よぶ 720通りは 中央値 71%・75%以上が 44%
 // ============================================================
 
 const RULES = (() => {
@@ -70,16 +78,16 @@ const RULES = (() => {
     { id: "g_umibe",   kind: "good", type: "ord", seq: [F_, R_, P_], up: 1, also: { farm: 1 }, pts: 3, memo: "海べの 村まつり：畑と 道の あとに 海の まつり" },
     { id: "g_heiwa",   kind: "good", type: "ord", seq: [G_, S_, P_], up: 1, also: { school: 1 }, pts: 3, memo: "へいわな 学び：まもられて 学べて いわえる" },
     { id: "g_iwau",    kind: "good", type: "ord", seq: [S_, F_, M_, P_], up: 2, also: { farm: 1, market: 1 }, pts: 4, memo: "学んで そだてて 売って いわう" },
-    // 悪くなる（1だんかい）。悪い パターンが そろった 回は、その回の のびも 良い パターンも なし（良い 絵を 出さない）
+    // 悪くなる（1だんかい）。悪い パターンが そろった 回は、良い パターンの おまけは なし（その回の のびは ある）
     { id: "b_shirake", kind: "bad", type: "adj", seq: [P_, G_],     lose: { fun: 1 }, pts: -2, memo: "おまつりに 兵が 来て しらけた" },
     { id: "b_oshiyose",kind: "bad", type: "adj", seq: [M_, G_],     lose: { market: 1 }, pts: -2, memo: "市に 兵が おしよせて お客が にげた" },
-    { id: "b_areta",   kind: "bad", type: "ord", seq: [P_, F_],     lose: { farm: 1 }, pts: -2, memo: "おまつりの あと、畑は あれほうだい" },
+    { id: "b_areta",   kind: "bad", type: "adj", seq: [P_, F_],     lose: { farm: 1 }, pts: -2, memo: "おまつりの あと、畑は あれほうだい" },
     { id: "b_kibishii",kind: "bad", type: "adj", seq: [G_, M_, G_], lose: { market: 1 }, pts: -3, memo: "きびしすぎる 市：見はりばかりで だれも 買わない" },
     { id: "b_fumiare", kind: "bad", type: "adj", seq: [F_, G_],     lose: { farm: 1 }, pts: -2, memo: "兵が 畑を ふみあらした" },
     { id: "b_gomi",    kind: "bad", type: "adj", seq: [P_, R_],     lose: { road: 1 }, pts: -2, memo: "おまつりの ごみで 道が よごれた" },
     { id: "b_kuchidashi", kind: "bad", type: "adj", seq: [S_, M_],  lose: { market: 1 }, pts: -2, memo: "学者が 商売に 口を 出して 店が こまった" },
     { id: "b_heitai",  kind: "bad", type: "adj", seq: [G_, P_],     lose: { fun: 1 }, pts: -2, memo: "兵の 見はりが きびしくて おまつりが しずかに" },
-    { id: "b_dekasegi",kind: "bad", type: "ord", seq: [M_, F_],     lose: { farm: 1 }, pts: -2, memo: "市が 先に できて 畑の 人が 町へ 出ていった" },
+    { id: "b_dekasegi",kind: "bad", type: "adj", seq: [M_, F_],     lose: { farm: 1 }, pts: -2, memo: "市が 先に できて 畑の 人が 町へ 出ていった" },
     // 2だんかい 悪くなる（世界が 暗くなる。big の 名前で 地図の 絵が きまる：volcano 噴火／flood 洪水／rebel 魔王の城／dark 暗やみ）
     { id: "k_funka",   kind: "big", type: "adj", seq: [P_, P_, P_], lose: { fun: 1, farm: 1 }, pts: -10, big: "volcano", memo: "おまつりの さわぎに 山の神が おこった（噴火）" },
     { id: "k_kozui",   kind: "big", type: "adj", seq: [F_, F_, F_], lose: { farm: 2 }, pts: -10, big: "flood", memo: "森を きりすぎて 大雨で 洪水" },
@@ -140,6 +148,7 @@ const RULES = (() => {
         break;
       case "school":
         say("みんなで 学ぼう！", 1);
+        if (has(st, "road")) say("道が あるから 学校に かよえる！", 1);
         if (has(st, "market")) say("市の おかげで 本が 買える！", 1);
         if (has(st, "farm")) say("おなかいっぱいで よく 学べる！", 1);
         else say("おなかが すいて 学べないよ…", 0);
@@ -147,6 +156,7 @@ const RULES = (() => {
       case "fun":
         say("おまつりだ！", 1);
         if (has(st, "road") && has(st, "market")) say("道と 市に 人が あつまる！", 1);
+        if (has(st, "farm")) say("しゅうかくを みんなで いわおう！", 1);
         if (has(st, "school")) say("学んだ うたと おどりで もりあがる！", 1);
         if (!has(st, "road") && !has(st, "market") && !has(st, "school")) say("…野原で ひとり おまつり", 0);
         break;
@@ -163,7 +173,7 @@ const RULES = (() => {
     const fired = PATTERNS.filter((p) => (p.again || !st.fired.includes(p.id)) && completes(p, st.picks));
     fired.forEach((p) => { if (!st.fired.includes(p.id)) st.fired.push(p.id); });
     const tired = fired.some((p) => p.kind === "none");
-    // 悪い パターンが そろった 回：その回の のび・良い パターン・先見の明の のびは なし（良い 絵を 出さない）
+    // 悪い パターンが そろった 回：良い パターンの おまけ（up・also）は なし。その回の のびと 先見の明は ふつうに ある（2026-10-26）
     // 同じ 賢者を 3回 つづけた ときから、えらぶ たびに 悪くなる（その ものが 1だんかい さがる。2026-09-27 先方の指示）
     let run = 0; for (let i = st.picks.length - 1; i >= 0 && st.picks[i] === id; i--) run++;
     const repeat = run >= 3 ? [{ id: "r_repeat", kind: "bad", lose: { [id]: 1 }, pts: -5, memo: "同じ 賢者ばかり" }] : [];
@@ -174,9 +184,10 @@ const RULES = (() => {
 
     // 先見の明：1回目に 知恵の賢者を よぶと、そのあと 毎回 学びが ひとりでに 育つ（真の 100% への 道）
     if (st.turn === 1 && id === "school") st.foresight = true;
-    if (st.foresight && st.turn > 1 && !badTurn && st.lv.school < MAX_LV) { st.lv.school += 1; events.push({ type: "grow", elem: "school", to: st.lv.school }); }
+    if (st.foresight && st.turn > 1 && st.lv.school < MAX_LV) { st.lv.school += 1; events.push({ type: "grow", elem: "school", to: st.lv.school }); }
 
-    if (id === "guard" && prev === "guard") {
+    const doubleGuard = id === "guard" && prev === "guard";
+    if (doubleGuard) {
       // つづけて まもりは 逆効果
       events.push({ type: "talk", id, reasons: [{ text: "兵ばかりで はたけに 人が いない！", plus: 0 }] });
       if (st.lv.farm > 0) {
@@ -186,7 +197,7 @@ const RULES = (() => {
       st.threat = 0;
       events.push({ type: "threat", value: 0 });
     } else {
-      const reasons = tired || badTurn ? [{ text: "…", plus: 0 }] : gainOf(st, id);
+      const reasons = tired ? [{ text: "…", plus: 0 }] : gainOf(st, id);
       // パターンで この回の のびが ふえる・へる
       const up = tired || badTurn ? 0 : fired.reduce((a, p) => a + (p.up || 0) - (p.down || 0), 0);
       const want = Math.max(0, reasons.reduce((a, r) => a + r.plus, 0) + up);
@@ -195,24 +206,6 @@ const RULES = (() => {
       events.push({ type: "talk", id, reasons });
       st.lv[id] = to;
       events.push({ type: "gain", elem: id, from, to, amount: to - from, want, capped: to - from < want });
-
-      if (id === "guard") {
-        st.threat = 0;
-        events.push({ type: "threat", value: 0 });
-      } else {
-        st.threat = Math.min(3, st.threat + 1);
-        events.push({ type: "threat", value: st.threat });
-        if (st.threat >= 3 && st.lv.guard < MAX_LV) {
-          const target = st.lv.farm > 0 ? "farm" : st.lv.market > 0 ? "market" : null;
-          if (target) {
-            st.lv[target] -= 1;
-            st.damage += 1;
-            events.push({ type: "raid", elem: target, to: st.lv[target] });
-          } else {
-            events.push({ type: "lurk" }); // うろつくだけ（あらすものが ない）
-          }
-        }
-      }
     }
 
     // パターンの 効果（ぜんぶ 入れる）：ほかの ものが のびる・さがる、大きく 悪くなる
@@ -230,6 +223,28 @@ const RULES = (() => {
     });
     if (fired.length) events.push({ type: "pattern", ids: active.map((p) => p.id), bad: badTurn, big: active.filter((p) => p.kind === "big").map((p) => p.big) });
 
+    // モンスター（パターンの あとに。同じ回の おまけで、あらされた ものが すぐ もとに もどって 見えないように＝2026-10-26）
+    if (!doubleGuard) {
+      if (id === "guard") {
+        st.threat = 0;
+        events.push({ type: "threat", value: 0 });
+      } else {
+        st.threat = Math.min(3, st.threat + 1);
+        events.push({ type: "threat", value: st.threat });
+        if (st.threat >= 3 && st.lv.guard < MAX_LV) {
+          const target = st.lv.farm > 0 ? "farm" : st.lv.market > 0 ? "market" : null;
+          if (target) {
+            st.lv[target] -= 1;
+            st.damage += 1;
+            st.threat = 1; // ぶんどって にげる。のこるのは 1ぴき（毎回は あらさない）
+            events.push({ type: "raid", elem: target, to: st.lv[target] });
+          } else {
+            events.push({ type: "lurk" }); // うろつくだけ（あらすものが ない）
+          }
+        }
+      }
+    }
+
     // 第2版：「同じ 賢者を 6回で その道を きわめる」は やめた（3回 つづけた ときから 悪くなる）
     return events;
   }
@@ -237,17 +252,18 @@ const RULES = (() => {
   const MONKING = -60; // これより 下は モンスター王国（はってん度 -100%）
   const FULL = 17; // 先見の明の 道だけが とどく だんかい（100% には finale も いる）
 
-  // 17だんかい（先見の明の 道だけ）で 100%。それ以外は 98% まで（ふつうの りそうの道 16 → 98%、15 → 94%）
+  // 17だんかい（先見の明の 道だけ）で 100%。それ以外は 98% まで（2026-10-26 から 15だんかいで 98%、14 → 93%）
   // 100% は もう1つ 条件つき：はたけの あとに 市を ひらき、さいごは おまつりで しめくくる
   // （17だんかいに とどく 3つの 順番のうち、知恵→創造→力→豊穣→繁栄→祈り だけが これを みたす）
   // 第2版：パターンで 17だんかいに とどく 道が ふえたので、「道の あとに 畑」も 条件に（道が あるから しゅうかくを はこべる）
-  const finale = (st) => { const p = st.picks, i = (e) => p.indexOf(e); return p[p.length - 1] === "fun" && i("road") >= 0 && i("road") < i("farm") && i("farm") < i("market"); };
+  // 2026-10-26：のびを ふやしたので「1回目が 知恵（先見の明）」も 条件に（創造→知恵→… も 17だんかいに とどくように なったため）
+  const finale = (st) => { const p = st.picks, i = (e) => p.indexOf(e); return st.foresight && p[p.length - 1] === "fun" && i("road") >= 0 && i("road") < i("farm") && i("farm") < i("market"); };
   // はってん度は ゲームの きまり（だんかい・パターン・あらされた 回数）で 決める。地図は この 数に あわせて 描く（index.html の viewLv）
   function score(st) {
     const sum = ELEMS.reduce((a, e) => a + st.lv[e], 0);
-    const total = sum - st.damage * 3;
+    const total = sum - st.damage * 1; // あらされた 1回で、へった だんかい ＋1（2026-10-26。前は ＋3）
     if (total >= FULL && finale(st)) return 100;
-    const raw = Math.round((total / 16) * 100 + (st.bonus || 0)); // パターンで こまかく うごく
+    const raw = Math.round((total / 15) * 100 + (st.bonus || 0)); // パターンで こまかく うごく
     if (raw <= MONKING) return -100; // モンスター王国の完成
     return Math.max(-100, Math.min(98, raw));
   }
